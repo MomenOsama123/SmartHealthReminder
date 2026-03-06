@@ -1,17 +1,16 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "com.smarthealthreminderwithaiassistant"
+    namespace = "com.example.smarthealthreminder"
     compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
+        version = release(36)
     }
 
     defaultConfig {
-        applicationId = "com.smarthealthreminderwithaiassistant"
+        applicationId = "com.example.smarthealthreminder"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -33,9 +32,13 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
+    implementation("androidx.core:core-splashscreen:1.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
