@@ -1,3 +1,30 @@
 <resources>
-    <string name="app_name">Smart Health Reminder with AI Assistant</string>
+
+    <string name="app_name">Smart Health Reminder</string>
+
+    <string name="create_account_title">Create Account</string>
+    <string name="create_account_subtitle">Join our wellness community</string>
+
+    <string name="full_name_label">Full Name</string>
+    <string name="full_name_hint">John Doe</string>
+
+    <string name="email_label">Email Address</string>
+    <string name="email_hint">name@example.com</string>
+
+    <string name="password_label">Password</string>
+    <string name="password_hint">********</string>
+
+    <string name="confirm_password_label">Confirm Password</string>
+    <string name="confirm_password_hint">********</string>
+
+    <string name="terms_text">By signing up, I agree to Terms of Service and Privacy Policy</string>
+
+    <string name="signup_button">Sign Up</string>
+
+    <string name="already_account">Already have an account?</string>
+
+    <string name="login_text">Log In</string>
+
+    <string name="toggle_dark_mode">Toggle Dark Mode</string>
+
 </resources>
