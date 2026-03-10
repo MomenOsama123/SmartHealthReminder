@@ -46,7 +46,7 @@
             android:layout_marginTop="32dp"
             android:fontFamily="@font/poppins_bold"
             android:gravity="center"
-            android:text="Check your email"
+            android:text="@string/check_your_email"
             android:textColor="#1A2E2A"
             android:textSize="24sp"
             android:textStyle="bold" />
@@ -60,7 +60,7 @@
             android:fontFamily="@font/poppins_regular"
             android:gravity="center"
             android:lineSpacingExtra="4dp"
-            android:text="We have sent a password recovery link to your registered email address."
+            android:text="@string/password_recovery_link"
             android:textColor="#6B7B75"
             android:textSize="14sp" />
 
