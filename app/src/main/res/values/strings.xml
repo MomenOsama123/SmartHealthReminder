@@ -1,8 +1,8 @@
 <resources>
 
 
-
-
+    <string name="login_text">Login</string>
+    <string name="welcome_back">Welcome Back</string>
     <string name="create_account_title">Create Account</string>
     <string name="create_account_subtitle">Join our wellness community</string>
 
@@ -24,7 +24,7 @@
 
     <string name="already_account">Already have an account?</string>
 
-   
+
 
     <string name="toggle_dark_mode">Toggle Dark Mode</string>
 
