@@ -62,6 +62,15 @@
     <string name="did_not_receive_code">Didn\'t receive the code?</string>
 
     <string name="resend_code">Resend Code</string>
+    <string name="forgot_password_title">Forgot Password</string>
+
+    <string name="forgot_password_subtitle">
+    Enter your email address to receive a link to reset your password.
+</string>
+
+    <string name="send_link">SEND LINK</string>
+
+    <string name="healthcare_technical">HEALTHCARE TECHNICAL</string>
 
 
 </resources> 
