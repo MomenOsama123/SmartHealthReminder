@@ -50,5 +50,18 @@
     <string name="your_email_verified">Your email has been verified. You can now log in to your account.</string>
     <string name="check_your_email">Check your email</string>
     <string name="password_recovery_link">We have sent a password recovery link to your registered email address.</string>
+    <string name="verify_email_title">Verify Your Email</string>
+
+    <string name="verify_email_subtitle">
+        We sent a verification code to your email.
+        Please enter it below to continue.
+    </string>
+
+    <string name="verify_button">Verify</string>
+
+    <string name="did_not_receive_code">Didn\'t receive the code?</string>
+
+    <string name="resend_code">Resend Code</string>
+
 
 </resources> 
