@@ -2,14 +2,5 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="primary">#6B7B75</color>
-    <color name="background_beige">#F3EFE3</color>
-        <color name="primary_green">#769382</color>
-        <color name="border_gray">#D9D3C4</color>
-        <color name="hint_gray">#C0C3B9</color>
-        <color name="text_dark">#000000</color>
-
-
-
-
+    <color name="page">#F3EFE3</color>
 </resources>

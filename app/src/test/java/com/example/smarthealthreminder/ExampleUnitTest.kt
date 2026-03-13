@@ -1,4 +1,4 @@
-package com.smarthealthreminderwithaiassistant
+package com.example.smarthealthreminder
 
 import org.junit.Test
 
