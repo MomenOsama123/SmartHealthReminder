@@ -29,6 +29,8 @@
 
 
     <string name="app_name">Smart Health Reminder with AI Assistant</string>
+    <string name="welcome_message">Welcome to Smart Health</string>
+    <string name="subtitle_welcome">Your personal health assistant</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="log_in">Log In</string>
     <string name="or_continue_with">OR CONTINUE WITH</string>
