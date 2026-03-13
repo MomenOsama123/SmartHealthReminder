@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main"
@@ -24,36 +22,39 @@
             android:src="@drawable/arrow_back"
             android:layout_gravity="start"
             android:layout_marginBottom="30dp"/>
+
+        <!-- Health Icon -->
         <ImageView
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/ic_health"
             android:layout_gravity="center"
             android:scaleType="fitCenter"
-            android:contentDescription="Health Icon"
+            android:contentDescription="@string/app_name"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"/>
+
         <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/verify_email_title"
+            android:text="@string/create_new_password_title"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:layout_marginBottom="10dp"/>
 
         <!-- Subtitle -->
         <TextView
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:text="@string/verify_email_subtitle"
+            android:text="@string/create_new_password_desc"
             android:textSize="14sp"
-            android:textColor="#000000"
+            android:textColor="@color/hint_gray"
             android:gravity="center"
             android:layout_marginBottom="60dp"/>
 
-        <!-- OTP Boxes -->
+        <!-- OTP / Verification Boxes -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -69,8 +70,8 @@
                 android:backgroundTint="@color/border_gray"
                 android:gravity="center"
                 android:maxLength="1"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textColor="@color/text_dark"
+                android:textSize="20sp"/>
 
             <EditText
                 android:layout_width="70dp"
@@ -80,8 +81,8 @@
                 android:backgroundTint="@color/border_gray"
                 android:gravity="center"
                 android:maxLength="1"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textColor="@color/text_dark"
+                android:textSize="20sp"/>
 
             <EditText
                 android:layout_width="70dp"
@@ -91,8 +92,8 @@
                 android:backgroundTint="@color/border_gray"
                 android:gravity="center"
                 android:maxLength="1"
-                android:textColor="#000000"
-                android:textSize="20sp" />
+                android:textColor="@color/text_dark"
+                android:textSize="20sp"/>
 
             <EditText
                 android:layout_width="70dp"
@@ -102,26 +103,27 @@
                 android:backgroundTint="@color/border_gray"
                 android:gravity="center"
                 android:maxLength="1"
-                android:textColor="#000000"
-                android:textSize="20sp" />
-
+                android:textColor="@color/text_dark"
+                android:textSize="20sp"/>
         </LinearLayout>
 
+        <!-- Verify Button -->
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="@string/verify_button"
+            android:text="@string/update_password_btn"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:backgroundTint="@color/primary_green"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="16dp"/>
-        <!-- Didn't receive -->
+
+        <!-- Didn't Receive -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/did_not_receive_code"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:textSize="13sp"
             android:layout_marginTop="8dp"/>
 

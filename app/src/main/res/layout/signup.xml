@@ -1,6 +1,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main"
-     android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_beige">
 
@@ -25,7 +25,7 @@
             android:text="@string/create_account_title"
             android:textSize="26sp"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:layout_gravity="center"
             android:layout_marginTop="16dp" />
 
@@ -35,15 +35,16 @@
             android:layout_height="wrap_content"
             android:text="@string/create_account_subtitle"
             android:textSize="14sp"
-            android:textColor="#666666"
+            android:textColor="@color/hint_gray"
             android:layout_gravity="center"
             android:layout_marginBottom="24dp" />
+
         <!-- Full Name -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/full_name_label"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:layout_marginTop="12dp" />
         <EditText
             android:id="@+id/full_name_input"
@@ -66,10 +67,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email_label"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:layout_marginTop="12dp" />
-
-
         <EditText
             android:id="@+id/email_input"
             android:layout_width="match_parent"
@@ -82,15 +81,14 @@
             android:textColor="@color/hint_gray"
             android:inputType="textEmailAddress"
             android:paddingStart="16dp"/>
-        <!-- Password -->
+
         <!-- Password -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/password_label"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:layout_marginTop="12dp" />
-
         <EditText
             android:id="@+id/password_input"
             android:layout_width="match_parent"
@@ -115,9 +113,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/confirm_password_label"
-            android:textColor="#000000"
+            android:textColor="@color/text_dark"
             android:layout_marginTop="12dp" />
-
         <EditText
             android:id="@+id/confirm_password_input"
             android:layout_width="match_parent"
@@ -134,12 +131,13 @@
             android:drawableStart="@drawable/outline_check_circle"
             android:drawablePadding="10dp"
             android:drawableTint="@color/primary_green"/>
+
         <!-- Terms -->
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/terms_text"
-            android:textColor="#000000" />
+            android:textColor="@color/text_dark" />
 
         <!-- Sign Up Button -->
         <Button
@@ -148,10 +146,10 @@
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/primary_green"
             android:text="@string/signup_button"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:backgroundTintMode="src_in"/>
 
-        <!-- Already Account + Dark Mode -->
+        <!-- Already Account & Dark Mode -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -162,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/already_account"
-                android:textColor="#000000"
+                android:textColor="@color/text_dark"
                 android:layout_centerHorizontal="true"/>
 
             <ImageView
@@ -170,12 +168,12 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/ic_dark_mode"
-                android:contentDescription="Dark Mode Icon"
                 android:layout_alignParentEnd="true"
                 android:clickable="true"
                 android:focusable="true"/>
 
         </RelativeLayout>
+
         <!-- Login -->
         <TextView
             android:layout_width="wrap_content"

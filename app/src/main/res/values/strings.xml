@@ -26,7 +26,6 @@
 
 
 
-    <string name="toggle_dark_mode">Toggle Dark Mode</string>
 
 
     <string name="app_name">Smart Health Reminder with AI Assistant</string>
@@ -71,6 +70,22 @@
     <string name="send_link">SEND LINK</string>
 
     <string name="healthcare_technical">HEALTHCARE TECHNICAL</string>
+    <string name="create_new_password_title">Create New Password</string>
+    <string name="create_new_password_desc">
+Please enter your new password to regain access to your account. Choose a strong, unique password.
+</string>
+
+    <string name="new_password_label">NEW PASSWORD</string>
+    <string name="new_password_hint">Enter new password</string>
+
+    <string name="confirm_new_password_label">CONFIRM NEW PASSWORD</string>
+    <string name="confirm_new_password_hint">Confirm new password</string>
+
+    <string name="password_rule">
+Password must be at least 8 characters long and include a mix of letters, numbers, and symbols.
+</string>
+
+    <string name="update_password_btn">UPDATE PASSWORD</string>
 
 
 </resources> 
