@@ -38,7 +38,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/create_new_password_title"
+            android:text="@string/verify_email_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/text_dark"
@@ -48,11 +48,13 @@
         <TextView
             android:layout_width="260dp"
             android:layout_height="wrap_content"
-            android:text="@string/create_new_password_desc"
+            android:text="@string/verify_email_subtitle"
             android:textSize="14sp"
             android:textColor="@color/hint_gray"
             android:gravity="center"
             android:layout_marginBottom="60dp"/>
+
+
 
         <!-- OTP / Verification Boxes -->
         <LinearLayout
@@ -106,18 +108,16 @@
                 android:textColor="@color/text_dark"
                 android:textSize="20sp"/>
         </LinearLayout>
-
         <!-- Verify Button -->
         <Button
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="@string/update_password_btn"
+            android:text="@string/verify_button"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:backgroundTint="@color/primary_green"
             android:layout_marginTop="6dp"
             android:layout_marginBottom="16dp"/>
-
         <!-- Didn't Receive -->
         <TextView
             android:layout_width="wrap_content"
