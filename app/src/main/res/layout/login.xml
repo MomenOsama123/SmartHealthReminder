@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5EE"
@@ -21,8 +22,8 @@
         <!-- App Logo -->
         <ImageView
             android:id="@+id/imgLogo"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
             android:background="@drawable/bg_logo_circle"
             android:src="@drawable/bg_logo_circle"
@@ -37,7 +38,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="16dp"
             android:text="@string/welcome_back"
-            android:textSize="50sp"
+            android:textSize="32sp"
             android:textStyle="bold"
             android:textColor="#1A2E2A"
             android:fontFamily="@font/serif_font" />
@@ -50,7 +51,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="10dp"
             android:text="@string/secure_access_to_your_health_records"
-            android:textSize="15sp"
+            android:textSize="12sp"
             android:textColor="#6B7B75" />
 
         <!-- Email Label -->
@@ -59,12 +60,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="@string/email_address"
-            android:textSize="15sp"
-            android:textColor="#6B7B75"
             android:letterSpacing="0.08"
-            android:textStyle="bold"
-            />
+            android:text="@string/email_address"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
         <!-- Email Input -->
         <LinearLayout
@@ -105,8 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/password"
-            android:textSize="15sp"
-            android:textColor="#6B7B75"
+            android:textSize="13sp"
+            android:textColor="@color/black"
             android:letterSpacing="0.08"
             android:textStyle="bold" />
 
@@ -211,8 +211,8 @@
             app:iconPadding="12dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            android:text="@string/continue_with_google"
-            android:textSize="17dp"
+            android:text="@string/google"
+            android:textSize="14dp"
             android:textColor="@color/black"
             android:background="@drawable/et_shape"
             android:backgroundTint="@color/white"
@@ -229,8 +229,8 @@
             app:iconPadding="12dp"
             app:iconSize="24dp"
             app:iconTint="@null"
-            android:text="@string/continue_with_facebook"
-            android:textSize="17dp"
+            android:text="@string/facebook"
+            android:textSize="14dp"
             android:textColor="@color/black"
             android:background="@drawable/et_shape"
             android:backgroundTint="@color/white"
@@ -249,7 +249,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/don_t_have_an_account"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textColor="#6B7B75" />
 
             <TextView
@@ -257,7 +257,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/create_an_account"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textColor="#3D6B5E"
                 android:textStyle="bold"
                 android:clickable="true"
