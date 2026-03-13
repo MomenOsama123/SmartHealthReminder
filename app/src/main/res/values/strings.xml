@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SmartHealthReminder</string>
+    <string name="welcome_message">Welcome to HealthSync</string>
+    <string name="subtitle_welcome">Your journey to a healthier heart starts here. \n High-tech monitoring meet personal care.</string>
 </resources>
