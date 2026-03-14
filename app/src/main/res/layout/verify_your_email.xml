@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main"
-    android:background="@color/background_beige">
+    android:background="@color/background_beige"
+    android:paddingHorizontal="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +22,10 @@
             android:layout_height="24dp"
             android:src="@drawable/arrow_back"
             android:layout_gravity="start"
-            android:layout_marginBottom="30dp"/>
+            android:layout_marginBottom="30dp"
+            android:layout_marginHorizontal="16dp"
+
+            />
 
         <!-- Health Icon -->
         <ImageView

@@ -9,21 +9,18 @@
     android:paddingStart="32dp"
     android:paddingEnd="32dp"
     android:paddingTop="48dp"
-    android:paddingBottom="48dp">
+    android:paddingBottom="48dp"
+    android:paddingHorizontal="16dp"
+    android:id="@+id/main">
 
     <!-- Success Icon Circle -->
-    <FrameLayout
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:background="@color/white">
+
 
         <ImageView
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
             android:src="@drawable/ic_check_mark" />
-
-    </FrameLayout>
 
     <!-- Title -->
     <TextView
@@ -64,5 +61,9 @@
         android:textSize="16sp"
         android:textStyle="bold"
         android:fontFamily="@font/poppins_medium" />
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

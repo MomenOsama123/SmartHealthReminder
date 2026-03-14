@@ -2,7 +2,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_beige">
+    android:background="@color/background_beige"
+    android:paddingHorizontal="16dp"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"

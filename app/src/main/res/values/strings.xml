@@ -45,16 +45,16 @@
     <string name="create_an_account">Create an Account</string>
     <string name="facebook">Facebook</string>
     <string name="password_changed_successfully">Password changed\nsuccessfully</string>
-    <string name="password_reset_successfully">Your password has been reset successfully. You can now log in with your new password.</string>
+    <string name="password_reset_successfully">Your password has been reset \n ccessfully. You can now log in with \n your new password.</string>
     <string name="back_to_login">BACK TO LOGIN</string>
     <string name="verification_successful">Verification Successful!</string>
-    <string name="your_email_verified">Your email has been verified. You can now log in to your account.</string>
+    <string name="your_email_verified">Your email has been verified. \n You can now log in to your account.</string>
     <string name="check_your_email">Check your email</string>
-    <string name="password_recovery_link">We have sent a password recovery link to your registered email address.</string>
+    <string name="password_recovery_link">We have sent a password recovery link \n to your registered email address.</string>
     <string name="verify_email_title">Verify Your Email</string>
 
     <string name="verify_email_subtitle">
-        We sent a verification code to your email.
+        We sent a verification code to your email.\n
         Please enter it below to continue.
     </string>
 
@@ -66,7 +66,7 @@
     <string name="forgot_password_title">Forgot Password</string>
 
     <string name="forgot_password_subtitle">
-    Enter your email address to receive a link to reset your password.
+    Enter your email address to receive \n a link to reset your password.
 </string>
 
     <string name="send_link">SEND LINK</string>
@@ -74,7 +74,7 @@
     <string name="healthcare_technical">HEALTHCARE TECHNICAL</string>
     <string name="create_new_password_title">Create New Password</string>
     <string name="create_new_password_desc">
-Please enter your new password to regain access to your account. Choose a strong, unique password.
+Please enter your new password to regain access \n to your account. Choose a strong, unique password.
 </string>
 
     <string name="new_password_label">NEW PASSWORD</string>
@@ -84,7 +84,7 @@ Please enter your new password to regain access to your account. Choose a strong
     <string name="confirm_new_password_hint">Confirm new password</string>
 
     <string name="password_rule">
-Password must be at least 8 characters long and include a mix of letters, numbers, and symbols.
+Password must be at least 8 characters long and \n include  a mix of letters, numbers, and symbols.
 </string>
 
     <string name="update_password_btn">UPDATE PASSWORD</string>
