@@ -18,12 +18,17 @@
             android:name=".features.welcome.WelcomeActivity2"
             android:exported="false" />
         <activity
+            android:name=".features.auth.signup.SignupActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.auth.signin.SigninActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.welcome.WelcomeActivity"
             android:exported="true"
             android:theme="@style/Theme.SmartHealthReminder..Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
