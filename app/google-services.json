@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "436777065371",
+    "project_id": "graduation-project-depi",
+    "storage_bucket": "graduation-project-depi.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436777065371:android:b83f9b8e44608adc475f3e",
+        "android_client_info": {
+          "package_name": "com.example.smarthealthreminder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC67Wn6mXxCPUsi7vMlBXuBh8viF70ge8w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
