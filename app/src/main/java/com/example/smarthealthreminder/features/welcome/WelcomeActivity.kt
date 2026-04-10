@@ -6,12 +6,12 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
-import com.example.smarthealthreminder.features.auth.signin.SigninActivity
+import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        installSplashScreen()//test
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
@@ -21,8 +21,8 @@ class WelcomeActivity : AppCompatActivity() {
           val intent = Intent(this, WelcomeActivity2::class.java)
             startActivity(intent)
         }
-        binding.signinBtn.setOnClickListener {
-            val intent = Intent(this, SigninActivity::class.java)
+        binding.signInBtn.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
 
