@@ -1,6 +1,9 @@
 <resources>
-
-
+//facebook
+    <string name="facebook_app_id">924597597084563</string>
+    <string name="fb_login_protocol_scheme">fb924597597084563</string>
+    <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
+///////////
     <string name="login_text">Login</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="create_account_title">Create Account</string>
@@ -89,6 +92,8 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
 
     <string name="update_password_btn">UPDATE PASSWORD</string>
     <string name="username">Username</string>
+    <string name="fb924597597084563" />
+    <string name="fb9738d8624eb804760bbd820158c42810" />
 
 
 </resources> 

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
 import com.example.smarthealthreminder.databinding.SignupBinding
+import com.example.smarthealthreminder.features.auth.providers.FacebookAuthHelper
 import com.example.smarthealthreminder.features.auth.signin.SigninActivity
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity2
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +17,10 @@ import com.google.firebase.auth.FirebaseAuth
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: SignupBinding
     private lateinit var auth: FirebaseAuth
+    //facebook
+    private lateinit var facebookAuthHelper: FacebookAuthHelper
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -46,7 +51,9 @@ class SignupActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
+
 
     private fun validateForm(): Boolean {
 

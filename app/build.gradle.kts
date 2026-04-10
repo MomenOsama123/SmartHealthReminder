@@ -39,6 +39,9 @@ android {
 }
 
 dependencies {
+    //facebook auth
+    implementation("com.facebook.android:facebook-login:18.2.3")
+
     implementation("androidx.core:core-splashscreen:1.0.0")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
