@@ -11,7 +11,7 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityWelcome2Binding
 import com.example.smarthealthreminder.features.auth.providers.FacebookAuthHelper
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
-import com.example.smarthealthreminder.features.auth.signin.SigninActivity
+import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -60,7 +60,7 @@ class WelcomeActivity2 : AppCompatActivity() {
         }
 
         binding.loginTxt.setOnClickListener {
-            val intent = Intent(this, SigninActivity::class.java)
+            val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
         }
 

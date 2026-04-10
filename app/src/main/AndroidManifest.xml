@@ -21,7 +21,7 @@
             android:name=".features.auth.signup.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".features.auth.signin.SigninActivity"
+            android:name=".features.auth.signIn.SignInActivity"
             android:exported="false" />
         <activity
             android:name=".features.welcome.WelcomeActivity"

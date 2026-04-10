@@ -95,6 +95,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="fb924597597084563" />
     <string name="fb9738d8624eb804760bbd820158c42810" />
     <string name="default_web_client_id">436777065371-4c3o1n4k43r3oadfipjfo9dgr8vvqme8.apps.googleusercontent.com</string>
+    <string name="sign_up">Sign Up</string>
 
 
 </resources> 
