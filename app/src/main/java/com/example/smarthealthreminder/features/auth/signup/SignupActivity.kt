@@ -5,13 +5,10 @@ import android.os.Bundle
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
 import com.example.smarthealthreminder.databinding.SignupBinding
 import com.example.smarthealthreminder.features.auth.providers.FacebookAuthHelper
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
-import com.example.smarthealthreminder.features.auth.signin.SigninActivity
-import com.example.smarthealthreminder.features.welcome.WelcomeActivity2
+import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
@@ -38,7 +35,7 @@ class SignupActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.loginText.setOnClickListener {
-            val intent = Intent(this, SigninActivity::class.java)
+            val intent = Intent(this, SignInActivity::class.java)
             finish()
             startActivity(intent)
         }
