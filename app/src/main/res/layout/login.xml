@@ -223,22 +223,6 @@
             style="@style/Widget.MaterialComponents.Button.TextButton" />
 
         <!-- Continue with Facebook -->
-        <Button
-            android:id="@+id/btnFacebook"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginTop="12dp"
-            app:icon="@drawable/ic_facebook"
-            app:iconGravity="textStart"
-            app:iconPadding="12dp"
-            app:iconSize="24dp"
-            app:iconTint="@null"
-            android:text="@string/facebook"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:background="@drawable/et_shape"
-            android:backgroundTint="@color/white"
-            style="@style/Widget.MaterialComponents.Button.TextButton" />
 
         <!-- Don't have an account -->
         <LinearLayout

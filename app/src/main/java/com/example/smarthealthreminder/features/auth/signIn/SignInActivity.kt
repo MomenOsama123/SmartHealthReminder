@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
-import com.example.smarthealthreminder.features.auth.providers.FacebookAuthHelper
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -17,14 +16,12 @@ class SignInActivity : AppCompatActivity() {
     //for facebook auth
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        facebookAuthHelper.forwardActivityResult(requestCode, resultCode, data)
         googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
 
     }
     private lateinit var binding: LoginBinding
     private lateinit var auth: FirebaseAuth
     //Facebook
-    private lateinit var facebookAuthHelper: FacebookAuthHelper
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,21 +54,8 @@ class SignInActivity : AppCompatActivity() {
 
 
         }
-        // --- Facebook Integration ---
 
-        // 1. Initialize the Helper first and define what happens on success/failure
-        facebookAuthHelper = FacebookAuthHelper(this, auth) { isSuccess, errorMessage ->
-            if (isSuccess) {
-                Toast.makeText(this, "Successfully logged in via Facebook!", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this, errorMessage ?: "An error occurred during login", Toast.LENGTH_LONG).show()
-            }
-        }
 
-        // 2. Trigger login when the Facebook button is clicked
-        binding.btnFacebook.setOnClickListener {
-            facebookAuthHelper.startLogin()
-        }
 
         // Initialize GoogleAuthHelper
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, errorMessage ->

@@ -125,36 +125,17 @@
         app:layout_constraintTop_toBottomOf="@id/continue_with" />
 
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/signup_facebook"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:backgroundTint="#ffffff"
-        app:icon="@drawable/facebook_icon"
-        app:iconGravity="textStart"
-        app:iconTint="@null"
-        android:text="Facebook"
-        android:textStyle="bold"
-        android:textColor="#0F172A"
-        android:textSize="16sp"
-        app:cornerRadius="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginHorizontal="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/signup_google" />
-
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Already have an account?"
-        android:textSize="16dp"
         android:layout_marginTop="16dp"
+        android:text="Already have an account?"
         android:textColor="#8A9A8A"
+        android:textSize="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup_facebook" />
+        app:layout_constraintTop_toBottomOf="@+id/signup_google" />
 
     <TextView
         android:id="@+id/login_txt"
@@ -165,6 +146,7 @@
         android:textColor="#769382"
         android:textSize="16dp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />

@@ -11,7 +11,7 @@ import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        installSplashScreen()//test
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityWelcomeBinding.inflate(layoutInflater)

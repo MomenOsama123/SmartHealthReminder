@@ -6,7 +6,6 @@ import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.SignupBinding
-import com.example.smarthealthreminder.features.auth.providers.FacebookAuthHelper
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.google.android.material.snackbar.Snackbar
@@ -15,14 +14,11 @@ import com.google.firebase.auth.FirebaseAuth
 class SignupActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        facebookAuthHelper.forwardActivityResult(requestCode, resultCode, data)
         googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
     }
 
     private lateinit var binding: SignupBinding
     private lateinit var auth: FirebaseAuth
-    //facebook
-    private lateinit var facebookAuthHelper: FacebookAuthHelper
     //Google
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
@@ -59,20 +55,13 @@ class SignupActivity : AppCompatActivity() {
             }
         }
 
-        // Initialize Helpers
-        facebookAuthHelper = FacebookAuthHelper(this, auth) { isSuccess, error ->
-            if (isSuccess) Snackbar.make(binding.root, "Facebook Sign Up Success", Snackbar.LENGTH_SHORT).show()
-            else Snackbar.make(binding.root, error ?: "Facebook Error", Snackbar.LENGTH_SHORT).show()
-        }
 
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
             if (isSuccess) Snackbar.make(binding.root, "Google Sign Up Success", Snackbar.LENGTH_SHORT).show()
             else Snackbar.make(binding.root, error ?: "Google Error", Snackbar.LENGTH_SHORT).show()
         }
 
-        // Set Click Listeners (Assuming IDs are btnFacebook and btnGoogle)
         // Adjust these IDs if they are different in your signup.xml
-        binding.root.findViewWithTag<android.view.View>("facebook_btn")?.setOnClickListener { facebookAuthHelper.startLogin() }
         binding.root.findViewWithTag<android.view.View>("google_btn")?.setOnClickListener { googleAuthHelper.startLogin() }
     }
 
