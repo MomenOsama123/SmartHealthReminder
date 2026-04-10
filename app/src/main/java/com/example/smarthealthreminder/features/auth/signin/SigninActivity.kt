@@ -14,17 +14,22 @@ import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity2
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
+
 
 class SigninActivity : AppCompatActivity() {
     //for facebook auth
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         facebookAuthHelper.forwardActivityResult(requestCode, resultCode, data)
+        googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
+
     }
     private lateinit var binding: LoginBinding
     private lateinit var auth: FirebaseAuth
     //Facebook
     private lateinit var facebookAuthHelper: FacebookAuthHelper
+    private lateinit var googleAuthHelper: GoogleAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +52,7 @@ class SigninActivity : AppCompatActivity() {
                     } else {
                         Snackbar.make(
                             binding.root,
-                            "Login Failed $it.message",
+                            "Login Failed: ${it.exception?.message}",
                             Snackbar.LENGTH_SHORT
                         ).show()
                     }
@@ -70,6 +75,20 @@ class SigninActivity : AppCompatActivity() {
         // 2. Trigger login when the Facebook button is clicked
         binding.btnFacebook.setOnClickListener {
             facebookAuthHelper.startLogin()
+        }
+
+        // Initialize GoogleAuthHelper
+        googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, errorMessage ->
+            if (isSuccess) {
+                Toast.makeText(this, "Successfully logged in via Google!", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, errorMessage ?: "An error occurred during Google login", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        //Google button
+        binding.btnGoogle.setOnClickListener {
+            googleAuthHelper.startLogin()
         }
     }
 

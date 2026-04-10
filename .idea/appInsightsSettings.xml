@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.smarthealthreminder" />
+                  <option name="mobileSdkAppId" value="1:436777065371:android:b83f9b8e44608adc475f3e" />
+                  <option name="projectId" value="graduation-project-depi" />
+                  <option name="projectNumber" value="436777065371" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
