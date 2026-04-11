@@ -56,6 +56,8 @@ class SignupActivity : AppCompatActivity() {
         }
 
 
+
+
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
             if (isSuccess) Snackbar.make(binding.root, "Google Sign Up Success", Snackbar.LENGTH_SHORT).show()
             else Snackbar.make(binding.root, error ?: "Google Error", Snackbar.LENGTH_SHORT).show()

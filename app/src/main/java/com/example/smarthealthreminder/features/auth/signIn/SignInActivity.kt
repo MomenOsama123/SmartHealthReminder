@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
+import com.example.smarthealthreminder.features.auth.forget_password.ForgetpasswordActivity
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -19,8 +20,10 @@ class SignInActivity : AppCompatActivity() {
         googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
 
     }
+
     private lateinit var binding: LoginBinding
     private lateinit var auth: FirebaseAuth
+
     //Facebook
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
@@ -54,7 +57,22 @@ class SignInActivity : AppCompatActivity() {
 
 
         }
+        // toggle password visibility
+        binding.icTogglePassword.setOnClickListener {
+            if (binding.etPassword.inputType == 1) {
+                binding.etPassword.inputType = 129
+            }
+            else {
+                binding.etPassword.inputType = 1
+            }
 
+        }
+        binding.tvForgotPassword.setOnClickListener {
+            val intent = Intent(this, ForgetpasswordActivity::class.java)
+            startActivity(intent)
+            binding.etEmail.text.clear()
+            binding.etPassword.text.clear()
+        }
 
 
         // Initialize GoogleAuthHelper
@@ -62,7 +80,11 @@ class SignInActivity : AppCompatActivity() {
             if (isSuccess) {
                 Toast.makeText(this, "Successfully logged in via Google!", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, errorMessage ?: "An error occurred during Google login", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    this,
+                    errorMessage ?: "An error occurred during Google login",
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
 
@@ -71,7 +93,6 @@ class SignInActivity : AppCompatActivity() {
             googleAuthHelper.startLogin()
         }
     }
-
 
 
     private fun validateForm(): Boolean {
