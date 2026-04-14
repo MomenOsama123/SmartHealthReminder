@@ -19,6 +19,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
+
             android:src="@drawable/bg_logo_circle" />
 
         <!-- Title -->
@@ -146,6 +147,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="16dp"
+            android:autofillHints="password"
             android:background="@drawable/et_shape"
             android:backgroundTint="@color/white"
             android:hint="@string/confirm_password_hint"
