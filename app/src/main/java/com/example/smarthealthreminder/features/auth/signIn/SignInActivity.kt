@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
-import com.example.smarthealthreminder.features.auth.forget_password.ForgetpasswordActivity
+import com.example.smarthealthreminder.features.auth.forget_password.ForgetPasswordActivity
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -68,7 +68,7 @@ class SignInActivity : AppCompatActivity() {
 
         }
         binding.tvForgotPassword.setOnClickListener {
-            val intent = Intent(this, ForgetpasswordActivity::class.java)
+            val intent = Intent(this, ForgetPasswordActivity::class.java)
             startActivity(intent)
             binding.etEmail.text.clear()
             binding.etPassword.text.clear()
