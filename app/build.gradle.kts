@@ -52,4 +52,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    // Core Retrofit library
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+
+    // Converter factory (Choose one based on your data format)
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
 }
