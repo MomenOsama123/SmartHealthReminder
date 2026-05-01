@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                android:contentDescription="Back"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Reminders"
+                android:textAppearance="@style/TextHeading3"/>
+
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_notifications"
+                android:contentDescription="Notifications"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ACTION REQUIRED"
+                android:textAppearance="@style/TextCaption"
+                android:textAllCaps="true"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Set a New Health Goal."
+                android:textAppearance="@style/TextHeading2"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Title Input -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title *"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_title"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="e.g., Morning Vitamins"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Description Input -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="Add specific instructions or notes..."
+                android:padding="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:gravity="top"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Category -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_medicine"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medicine"
+                    app:chipIcon="@drawable/ic_medicine"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_appointment"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Appointment"
+                    app:chipIcon="@drawable/ic_appointment"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_task"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Task"
+                    app:chipIcon="@drawable/ic_task"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_custom"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom"
+                    app:chipIcon="@drawable/ic_custom"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Date & Time -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DATE &amp; TIME"
+                android:textAppearance="@style/TextCaption"
+                android:textAllCaps="true"
+                android:layout_marginBottom="12dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="20dp">
+
+                <EditText
+                    android:id="@+id/et_date"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="mm/dd/yyyy"
+                    android:paddingHorizontal="16dp"
+                    android:textAppearance="@style/TextBody1"
+                    android:drawableEnd="@drawable/ic_calendar"
+                    android:drawableTint="@color/text_tertiary"/>
+
+                <EditText
+                    android:id="@+id/et_time"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_input_field"
+                    android:hint="--:--"
+                    android:paddingHorizontal="16dp"
+                    android:textAppearance="@style/TextBody1"
+                    android:drawableEnd="@drawable/ic_clock"
+                    android:drawableTint="@color/text_tertiary"/>
+
+            </LinearLayout>
+
+            <!-- Recurrence -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RECURRENCE"
+                android:textAppearance="@style/TextCaption"
+                android:textAllCaps="true"
+                android:layout_marginBottom="8dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:layout_marginBottom="20dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="None"
+                    android:textAppearance="@style/TextBody1"/>
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_arrow_right"
+                    app:tint="@color/text_tertiary"
+                    android:contentDescription="Select recurrence"/>
+
+            </LinearLayout>
+
+            <!-- Priority Level -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Priority Level"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_priority"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:checkedButton="@id/btn_medium"
+                android:layout_marginBottom="20dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_low"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Low"
+                    android:textAppearance="@style/TextBody1"
+                    app:strokeColor="@color/border"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_medium"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Medium"
+                    android:textAppearance="@style/TextBody1"
+                    app:strokeColor="@color/border"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_high"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="High"
+                    android:textAppearance="@style/TextBody1"
+                    app:strokeColor="@color/border"/>
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- Early Notification -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_notifications"
+                    app:tint="@color/text_secondary"
+                    android:contentDescription="Notification"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Early Notification"
+                        android:textAppearance="@style/TextBody1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Remind me before the event"
+                        android:textAppearance="@style/TextCaption"/>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5 min"
+                    android:textAppearance="@style/TextBody2"
+                    android:textColor="@color/primary"
+                    android:layout_marginEnd="12dp"/>
+
+            </LinearLayout>
+
+            <!-- Vibration -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="32dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_vibration"
+                    app:tint="@color/text_secondary"
+                    android:contentDescription="Vibration"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="12dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vibration"
+                        android:textAppearance="@style/TextBody1"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Haptic feedback on alert"
+                        android:textAppearance="@style/TextCaption"/>
+
+                </LinearLayout>
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"/>
+
+            </LinearLayout>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save_reminder"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Save Reminder"
+                android:textAppearance="@style/TextButton"
+                android:background="@drawable/bg_rounded_button_primary"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="12dp"/>
+
+            <TextView
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Cancel"
+                android:textAppearance="@style/TextBody1"
+                android:textColor="@color/text_secondary"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
