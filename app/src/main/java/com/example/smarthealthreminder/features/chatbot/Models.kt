@@ -1,4 +1,5 @@
-package com.example.testchatbot
+package com.example.smarthealthreminder.features.chatbot
+
 
 data class ChatRequest(
     val model: String,

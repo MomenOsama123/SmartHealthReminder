@@ -1,4 +1,5 @@
-package com.example.testchatbot
+package com.example.smarthealthreminder.features.chatbot
+
 
 import retrofit2.Call
 import retrofit2.http.Body

@@ -1,4 +1,4 @@
-package com.example.testchatbot
+package com.example.smarthealthreminder.features.chatbot
 
 import android.os.Bundle
 import android.os.Handler
