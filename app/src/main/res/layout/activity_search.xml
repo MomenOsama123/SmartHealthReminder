@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/searchActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/page"
@@ -68,6 +69,7 @@
                 android:hint="@string/search_hint"
                 android:importantForAutofill="no"
                 android:inputType="text"
+                android:imeOptions="actionSearch"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp" />
 
@@ -291,7 +293,7 @@
         android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/background_beige"
+        android:background="@color/white"
         app:labelVisibilityMode="labeled"
         app:layout_constraintBottom_toBottomOf="parent" />
 

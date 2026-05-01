@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
+import com.example.smarthealthreminder.features.Search.SearchActivity
 import com.example.smarthealthreminder.features.auth.forget_password.ForgetPasswordActivity
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
@@ -23,8 +24,9 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var intent: Intent
 
-    //Facebook
+    //Google Authentication
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +81,9 @@ class SignInActivity : AppCompatActivity() {
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, errorMessage ->
             if (isSuccess) {
                 Toast.makeText(this, "Successfully logged in via Google!", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+
             } else {
                 Toast.makeText(
                     this,
