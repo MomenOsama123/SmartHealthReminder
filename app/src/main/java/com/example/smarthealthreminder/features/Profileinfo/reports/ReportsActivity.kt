@@ -1,7 +1,5 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
-// ⚠️ لا تنسَ تغيير هذا السطر لاسم مشروعك الفعلي
-
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
