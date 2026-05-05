@@ -132,4 +132,26 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="may_14_1968">May 14, 1968</string>
     <string name="female">Female</string>
     <string name="gender">Gender</string>
+    <string name="health_reports">Health Reports</string>
+    <string name="current_status">CURRENT STATUS</string>
+    <string name="your_condition_is_nstable">Your condition is\nstable</string>
+    <string name="daily_vitals_show_consistent_patterns_over_the_last_7_days">Daily vitals show consistent patterns over the last 7 days.</string>
+    <string name="medication_nadherence">Medication\nAdherence</string>
+    <string name="_85">85%</string>
+    <string name="goal_100">Goal: 100%</string>
+    <string name="you_took_85_of_your_medications_this_week_you_missed_only_2_evening_doses">You took 85% of your medications this week. You missed only 2 evening doses.</string>
+    <string name="symptoms_noverview">Symptoms\nOverview</string>
+    <string name="mild_fatigue_reported_more_frequently_on_wednesday_and_saturday">Mild fatigue reported more frequently on Wednesday and Saturday.</string>
+    <string name="ai_insights">AI Insights</string>
+    <string name="try_not_to_miss_evening_doses_to_maintain_consistent_levels">Try not to miss evening doses to maintain consistent levels.</string>
+    <string name="symptoms_increased_this_week_monitor_fatigue_levels_closely_tomorrow">Symptoms increased this week; monitor fatigue levels closely tomorrow.</string>
+    <string name="download_report">Download Report</string>
+    <string name="pdf_format_last_updated_today_at_08_45_am">PDF Format • Last updated today at 08:45 AM</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="sun">SUN</string>
 </resources>

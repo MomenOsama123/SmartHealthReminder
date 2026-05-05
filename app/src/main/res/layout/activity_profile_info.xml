@@ -147,7 +147,7 @@
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/white"
                 android:hint="@string/may_14_1968"
-                android:inputType="date"
+                android:inputType="datetime"
                 android:paddingStart="16dp"
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="12dp"
