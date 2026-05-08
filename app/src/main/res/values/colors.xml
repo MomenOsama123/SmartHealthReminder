@@ -8,5 +8,6 @@
     <color name="hint_gray">#475569</color>
     <color name="primary_green">#769382</color>
     <color name="primary">#769382</color>
+    <color name="primary_dark">#496856</color>
     <color name="border_gray">#D1D5DB</color>
 </resources>
