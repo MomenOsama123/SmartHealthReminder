@@ -324,6 +324,12 @@
                     android:textColor="@color/primary"
                     android:layout_marginEnd="12dp"/>
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_early_notification"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"/>
+
             </LinearLayout>
 
             <!-- Vibration -->
@@ -363,6 +369,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_vibration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"/>

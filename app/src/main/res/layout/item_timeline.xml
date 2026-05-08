@@ -18,7 +18,7 @@
             android:id="@+id/tv_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OCT"
+            android:text=""
             android:textAppearance="@style/TextCaption"
             android:textAllCaps="true"/>
 
@@ -26,7 +26,7 @@
             android:id="@+id/tv_day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="24"
+            android:text=""
             android:textAppearance="@style/TextBody1"/>
 
     </LinearLayout>
@@ -62,14 +62,14 @@
                         android:id="@+id/tv_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Morning Insulin Dose"
+                        android:text=""
                         android:textAppearance="@style/TextBody1"/>
 
                     <TextView
                         android:id="@+id/tv_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Take 15 units before breakfast..."
+                        android:text=""
                         android:textAppearance="@style/TextCaption"
                         android:layout_marginTop="2dp"/>
 
@@ -96,7 +96,7 @@
                     style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medicine"
+                    android:text=""
                     android:textColor="@color/medicine"
                     app:chipBackgroundColor="@color/medicine_light"
                     app:chipIcon="@drawable/ic_medicine"
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="08:00 AM"
+                    android:text=""
                     android:textAppearance="@style/TextCaption"
                     app:drawableStartCompat="@drawable/ic_clock"
                     app:drawableTint="@color/text_tertiary"
@@ -123,7 +123,7 @@
                     android:id="@+id/tv_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MISSED"
+                    android:text=""
                     android:textAppearance="@style/TextCaption"
                     android:textColor="@color/missed"
                     android:background="@drawable/bg_rounded_card_red"

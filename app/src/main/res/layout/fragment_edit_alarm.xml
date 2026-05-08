@@ -78,9 +78,10 @@
                         android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tv_hour"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="06"
+                            android:text=""
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="48sp"
                             android:textColor="@color/text_primary"/>
@@ -94,24 +95,26 @@
                             android:textColor="@color/text_tertiary"/>
 
                         <TextView
+                            android:id="@+id/tv_minute"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="30"
+                            android:text=""
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="48sp"
                             android:textColor="@color/text_primary"/>
 
                         <TextView
+                            android:id="@+id/tv_am_pm_display"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
-                            android:text="AM"
+                            android:text=""
                             android:textAppearance="@style/TextBody1"
                             android:textColor="@color/text_secondary"/>
 
                     </LinearLayout>
 
-                    <!-- Time Slider模拟 -->
+                    <!-- Time Slider Placeholder -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -120,9 +123,10 @@
                         android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_prev_hour"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="05"
+                            android:text=""
                             android:textAppearance="@style/TextBody2"
                             android:textColor="@color/text_tertiary"/>
 
@@ -133,9 +137,10 @@
                             android:background="@color/primary"/>
 
                         <TextView
+                            android:id="@+id/tv_prev_minute"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="29"
+                            android:text=""
                             android:textAppearance="@style/TextBody2"
                             android:textColor="@color/text_tertiary"/>
 
@@ -146,9 +151,10 @@
                             android:background="@color/primary"/>
 
                         <TextView
+                            android:id="@+id/tv_prev_am_pm"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="AM"
+                            android:text=""
                             android:textAppearance="@style/TextBody2"
                             android:textColor="@color/text_tertiary"/>
 
@@ -175,6 +181,7 @@
                 android:layout_marginBottom="24dp">
 
                 <TextView
+                    android:id="@+id/day_sun"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/bg_day_circle_unselected"
@@ -184,56 +191,62 @@
                     android:textColor="@color/text_secondary"/>
 
                 <TextView
+                    android:id="@+id/day_mon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_day_circle"
+                    android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
                     android:text="M"
-                    android:textAppearance="@style/TextBody1"
-                    android:textColor="@color/text_on_primary"/>
+                    android:textAppearance="@style/TextBody2"
+                    android:textColor="@color/text_secondary"/>
 
                 <TextView
+                    android:id="@+id/day_tue"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_day_circle"
+                    android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
                     android:text="T"
-                    android:textAppearance="@style/TextBody1"
-                    android:textColor="@color/text_on_primary"/>
+                    android:textAppearance="@style/TextBody2"
+                    android:textColor="@color/text_secondary"/>
 
                 <TextView
+                    android:id="@+id/day_wed"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_day_circle"
+                    android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
                     android:text="W"
-                    android:textAppearance="@style/TextBody1"
-                    android:textColor="@color/text_on_primary"/>
+                    android:textAppearance="@style/TextBody2"
+                    android:textColor="@color/text_secondary"/>
 
                 <TextView
+                    android:id="@+id/day_thu"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_day_circle"
+                    android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
                     android:text="T"
-                    android:textAppearance="@style/TextBody1"
-                    android:textColor="@color/text_on_primary"/>
+                    android:textAppearance="@style/TextBody2"
+                    android:textColor="@color/text_secondary"/>
 
                 <TextView
+                    android:id="@+id/day_fri"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_day_circle"
+                    android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
                     android:text="F"
-                    android:textAppearance="@style/TextBody1"
-                    android:textColor="@color/text_on_primary"/>
+                    android:textAppearance="@style/TextBody2"
+                    android:textColor="@color/text_secondary"/>
 
                 <TextView
+                    android:id="@+id/day_sat"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
@@ -255,10 +268,11 @@
                 android:layout_marginBottom="8dp"/>
 
             <EditText
+                android:id="@+id/et_alarm_label"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@drawable/bg_input_field"
-                android:hint="Clinical Rounds"
+                android:hint="Enter alarm label"
                 android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextBody1"
                 android:layout_marginBottom="24dp"/>
@@ -281,10 +295,11 @@
                 android:layout_marginBottom="24dp">
 
                 <TextView
+                    android:id="@+id/tv_sound_name"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Vital Pulse (Default)"
+                    android:text=""
                     android:textAppearance="@style/TextBody1"/>
 
                 <ImageView
@@ -312,13 +327,15 @@
                     android:textAppearance="@style/TextBody1"/>
 
                 <TextView
+                    android:id="@+id/tv_vibration_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="On (Sync pulse)"
+                    android:text=""
                     android:textAppearance="@style/TextBody2"
                     android:layout_marginEnd="12dp"/>
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_vibration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"/>
@@ -354,6 +371,7 @@
                 </LinearLayout>
 
                 <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_gradual"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"/>
@@ -408,9 +426,10 @@
                             android:gravity="center"/>
 
                         <TextView
+                            android:id="@+id/tv_snooze_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="10 Minutes"
+                            android:text=""
                             android:textAppearance="@style/TextBody2"
                             android:textColor="@color/primary"
                             android:layout_marginTop="4dp"/>
@@ -461,6 +480,7 @@
                             android:maxLines="3"/>
 
                         <androidx.appcompat.widget.SwitchCompat
+                            android:id="@+id/switch_cognitive"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"

@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHealthReminder">
 
-        <!-- Existing Activities -->
+        <!-- Welcome & Auth Activities -->
         <activity
             android:name=".features.welcome.WelcomeActivity2"
             android:exported="false" />
@@ -36,6 +36,7 @@
             android:exported="false"
             android:theme="@style/Theme.SmartHealthReminder..Splash" />
 
+        <!-- Main Activity -->
         <activity
             android:name=".features.activity.MainActivity"
             android:exported="true"
@@ -57,6 +58,30 @@
             android:turnScreenOn="true"
             android:theme="@style/Theme.ClinicalAlarms" />
 
+        <!-- Edit Alarm Activity -->
+        <activity
+            android:name=".features.activity.EditAlarmActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
+
+        <!-- Add Reminder Activity -->
+        <activity
+            android:name=".features.activity.AddReminderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
+
+        <!-- Alarm Receiver -->
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:exported="false" />
+
+        <!-- Alarm Service -->
+        <service
+            android:name=".alarm.AlarmService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <!-- Meta Data -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

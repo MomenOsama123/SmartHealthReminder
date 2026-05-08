@@ -28,6 +28,19 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
         notifyDataSetChanged()
     }
 
+    fun addItem(item: TimelineItem) {
+        this.items.add(item)
+        notifyItemInserted(items.size - 1)
+    }
+
+    fun updateItem(item: TimelineItem) {
+        val index = items.indexOfFirst { it.id == item.id }
+        if (index != -1) {
+            items[index] = item
+            notifyItemChanged(index)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_timeline, parent, false)
@@ -60,23 +73,24 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
         }
 
         fun bind(item: TimelineItem) {
-            tvMonth.text = item.month
-            tvDay.text = item.day
-            tvTitle.text = item.title
-            tvDescription.text = item.description
-            tvTime.text = item.time
-            chipCategory.text = item.category
+            tvMonth.text = item.month ?: ""
+            tvDay.text = item.day ?: ""
+            tvTitle.text = item.title ?: ""
+            tvDescription.text = item.description ?: ""
+            tvTime.text = item.time ?: ""
+            chipCategory.text = item.category ?: "General"
 
             // Set status
-            tvStatus.text = item.status
-            when (item.status) {
+            val status = item.status ?: "PENDING"
+            tvStatus.text = status
+            when (status.uppercase()) {
                 "MISSED" -> {
                     tvStatus.setBackgroundResource(R.drawable.bg_rounded_card_red)
                     tvStatus.setTextColor(itemView.context.getColor(R.color.missed))
                     statusIndicator.backgroundTintList =
                         itemView.context.getColorStateList(R.color.missed)
                 }
-                "DONE" -> {
+                "DONE", "COMPLETED" -> {
                     tvStatus.setBackgroundResource(R.drawable.bg_rounded_card_green)
                     tvStatus.setTextColor(itemView.context.getColor(R.color.success))
                     statusIndicator.backgroundTintList =

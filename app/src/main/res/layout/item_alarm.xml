@@ -33,7 +33,7 @@
                     style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MEDICINE"
+                    android:text=""
                     android:textColor="@color/medicine"
                     app:chipBackgroundColor="@color/medicine_light"
                     app:chipIcon="@drawable/ic_medicine"
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="08:00"
+                android:text=""
                 android:textAppearance="@style/TextHeading3"
                 android:textSize="28sp"/>
 
@@ -56,7 +56,7 @@
                 android:id="@+id/tv_am_pm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="AM"
+                android:text=""
                 android:textAppearance="@style/TextCaption"/>
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="M T W T F S S"
+                android:text=""
                 android:textAppearance="@style/TextCaption"/>
 
         </LinearLayout>

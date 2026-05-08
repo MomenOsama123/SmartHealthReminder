@@ -80,13 +80,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        >
+                        android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tv_today_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="12"
+                            android:text="0"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"/>
 
@@ -136,13 +136,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        >
+                        android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tv_missed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="03"
+                            android:text="00"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"
                             android:textColor="@color/missed"/>
@@ -195,13 +195,13 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        >
+                        android:gravity="center_vertical">
 
                         <TextView
+                            android:id="@+id/tv_completed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="08"
+                            android:text="00"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"
                             android:textColor="@color/success"/>

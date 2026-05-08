@@ -32,22 +32,24 @@
                 android:background="@drawable/bg_day_circle"
                 android:padding="6dp"
                 app:tint="@color/text_on_primary"
-                android:contentDescription="Profile"/>
+                android:contentDescription="Category Icon"/>
 
             <TextView
+                android:id="@+id/tv_alarm_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:text="Dr. Aris Thorne"
+                android:text=""
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_on_primary"/>
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tv_alarm_priority"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HIGH PRIORITY"
+            android:text=""
             android:textAppearance="@style/TextCaption"
             android:textColor="@color/text_on_primary"
             android:background="@drawable/bg_rounded_card_red"
@@ -80,15 +82,16 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         app:layout_constraintTop_toBottomOf="@id/iv_bell"
-        app:layout_constraintBottom_toTopOf="@id/info_container"
+        app:layout_constraintBottom_toTopOf="@id/tv_alarm_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="32dp">
 
         <TextView
+            android:id="@+id/tv_alarm_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="08:45"
+            android:text=""
             android:textAppearance="@style/TextHeading1"
             android:textSize="72sp"
             android:textColor="@color/text_on_primary"/>
@@ -97,10 +100,10 @@
 
     <!-- Date -->
     <TextView
-        android:id="@+id/tv_date"
+        android:id="@+id/tv_alarm_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="WEDNESDAY, OCT 24"
+        android:text=""
         android:textAppearance="@style/TextCaption"
         android:textColor="@color/text_on_primary"
         android:alpha="0.8"
@@ -116,7 +119,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/tv_date"
+        app:layout_constraintTop_toBottomOf="@id/tv_alarm_date"
         app:layout_constraintBottom_toTopOf="@id/btn_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,26 +127,29 @@
         android:layout_marginHorizontal="32dp">
 
         <TextView
+            android:id="@+id/tv_alarm_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Morning Medication"
+            android:text=""
             android:textAppearance="@style/TextHeading2"
             android:textColor="@color/text_on_primary"/>
 
         <TextView
+            android:id="@+id/tv_patient_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Patient: Sarah Jenkins"
+            android:text=""
             android:textAppearance="@style/TextBody1"
             android:textColor="@color/text_on_primary"
             android:alpha="0.9"/>
 
         <TextView
+            android:id="@+id/tv_room_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="Room 402 • Post-Op Ward"
+            android:text=""
             android:textAppearance="@style/TextBody2"
             android:textColor="@color/text_on_primary"
             android:alpha="0.7"/>

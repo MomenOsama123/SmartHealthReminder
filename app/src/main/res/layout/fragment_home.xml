@@ -27,7 +27,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Reminders"
+                    android:text="@string/welcome_message"
                     android:textAppearance="@style/TextHeading2"/>
 
                 <ImageButton
@@ -79,9 +79,57 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <!-- Empty State -->
+    <LinearLayout
+        android:id="@+id/empty_state"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="32dp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_notifications"
+            app:tint="@color/text_tertiary"
+            android:contentDescription="No reminders"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Reminders Yet"
+            android:textAppearance="@style/TextHeading3"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add your first health reminder"
+            android:textAppearance="@style/TextCaption"
+            android:layout_marginBottom="24dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_reminder"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:paddingHorizontal="32dp"
+            android:text="Add Reminder"
+            android:textAppearance="@style/TextButton"
+            app:backgroundTint="@color/primary"
+            app:cornerRadius="12dp"/>
+
+    </LinearLayout>
+
+    <!-- Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
@@ -128,16 +176,18 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_reminder_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Evening Insulin Dosage &amp; Check-up"
+                                android:text=""
                                 android:textAppearance="@style/TextHeading3"
                                 android:layout_marginBottom="4dp"/>
 
                             <TextView
+                                android:id="@+id/tv_reminder_subtitle"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Daily Repeat • Until Dec 2024"
+                                android:text=""
                                 android:textAppearance="@style/TextCaption"/>
 
                         </LinearLayout>
@@ -162,16 +212,18 @@
                             android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/tv_reminder_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="19:30"
+                                android:text=""
                                 android:textAppearance="@style/TextHeading2"
                                 android:textColor="@color/primary"/>
 
                             <TextView
+                                android:id="@+id/tv_reminder_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Oct 24"
+                                android:text=""
                                 android:textAppearance="@style/TextBody2"/>
 
                         </LinearLayout>
@@ -183,23 +235,15 @@
                             android:gravity="end">
 
                             <TextView
+                                android:id="@+id/tv_reminder_priority"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="! High Priority"
+                                android:text=""
                                 android:textAppearance="@style/TextBody1"
                                 android:textColor="@color/urgent"
                                 android:background="@drawable/bg_rounded_card_red"
                                 android:paddingHorizontal="12dp"
                                 android:paddingVertical="6dp"/>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:text="Missed doses significantly impact blood glucose stability."
-                                android:textAppearance="@style/TextCaption"
-                                android:maxLines="2"
-                                android:ellipsize="end"/>
 
                         </LinearLayout>
 
@@ -232,9 +276,10 @@
                     android:padding="16dp">
 
                     <TextView
+                        android:id="@+id/tv_reminder_description"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Administer 15 units of Lantus SoloStar long-acting insulin subcutaneously. Ideally, injection should occur in the abdominal area, alternating sites daily to prevent lipohypertrophy.\n\nPost-administration, perform a quick capillary blood glucose check and log the results in the Health vitals section. If reading is below 70 mg/dL, refer to the hypoglycemic emergency protocol provided by Dr. Aris."
+                        android:text=""
                         android:textAppearance="@style/TextBody2"
                         android:lineSpacingMultiplier="1.2"/>
 
@@ -297,7 +342,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Yesterday at 19:32 (2m delay)"
+                                android:text=""
                                 android:textAppearance="@style/TextCaption"/>
 
                         </LinearLayout>
@@ -350,7 +395,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Oct 22 at 19:30 (No user action)"
+                                android:text=""
                                 android:textAppearance="@style/TextCaption"/>
 
                         </LinearLayout>
@@ -402,7 +447,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Oct 21 at 14:15 by Dr. Aris"
+                                android:text=""
                                 android:textAppearance="@style/TextCaption"/>
 
                         </LinearLayout>
