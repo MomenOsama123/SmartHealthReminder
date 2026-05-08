@@ -20,11 +20,13 @@ class AlarmService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
+    private var isRunning = false  // ← عشان نمنع تشغيل الصوت أكتر من مرة
 
     companion object {
         const val CHANNEL_ID = "alarm_channel"
         const val NOTIFICATION_ID = 1001
         const val EXTRA_ALARM_LABEL = "alarm_label"
+        const val ACTION_STOP = "ACTION_STOP"
     }
 
     override fun onCreate() {
@@ -33,20 +35,54 @@ class AlarmService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val label = intent?.getStringExtra(EXTRA_ALARM_LABEL) ?: "Alarm"
+
+        // لو جه أمر stop — وقف كل حاجة فوراً
+        if (intent?.action == ACTION_STOP) {
+            stopAlarmSound()
+            stopVibration()
+            stopForeground(true)
+            stopSelf()
+            isRunning = false
+            return START_NOT_STICKY
+        }
+
+        // لو الصوت شغال بالفعل، متشغلوش تاني
+        if (isRunning) return START_NOT_STICKY
+        isRunning = true
+
+        val label = intent?.getStringExtra("alarm_label") ?: "Alarm"
+        val alarmId = intent?.getStringExtra("alarm_id")
+        val alarmTime = intent?.getStringExtra("alarm_time")
+        val alarmCategory = intent?.getStringExtra("alarm_category")
+
         startForeground(NOTIFICATION_ID, buildNotification(label))
         playAlarmSound()
         startVibration()
-        return START_STICKY
-    }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+        // افتح شاشة الـ alarm
+        val alarmIntent = Intent(this, AlarmRingingActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_ID, alarmId)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_LABEL, label)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_TIME, alarmTime)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_CATEGORY, alarmCategory)
+        }
+        startActivity(alarmIntent)
+
+        return START_NOT_STICKY
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         stopAlarmSound()
         stopVibration()
+        stopForeground(true)
+        isRunning = false
     }
+
+    override fun onBind(p0: Intent?): IBinder? = null
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -86,19 +122,30 @@ class AlarmService : Service() {
     }
 
     private fun playAlarmSound() {
-        mediaPlayer = MediaPlayer.create(this, android.provider.Settings.System.DEFAULT_ALARM_ALERT_URI)
-        mediaPlayer?.apply {
-            isLooping = true
-            start()
+        try {
+            mediaPlayer = MediaPlayer.create(
+                this,
+                android.provider.Settings.System.DEFAULT_ALARM_ALERT_URI
+            )
+            mediaPlayer?.apply {
+                isLooping = true
+                start()
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     private fun stopAlarmSound() {
-        mediaPlayer?.apply {
-            if (isPlaying) stop()
-            release()
+        try {
+            mediaPlayer?.apply {
+                if (isPlaying) stop()
+                release()
+            }
+            mediaPlayer = null
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-        mediaPlayer = null
     }
 
     private fun startVibration() {

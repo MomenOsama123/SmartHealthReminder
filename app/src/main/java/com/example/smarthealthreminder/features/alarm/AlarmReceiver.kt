@@ -3,7 +3,7 @@ package com.example.smarthealthreminder.alarm
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.smarthealthreminder.features.activity.AlarmRingingActivity
+import android.os.Build
 
 class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
@@ -13,15 +13,19 @@ class AlarmReceiver : BroadcastReceiver() {
         val alarmCategory = intent.getStringExtra("alarm_category")
         val isSnooze = intent.getBooleanExtra("is_snooze", false)
 
-        val alarmIntent = Intent(context, AlarmRingingActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            putExtra(AlarmRingingActivity.EXTRA_ALARM_ID, alarmId)
-            putExtra(AlarmRingingActivity.EXTRA_ALARM_LABEL, alarmLabel)
-            putExtra(AlarmRingingActivity.EXTRA_ALARM_TIME, alarmTime)
-            putExtra(AlarmRingingActivity.EXTRA_ALARM_CATEGORY, alarmCategory)
+        // ← شغلي الـ Service بدل ما تفتحي Activity مباشرة
+        val serviceIntent = Intent(context, AlarmService::class.java).apply {
+            putExtra("alarm_id", alarmId)
+            putExtra("alarm_label", alarmLabel)
+            putExtra("alarm_time", alarmTime)
+            putExtra("alarm_category", alarmCategory)
             putExtra("is_snooze", isSnooze)
         }
-        context.startActivity(alarmIntent)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(serviceIntent)
+        } else {
+            context.startService(serviceIntent)
+        }
     }
 }

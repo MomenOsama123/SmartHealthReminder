@@ -13,7 +13,10 @@ import com.example.smarthealthreminder.data.repository.HealthRepository
 import kotlinx.coroutines.launch
 import java.util.*
 import android.content.Intent
-
+import com.example.smarthealthreminder.alarm.ReminderReceiver
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.os.Build
 
 
 class AddReminderActivity : AppCompatActivity() {
@@ -169,10 +172,13 @@ class AddReminderActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repository.insertReminder(reminder)
-            Toast.makeText(this@AddReminderActivity, 
+
+            // ← أضيفي الكود ده عشان تشيديلي الـ notification
+            scheduleReminderNotification(reminder)
+
+            Toast.makeText(this@AddReminderActivity,
                 "Reminder saved!", Toast.LENGTH_SHORT).show()
 
-            // Return result
             val resultIntent = android.content.Intent().apply {
                 putExtra(EXTRA_REMINDER_RESULT, reminder.id)
             }
@@ -180,4 +186,66 @@ class AddReminderActivity : AppCompatActivity() {
             finish()
         }
     }
-}
+
+    private fun scheduleReminderNotification(reminder: ReminderEntity) {
+        try {
+            val dateParts = reminder.date?.split("/") ?: return
+            val timeParts = reminder.time?.split(":") ?: return   // HH:MM
+
+            if (dateParts.size < 3 || timeParts.size < 2) return
+
+            val calendar = Calendar.getInstance().apply {
+                set(Calendar.MONTH, dateParts[0].toInt() - 1)
+                set(Calendar.DAY_OF_MONTH, dateParts[1].toInt())
+                set(Calendar.YEAR, dateParts[2].toInt())
+                set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+                set(Calendar.MINUTE, timeParts[1].toInt())
+                set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
+            }
+
+            // لو الوقت فات، متشيدلوش
+            if (calendar.timeInMillis <= System.currentTimeMillis()) {
+                Toast.makeText(this, "⚠️ Please choose a future time!", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val intent = android.content.Intent(this, ReminderReceiver::class.java).apply {
+                putExtra("reminder_id", reminder.id)
+                putExtra("reminder_title", reminder.title)
+                putExtra("reminder_description", reminder.description)
+                putExtra("reminder_time", reminder.time)
+                putExtra("vibration_enabled", reminder.vibrationEnabled)
+            }
+
+            val pendingIntent = android.app.PendingIntent.getBroadcast(
+                this,
+                reminder.id.hashCode(),
+                intent,
+                android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val alarmManager = getSystemService(ALARM_SERVICE) as android.app.AlarmManager
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+                if (alarmManager.canScheduleExactAlarms()) {
+                    alarmManager.setExactAndAllowWhileIdle(
+                        android.app.AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
+                }
+            } else {
+                alarmManager.setExactAndAllowWhileIdle(
+                    android.app.AlarmManager.RTC_WAKEUP,
+                    calendar.timeInMillis,
+                    pendingIntent
+                )
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+    }
+

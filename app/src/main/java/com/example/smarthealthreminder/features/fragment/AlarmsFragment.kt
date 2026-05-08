@@ -74,6 +74,12 @@ class AlarmsFragment : Fragment() {
             override fun onToggle(alarm: Alarm, isActive: Boolean) {
                 alarm.id?.let { id ->
                     viewModel.toggleAlarm(id, isActive)
+                    val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(requireContext())
+                    if (isActive) {
+                        alarmHelper.scheduleAlarm(alarm)
+                    } else {
+                        alarmHelper.cancelAlarm(alarm)
+                    }
                 }
             }
         })

@@ -145,6 +145,8 @@ class EditAlarmActivity : AppCompatActivity() {
             else -> hour24
         }
         val timeString = String.format("%02d:%02d", displayHour, minute)
+        // ← خليها 24h عشان AlarmHelper يحسب الوقت صح
+        val time24String = String.format("%02d:%02d", hour24, minute)
 
         val selectedDays = getSelectedDays()
 
@@ -165,11 +167,26 @@ class EditAlarmActivity : AppCompatActivity() {
                 repository.insertAlarm(alarm)
             }
 
-            Toast.makeText(this@EditAlarmActivity, 
-                "Alarm ${if (isEditMode) "updated" else "saved"}: $label", 
-                Toast.LENGTH_SHORT).show()
+            val alarmModel = com.example.smarthealthreminder.features.model.Alarm(
+                id = alarm.id,
+                label = alarm.label,
+                time = time24String,  // ← 24h عشان AlarmHelper يشتغل صح
+                amPm = alarm.amPm,
+                category = alarm.category,
+                isActive = alarm.isActive
+            )
 
-            // Return result
+            val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(this@EditAlarmActivity)
+            if (alarm.isActive) {
+                alarmHelper.scheduleAlarm(alarmModel)
+            }
+
+            Toast.makeText(
+                this@EditAlarmActivity,
+                "Alarm ${if (isEditMode) "updated" else "saved"}: $label",
+                Toast.LENGTH_SHORT
+            ).show()
+
             val resultIntent = Intent().apply {
                 putExtra(EXTRA_ALARM_RESULT, alarm.id)
             }
@@ -203,6 +220,16 @@ class EditAlarmActivity : AppCompatActivity() {
     private fun deleteAlarm() {
         lifecycleScope.launch {
             existingAlarmId?.let { id ->
+                val alarmModel = com.example.smarthealthreminder.features.model.Alarm(
+                    id = id,
+                    label = "",
+                    time = "",
+                    amPm = "",
+                    category = ""
+                )
+                val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(this@EditAlarmActivity)
+                alarmHelper.cancelAlarm(alarmModel)
+
                 repository.deleteAlarmById(id)
 
                 val resultIntent = Intent().apply {
