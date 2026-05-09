@@ -3,6 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+
 
     <application
         android:allowBackup="true"
@@ -13,6 +23,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHealthReminder">
+
+        <!-- Welcome & Auth Activities -->
         <activity
             android:name=".features.Search.SearchActivity"
             android:exported="false" />
@@ -31,14 +43,75 @@
 
 
         <activity
-            android:name=".features.Profileinfo.reports.ProfileActivity"
-            android:exported="true" >
+            android:name=".features.welcome.WelcomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SmartHealthReminder..Splash" />
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".features.activity.MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.ClinicalAlarms">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <!-- Alarm Ringing Activity -->
+        <activity
+            android:name=".features.activity.AlarmRingingActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
+            android:theme="@style/Theme.ClinicalAlarms" />
+
+        <!-- Edit Alarm Activity -->
+        <activity
+            android:name=".features.activity.EditAlarmActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
+
+        <!-- Add Reminder Activity -->
+        <activity
+            android:name=".features.activity.AddReminderActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
+
+        <!-- Alarm Receiver - واحدة بس مع الـ BOOT_COMPLETED -->
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Alarm Service -->
+        <service
+            android:name=".alarm.AlarmService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="alarm"/>
+        </service>
+        <receiver
+            android:name=".alarm.ReminderReceiver"
+            android:exported="false" />
+
+        <!-- Meta Data -->
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.facebook.sdk.ClientToken"
+            android:value="@string/facebook_client_token" />
 
         <activity
             android:name=".features.auth.forget_password.ForgetPasswordActivity"
