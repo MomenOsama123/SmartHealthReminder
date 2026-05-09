@@ -112,4 +112,16 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="try_a_different_keyword">Try a different keyword ↵</string>
     <string name="clear_all_filters">Clear all filters</string>
     <string name="gluten_free_remedies">Gluten-free remedies</string>
+    <string name="serenepulse">SerenePulse</string>
+    <string name="clinical_care_active">CLINICAL CARE ACTIVE</string>
+    <string name="report_session_today">REPORT SESSION: TODAY</string>
+    <string name="rk_your_health_sanctuary">✦_✦RK YOUR HEALTH SANCTUARY</string>
+    <string name="take_a_breath_your_wellness_journey_continues_today_with_personalized_reminders_and_gentle_insights_designed_for_your_tranquility">Take a breath. Your wellness journey continues today with personalized reminders and gentle insights designed for your tranquility.</string>
+    <string name="today_s_reminders">Today\'s Reminders</string>
+    <string name="sleep_quality">Sleep Quality</string>
+    <string name="optimal">Optimal</string>
+    <string name="daily_steps">DAILY STEPS</string>
+    <string name="fatigue">FATIGUE</string>
+    <string name="essential_tools">Essential Tools</string>
+    <string name="vitamins">Vitamins</string>
 </resources>
