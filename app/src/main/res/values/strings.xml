@@ -3,12 +3,9 @@
 
     <!-- ================= Dashboard ================= -->
 
-    <string name="thu">THU</string>
-    <string name="fri">FRI</string>
-
     <string name="app_rname">Good Morning, Elena</string>
 
-    <string name="adherence_percent">72%%</string>
+    <string name="adherence_percent">72%</string>
     <string name="adherence_label">ADHERENCE</string>
 
     <string name="on_track_title">On Track</string>
@@ -64,5 +61,121 @@
 
     <string name="suggested_topics">SUGGESTED TOPICS</string>
     <string name="health_assistant">Health Assistant</string>
+
+    <string name="no_results_found">No results found</string>
+    <string name="try_a_different_keyword">Try a different keyword ↵</string>
+    <string name="clear_all_filters">Clear all filters</string>
+    <string name="gluten_free_remedies">Gluten-free remedies</string>
+
+    <string name="none_reported_mild_hypertension_managed_by_diet">None reported. Mild hypertension managed by diet.</string>
+    <string name="chronic_diseases">Chronic Diseases</string>
+
+    <string name="weight_kg">Weight (kg)</string>
+    <string name="_64">64</string>
+
+    <string name="height_cm">Height (cm)</string>
+    <string name="_168">168</string>
+
+    <string name="blood_type">Blood Type</string>
+    <string name="a_positive_a">A Positive (A+)</string>
+    <string name="a">A+</string>
+
+    <string name="full_name">Full Name</string>
+    <string name="eleanor_vance">Eleanor Vance</string>
+
+    <string name="date_of_birth">Date of Birth</string>
+
+    <string name="healthsync">HealthSync</string>
+    <string name="personal_health_information">Personal Health Information</string>
+
+    <string name="save_changes">Save Changes</string>
+    <string name="darkmode">DarkMode</string>
+
+    <string name="yehia_abdo">yehia abdo.</string>
+    <string name="may_14_1968">May 14, 1968</string>
+
+    <string name="female">Female</string>
+    <string name="gender">Gender</string>
+
+    <string name="health_reports">Health Reports</string>
+
+    <string name="current_status">CURRENT STATUS</string>
+    <string name="your_condition_is_stable">Your condition is\nstable</string>
+
+    <string name="daily_vitals_show_consistent_patterns_over_the_last_7_days">
+        Daily vitals show consistent patterns over the last 7 days.
+    </string>
+
+    <string name="medication_adherence">Medication\nAdherence</string>
+
+    <string name="_85">85%</string>
+    <string name="goal_100">Goal: 100%</string>
+
+    <string name="you_took_85_of_your_medications_this_week_you_missed_only_2_evening_doses">
+        You took 85% of your medications this week. You missed only 2 evening doses.
+    </string>
+
+    <string name="symptoms_overview">Symptoms\nOverview</string>
+
+    <string name="mild_fatigue_reported_more_frequently_on_wednesday_and_saturday">
+        Mild fatigue reported more frequently on Wednesday and Saturday.
+    </string>
+
+    <string name="ai_insights">AI Insights</string>
+
+    <string name="try_not_to_miss_evening_doses_to_maintain_consistent_levels">
+        Try not to miss evening doses to maintain consistent levels.
+    </string>
+
+    <string name="symptoms_increased_this_week_monitor_fatigue_levels_closely_tomorrow">
+        Symptoms increased this week; monitor fatigue levels closely tomorrow.
+    </string>
+
+    <string name="download_report">Download Report</string>
+
+    <string name="pdf_format_last_updated_today_at_08_45_am">
+        PDF Format • Last updated today at 08:45 AM
+    </string>
+
+    <!-- Week Days -->
+
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="sat">SAT</string>
+    <string name="sun">SUN</string>
+
+    <string name="allergies">Allergies</string>
+    <string name="emergency_contact_number">Emergency Contact Number</string>
+
+    <string name="date">mm/dd/yyyy</string>
+
+    <string name="skip_for_now">Skip for now</string>
+
+    <string name="serenepulse">SerenePulse</string>
+
+    <string name="clinical_care_active">CLINICAL CARE ACTIVE</string>
+
+    <string name="report_session_today">REPORT SESSION: TODAY</string>
+
+    <string name="rk_your_health_sanctuary">✦ EMBARK YOUR HEALTH SANCTUARY</string>
+
+    <string name="take_a_breath_your_wellness_journey_continues_today_with_personalized_reminders_and_gentle_insights_designed_for_your_tranquility">
+        Take a breath. Your wellness journey continues today with personalized reminders and gentle insights designed for your tranquility.
+    </string>
+
+    <string name="today_s_reminders">Today's Reminders</string>
+
+    <string name="sleep_quality">Sleep Quality</string>
+    <string name="optimal">Optimal</string>
+
+    <string name="daily_steps">DAILY STEPS</string>
+    <string name="fatigue">FATIGUE</string>
+
+    <string name="essential_tools">Essential Tools</string>
+
+    <string name="vitamins">Vitamins</string>
 
 </resources>

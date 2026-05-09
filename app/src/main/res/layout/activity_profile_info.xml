@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_beige"
+    tools:context=".features.Profileinfo.reports.ProfileActivity">
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="26dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/text_dark"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn_back"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="14dp"
+            android:text="@string/healthsync"
+            android:textColor="@color/text_dark"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="RelativeOverlap" />
+
+        <ImageView
+            android:id="@+id/icDarkMode"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/darkmode"
+            android:src="@drawable/ic_dark_mode"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:focusable="true"/>
+    </RelativeLayout>
+
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_bar"
+        android:paddingHorizontal="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <RelativeLayout
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp">
+
+                <ImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bg_logo_circle"
+                    tools:ignore="ContentDescription" />
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:background="@drawable/bg_logo_circle"
+                    android:backgroundTint="@color/primary_green"
+                    android:src="@drawable/ic_edit"
+                    android:padding="6dp"
+                    app:tint="@color/white"
+                    tools:ignore="ContentDescription" />
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yehia_abdo"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_dark"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_health_information"
+                android:textSize="14sp"
+                android:textColor="@color/hint_gray"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/full_name"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/full_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="@string/eleanor_vance"
+                android:inputType="textPersonName"
+                android:paddingStart="16dp"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_of_birth"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/dob_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="@string/may_14_1968"
+                android:inputType="datetime"
+                android:paddingStart="16dp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/gender_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="@string/female"
+                android:inputType="text"
+                android:textColor="@color/text_dark"
+                android:paddingStart="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blood_type"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/blood_type_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="@string/a"
+                android:inputType="number"
+                android:textColor="@color/text_dark"
+                android:paddingStart="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:drawableStart="@drawable/outline_check_circle"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight_kg"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/weight_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:text="@string/_64"
+                android:textColorHint="@color/border_gray"
+                android:inputType="numberDecimal"
+                android:paddingStart="16dp"
+                android:drawableStart="@drawable/outline_check_circle"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/height_cm"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/height_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="@string/_168"
+                android:textColor="@color/text_dark"
+                android:inputType="number"
+                android:paddingStart="16dp"
+                android:drawableStart="@drawable/outline_check_circle"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Chronic Diseases"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp"
+                tools:ignore="HardcodedText" />
+            <EditText
+                android:id="@+id/diseases_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:minHeight="80dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="None reported. Mild hypertension managed by diet."
+                android:textColor="@color/text_dark"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:padding="16dp"
+                android:drawableStart="@drawable/outline_check_circle"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                tools:ignore="HardcodedText" />
+
+            <Button
+                android:id="@+id/save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/primary_green"
+                android:text="@string/save_changes"
+                android:textColor="@color/white"
+                android:backgroundTintMode="src_in"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

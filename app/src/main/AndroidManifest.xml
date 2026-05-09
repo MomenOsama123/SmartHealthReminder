@@ -40,6 +40,8 @@
         <activity
             android:name=".features.auth.signIn.SignInActivity"
             android:exported="false" />
+
+
         <activity
             android:name=".features.welcome.WelcomeActivity"
             android:exported="true"
