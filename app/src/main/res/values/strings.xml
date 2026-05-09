@@ -154,4 +154,8 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="fri">FRI</string>
     <string name="sat">SAT</string>
     <string name="sun">SUN</string>
+    <string name="allergies">Allergies</string>
+    <string name="emergency_contact_number">Emergency Contact Number</string>
+    <string name="date">mm/dd/yyyy</string>
+    <string name="skip_for_now">Skip for now</string>
 </resources>
