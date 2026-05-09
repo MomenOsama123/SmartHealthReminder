@@ -1,127 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    //facebook
-    <string name="facebook_app_id">924597597084563</string>
-    <string name="fb_login_protocol_scheme">fb924597597084563</string>
-    <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
-    ///////////
-    <string name="login_text">Login</string>
-    <string name="welcome_back">Welcome Back</string>
-    <string name="create_account_title">Create Account</string>
-    <string name="create_account_subtitle">Join our wellness community</string>
 
-    <string name="full_name_label">Full Name</string>
-    <string name="full_name_hint">John Doe</string>
+    <!-- ================= Dashboard ================= -->
 
-    <string name="email_label">Email Address</string>
-    <string name="email_hint">name@example.com</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
 
-    <string name="password_label">Password</string>
-    <string name="password_hint">********</string>
+    <string name="app_rname">Good Morning, Elena</string>
 
-    <string name="confirm_password_label">Confirm Password</string>
-    <string name="confirm_password_hint">********</string>
+    <string name="adherence_percent">72%%</string>
+    <string name="adherence_label">ADHERENCE</string>
 
-    <string name="terms_text">By signing up, I agree to Terms of Service and Privacy Policy</string>
+    <string name="on_track_title">On Track</string>
+    <string name="on_track_desc">You are doing great. Just 2 more doses to reach your daily goal.</string>
 
-    <string name="signup_button">Sign Up</string>
+    <string name="next_medication">Next Medication</string>
+    <string name="today_date">Today, Oct 24</string>
 
-    <string name="already_account">Already have an account?</string>
+    <string name="med_name">Lisinopril 10mg</string>
+    <string name="med_time">09:00 AM</string>
 
+    <string name="mark_taken">Mark as Taken</string>
+    <string name="snooze">Snooze 15m</string>
 
-    <string name="app_name">Smart Health Reminder with AI Assistant</string>
-    <string name="welcome_message">Welcome to Smart Health</string>
-    <string name="subtitle_welcome">Your personal health assistant</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="log_in">Log In</string>
-    <string name="or_continue_with">OR CONTINUE WITH</string>
-    <string name="c">Welcome Back</string>
-    <string name="secure_access_to_your_health_records">Secure access to your health records.</string>
-    <string name="email_address">Username or Email Address</string>
-    <string name="sampleEmail">name@example.com</string>
-    <string name="password">Password</string>
-    <string name="hiddenPassword">••••••••</string>
-    <string name="google">Google</string>
-    <string name="don_t_have_an_account">Don\'t have an account?</string>
-    <string name="create_an_account">Create an Account</string>
-    <string name="facebook">Facebook</string>
-    <string name="password_changed_successfully">Password changed\nsuccessfully</string>
-    <string name="password_reset_successfully">Your password has been reset \n ccessfully. You can now log in with \n your new password.</string>
-    <string name="back_to_login">BACK TO LOGIN</string>
-    <string name="verification_successful">Verification Successful!</string>
-    <string name="your_email_verified">Your email has been verified. \n You can now log in to your account.</string>
-    <string name="check_your_email">Check your email</string>
-    <string name="password_recovery_link">We have sent a password recovery link \n to your registered email address.</string>
-    <string name="verify_email_title">Verify Your Email</string>
+    <string name="total_meds">TOTAL MEDS</string>
+    <string name="taken_today">TAKEN TODAY</string>
+    <string name="missed_today">MISSED TODAY</string>
+    <string name="upcoming_today">Upcoming Today</string>
 
-    <string name="verify_email_subtitle">
-        We sent a verification code to your email.\n
-        Please enter it below to continue.
-    </string>
+    <string name="metformin">Metformin 500mg</string>
+    <string name="after_lunch">After Lunch</string>
+    <string name="time_1pm">01:00 PM</string>
 
-    <string name="verify_button">Verify</string>
+    <string name="atorvastatin">Atorvastatin 20mg</string>
+    <string name="before_bed">Before Bed</string>
+    <string name="time_9pm">09:00 PM</string>
+    <string name="time_1">01:00 PM</string>
 
-    <string name="did_not_receive_code">Didn\'t receive the code?</string>
+    <!-- ================= Features / Master ================= -->
 
-    <string name="resend_code">Resend Code</string>
-    <string name="forgot_password_title">Forgot Password</string>
-
-    <string name="forgot_password_subtitle">
-    Enter your email address to receive \n a link to reset your password.
-</string>
-
-    <string name="send_link">SEND LINK</string>
-
-    <string name="healthcare_technical">HEALTHCARE TECHNICAL</string>
-    <string name="create_new_password_title">Create New Password</string>
-    <string name="create_new_password_desc">
-Please enter your new password to regain access \n to your account. Choose a strong, unique password.
-</string>
-
-    <string name="new_password_label">NEW PASSWORD</string>
-    <string name="new_password_hint">Enter new password</string>
-
-    <string name="confirm_new_password_label">CONFIRM NEW PASSWORD</string>
-    <string name="confirm_new_password_hint">Confirm new password</string>
-
-    <string name="password_rule">
-Password must be at least 8 characters long and \n include  a mix of letters, numbers, and symbols.
-</string>
-
-    <string name="update_password_btn">UPDATE PASSWORD</string>
-    <string name="username">Username</string>
-    <string name="fb924597597084563" />
-    <string name="fb9738d8624eb804760bbd820158c42810" />
-    <string name="default_web_client_id">436777065371-4c3o1n4k43r3oadfipjfo9dgr8vvqme8.apps.googleusercontent.com</string>
-    <string name="sign_up">Sign Up</string>
     <string name="search_resources">Search Resources</string>
     <string name="search_hint">Search for medication...</string>
+
     <string name="medical_encyclopedia">Medical\nEncyclopedia</string>
     <string name="encyclopedia_desc">Symptoms, conditions, and clinical research data library.</string>
+
     <string name="alarms">Alarms</string>
     <string name="alarms_desc">Medication &amp; reminders</string>
+
     <string name="tips">Tips</string>
     <string name="tips_desc">Daily health advice</string>
+
     <string name="app_features">App Features</string>
     <string name="app_features_desc">Master your wellness\njourney</string>
+
     <string name="content_desc_back">Go back</string>
     <string name="content_desc_search">Search icon</string>
-    <string name="noResParagraph">We couldn\'t find any matches for that keyword.\nSometimes the best path is a different approach.</string>
+
+    <string name="noResParagraph">
+        We couldn't find any matches for that keyword.
+        Sometimes the best path is a different approach.
+    </string>
+
     <string name="suggested_topics">SUGGESTED TOPICS</string>
     <string name="health_assistant">Health Assistant</string>
-    <string name="no_results_found">No results found</string>
-    <string name="try_a_different_keyword">Try a different keyword ↵</string>
-    <string name="clear_all_filters">Clear all filters</string>
-    <string name="gluten_free_remedies">Gluten-free remedies</string>
-    <string name="serenepulse">SerenePulse</string>
-    <string name="clinical_care_active">CLINICAL CARE ACTIVE</string>
-    <string name="report_session_today">REPORT SESSION: TODAY</string>
-    <string name="rk_your_health_sanctuary">✦_✦RK YOUR HEALTH SANCTUARY</string>
-    <string name="take_a_breath_your_wellness_journey_continues_today_with_personalized_reminders_and_gentle_insights_designed_for_your_tranquility">Take a breath. Your wellness journey continues today with personalized reminders and gentle insights designed for your tranquility.</string>
-    <string name="today_s_reminders">Today\'s Reminders</string>
-    <string name="sleep_quality">Sleep Quality</string>
-    <string name="optimal">Optimal</string>
-    <string name="daily_steps">DAILY STEPS</string>
-    <string name="fatigue">FATIGUE</string>
-    <string name="essential_tools">Essential Tools</string>
-    <string name="vitamins">Vitamins</string>
+
 </resources>
