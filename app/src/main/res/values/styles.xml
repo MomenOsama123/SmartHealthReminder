@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="App.ActiveIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/primary_light</item>
+    </style>
+
+    <style name="Widget.App.Chip" parent="Widget.Material3.Chip.Assist">
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipMinHeight">32dp</item>
+        <item name="android:textAppearance">@style/TextCaption</item>
+    </style>
+
+    <style name="Widget.App.Chip.Selectable" parent="Widget.Material3.Chip.Filter">
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">@color/border</item>
+        <item name="chipBackgroundColor">@color/surface_variant</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="chipMinHeight">40dp</item>
+    </style>
+</resources>

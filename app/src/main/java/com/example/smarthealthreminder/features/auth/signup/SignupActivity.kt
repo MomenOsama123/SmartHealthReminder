@@ -6,6 +6,7 @@ import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.SignupBinding
+import com.example.smarthealthreminder.features.Search.SearchActivity
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.google.android.material.snackbar.Snackbar
@@ -59,8 +60,11 @@ class SignupActivity : AppCompatActivity() {
 
 
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
-            if (isSuccess) Snackbar.make(binding.root, "Google Sign Up Success", Snackbar.LENGTH_SHORT).show()
-            else Snackbar.make(binding.root, error ?: "Google Error", Snackbar.LENGTH_SHORT).show()
+            if (isSuccess){
+                Snackbar.make(binding.root, "Google Sign Up Success", Snackbar.LENGTH_SHORT).show()
+                val intent = Intent(this, SearchActivity::class.java)
+                startActivity(intent)
+            }else Snackbar.make(binding.root, error ?: "Google Error", Snackbar.LENGTH_SHORT).show()
         }
 
         // Adjust these IDs if they are different in your signup.xml
