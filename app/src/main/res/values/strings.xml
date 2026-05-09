@@ -96,6 +96,72 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="fb9738d8624eb804760bbd820158c42810" />
     <string name="default_web_client_id">436777065371-4c3o1n4k43r3oadfipjfo9dgr8vvqme8.apps.googleusercontent.com</string>
     <string name="sign_up">Sign Up</string>
+    <string name="app_ename">HealthSync</string>
+
+
+    <string name="performance">PERFORMANCE</string>
+    <string name="your_week">Your Week</string>
+    <string name="on_track">On Track</string>
+    <string name="today">Today</string>
+    <string name="date_oct_24_2023">OCT 24, 2023</string>
+
+
+    <string name="steps">Steps</string>
+    <string name="steps_value">8,432</string>
+    <string name="steps_percent">+12% from yesterday</string>
+
+    <string name="sleep">Sleep</string>
+    <string name="sleep_time">7h 20m</string>
+
+    <string name="heart_rate">Heart Rate</string>
+    <string name="heart_rate_value">72 bpm</string>
+
+
+    <string name="medication_tracking">Medication Tracking</string>
+    <string name="take_now">TAKE NOW</string>
+
+    <string name="multivitamin">Multivitamin</string>
+    <string name="multi_time">8:00 AM - 1 capsule</string>
+
+    <string name="omega">Omega-3</string>
+    <string name="omega_time">1:00 PM - 2 softgels</string>
+
+    <string name="sat">SAT</string>
+    <string name="sun">SUN</string>
+    <string name="mon">MON</string>
+    <string name="tue">TUE</string>
+    <string name="wed">WED</string>
+    <string name="thu">THU</string>
+    <string name="fri">FRI</string>
+    <string name="app_rname">Good Morning,Elena</string>
+
+    <string name="adherence_percent">72%%</string>
+    <string name="adherence_label">ADHERENCE</string>
+    <string name="on_track_title">On Track</string>
+    <string name="on_track_desc">You are doing great. Just 2 more doses to reach your daily goal.</string>
+    <string name="next_medication">Next Medication</string>
+    <string name="today_date">Today, Oct 24</string>
+
+    <string name="med_name">Lisinopril 10mg</string>
+    <string name="med_time">09:00 AM</string>
+
+    <string name="mark_taken">Mark as Taken</string>
+    <string name="snooze">Snooze 15m</string>
+    <string name="total_meds">TOTAL MEDS</string>
+    <string name="taken_today">TAKEN TODAY</string>
+    <string name="missed_today">MISSED TODAY</string>
+    <string name="upcoming_today">Upcoming Today</string>
+
+    <string name="metformin">Metformin 500mg</string>
+    <string name="after_lunch">After Lunch</string>
+    <string name="time_1pm">01:00 PM</string>
+
+    <string name="atorvastatin">Atorvastatin 20mg</string>
+    <string name="before_bed">Before Bed</string>
+    <string name="time_9pm">09:00 PM</string>
+        <string name="time_1">01:00 PM</string>
+
+
 
 
 </resources> 
