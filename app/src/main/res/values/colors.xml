@@ -1,57 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Background -->
     <color name="page">#F3EFE3</color>
     <color name="background_beige">#F3EFE3</color>
-    <color name="text_dark">#0F172A</color>
-    <color name="hint_gray">#475569</color>
+
+    <!-- Main Theme -->
     <color name="primary_green">#769382</color>
     <color name="primary">#769382</color>
-<!--    <color name="primary_dark">#496856</color>-->
+
+    <!-- Text -->
+    <color name="text_dark">#0F172A</color>
+    <color name="hint_gray">#475569</color>
+
+    <!-- Utility -->
     <color name="border_gray">#D1D5DB</color>
 
-    <!-- Primary Colors -->
-<color name="primary_dark">#3D5636</color>
-<color name="primary_light">#6B8F62</color>
+    <!-- Optional (مفيدة بس مش ضرورية) -->
+    <color name="primary_dark">#3D5636</color>
+    <color name="primary_light">#6B8F62</color>
 
-<!-- Background Colors -->
-<color name="background">#F5F5F0</color>
-<color name="surface">#FFFFFF</color>
-<color name="surface_variant">#F0F0EB</color>
-
-<!-- Text Colors -->
-<color name="text_primary">#1A1A1A</color>
-<color name="text_secondary">#666666</color>
-<color name="text_tertiary">#999999</color>
-<color name="text_on_primary">#FFFFFF</color>
-
-<!-- Status Colors -->
-<color name="urgent">#C44536</color>
-<color name="urgent_light">#FDE8E6</color>
-<color name="pending">#E8A838</color>
-<color name="pending_light">#FEF3E2</color>
-<color name="success">#4A6741</color>
-<color name="success_light">#E8F0E6</color>
-<color name="missed">#C44536</color>
-<color name="missed_light">#FDE8E6</color>
-
-<!-- Category Colors -->
-<color name="medicine">#4A6741</color>
-<color name="medicine_light">#E8F0E6</color>
-<color name="appointment">#5B7BA3</color>
-<color name="appointment_light">#E8EEF5</color>
-<color name="health">#7B9E6B</color>
-<color name="health_light">#E8F0E6</color>
-<color name="personal">#9B7BB3</color>
-<color name="personal_light">#F0E8F5</color>
-<color name="work">#B38B6B</color>
-<color name="work_light">#F5ECE8</color>
-
-<!-- Divider & Border -->
-<color name="divider">#E0E0E0</color>
-<color name="border">#E8E8E8</color>
-
-<!-- Overlay -->
-<color name="overlay">#80000000</color>
 </resources>
