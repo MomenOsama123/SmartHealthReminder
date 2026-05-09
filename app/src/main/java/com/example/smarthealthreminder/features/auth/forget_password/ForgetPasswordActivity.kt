@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.ForgetPasswordBinding
 import com.google.firebase.auth.FirebaseAuth
 
-class ForgetpasswordActivity : AppCompatActivity() {
+class ForgetPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ForgetPasswordBinding
     private lateinit var auth: FirebaseAuth
 
