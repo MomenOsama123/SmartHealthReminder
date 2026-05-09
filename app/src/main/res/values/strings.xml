@@ -1,9 +1,9 @@
 <resources>
-//facebook
+    //facebook
     <string name="facebook_app_id">924597597084563</string>
     <string name="fb_login_protocol_scheme">fb924597597084563</string>
     <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
-///////////
+    ///////////
     <string name="login_text">Login</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="create_account_title">Create Account</string>
@@ -26,9 +26,6 @@
     <string name="signup_button">Sign Up</string>
 
     <string name="already_account">Already have an account?</string>
-
-
-
 
 
     <string name="app_name">Smart Health Reminder with AI Assistant</string>
@@ -96,6 +93,23 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="fb9738d8624eb804760bbd820158c42810" />
     <string name="default_web_client_id">436777065371-4c3o1n4k43r3oadfipjfo9dgr8vvqme8.apps.googleusercontent.com</string>
     <string name="sign_up">Sign Up</string>
-
-
-</resources> 
+    <string name="search_resources">Search Resources</string>
+    <string name="search_hint">Search for medication...</string>
+    <string name="medical_encyclopedia">Medical\nEncyclopedia</string>
+    <string name="encyclopedia_desc">Symptoms, conditions, and clinical research data library.</string>
+    <string name="alarms">Alarms</string>
+    <string name="alarms_desc">Medication &amp; reminders</string>
+    <string name="tips">Tips</string>
+    <string name="tips_desc">Daily health advice</string>
+    <string name="app_features">App Features</string>
+    <string name="app_features_desc">Master your wellness\njourney</string>
+    <string name="content_desc_back">Go back</string>
+    <string name="content_desc_search">Search icon</string>
+    <string name="noResParagraph">We couldn\'t find any matches for that keyword.\nSometimes the best path is a different approach.</string>
+    <string name="suggested_topics">SUGGESTED TOPICS</string>
+    <string name="health_assistant">Health Assistant</string>
+    <string name="no_results_found">No results found</string>
+    <string name="try_a_different_keyword">Try a different keyword ↵</string>
+    <string name="clear_all_filters">Clear all filters</string>
+    <string name="gluten_free_remedies">Gluten-free remedies</string>
+</resources>

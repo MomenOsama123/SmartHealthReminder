@@ -6,6 +6,11 @@
     </style>
 
     <style name="Theme.SmartHealthReminder" parent="Base.Theme.SmartHealthReminder" />
+
+    <style name="CircleImageStyle">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Theme.SmartHealthReminder..Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/page</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
