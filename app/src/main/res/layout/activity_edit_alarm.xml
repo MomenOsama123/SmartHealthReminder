@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                android:contentDescription="Back"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Set Alarm"
+                android:textAppearance="@style/TextHeading3"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Alarm Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alarm Name"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_label"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="e.g., Morning Medication"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Time Picker -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <TimePicker
+                android:id="@+id/time_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:timePickerMode="spinner"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Repeat Days -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Repeat Days"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_days"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleSelection="false"
+                android:layout_marginBottom="32dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sun"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S"
+                    android:checkable="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_mon"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="M"
+                    android:checkable="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_tue"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T"
+                    android:checkable="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_wed"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="W"
+                    android:checkable="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_thu"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="T"
+                    android:checkable="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_fri"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="F"
+                    android:checkable="true"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_sat"
+                    style="@style/Widget.App.Chip.Selectable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="S"
+                    android:checkable="true"/>
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Save Alarm"
+                android:textAppearance="@style/TextButton"
+                android:background="@drawable/bg_rounded_button_primary"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="12dp"
+                android:layout_marginBottom="12dp"/>
+
+            <!-- Delete Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="Delete Alarm"
+                android:textAppearance="@style/TextButton"
+                android:textColor="@color/urgent"
+                android:background="@drawable/bg_rounded_button_secondary"
+                app:backgroundTint="@color/urgent_light"
+                app:cornerRadius="12dp"
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
