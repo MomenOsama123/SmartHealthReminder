@@ -1,6 +1,6 @@
 package com.example.smarthealthreminder.features.chatbot
 
-import android.content.Intent
+
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,15 +11,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
-import com.example.smarthealthreminder.features.main.MainWelcomeActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class ChatBotActivity : AppCompatActivity() {
 
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivityChatbotBinding
     private lateinit var adapter: ChatAdapter
     private val messages = mutableListOf<Message>()
@@ -36,7 +40,7 @@ class ChatBotActivity : AppCompatActivity() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
-            
+
             v.setPadding(
                 systemBars.left,
                 systemBars.top,
@@ -47,6 +51,8 @@ class ChatBotActivity : AppCompatActivity() {
         }
 
         api = RetrofitClient.api
+        db = FirebaseFirestore.getInstance()
+        auth = FirebaseAuth.getInstance()
 
         // RecyclerView setup: default top-to-bottom layout
         val layoutManager = LinearLayoutManager(this)
@@ -55,27 +61,69 @@ class ChatBotActivity : AppCompatActivity() {
         adapter = ChatAdapter(messages)
         binding.chatRecyclerView.adapter = adapter
 
-        binding.sendButton.setOnClickListener {
-            val userMessage = binding.messageEditText.text.toString().trim()
-            if (userMessage.isEmpty()) return@setOnClickListener
+        // Load previous messages
+        if (auth.currentUser != null) {
+            loadMessages()
+        } else {
+            // If no user is logged in, you might want to redirect to Login
+            // or show a message. For now, we'll just skip loading.
+            finish() // Optional: close activity if not logged in
+        }
 
-            // 1. Add user message
-            addMessage(Message(userMessage, true))
+        binding.sendButton.setOnClickListener {
+            val userMessageText = binding.messageEditText.text.toString().trim()
+            if (userMessageText.isEmpty()) return@setOnClickListener
+
+            val userMessage = Message(userMessageText, true)
+
+            // 1. Add user message locally and to Firestore
+            addMessage(userMessage)
+            saveMessageToFirestore(userMessage)
+
             binding.messageEditText.text.clear()
-            
+
             // Hide keyboard
             hideKeyboard()
 
             // 2. Show thinking indicator and call AI
             showTyping(true)
-            sendToAI(userMessage)
+            sendToAI(userMessageText)
         }
+    }
 
-        // Back Button
-        findViewById<View>(R.id.btn_back)?.setOnClickListener {
-            val intent = Intent(this, MainWelcomeActivity::class.java)
-            startActivity(intent)
-        }
+    private fun loadMessages() {
+        val uid = auth.currentUser?.uid ?: return
+
+        db.collection("users").document(uid).collection("messages")
+            .orderBy("timestamp", Query.Direction.ASCENDING)
+            .get()
+            .addOnSuccessListener { documents ->
+                messages.clear()
+                for (document in documents) {
+                    val message = document.toObject(Message::class.java)
+                    messages.add(message)
+                }
+                adapter.notifyDataSetChanged()
+                if (messages.isNotEmpty()) {
+                    binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+                }
+            }
+            .addOnFailureListener { e ->
+                android.util.Log.e("FirestoreChat", "Error loading messages", e)
+            }
+    }
+
+    private fun saveMessageToFirestore(message: Message) {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid).collection("messages")
+            .add(message)
+            .addOnSuccessListener {
+                android.util.Log.d("FirestoreChat", "Message saved: ${message.text}")
+            }
+            .addOnFailureListener { e ->
+                android.util.Log.e("FirestoreChat", "Failed to save message", e)
+                android.widget.Toast.makeText(this, "Sync failed: ${e.message}", android.widget.Toast.LENGTH_SHORT).show()
+            }
     }
 
     private fun addMessage(message: Message) {
@@ -98,7 +146,7 @@ class ChatBotActivity : AppCompatActivity() {
             binding.typingIndicator.text = "SerenePulse is thinking."
             binding.typingIndicator.alpha = 0f
             binding.typingIndicator.animate().alpha(1f).setDuration(300).start()
-            
+
             // Loop for "Thinking..." text animation
             val handler = Handler(Looper.getMainLooper())
             val runnable = object : Runnable {
@@ -134,8 +182,10 @@ class ChatBotActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ChatResponse>, response: Response<ChatResponse>) {
                 showTyping(false)
                 if (response.isSuccessful) {
-                    val reply = response.body()?.choices?.firstOrNull()?.message?.content ?: "No response"
-                    addMessage(Message(reply, false))
+                    val replyText = response.body()?.choices?.firstOrNull()?.message?.content ?: "No response"
+                    val botMessage = Message(replyText, false)
+                    addMessage(botMessage)
+                    saveMessageToFirestore(botMessage)
                 } else {
                     addMessage(Message("Error: ${response.errorBody()?.string()}", false))
                 }
