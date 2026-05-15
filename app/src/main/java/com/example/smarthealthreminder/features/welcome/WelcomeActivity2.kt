@@ -40,6 +40,9 @@ class WelcomeActivity2 : AppCompatActivity() {
         googleAuthHelper = GoogleAuthHelper(this, auth){isSuccess, errorMessage ->
             if (isSuccess) {
                 Snackbar.make(binding.root, "Successfully logged in via Google!", Snackbar.LENGTH_LONG).show()
+                val intent = Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
+                startActivity(intent)
+                finish()
             } else {
                 Snackbar.make(binding.root, errorMessage ?: "An error occurred during login", Snackbar.LENGTH_LONG).show()
             }

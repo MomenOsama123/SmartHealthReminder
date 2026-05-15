@@ -12,6 +12,7 @@ import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
+import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 
 
 class SignInActivity : AppCompatActivity() {
@@ -24,7 +25,6 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var binding: LoginBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var intent: Intent
 
     //Google Authentication
     private lateinit var googleAuthHelper: GoogleAuthHelper
@@ -36,8 +36,8 @@ class SignInActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.tvCreateAccount.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
-            finish()
             startActivity(intent)
+            finish()
         }
         auth = FirebaseAuth.getInstance()
         binding.btnLogin.setOnClickListener {
@@ -47,6 +47,9 @@ class SignInActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
                     if (it.isSuccessful) {
                         Snackbar.make(binding.root, "Welcome Back", Snackbar.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainWelcomeActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     } else {
                         Snackbar.make(
                             binding.root,
@@ -61,13 +64,16 @@ class SignInActivity : AppCompatActivity() {
         }
         // toggle password visibility
         binding.icTogglePassword.setOnClickListener {
-            if (binding.etPassword.inputType == 1) {
-                binding.etPassword.inputType = 129
-            }
-            else {
-                binding.etPassword.inputType = 1
+            val selection = binding.etPassword.selectionEnd
+            val isPasswordVisible = binding.etPassword.inputType == (android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+            
+            if (isPasswordVisible) {
+                binding.etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            } else {
+                binding.etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
             }
 
+            binding.etPassword.setSelection(selection)
         }
         binding.tvForgotPassword.setOnClickListener {
             val intent = Intent(this, ForgetPasswordActivity::class.java)
@@ -81,7 +87,7 @@ class SignInActivity : AppCompatActivity() {
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, errorMessage ->
             if (isSuccess) {
                 Toast.makeText(this, "Successfully logged in via Google!", Toast.LENGTH_LONG).show()
-                val intent = Intent(this, SearchActivity::class.java)
+                val intent = Intent(this, MainWelcomeActivity::class.java)
                 startActivity(intent)
 
             } else {

@@ -1,5 +1,6 @@
 package com.example.smarthealthreminder.features.chatbot
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -10,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
+import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,7 +23,6 @@ class ChatBotActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatbotBinding
     private lateinit var adapter: ChatAdapter
     private val messages = mutableListOf<Message>()
-
     private lateinit var api: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +69,12 @@ class ChatBotActivity : AppCompatActivity() {
             // 2. Show thinking indicator and call AI
             showTyping(true)
             sendToAI(userMessage)
+        }
+
+        // Back Button
+        findViewById<View>(R.id.btn_back)?.setOnClickListener {
+            val intent = Intent(this, MainWelcomeActivity::class.java)
+            startActivity(intent)
         }
     }
 
