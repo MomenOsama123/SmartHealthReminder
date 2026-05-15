@@ -17,5 +17,13 @@ class NoResultsActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        findViewById<android.view.View>(R.id.btnTryAgain).setOnClickListener {
+            finish()
+        }
+
+        findViewById<android.view.View>(R.id.tvClearFilters).setOnClickListener {
+            finish()
+        }
     }
 }

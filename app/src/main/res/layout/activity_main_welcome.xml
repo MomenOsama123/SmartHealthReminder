@@ -59,6 +59,7 @@
 
                 <!-- Profile Image -->
                 <com.google.android.material.imageview.ShapeableImageView
+                    android:id= "@+id/profileInfo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
@@ -573,7 +574,7 @@
                 android:layout_height="64dp"
                 android:layout_marginTop="24dp"
                 android:backgroundTint="#5A7766"
-                android:text="View Today's Plan \u2192"
+                android:text="@string/view_today_s_plan_u2192"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
@@ -591,7 +592,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
         android:src="@drawable/ic_app_logo"
-        android:contentDescription="ChatBot"
+        android:contentDescription="@string/chatbot"
         app:backgroundTint="@color/primary_dark"
         app:tint="@null"
         app:borderWidth="0dp"

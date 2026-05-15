@@ -2,28 +2,28 @@ package com.example.smarthealthreminder.features.auth.signup
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.EditText
+import android.util.Patterns
+import android.view.View
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import com.example.smarthealthreminder.databinding.SignupBinding
-import com.example.smarthealthreminder.features.Search.SearchActivity
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 class SignupActivity : AppCompatActivity() {
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
-    }
 
     private lateinit var binding: SignupBinding
-    private lateinit var auth: FirebaseAuth
-    //Google
+    private val viewModel: SignupViewModel by viewModels()
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    
+    // Google Authentication
     private lateinit var googleAuthHelper: GoogleAuthHelper
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,48 +31,83 @@ class SignupActivity : AppCompatActivity() {
         binding = SignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.loginText.setOnClickListener {
-            val intent = Intent(this, SignInActivity::class.java)
-            finish()
-            startActivity(intent)
+        setupWindowInsets()
+        setupListeners()
+        setupObservers()
+        setupGoogleAuth()
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
         }
-        auth = FirebaseAuth.getInstance()
+    }
+
+    private fun setupListeners() {
+        binding.loginText.setOnClickListener {
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }
+
         binding.signupBtn.setOnClickListener {
             if (validateForm()) {
-                val email = binding.emailInput.text.toString()
+                val email = binding.emailInput.text.toString().trim()
                 val password = binding.passwordInput.text.toString()
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Snackbar.make(binding.root, "Sign Up Success", Snackbar.LENGTH_SHORT).show()
-
-                    } else {
-                        Snackbar.make(
-                            binding.root,
-                            "Sign Up Failed $it.message",
-                            Snackbar.LENGTH_SHORT
-                        ).show()
-                    }
-                }
+                viewModel.signUp(email, password)
             }
         }
 
-
-
-
-        googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
-            if (isSuccess){
-                Snackbar.make(binding.root, "Google Sign Up Success", Snackbar.LENGTH_SHORT).show()
-                val intent = Intent(this, SearchActivity::class.java)
-                startActivity(intent)
-            }else Snackbar.make(binding.root, error ?: "Google Error", Snackbar.LENGTH_SHORT).show()
-        }
-
-        // Adjust these IDs if they are different in your signup.xml
-        binding.root.findViewWithTag<android.view.View>("google_btn")?.setOnClickListener { googleAuthHelper.startLogin() }
+        // Clear error indicators when user starts typing
+        binding.emailInput.addTextChangedListener { binding.emailInput.error = null }
+        binding.passwordInput.addTextChangedListener { binding.passwordInput.error = null }
+        binding.confirmPasswordInput.addTextChangedListener { binding.confirmPasswordInput.error = null }
+        binding.fullNameInput.addTextChangedListener { binding.fullNameInput.error = null }
+        binding.usernameInput.addTextChangedListener { binding.usernameInput.error = null }
     }
 
+    private fun setupObservers() {
+        viewModel.signupState.observe(this) { state ->
+            when (state) {
+                is SignupState.Loading -> {
+                    binding.signupBtn.isEnabled = false
+                    // If you add a progress bar to your layout, show it here
+                }
+                is SignupState.Success -> {
+                    binding.signupBtn.isEnabled = true
+                    showSnackbar("Sign Up Success")
+                    navigateToCompleteProfile()
+                }
+                is SignupState.Error -> {
+                    binding.signupBtn.isEnabled = true
+                    showSnackbar("Sign Up Failed: ${state.message}")
+                }
+                is SignupState.Idle -> {
+                    binding.signupBtn.isEnabled = true
+                }
+            }
+        }
+    }
+
+    private fun setupGoogleAuth() {
+        googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
+            if (isSuccess) {
+                showSnackbar("Google Sign Up Success")
+                navigateToCompleteProfile()
+            } else {
+                showSnackbar(error ?: "Google Error")
+            }
+        }
+
+        // Use findViewWithTag as in original code or add an ID to the button in signup.xml
+        binding.root.findViewWithTag<View>("google_btn")?.setOnClickListener {
+            googleAuthHelper.startLogin()
+        }
+    }
 
     private fun validateForm(): Boolean {
+        var isValid = true
 
         val fullName = binding.fullNameInput.text.toString().trim()
         val username = binding.usernameInput.text.toString().trim()
@@ -81,39 +116,50 @@ class SignupActivity : AppCompatActivity() {
         val confirmPassword = binding.confirmPasswordInput.text.toString()
         val isChecked = binding.checkBox.isChecked
 
-        var isValid = true
-
-        fun validateField(value: String, field: EditText): Boolean {
-            return if (value.isEmpty()) {
-                field.error = "Required"
-                false
-            } else {
-                field.error = null
-                true
-            }
+        if (fullName.isEmpty()) {
+            binding.fullNameInput.error = "Full Name is required"
+            isValid = false
         }
 
-        isValid = validateField(fullName, binding.fullNameInput) && isValid
-        isValid = validateField(username, binding.usernameInput) && isValid
-        isValid = validateField(email, binding.emailInput) && isValid
-        isValid = validateField(password, binding.passwordInput) && isValid
-        isValid = validateField(confirmPassword, binding.confirmPasswordInput) && isValid
+        if (username.isEmpty()) {
+            binding.usernameInput.error = "Username is required"
+            isValid = false
+        }
 
-        // Password match
+        if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.emailInput.error = "Enter a valid email address"
+            isValid = false
+        }
+
+        if (password.length < 6) {
+            binding.passwordInput.error = "Password must be at least 6 characters"
+            isValid = false
+        }
+
         if (password != confirmPassword) {
             binding.confirmPasswordInput.error = "Passwords do not match"
             isValid = false
         }
 
-        // Checkbox
         if (!isChecked) {
-            binding.checkBox.error = "Required"
+            showSnackbar("You must agree to the terms")
             isValid = false
-        } else {
-            binding.checkBox.error = null
         }
 
         return isValid
     }
-}
 
+    private fun navigateToCompleteProfile() {
+        startActivity(Intent(this, CompleteProfileActivity::class.java))
+        finish()
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
+    }
+}
