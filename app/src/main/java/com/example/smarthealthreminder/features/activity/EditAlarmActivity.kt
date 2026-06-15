@@ -2,7 +2,10 @@ package com.example.smarthealthreminder.features.activity
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.os.Build
+import android.provider.Settings
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -99,13 +102,16 @@ class EditAlarmActivity : AppCompatActivity() {
 
     private fun selectDays(days: String) {
         val dayMap = mapOf(
-            "S" to R.id.chip_sun,
+            "Sun" to R.id.chip_sun,
+            "Mon" to R.id.chip_mon,
+            "Tue" to R.id.chip_tue,
+            "Wed" to R.id.chip_wed,
+            "Thu" to R.id.chip_thu,
+            "Fri" to R.id.chip_fri,
+            "Sat" to R.id.chip_sat,
             "M" to R.id.chip_mon,
-            "T" to R.id.chip_tue,
             "W" to R.id.chip_wed,
-            "T" to R.id.chip_thu,
-            "F" to R.id.chip_fri,
-            "S" to R.id.chip_sat
+            "F" to R.id.chip_fri
         )
         days.split(" ").forEach { day ->
             dayMap[day]?.let { chipId ->
@@ -149,6 +155,21 @@ class EditAlarmActivity : AppCompatActivity() {
         val time24String = String.format("%02d:%02d", hour24, minute)
 
         val selectedDays = getSelectedDays()
+        val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(this@EditAlarmActivity)
+
+        if (!alarmHelper.canScheduleExactAlarm()) {
+            Toast.makeText(
+                this,
+                "Allow exact alarms so this alarm can ring on time",
+                Toast.LENGTH_LONG
+            ).show()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                    data = Uri.parse("package:$packageName")
+                })
+            }
+            return
+        }
 
         val alarm = AlarmEntity(
             id = existingAlarmId ?: UUID.randomUUID().toString(),
@@ -176,9 +197,15 @@ class EditAlarmActivity : AppCompatActivity() {
                 isActive = alarm.isActive
             )
 
-            val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(this@EditAlarmActivity)
             if (alarm.isActive) {
-                alarmHelper.scheduleAlarm(alarmModel)
+                val scheduled = alarmHelper.scheduleAlarm(alarmModel)
+                if (!scheduled) {
+                    Toast.makeText(
+                        this@EditAlarmActivity,
+                        "Allow exact alarms so this alarm can ring on time",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
 
             Toast.makeText(
@@ -198,13 +225,13 @@ class EditAlarmActivity : AppCompatActivity() {
     private fun getSelectedDays(): String {
         val days = StringBuilder()
         val chipIds = mapOf(
-            R.id.chip_sun to "S",
-            R.id.chip_mon to "M",
-            R.id.chip_tue to "T",
-            R.id.chip_wed to "W",
-            R.id.chip_thu to "T",
-            R.id.chip_fri to "F",
-            R.id.chip_sat to "S"
+            R.id.chip_sun to "Sun",
+            R.id.chip_mon to "Mon",
+            R.id.chip_tue to "Tue",
+            R.id.chip_wed to "Wed",
+            R.id.chip_thu to "Thu",
+            R.id.chip_fri to "Fri",
+            R.id.chip_sat to "Sat"
         )
 
         chipIds.forEach { (id, day) ->

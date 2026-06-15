@@ -50,12 +50,19 @@ class AlarmService : Service() {
         if (isRunning) return START_NOT_STICKY
         isRunning = true
 
-        val label = intent?.getStringExtra("alarm_label") ?: "Alarm"
         val alarmId = intent?.getStringExtra("alarm_id")
+        if (alarmId.isNullOrBlank()) {
+            stopForeground(true)
+            stopSelf()
+            isRunning = false
+            return START_NOT_STICKY
+        }
+
+        val label = intent.getStringExtra("alarm_label") ?: "Alarm"
         val alarmTime = intent?.getStringExtra("alarm_time")
         val alarmCategory = intent?.getStringExtra("alarm_category")
 
-        startForeground(NOTIFICATION_ID, buildNotification(label))
+        startForeground(NOTIFICATION_ID, buildNotification(label, alarmId, alarmTime, alarmCategory))
         playAlarmSound()
         startVibration()
 
@@ -99,9 +106,18 @@ class AlarmService : Service() {
         }
     }
 
-    private fun buildNotification(label: String): Notification {
+    private fun buildNotification(
+        label: String,
+        alarmId: String,
+        alarmTime: String?,
+        alarmCategory: String?
+    ): Notification {
         val intent = Intent(this, AlarmRingingActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_ID, alarmId)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_LABEL, label)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_TIME, alarmTime)
+            putExtra(AlarmRingingActivity.EXTRA_ALARM_CATEGORY, alarmCategory)
         }
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,

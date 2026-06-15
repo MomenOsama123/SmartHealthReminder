@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="page">#111814</color>
+    <color name="background_beige">#111814</color>
+    <color name="background">#111814</color>
+    <color name="surface">#1B241F</color>
+    <color name="surface_variant">#243129</color>
+    <color name="text_dark">#F3F7F4</color>
+    <color name="text_primary">#F3F7F4</color>
+    <color name="text_secondary">#B8C4BC</color>
+    <color name="text_tertiary">#8B9A91</color>
+    <color name="hint_gray">#B8C4BC</color>
+    <color name="border">#314139</color>
+    <color name="border_gray">#314139</color>
+    <color name="divider">#314139</color>
+    <color name="primary">#9BB8A4</color>
+    <color name="primary_green">#9BB8A4</color>
+    <color name="primary_dark">#DDEBDF</color>
+    <color name="primary_light">#5D7866</color>
+    <color name="success_light">#263A2C</color>
+    <color name="pending_light">#44351F</color>
+    <color name="urgent_light">#442A28</color>
+    <color name="missed_light">#442A28</color>
+</resources>
