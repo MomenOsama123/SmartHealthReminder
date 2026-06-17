@@ -1,13 +1,12 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.ksp)
 }
 
 android {
     namespace = "com.example.smarthealthreminder"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.smarthealthreminder"
@@ -33,8 +32,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
     }
 
     buildFeatures {
@@ -52,7 +53,7 @@ dependencies {
 
     // Firebase
     implementation(libs.firebase.auth)
-    implementation("com.google.android.gms:play-services-auth:21.5.1")
+    implementation("com.google.android.gms:play-services-auth:21.6.0")
 
     // Room Database
     val roomVersion = "2.7.0"
@@ -62,21 +63,21 @@ dependencies {
     implementation("androidx.room:room-ktx:$roomVersion")
 
     // ViewModel + Coroutines
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.40")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.11.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 
 
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
+    implementation("androidx.fragment:fragment-ktx:1.8.9")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     // Core Retrofit library
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
 
     // Converter factory (Choose one based on your data format)
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
 
 }

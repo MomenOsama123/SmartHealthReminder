@@ -44,7 +44,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/circular_container"
-        android:textColor="#0F172A"
+        android:textColor="@color/text_dark"
         android:textSize="30sp"
         android:gravity="center"
         />
@@ -58,7 +58,7 @@
         android:gravity="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="#475569"
+        android:textColor="@color/hint_gray"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
@@ -70,7 +70,7 @@
         android:text="@string/sign_up"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:backgroundTint="#769382"
+        android:backgroundTint="@color/primary_green"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -81,13 +81,13 @@
         android:layout_height="56dp"
         android:backgroundTint="@android:color/transparent"
         android:text="@string/log_in"
-        android:textColor="#2E3A35"
+        android:textColor="@color/text_dark_green"
         android:textSize="16sp"
         android:textStyle="bold"
         app:cornerRadius="28dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signup_btn"
-        app:strokeColor="#d8cfbc"
+        app:strokeColor="@color/stroke_beige"
         app:strokeWidth="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,9 @@ data class ReminderEntity(
     val time: String? = null,
     val priority: String? = null,
     val status: String = "Pending",
+    val totalQuantity: Int = 0,
+    val dosagePerTime: Int = 1,
+    val lowStockThreshold: Int = 3,
 
     @ColumnInfo(name = "is_recurring")
     val isRecurring: Boolean = false,

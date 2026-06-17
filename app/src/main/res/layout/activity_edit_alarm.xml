@@ -23,13 +23,13 @@
                 android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_back"
-                android:contentDescription="Back"/>
+                android:contentDescription="@string/back"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Set Alarm"
+                android:text="@string/set_alarm"
                 android:textAppearance="@style/TextHeading3"/>
 
         </androidx.appcompat.widget.Toolbar>
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alarm Name"
+                android:text="@string/alarm_name"
                 android:textAppearance="@style/TextBody2"
                 android:layout_marginBottom="8dp"/>
 
@@ -60,7 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:background="@drawable/bg_input_field"
-                android:hint="e.g., Morning Medication"
+                android:hint="@string/alarm_hint"
                 android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextBody1"
                 android:layout_marginBottom="24dp"/>
@@ -69,7 +69,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time"
+                android:text="@string/time"
                 android:textAppearance="@style/TextBody2"
                 android:layout_marginBottom="8dp"/>
 
@@ -84,7 +84,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Repeat Days"
+                android:text="@string/repeat_days"
                 android:textAppearance="@style/TextBody2"
                 android:layout_marginBottom="12dp"/>
 
@@ -100,7 +100,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="S"
+                    android:text="@string/sun_initial"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -108,7 +108,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="M"
+                    android:text="@string/mon_initial"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -116,7 +116,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="T"
+                    android:text="@string/tue_initial"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -124,7 +124,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="W"
+                    android:text="@string/wed_initial"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -132,7 +132,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="T"
+                    android:text="@string/thu_initial"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -140,7 +140,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="F"
+                    android:text="@string/fri_initial"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -148,7 +148,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="S"
+                    android:text="@string/sat_initial"
                     android:checkable="true"/>
 
             </com.google.android.material.chip.ChipGroup>
@@ -158,7 +158,7 @@
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Save Alarm"
+                android:text="@string/save_alarm"
                 android:textAppearance="@style/TextButton"
                 android:background="@drawable/bg_rounded_button_primary"
                 app:backgroundTint="@color/primary"
@@ -170,7 +170,7 @@
                 android:id="@+id/btn_delete"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Delete Alarm"
+                android:text="@string/delete_alarm"
                 android:textAppearance="@style/TextButton"
                 android:textColor="@color/urgent"
                 android:background="@drawable/bg_rounded_button_secondary"

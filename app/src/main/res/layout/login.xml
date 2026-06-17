@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5EE"
+    android:background="@color/bg_warm"
     android:fillViewport="true"
     android:paddingHorizontal="16dp"
 
@@ -44,7 +44,7 @@
             android:text="@string/welcome_back"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:textColor="#1A2E2A"
+            android:textColor="@color/text_main_dark"
             android:fontFamily="@font/serif_font" />
 
         <!-- Subtitle -->
@@ -91,7 +91,7 @@
                 android:backgroundTint="@color/white"
                 android:hint="@string/sampleEmail"
                 android:inputType="textEmailAddress"
-                android:textColor="#1A2E2A"
+                android:textColor="@color/text_main_dark"
                 android:textSize="14sp" />
 
             <ImageView
@@ -134,7 +134,7 @@
                 android:background="@null"
                 android:hint="@string/hiddenPassword"
                 android:inputType="textPassword"
-                android:textColor="#1A2E2A"
+                android:textColor="@color/text_main_dark"
                 android:textSize="14sp" />
 
             <ImageView
@@ -155,7 +155,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/forgot_password"
             android:textSize="17sp"
-            android:textColor="#3D6B5E"
+            android:textColor="@color/text_accent"
             android:clickable="true"
             android:focusable="true" />
 
@@ -166,9 +166,9 @@
             android:layout_height="52dp"
             android:layout_marginTop="24dp"
             android:background="@drawable/et_shape"
-            app:backgroundTint="#6B7B75"
+            app:backgroundTint="@color/text_muted"
             android:text="@string/log_in"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold"
             android:letterSpacing="0.02" />
@@ -185,7 +185,7 @@
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                android:background="#D8DDD9" />
+                android:background="@color/divider_color" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -194,14 +194,14 @@
                 android:layout_marginEnd="12dp"
                 android:text="@string/or_continue_with"
                 android:textSize="15sp"
-                android:textColor="#6B7B75"
+                android:textColor="@color/text_muted"
                 android:letterSpacing="0.06" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                android:background="#D8DDD9" />
+                android:background="@color/divider_color" />
         </LinearLayout>
 
         <!-- Continue with Google -->
@@ -238,7 +238,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/don_t_have_an_account"
                 android:textSize="15sp"
-                android:textColor="#6B7B75" />
+                android:textColor="@color/text_muted" />
 
             <TextView
                 android:id="@+id/tvCreateAccount"
@@ -246,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/create_an_account"
                 android:textSize="15sp"
-                android:textColor="#3D6B5E"
+                android:textColor="@color/text_accent"
                 android:textStyle="bold"
                 android:clickable="true"
                 android:focusable="true" />

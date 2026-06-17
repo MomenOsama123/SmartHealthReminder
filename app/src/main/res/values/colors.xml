@@ -20,6 +20,7 @@
     <color name="text_secondary">#666666</color>
     <color name="text_tertiary">#999999</color>
     <color name="text_on_primary">#FFFFFF</color>
+    <color name="gray_text_light">#8A8A8A</color>
 
     <!-- Text -->
     <color name="text_dark">#0F172A</color>
@@ -60,5 +61,22 @@
 
     <!-- Overlay -->
     <color name="overlay">#80000000</color>
+    <color name="overlay_white">#80FFFFFF</color>
 
+    <!-- Specific Colors for Login/Goal -->
+    <color name="bg_warm">#F5F5EE</color>
+    <color name="text_main_dark">#1A2E2A</color>
+    <color name="text_muted">#6B7B75</color>
+    <color name="text_accent">#3D6B5E</color>
+    <color name="divider_color">#D8DDD9</color>
+
+    <!-- UI Component Colors -->
+    <color name="text_dark_green">#2E3A35</color>
+    <color name="stroke_beige">#D8CFBC</color>
+    <color name="bg_light_blue">#DCE7F3</color>
+    <color name="bg_soft_beige">#EAE8DF</color>
+    <color name="bg_soft_pink">#FDE2E4</color>
+    <color name="error_red">#D9534F</color>
+    <color name="bg_soft_green">#EBF0EF</color>
+    <color name="text_blue_gray">#4A6572</color>
 </resources>

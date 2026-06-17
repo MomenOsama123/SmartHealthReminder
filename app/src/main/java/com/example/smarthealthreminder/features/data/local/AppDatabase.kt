@@ -11,7 +11,7 @@ import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 
 @Database(
     entities = [AlarmEntity::class, ReminderEntity::class],
-    version = 1,
+    version = 2, // تم التحديث بنجاح لمنع الكراش بعد تعديل الـ Entity
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -34,8 +34,8 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "smart_health_db"
             )
-            .fallbackToDestructiveMigration() // For development only!
-            .build()
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

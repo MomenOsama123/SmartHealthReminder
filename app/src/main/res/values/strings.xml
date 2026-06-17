@@ -319,7 +319,46 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="back_arrow_into_the_main_page">Back arrow into the main page</string>
     <string name="describe_your_symptoms">Describe your symptoms...</string>
     <string name="serenepulse_is_thinking">SerenePulse is thinking...</string>
+    <string name="send">Send</string>
 
 
     <string name="complete_profile_label">Complete Profile</string>
+    <string name="low">Low</string>
+    <string name="medications">Medications</string>
+    <string name="sleep_track">Sleep Track</string>
+    <string name="forgot_password_icon_desc">forgot password icon</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="alarm_name">Alarm Name</string>
+    <string name="alarm_hint">e.g., Morning Medication</string>
+    <string name="time">Time</string>
+    <string name="repeat_days">Repeat Days</string>
+    <string name="save_alarm">Save Alarm</string>
+    <string name="delete_alarm">Delete Alarm</string>
+    <string name="back">Back</string>
+    <string name="sun_initial">S</string>
+    <string name="mon_initial">M</string>
+    <string name="tue_initial">T</string>
+    <string name="wed_initial">W</string>
+    <string name="thu_initial">T</string>
+    <string name="fri_initial">F</string>
+    <string name="sat_initial">S</string>
+    <string name="search">Search</string>
+    <string name="more_options">More options</string>
+    <string name="urgent">URGENT</string>
+    <string name="pending">Pending</string>
+    <string name="no_reminders">No reminders</string>
+    <string name="no_reminders_yet">No Reminders Yet</string>
+    <string name="add_first_reminder">Add your first health reminder</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="medicine_icon">Medicine icon</string>
+    <string name="full_description">Full Description</string>
+    <string name="reminder_history">Reminder History</string>
+    <string name="completed">Completed</string>
+    <string name="view_details">View details</string>
+    <string name="missed">Missed</string>
+    <string name="modified">Modified</string>
+    <string name="mark_as_done">Mark as Done</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="today_s_air_is_clean_and_restorative">Today\'s air is clean and restorative.</string>
 </resources>

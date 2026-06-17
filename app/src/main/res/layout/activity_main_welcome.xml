@@ -391,7 +391,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="Low"
+                                android:text="@string/low"
                                 android:textColor="#1A1A1A"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -437,7 +437,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Medications"
+                        android:text="@string/medications"
                         android:textColor="#707873"
                         android:textSize="11sp" />
                 </LinearLayout>
@@ -462,7 +462,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Sleep Track"
+                        android:text="@string/sleep_track"
                         android:textColor="#707873"
                         android:textSize="11sp" />
                 </LinearLayout>
@@ -561,7 +561,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Today's air is clean and restorative."
+                            android:text="@string/today_s_air_is_clean_and_restorative"
                             android:textColor="#E0E0E0"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -591,9 +591,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
-        android:src="@drawable/ic_app_logo"
+        android:src="@drawable/chatbot"
         android:contentDescription="@string/chatbot"
-        app:backgroundTint="@color/primary_dark"
+        app:backgroundTint="@color/medicine"
         app:tint="@null"
         app:borderWidth="0dp"
         app:elevation="8dp"
