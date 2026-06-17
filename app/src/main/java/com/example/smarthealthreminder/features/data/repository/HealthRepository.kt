@@ -29,6 +29,9 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun markReminderDone(id: String) = database.reminderDao().updateReminderStatus(id, "Completed")
     suspend fun markReminderMissed(id: String) = database.reminderDao().updateReminderStatus(id, "Missed")
 
+    fun searchReminders(query: String): Flow<List<ReminderEntity>> = 
+        database.reminderDao().searchReminders("%$query%")
+
     // Counts
     fun getPendingCount(): Flow<Int> = database.reminderDao().getPendingCount()
     fun getCompletedCount(): Flow<Int> = database.reminderDao().getCompletedCount()

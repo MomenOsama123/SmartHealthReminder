@@ -15,6 +15,7 @@
 
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,11 +27,13 @@
 
         <!-- Welcome & Auth Activities -->
         <activity
-            android:name=".features.Search.SearchActivity"
-            android:exported="false" />
+            android:name=".features.search.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
         <activity
-            android:name=".features.Search.NoResultsActivity"
+            android:name=".features.auth.forget_password.ForgetPasswordActivity"
             android:exported="false" />
+
         <activity
             android:name=".features.welcome.WelcomeActivity2"
             android:exported="false" />
