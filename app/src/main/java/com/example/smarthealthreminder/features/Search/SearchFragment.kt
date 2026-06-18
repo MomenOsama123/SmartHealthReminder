@@ -41,6 +41,10 @@ class SearchFragment : Fragment() {
     private lateinit var rvSearchResults: RecyclerView
     private lateinit var layoutNoResults: View
     private lateinit var layoutSuggestions: View
+    private lateinit var cgFilters: com.google.android.material.chip.ChipGroup
+    private lateinit var layoutRecentSearches: View
+    private lateinit var cgRecentSearches: com.google.android.material.chip.ChipGroup
+    private lateinit var btnClearHistory: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,6 +83,54 @@ class SearchFragment : Fragment() {
         rvSearchResults = view.findViewById(R.id.rv_search_results)
         layoutNoResults = view.findViewById(R.id.layout_no_results)
         layoutSuggestions = view.findViewById(R.id.layout_suggestions)
+        cgFilters = view.findViewById(R.id.cg_filters)
+        layoutRecentSearches = view.findViewById(R.id.layout_recent_searches)
+        cgRecentSearches = view.findViewById(R.id.cg_recent_searches)
+        btnClearHistory = view.findViewById(R.id.btn_clear_history)
+
+        setupFilters()
+        setupHistory()
+    }
+
+    private fun setupHistory() {
+        btnClearHistory.setOnClickListener {
+            viewModel.clearHistory()
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.searchHistory.collect { history ->
+                    updateHistoryUi(history)
+                }
+            }
+        }
+    }
+
+    private fun updateHistoryUi(history: List<String>) {
+        layoutRecentSearches.isVisible = history.isNotEmpty()
+        cgRecentSearches.removeAllViews()
+        history.forEach { query ->
+            val chip = Chip(requireContext()).apply {
+                text = query
+                setOnClickListener {
+                    etSearch.setText(query)
+                    etSearch.setSelection(query.length)
+                    viewModel.saveSearch(query)
+                }
+            }
+            cgRecentSearches.addView(chip)
+        }
+    }
+
+    private fun setupFilters() {
+        cgFilters.setOnCheckedStateChangeListener { _, checkedIds ->
+            val filter = when (checkedIds.firstOrNull()) {
+                R.id.chip_filter_reminders -> SearchViewModel.SearchFilter.REMINDERS
+                R.id.chip_filter_alarms -> SearchViewModel.SearchFilter.ALARMS
+                else -> SearchViewModel.SearchFilter.ALL
+            }
+            viewModel.onFilterChanged(filter)
+        }
     }
 
     private fun setupRecyclerView() {
@@ -138,6 +190,8 @@ class SearchFragment : Fragment() {
 
         etSearch.setOnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val query = etSearch.text.toString().trim()
+                viewModel.saveSearch(query)
                 hideKeyboard()
                 true
             } else {
@@ -150,8 +204,10 @@ class SearchFragment : Fragment() {
         val suggestionsContainer = view.findViewById<ViewGroup>(R.id.layout_suggestions)
         findAllChips(suggestionsContainer).forEach { chip ->
             chip.setOnClickListener {
-                etSearch.setText(chip.text)
-                etSearch.setSelection(chip.text.length)
+                val query = chip.text.toString()
+                etSearch.setText(query)
+                etSearch.setSelection(query.length)
+                viewModel.saveSearch(query)
             }
         }
     }
@@ -184,6 +240,7 @@ class SearchFragment : Fragment() {
         val isQueryEmpty = query.isEmpty()
 
         layoutSuggestions.isVisible = isQueryEmpty
+        cgFilters.isVisible = !isQueryEmpty
         
         if (isQueryEmpty) {
             rvSearchResults.isVisible = false
