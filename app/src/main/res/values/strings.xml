@@ -57,7 +57,7 @@
     <string name="content_desc_search">Search icon</string>
 
     <string name="noResParagraph">
-        We couldn't\'t find any matches for that keyword.
+        We couldn\'t find any matches for that keyword.
         Sometimes the best path is a different approach.
     </string>
 
@@ -180,11 +180,11 @@
 
     <string name="vitamins">Vitamins</string>
 
-    //facebook
+    <!-- facebook -->
     <string name="facebook_app_id">924597597084563</string>
     <string name="fb_login_protocol_scheme">fb924597597084563</string>
     <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
-    ///////////
+    <!-- -->
     <string name="login_text">Login</string>
 
     <string name="create_account_title">Create Account</string>
