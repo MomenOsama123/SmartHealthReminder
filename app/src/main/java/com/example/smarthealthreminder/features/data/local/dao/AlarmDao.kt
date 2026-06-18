@@ -30,4 +30,7 @@ interface AlarmDao {
 
     @Query("SELECT COUNT(*) FROM alarms WHERE is_active = 1")
     fun getActiveAlarmCount(): Flow<Int>
+
+    @Query("SELECT * FROM alarms WHERE label LIKE :query ORDER BY time ASC")
+    fun searchAlarms(query: String): Flow<List<AlarmEntity>>
 }

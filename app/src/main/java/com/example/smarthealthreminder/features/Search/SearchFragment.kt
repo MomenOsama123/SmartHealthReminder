@@ -20,10 +20,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.flow.collectLatest
@@ -60,14 +60,14 @@ class SearchFragment : Fragment() {
 
         btnBack.setOnClickListener {
             hideKeyboard()
-            findNavController().navigateUp()
+            requireActivity().finish()
         }
 
         ivClearSearch.setOnClickListener {
             etSearch.text.clear()
         }
 
-        // Auto focus and show keyboard
+        // Autofocus and show keyboard
         etSearch.requestFocus()
         showKeyboard()
     }
@@ -82,16 +82,32 @@ class SearchFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        searchAdapter = SearchAdapter { reminder ->
+        searchAdapter = SearchAdapter { result ->
             hideKeyboard()
-            // Navigate to Edit/Details screen
-            val intent = Intent(requireContext(), EditAlarmActivity::class.java).apply {
-                putExtra("alarm_id", reminder.id)
-                putExtra("alarm_label", reminder.title)
-                putExtra("alarm_time", reminder.time)
-                putExtra("alarm_category", reminder.category)
+            when (result) {
+                is SearchResult.Alarm -> {
+                    val intent = Intent(requireContext(), EditAlarmActivity::class.java).apply {
+                        putExtra("alarm_id", result.entity.id)
+                        putExtra("alarm_label", result.entity.label)
+                        putExtra("alarm_time", result.entity.time)
+                        putExtra("alarm_am_pm", result.entity.amPm)
+                        putExtra("alarm_category", result.entity.category)
+                        putExtra("alarm_repeat_days", result.entity.repeatDays)
+                    }
+                    startActivity(intent)
+                }
+                is SearchResult.Reminder -> {
+                    val intent = Intent(requireContext(), AddReminderActivity::class.java).apply {
+                        putExtra("reminder_id", result.entity.id)
+                        putExtra("reminder_title", result.entity.title)
+                        putExtra("reminder_desc", result.entity.description)
+                        putExtra("reminder_time", result.entity.time)
+                        putExtra("reminder_date", result.entity.date)
+                        putExtra("reminder_category", result.entity.category)
+                    }
+                    startActivity(intent)
+                }
             }
-            startActivity(intent)
         }
 
         rvSearchResults.apply {
