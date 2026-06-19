@@ -350,6 +350,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="no_reminders_yet">No Reminders Yet</string>
     <string name="add_first_reminder">Add your first health reminder</string>
     <string name="add_reminder">Add Reminder</string>
+    <string name="due_at">Due at %s</string>
     <string name="medicine_icon">Medicine icon</string>
     <string name="full_description">Full Description</string>
     <string name="reminder_history">Reminder History</string>

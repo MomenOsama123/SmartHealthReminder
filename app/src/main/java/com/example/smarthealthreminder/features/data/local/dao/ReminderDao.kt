@@ -45,7 +45,4 @@ interface ReminderDao {
 
     @Query("SELECT COUNT(*) FROM reminders WHERE status = 'Missed'")
     fun getMissedCount(): Flow<Int>
-
-    @Query("SELECT * FROM reminders WHERE title LIKE :searchQuery")
-    fun searchReminders(searchQuery: String): Flow<List<ReminderEntity>>
 }

@@ -39,8 +39,4 @@ class HealthRepository(private val database: AppDatabase) {
     fun getPendingCount(): Flow<Int> = database.reminderDao().getPendingCount()
     fun getCompletedCount(): Flow<Int> = database.reminderDao().getCompletedCount()
     fun getMissedCount(): Flow<Int> = database.reminderDao().getMissedCount()
-    
-    // Search
-    fun searchReminders(query: String): Flow<List<ReminderEntity>> =
-        database.reminderDao().searchReminders("%$query%")
 }
