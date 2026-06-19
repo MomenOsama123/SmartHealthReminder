@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
-import com.example.smarthealthreminder.features.Search.SearchActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.fragment.AlarmsFragment
 import com.example.smarthealthreminder.features.fragment.HomeFragment

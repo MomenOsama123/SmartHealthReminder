@@ -60,5 +60,22 @@
 
     <!-- Overlay -->
     <color name="overlay">#80000000</color>
+    <color name="overlay_white">#CCFFFFFF</color>
+
+    <!-- Additional Colors for Layouts -->
+    <color name="splash_background">#F3EFE3</color>
+    <color name="bg_warm">#F5F5F0</color>
+    <color name="text_main_dark">#1A1A1A</color>
+    <color name="text_accent">#769382</color>
+    <color name="text_muted">#666666</color>
+    <color name="divider_color">#E0E0E0</color>
+    <color name="bg_light_blue">#E3F2FD</color>
+    <color name="bg_soft_beige">#F5F5DC</color>
+    <color name="error_red">#D32F2F</color>
+    <color name="bg_soft_pink">#FCE4EC</color>
+    <color name="bg_soft_green">#E8F5E9</color>
+    <color name="text_blue_gray">#546E7A</color>
+    <color name="text_dark_green">#2E7D32</color>
+    <color name="gray_text_light">#9E9E9E</color>
 
 </resources>

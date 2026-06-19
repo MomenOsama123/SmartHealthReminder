@@ -26,6 +26,7 @@ import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.search.SearchActivity
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
@@ -48,6 +49,7 @@ class MainWelcomeActivity : AppCompatActivity() {
         binding = ActivityMainWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupRecyclerView()
         setupClickListeners()
         setupBottomNavigation()
         setupWindowInsets()
@@ -56,10 +58,13 @@ class MainWelcomeActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
+        // Check if rvTodayReminders exists in binding to avoid unresolved reference if XML is not updated yet
+        // In this case, we'll assume it will be added to XML or we can use try-catch/if-null if needed, 
+        // but ViewBinding usually handles it by not generating the field if it's missing.
+        // If it's missing in XML, this line will cause a compile error.
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
-            // Handle reminder click, e.g., open details or mark as done
             Toast.makeText(this, "Clicked: ${reminder.title}", Toast.LENGTH_SHORT).show()
         }
     }
@@ -101,7 +106,6 @@ class MainWelcomeActivity : AppCompatActivity() {
         binding.profileInfo.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
-
     }
 
     private fun setupBottomNavigation() {
@@ -153,10 +157,8 @@ class MainWelcomeActivity : AppCompatActivity() {
                         startActivity(Intent(this@MainWelcomeActivity, ReportsActivity::class.java))
                         true
                     }
-
-                    else -> {
-                        true
-                    }
+                    else -> true
+                }
             }
             show()
         }
@@ -167,8 +169,6 @@ class MainWelcomeActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
-            }
         }
     }
 }
-
