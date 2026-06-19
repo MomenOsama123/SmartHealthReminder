@@ -34,6 +34,9 @@ interface ReminderDao {
     @Query("UPDATE reminders SET status = :status WHERE id = :reminderId")
     suspend fun updateReminderStatus(reminderId: String, status: String)
 
+    @Query("SELECT * FROM reminders WHERE title LIKE :query OR description LIKE :query ORDER BY date DESC")
+    fun searchReminders(query: String): Flow<List<ReminderEntity>>
+
     @Query("SELECT COUNT(*) FROM reminders WHERE status = 'Pending'")
     fun getPendingCount(): Flow<Int>
 

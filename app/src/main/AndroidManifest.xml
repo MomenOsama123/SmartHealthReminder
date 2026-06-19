@@ -15,6 +15,7 @@
 
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -26,11 +27,13 @@
 
         <!-- Welcome & Auth Activities -->
         <activity
-            android:name=".features.Search.SearchActivity"
-            android:exported="false" />
+            android:name=".features.search.SearchActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
         <activity
-            android:name=".features.Search.NoResultsActivity"
+            android:name=".features.auth.forget_password.ForgetPasswordActivity"
             android:exported="false" />
+
         <activity
             android:name=".features.welcome.WelcomeActivity2"
             android:exported="false" />
@@ -45,7 +48,7 @@
         <activity
             android:name=".features.welcome.WelcomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmartHealthReminder..Splash" >
+            android:theme="@style/Theme.SmartHealthReminder.Splash" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -124,9 +127,7 @@
             android:exported="false"
             android:label="@string/complete_profile_label"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".features.auth.forget_password.ForgetPasswordActivity"
-            android:exported="false" />
+
         <activity
             android:name="com.example.smarthealthreminder.features.chatbot.ChatBotActivity"
             android:exported="false" />

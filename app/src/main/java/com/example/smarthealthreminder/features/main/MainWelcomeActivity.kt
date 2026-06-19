@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.example.smarthealthreminder.databinding.ActivityMainWelcomeBinding
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
+import com.example.smarthealthreminder.features.search.SearchActivity
 
 class MainWelcomeActivity : AppCompatActivity() {
 
@@ -26,6 +27,9 @@ class MainWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
+        binding.searchIcon.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+        }
         binding.fabChatbot.setOnClickListener {
             startActivity(Intent(this, ChatBotActivity::class.java))
         }
