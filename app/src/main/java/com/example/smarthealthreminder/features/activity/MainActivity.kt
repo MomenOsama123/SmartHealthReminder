@@ -164,8 +164,9 @@ class MainActivity : AppCompatActivity() {
                         startActivity(Intent(this@MainActivity, ReportsActivity::class.java))
                         true
                     }
-
-                    else -> false
+                    else -> {
+                        true
+                    }
                 }
             }
             show()
