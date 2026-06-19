@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
@@ -30,16 +31,16 @@ class AlarmRingingActivity : AppCompatActivity() {
     private var alarmTime: String = ""
     private var alarmCategory: String = ""
     private lateinit var alarmHelper: AlarmHelper
-    private var isStopped = false  // ← عشان نمنع onDestroy يوقف الـ snooze
+    private var isStopped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         window.addFlags(
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
 
         setContentView(R.layout.activity_alarm_ringing)
@@ -47,6 +48,12 @@ class AlarmRingingActivity : AppCompatActivity() {
         alarmHelper = AlarmHelper(this)
 
         alarmId = intent.getStringExtra(EXTRA_ALARM_ID)
+        if (alarmId.isNullOrBlank()) {
+            stopAlarmService()
+            finish()
+            return
+        }
+
         alarmLabel = intent.getStringExtra(EXTRA_ALARM_LABEL) ?: "Alarm"
         alarmTime = intent.getStringExtra(EXTRA_ALARM_TIME) ?: getCurrentTime()
         alarmCategory = intent.getStringExtra(EXTRA_ALARM_CATEGORY) ?: "General"
@@ -64,10 +71,7 @@ class AlarmRingingActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_room_info)?.text = roomInfo
 
         findViewById<Button>(R.id.btn_snooze)?.setOnClickListener {
-            isStopped = true
-            stopAlarmService()  // ← وقفي الصوت
-            // شيديل snooze بعد 10 دقايق
-            alarmId?.let { id ->
+            val snoozed = alarmId?.let { id ->
                 val snoozeAlarm = com.example.smarthealthreminder.features.model.Alarm(
                     id = id,
                     label = alarmLabel,
@@ -76,17 +80,27 @@ class AlarmRingingActivity : AppCompatActivity() {
                     category = alarmCategory
                 )
                 alarmHelper.snoozeAlarm(snoozeAlarm, 10)
+            } ?: false
+
+            if (snoozed) {
+                isStopped = true
+                stopAlarmService()
+                Toast.makeText(this, "Snoozed for 10 minutes", Toast.LENGTH_SHORT).show()
+                finish()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Couldn't snooze. Please allow exact alarms or stop the alarm.",
+                    Toast.LENGTH_LONG
+                ).show()
             }
-            finish()
         }
 
         findViewById<Button>(R.id.btn_stop_alarm)?.setOnClickListener {
             isStopped = true
-            stopAlarmService()  // ← وقفي الصوت
+            stopAlarmService()
             finish()
         }
-
-        // ← مفيش startService هنا خالص
     }
 
     private fun stopAlarmService() {

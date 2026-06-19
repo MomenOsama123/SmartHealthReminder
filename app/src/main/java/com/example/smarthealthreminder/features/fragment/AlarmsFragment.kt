@@ -1,11 +1,15 @@
 package com.example.smarthealthreminder.features.fragment
 
 import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -73,11 +77,28 @@ class AlarmsFragment : Fragment() {
         alarmAdapter?.setOnAlarmToggleListener(object : AlarmAdapter.OnAlarmToggleListener {
             override fun onToggle(alarm: Alarm, isActive: Boolean) {
                 alarm.id?.let { id ->
-                    viewModel.toggleAlarm(id, isActive)
                     val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(requireContext())
                     if (isActive) {
-                        alarmHelper.scheduleAlarm(alarm)
+                        val scheduled = alarmHelper.scheduleAlarm(alarm)
+                        if (scheduled) {
+                            viewModel.toggleAlarm(id, true)
+                        } else {
+                            alarm.isActive = false
+                            alarmAdapter?.updateAlarm(alarm)
+                            viewModel.toggleAlarm(id, false)
+                            Toast.makeText(
+                                requireContext(),
+                                "Allow exact alarms so this alarm can ring on time",
+                                Toast.LENGTH_LONG
+                            ).show()
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                                    data = Uri.parse("package:${requireContext().packageName}")
+                                })
+                            }
+                        }
                     } else {
+                        viewModel.toggleAlarm(id, false)
                         alarmHelper.cancelAlarm(alarm)
                     }
                 }

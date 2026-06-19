@@ -53,6 +53,7 @@ dependencies {
     // Firebase
     implementation(libs.firebase.auth)
     implementation("com.google.android.gms:play-services-auth:21.5.1")
+    implementation(libs.firebase.firestore)
 
     // Room Database
     val roomVersion = "2.7.0"
