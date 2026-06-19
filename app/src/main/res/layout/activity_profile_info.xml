@@ -37,16 +37,6 @@
             android:textStyle="bold"
             tools:ignore="RelativeOverlap" />
 
-        <ImageView
-            android:id="@+id/icDarkMode"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:contentDescription="@string/darkmode"
-            android:src="@drawable/ic_dark_mode"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:focusable="true"/>
     </RelativeLayout>
 
 
@@ -293,4 +283,5 @@
 
         </LinearLayout>
     </ScrollView>
+
 </RelativeLayout>

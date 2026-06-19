@@ -17,7 +17,7 @@
         android:icon="@drawable/ic_sparkle"
         android:title="AI" />
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_person"
-        android:title="Profile" />
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="Settings" />
 </menu>

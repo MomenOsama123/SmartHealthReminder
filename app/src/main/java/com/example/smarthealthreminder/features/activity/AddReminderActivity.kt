@@ -21,7 +21,9 @@ import com.example.smarthealthreminder.alarm.ReminderReceiver
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.UUID
@@ -61,6 +63,7 @@ class AddReminderActivity : AppCompatActivity() {
 
         initViews()
         setupListeners()
+        BottomNavHelper.setup(this, findViewById<BottomNavigationView>(R.id.bottom_navigation))
     }
 
     private fun initViews() {

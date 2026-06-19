@@ -8,13 +8,6 @@ class SmartHealthReminderApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val darkModeEnabled = getSharedPreferences(
-            SettingsActivity.PREFS_NAME,
-            MODE_PRIVATE
-        ).getBoolean(SettingsActivity.KEY_DARK_MODE, false)
-
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkModeEnabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        )
+        AppCompatDelegate.setDefaultNightMode(SettingsActivity.getSavedNightMode(this))
     }
 }
