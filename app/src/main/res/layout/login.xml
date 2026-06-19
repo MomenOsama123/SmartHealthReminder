@@ -252,16 +252,5 @@
                 android:focusable="true" />
         </LinearLayout>
 
-        <!-- Dark Mode Toggle -->
-        <ImageView
-            android:id="@+id/icDarkMode"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="end"
-            android:layout_marginTop="24dp"
-            android:src="@drawable/ic_dark_mode"
-            android:clickable="true"
-            android:focusable="true" />
-
     </LinearLayout>
 </ScrollView>

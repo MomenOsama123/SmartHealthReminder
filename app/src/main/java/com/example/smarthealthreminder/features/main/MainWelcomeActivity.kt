@@ -44,11 +44,10 @@ class MainWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityMainWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupRecyclerView()
         setupClickListeners()
         setupBottomNavigation()
         setupWindowInsets()
@@ -58,7 +57,7 @@ class MainWelcomeActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
         binding.rvTodayReminders.adapter = reminderAdapter
-        
+
         reminderAdapter.setOnReminderClickListener { reminder ->
             // Handle reminder click, e.g., open details or mark as done
             Toast.makeText(this, "Clicked: ${reminder.title}", Toast.LENGTH_SHORT).show()
@@ -122,9 +121,9 @@ class MainWelcomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, ChatBotActivity::class.java))
                     false
                 }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                    false
+                R.id.action_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
                 }
                 else -> false
             }
@@ -142,52 +141,22 @@ class MainWelcomeActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.quick_actions_menu, menu)
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.action_add_reminder -> {
+                    R.id.reminder -> {
                         startActivity(Intent(this@MainWelcomeActivity, AddReminderActivity::class.java))
-                        true
-                    }
-                    R.id.action_add_alarm -> {
-                        startActivity(Intent(this@MainWelcomeActivity, EditAlarmActivity::class.java))
                         true
                     }
                     R.id.action_alarms -> {
                         openMainSection(MainActivity.DESTINATION_ALARMS)
                         true
                     }
-                    R.id.action_search -> {
-                        startActivity(Intent(this@MainWelcomeActivity, SearchActivity::class.java))
-                        true
-                    }
                     R.id.action_reports -> {
                         startActivity(Intent(this@MainWelcomeActivity, ReportsActivity::class.java))
                         true
                     }
-                    R.id.action_add_medicine -> {
-                        Toast.makeText(
-                            this@MainWelcomeActivity,
-                            "Add Medicine feature coming soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
+
+                    else -> {
                         true
                     }
-                    R.id.action_add_appointment -> {
-                        Toast.makeText(
-                            this@MainWelcomeActivity,
-                            "Add Appointment feature coming soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        true
-                    }
-                    R.id.action_add_health_goal -> {
-                        Toast.makeText(
-                            this@MainWelcomeActivity,
-                            "Add Health Goal feature coming soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        true
-                    }
-                    else -> false
-                }
             }
             show()
         }
@@ -198,6 +167,8 @@ class MainWelcomeActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+            }
         }
     }
 }
+

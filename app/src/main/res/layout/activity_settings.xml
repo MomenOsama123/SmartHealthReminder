@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/settingsRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:fillViewport="true"
     tools:context=".features.settings.SettingsActivity">
+
+    <ScrollView
+        android:id="@+id/settingsScroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -167,15 +176,16 @@
                     style="@style/SettingsTextGroup">
                     <TextView
                         style="@style/SettingsTitle"
-                        android:text="Dark mode" />
+                        android:text="Appearance" />
                     <TextView
                         style="@style/SettingsSubtitle"
-                        android:text="Switch between light and dark appearance." />
+                        android:text="Choose light, dark, or match your device." />
                 </LinearLayout>
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/switch_dark_mode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <Spinner
+                    android:id="@+id/spinner_theme_mode"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
             </LinearLayout>
 
             <View
@@ -250,4 +260,24 @@
             android:textStyle="bold" />
 
     </LinearLayout>
-</ScrollView>
+
+    </ScrollView>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/surface"
+        android:elevation="10dp"
+        app:itemActiveIndicatorStyle="@style/App.ActiveIndicator"
+        app:itemIconSize="24dp"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemRippleColor="@color/success_light"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
