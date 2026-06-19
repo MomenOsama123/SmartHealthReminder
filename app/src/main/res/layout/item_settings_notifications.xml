@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/SettingsRow">
+
+    <ImageView
+        style="@style/SettingsIcon"
+        android:src="@drawable/ic_notifications" />
+
+    <LinearLayout
+        style="@style/SettingsTextGroup">
+        <TextView
+            style="@style/SettingsTitle"
+            android:text="Notifications" />
+        <TextView
+            style="@style/SettingsSubtitle"
+            android:text="Allow reminders and alarm alerts to appear." />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/switch_notifications"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

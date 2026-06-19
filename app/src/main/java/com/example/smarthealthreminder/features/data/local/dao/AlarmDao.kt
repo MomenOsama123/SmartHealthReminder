@@ -13,6 +13,9 @@ interface AlarmDao {
     @Query("SELECT * FROM alarms WHERE id = :alarmId")
     suspend fun getAlarmById(alarmId: String): AlarmEntity?
 
+    @Query("SELECT * FROM alarms WHERE id = :alarmId AND is_active = 1")
+    suspend fun getActiveAlarmById(alarmId: String): AlarmEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAlarm(alarm: AlarmEntity)
 

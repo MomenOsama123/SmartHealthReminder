@@ -82,7 +82,7 @@ class AlarmAdapter : RecyclerView.Adapter<AlarmAdapter.ViewHolder>() {
 
         init {
             itemView.setOnClickListener {
-                val position = adapterPosition
+                val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     clickListener?.onAlarmClick(alarms[position])
                 }
@@ -94,10 +94,11 @@ class AlarmAdapter : RecyclerView.Adapter<AlarmAdapter.ViewHolder>() {
             tvAmPm.text = alarm.amPm ?: ""
             tvRepeatDays.text = alarm.repeatDays ?: "No repeat"
             chipCategory.text = alarm.category ?: "General"
+            switchAlarm.setOnCheckedChangeListener(null)
             switchAlarm.isChecked = alarm.isActive
 
             switchAlarm.setOnCheckedChangeListener { _, isChecked ->
-                val position = adapterPosition
+                val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     alarms[position].isActive = isChecked
                     toggleListener?.onToggle(alarms[position], isChecked)
