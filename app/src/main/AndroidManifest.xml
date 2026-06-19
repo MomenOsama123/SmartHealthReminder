@@ -106,7 +106,7 @@
                 android:value="alarm"/>
         </service>
         <receiver
-            android:name=".alarm.ReminderReceiver"
+            android:name=".features.alarm.ReminderReceiver"
             android:exported="false" />
 
         <!-- Meta Data -->
