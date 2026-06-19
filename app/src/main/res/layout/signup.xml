@@ -179,7 +179,7 @@
             android:textColor="@color/white"
             android:backgroundTintMode="src_in"/>
 
-        <!-- Already Account & Dark Mode -->
+        <!-- Already Account -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -192,15 +192,6 @@
                 android:text="@string/already_account"
                 android:textColor="@color/text_dark"
                 android:layout_centerHorizontal="true"/>
-
-            <ImageView
-                android:id="@+id/icDarkMode"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_dark_mode"
-                android:layout_alignParentEnd="true"
-                android:clickable="true"
-                android:focusable="true"/>
 
         </RelativeLayout>
 

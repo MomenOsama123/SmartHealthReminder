@@ -9,9 +9,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -22,7 +26,9 @@ import androidx.core.content.ContextCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 
 class SettingsActivity : AppCompatActivity() {
@@ -33,7 +39,23 @@ class SettingsActivity : AppCompatActivity() {
         const val KEY_VIBRATION = "vibration_enabled"
         const val KEY_EARLY_REMINDERS = "early_reminders_enabled"
         const val KEY_DARK_MODE = "dark_mode_enabled"
+        const val KEY_THEME_MODE = "theme_mode"
+        const val THEME_LIGHT = "light"
+        const val THEME_DARK = "dark"
+        const val THEME_SYSTEM = "system"
         private const val REQUEST_NOTIFICATIONS = 3001
+
+        fun getSavedNightMode(context: Context): Int {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val savedMode = prefs.getString(KEY_THEME_MODE, null)
+                ?: if (prefs.getBoolean(KEY_DARK_MODE, false)) THEME_DARK else THEME_LIGHT
+
+            return when (savedMode) {
+                THEME_DARK -> AppCompatDelegate.MODE_NIGHT_YES
+                THEME_SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+                else -> AppCompatDelegate.MODE_NIGHT_NO
+            }
+        }
     }
 
     private val prefs by lazy {
@@ -43,10 +65,10 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var switchNotifications: SwitchCompat
     private lateinit var switchVibration: SwitchCompat
     private lateinit var switchEarlyReminders: SwitchCompat
-    private lateinit var switchDarkMode: SwitchCompat
+    private lateinit var themeModeSpinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        applySavedDarkMode()
+        AppCompatDelegate.setDefaultNightMode(getSavedNightMode(this))
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
@@ -59,8 +81,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onResume()
         if (::switchNotifications.isInitialized) {
             switchNotifications.setOnCheckedChangeListener(null)
-            switchNotifications.isChecked = areNotificationsAllowed()
-            prefs.edit().putBoolean(KEY_NOTIFICATIONS, switchNotifications.isChecked).apply()
+            switchNotifications.isChecked = prefs.getBoolean(KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
             setupNotificationSwitchListener()
         }
     }
@@ -69,14 +90,19 @@ class SettingsActivity : AppCompatActivity() {
         switchNotifications = findViewById(R.id.switch_notifications)
         switchVibration = findViewById(R.id.switch_vibration)
         switchEarlyReminders = findViewById(R.id.switch_early_reminders)
-        switchDarkMode = findViewById(R.id.switch_dark_mode)
+        themeModeSpinner = findViewById(R.id.spinner_theme_mode)
     }
 
     private fun loadValues() {
-        switchNotifications.isChecked = prefs.getBoolean(KEY_NOTIFICATIONS, true)
+        switchNotifications.isChecked = prefs.getBoolean(KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
         switchVibration.isChecked = prefs.getBoolean(KEY_VIBRATION, true)
         switchEarlyReminders.isChecked = prefs.getBoolean(KEY_EARLY_REMINDERS, true)
-        switchDarkMode.isChecked = prefs.getBoolean(KEY_DARK_MODE, false)
+        themeModeSpinner.adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf("Light", "Dark", "Same as device")
+        )
+        themeModeSpinner.setSelection(themeModeToPosition(prefs.getString(KEY_THEME_MODE, THEME_LIGHT)))
     }
 
     private fun setupListeners() {
@@ -85,6 +111,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         setupNotificationSwitchListener()
+        setupBottomNavigation()
 
         switchVibration.setOnCheckedChangeListener { _, isChecked ->
             prefs.edit().putBoolean(KEY_VIBRATION, isChecked).apply()
@@ -94,12 +121,20 @@ class SettingsActivity : AppCompatActivity() {
             prefs.edit().putBoolean(KEY_EARLY_REMINDERS, isChecked).apply()
         }
 
-        switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(KEY_DARK_MODE, isChecked).apply()
-            AppCompatDelegate.setDefaultNightMode(
-                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-            )
-            recreate()
+        themeModeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val themeMode = positionToThemeMode(position)
+                if (prefs.getString(KEY_THEME_MODE, THEME_LIGHT) == themeMode) return
+
+                prefs.edit()
+                    .putString(KEY_THEME_MODE, themeMode)
+                    .putBoolean(KEY_DARK_MODE, themeMode == THEME_DARK)
+                    .apply()
+                AppCompatDelegate.setDefaultNightMode(getSavedNightMode(this@SettingsActivity))
+                recreate()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
 
         findViewById<LinearLayout>(R.id.row_exact_alarm).setOnClickListener {
@@ -192,11 +227,27 @@ class SettingsActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun applySavedDarkMode() {
-        val darkModeEnabled = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .getBoolean(KEY_DARK_MODE, false)
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkModeEnabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+    private fun setupBottomNavigation() {
+        BottomNavHelper.setup(
+            this,
+            findViewById<BottomNavigationView>(R.id.bottom_navigation),
+            R.id.action_settings
         )
+    }
+
+    private fun themeModeToPosition(themeMode: String?): Int {
+        return when (themeMode) {
+            THEME_DARK -> 1
+            THEME_SYSTEM -> 2
+            else -> 0
+        }
+    }
+
+    private fun positionToThemeMode(position: Int): String {
+        return when (position) {
+            1 -> THEME_DARK
+            2 -> THEME_SYSTEM
+            else -> THEME_LIGHT
+        }
     }
 }

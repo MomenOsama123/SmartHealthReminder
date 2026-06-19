@@ -67,9 +67,9 @@ class MainWelcomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, ChatBotActivity::class.java))
                     false
                 }
-                R.id.nav_profile -> {
-                    startActivity(Intent(this, ProfileActivity::class.java))
-                    false
+                R.id.action_settings -> {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                    true
                 }
                 else -> false
             }
@@ -87,50 +87,19 @@ class MainWelcomeActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.quick_actions_menu, menu)
             setOnMenuItemClickListener { item ->
                 when (item.itemId) {
-                    R.id.action_add_reminder -> {
+                    R.id.reminder -> {
                         startActivity(Intent(this@MainWelcomeActivity, AddReminderActivity::class.java))
-                        true
-                    }
-                    R.id.action_add_alarm -> {
-                        startActivity(Intent(this@MainWelcomeActivity, EditAlarmActivity::class.java))
                         true
                     }
                     R.id.action_alarms -> {
                         openMainSection(MainActivity.DESTINATION_ALARMS)
                         true
                     }
-                    R.id.action_search -> {
-                        startActivity(Intent(this@MainWelcomeActivity, SearchActivity::class.java))
-                        true
-                    }
                     R.id.action_reports -> {
                         startActivity(Intent(this@MainWelcomeActivity, ReportsActivity::class.java))
                         true
                     }
-                    R.id.action_add_medicine -> {
-                        Toast.makeText(
-                            this@MainWelcomeActivity,
-                            "Add Medicine feature coming soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        true
-                    }
-                    R.id.action_add_appointment -> {
-                        Toast.makeText(
-                            this@MainWelcomeActivity,
-                            "Add Appointment feature coming soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        true
-                    }
-                    R.id.action_add_health_goal -> {
-                        Toast.makeText(
-                            this@MainWelcomeActivity,
-                            "Add Health Goal feature coming soon",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        true
-                    }
+
                     R.id.action_settings -> {
                         startActivity(Intent(this@MainWelcomeActivity, SettingsActivity::class.java))
                         true

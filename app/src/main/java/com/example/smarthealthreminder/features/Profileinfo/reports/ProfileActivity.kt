@@ -1,11 +1,7 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -17,22 +13,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 
 
 class ProfileActivity : AppCompatActivity() {
 
-    companion object {
-        const val PREFS_NAME = "smart_health_settings"
-        const val KEY_DARK_MODE = "dark_mode_enabled"
-    }
-
-    private val prefs by lazy {
-        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    }
-
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
-        applySavedDarkMode()
+        AppCompatDelegate.setDefaultNightMode(SettingsActivity.getSavedNightMode(this))
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -45,7 +33,6 @@ class ProfileActivity : AppCompatActivity() {
         val btnSave = findViewById<Button>(R.id.save_btn)
         val genderInput = findViewById<EditText>(R.id.gender_input)
         val bloodTypeInput = findViewById<EditText>(R.id.blood_type_input)
-        val icDarkMode = findViewById<ImageView>(R.id.icDarkMode)
 
         // 2. تشغيل زر الرجوع (Top Bar)
         btnBack.setOnClickListener {
@@ -53,16 +40,6 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         // 3. تشغيل أيقونة الدارك مود
-        icDarkMode.setOnClickListener {
-            val currentDarkMode = prefs.getBoolean(KEY_DARK_MODE, false)
-            val newDarkMode = !currentDarkMode
-            prefs.edit().putBoolean(KEY_DARK_MODE, newDarkMode).apply()
-            AppCompatDelegate.setDefaultNightMode(
-                if (newDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-            )
-            recreate()
-        }
-
         // 4. تشغيل قائمة اختيار النوع (Gender)
         genderInput.setOnClickListener {
             showGenderDialog(genderInput)
@@ -113,11 +90,4 @@ class ProfileActivity : AppCompatActivity() {
         builder.show()
     }
 
-    private fun applySavedDarkMode() {
-        val darkModeEnabled = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .getBoolean(KEY_DARK_MODE, false)
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkModeEnabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
-        )
-    }
 }

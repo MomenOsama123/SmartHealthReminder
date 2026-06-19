@@ -21,6 +21,9 @@ import com.example.smarthealthreminder.alarm.ReminderReceiver
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
+import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.util.*
 import android.content.Intent
@@ -71,6 +74,7 @@ class AddReminderActivity : AppCompatActivity() {
         initViews()
         checkEditMode()
         setupListeners()
+        BottomNavHelper.setup(this, findViewById<BottomNavigationView>(R.id.bottom_navigation))
     }
 
     private fun checkEditMode() {
@@ -110,6 +114,10 @@ class AddReminderActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
         btnDelete = findViewById(R.id.btn_delete_reminder)
+
+        val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
+        switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
+        switchVibration.isChecked = settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
         val calendar = Calendar.getInstance()
         selectedDate = String.format(

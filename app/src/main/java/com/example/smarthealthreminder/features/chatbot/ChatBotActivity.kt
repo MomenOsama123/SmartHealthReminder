@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -35,6 +37,7 @@ class ChatBotActivity : AppCompatActivity() {
 
         binding = ActivityChatbotBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        BottomNavHelper.setup(this, binding.bottomNavigation, R.id.nav_ai)
 
         // Handle Keyboard (IME) and System Bars insets
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->

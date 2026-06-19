@@ -10,14 +10,21 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 
 class ReminderReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
+        val settings = context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
+        if (!settings.getBoolean(SettingsActivity.KEY_NOTIFICATIONS, true)) {
+            return
+        }
+
         val reminderId = intent.getStringExtra("reminder_id") ?: return
         val title = intent.getStringExtra("reminder_title") ?: "Health Reminder"
         val description = intent.getStringExtra("reminder_description") ?: ""
-        val vibrationEnabled = intent.getBooleanExtra("vibration_enabled", false)
+        val vibrationEnabled = intent.getBooleanExtra("vibration_enabled", false) &&
+            settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
         showNotification(context, reminderId, title, description)
 

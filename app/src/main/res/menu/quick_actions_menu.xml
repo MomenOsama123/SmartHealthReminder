@@ -1,39 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/action_add_reminder"
+        android:id="@+id/reminder"
         android:icon="@drawable/ic_notifications"
-        android:title="Add Reminder" />
-    <item
-        android:id="@+id/action_add_alarm"
-        android:icon="@drawable/ic_bell"
-        android:title="Add Alarm" />
+        android:title="Reminder" />
+
     <item
         android:id="@+id/action_alarms"
         android:icon="@drawable/ic_bell"
         android:title="Alarms" />
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search"
-        android:title="Search" />
+
     <item
         android:id="@+id/action_reports"
         android:icon="@drawable/ic_chart"
         android:title="Reports" />
-    <item
-        android:id="@+id/action_add_medicine"
-        android:icon="@drawable/ic_medicine"
-        android:title="Add Medicine" />
-    <item
-        android:id="@+id/action_add_appointment"
-        android:icon="@drawable/ic_appointment"
-        android:title="Add Appointment" />
-    <item
-        android:id="@+id/action_add_health_goal"
-        android:icon="@drawable/ic_health"
-        android:title="Add Health Goal" />
-    <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+
+
 </menu>

@@ -1,19 +1,14 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
-import android.os.Build
+import android.content.Intent
 import android.os.Bundle
-import android.view.WindowInsets
-import android.view.WindowManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.WindowCompat
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class ReportsActivity : AppCompatActivity() {
 
@@ -26,6 +21,7 @@ class ReportsActivity : AppCompatActivity() {
         // 1. تعريف العناصر الموجودة في الشاشة
         val btnBack = findViewById<ImageView>(R.id.btn_back)
         val btnDownload = findViewById<Button>(R.id.download_btn)
+        setupBottomNavigation()
 
         // 2. تشغيل زر الرجوع (السهم أعلى الشاشة)
         btnBack.setOnClickListener {
@@ -40,5 +36,9 @@ class ReportsActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun setupBottomNavigation() {
+        BottomNavHelper.setup(this, findViewById<BottomNavigationView>(R.id.bottom_navigation))
     }
 }
