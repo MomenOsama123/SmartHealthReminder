@@ -27,7 +27,7 @@ class MainWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         binding = ActivityMainWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -95,12 +95,13 @@ class MainWelcomeActivity : AppCompatActivity() {
                         startActivity(Intent(this@MainWelcomeActivity, ReportsActivity::class.java))
                         true
                     }
-
                     R.id.action_settings -> {
                         startActivity(Intent(this@MainWelcomeActivity, SettingsActivity::class.java))
                         true
                     }
-                    else -> false
+                    else -> {
+                        true
+                    }
                 }
             }
             show()
