@@ -15,6 +15,7 @@ import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.AlarmRingingActivity
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 
 class AlarmService : Service() {
 
@@ -165,6 +166,13 @@ class AlarmService : Service() {
     }
 
     private fun startVibration() {
+        val vibrationEnabled = getSharedPreferences(
+            SettingsActivity.PREFS_NAME,
+            Context.MODE_PRIVATE
+        ).getBoolean(SettingsActivity.KEY_VIBRATION, true)
+
+        if (!vibrationEnabled) return
+
         vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val pattern = longArrayOf(0, 500, 500, 500, 500, 500)

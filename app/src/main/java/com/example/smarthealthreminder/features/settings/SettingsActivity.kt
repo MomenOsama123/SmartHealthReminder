@@ -59,8 +59,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onResume()
         if (::switchNotifications.isInitialized) {
             switchNotifications.setOnCheckedChangeListener(null)
-            switchNotifications.isChecked = areNotificationsAllowed()
-            prefs.edit().putBoolean(KEY_NOTIFICATIONS, switchNotifications.isChecked).apply()
+            switchNotifications.isChecked = prefs.getBoolean(KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
             setupNotificationSwitchListener()
         }
     }
@@ -73,7 +72,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadValues() {
-        switchNotifications.isChecked = prefs.getBoolean(KEY_NOTIFICATIONS, true)
+        switchNotifications.isChecked = prefs.getBoolean(KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
         switchVibration.isChecked = prefs.getBoolean(KEY_VIBRATION, true)
         switchEarlyReminders.isChecked = prefs.getBoolean(KEY_EARLY_REMINDERS, true)
         switchDarkMode.isChecked = prefs.getBoolean(KEY_DARK_MODE, false)

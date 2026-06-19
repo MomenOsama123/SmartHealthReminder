@@ -21,6 +21,7 @@ import com.example.smarthealthreminder.alarm.ReminderReceiver
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.UUID
@@ -73,6 +74,10 @@ class AddReminderActivity : AppCompatActivity() {
         switchVibration = findViewById(R.id.switch_vibration)
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
+
+        val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
+        switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
+        switchVibration.isChecked = settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
         val calendar = Calendar.getInstance()
         selectedDate = String.format(

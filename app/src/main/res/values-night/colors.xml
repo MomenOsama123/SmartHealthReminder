@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="splash_background">#F3EFE3</color>
     <color name="page">#111814</color>
     <color name="background_beige">#111814</color>
     <color name="background">#111814</color>

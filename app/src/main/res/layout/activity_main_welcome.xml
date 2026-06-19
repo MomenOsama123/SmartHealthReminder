@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFCF8">
+    android:background="@color/background">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_heart"
-                        app:tint="#374F41" />
+                        app:tint="@color/text_dark" />
                 </FrameLayout>
 
                 <!-- App Title -->
@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="@string/serenepulse"
-                    android:textColor="#374F41"
+                    android:textColor="@color/text_dark"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -80,7 +80,7 @@
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="6dp"
                 android:text="@string/rk_your_health_sanctuary"
-                android:textColor="#5A4A42"
+                android:textColor="@color/text_secondary"
                 android:textSize="10sp"
                 android:textStyle="bold" />
 
@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/welcome_back"
-                android:textColor="#374F41"
+                android:textColor="@color/text_dark"
                 android:textSize="32sp"
                 android:textStyle="bold" />
 
@@ -99,7 +99,7 @@
                 android:layout_marginTop="8dp"
                 android:lineSpacingExtra="4dp"
                 android:text="@string/take_a_breath_your_wellness_journey_continues_today_with_personalized_reminders_and_gentle_insights_designed_for_your_tranquility"
-                android:textColor="#707873"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
 
             <!-- Reminders Card -->
@@ -107,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:cardBackgroundColor="#FFFFFF"
+                app:cardBackgroundColor="@color/surface"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
 
@@ -126,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/today_s_reminders"
-                            android:textColor="#374F41"
+                            android:textColor="@color/text_dark"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -135,7 +135,7 @@
                             android:layout_height="20dp"
                             android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_calendar"
-                            app:tint="#B0B5B1" />
+                            app:tint="@color/text_tertiary" />
                     </RelativeLayout>
 
                     <!-- Reminder 1 -->
@@ -152,7 +152,7 @@
                             android:background="@drawable/circle_white"
                             android:padding="8dp"
                             android:src="@drawable/ic_pill"
-                            app:tint="#5A7766" />
+                            app:tint="@color/primary" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -164,7 +164,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/vitamins"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
@@ -172,7 +172,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Due at 9:00 AM"
-                                android:textColor="#808080"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -204,7 +204,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Hydration"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
@@ -212,7 +212,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="4 of 8 glasses reached"
-                                android:textColor="#808080"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -244,7 +244,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Sleep Routine"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
 
@@ -252,7 +252,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Starts at 10:30 PM"
-                                android:textColor="#808080"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -287,7 +287,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chart_line"
-                            app:tint="#FFFFFF" />
+                            app:tint="@color/text_on_primary" />
 
                         <Space
                             android:layout_width="wrap_content"
@@ -305,7 +305,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="88%"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/text_on_primary"
                             android:textSize="28sp"
                             android:textStyle="bold" />
 
@@ -313,7 +313,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/optimal"
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/text_on_primary"
                             android:textSize="16sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -333,7 +333,7 @@
                         android:layout_height="0dp"
                         android:layout_marginBottom="8dp"
                         android:layout_weight="1"
-                        app:cardBackgroundColor="#EFECE2"
+                        app:cardBackgroundColor="@color/surface_variant"
                         app:cardCornerRadius="24dp"
                         app:cardElevation="0dp">
 
@@ -348,7 +348,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/daily_steps"
-                                android:textColor="#7A7A7A"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
 
@@ -357,7 +357,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="6,432"
-                                android:textColor="#374F41"
+                                android:textColor="@color/text_dark"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -369,7 +369,7 @@
                         android:layout_height="0dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        app:cardBackgroundColor="#EAE4D3"
+                        app:cardBackgroundColor="@color/surface_variant"
                         app:cardCornerRadius="24dp"
                         app:cardElevation="0dp">
 
@@ -384,7 +384,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/fatigue"
-                                android:textColor="#7A7A7A"
+                                android:textColor="@color/text_secondary"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
 
@@ -393,7 +393,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="Low"
-                                android:textColor="#1A1A1A"
+                                android:textColor="@color/text_dark"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
@@ -408,7 +408,7 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/essential_tools"
-                android:textColor="#374F41"
+                android:textColor="@color/text_dark"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -432,14 +432,14 @@
                         android:background="@drawable/circle_tool_bg"
                         android:padding="16dp"
                         android:src="@drawable/ic_clipboard"
-                        app:tint="#5A7766" />
+                        app:tint="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Medications"
-                        android:textColor="#707873"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -457,14 +457,14 @@
                         android:background="@drawable/circle_tool_bg"
                         android:padding="16dp"
                         android:src="@drawable/ic_moon_outline"
-                        app:tint="#5A7766" />
+                        app:tint="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Sleep Track"
-                        android:textColor="#707873"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -482,14 +482,14 @@
                         android:background="@drawable/circle_tool_bg"
                         android:padding="16dp"
                         android:src="@drawable/ic_apple"
-                        app:tint="#5A7766" />
+                        app:tint="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Nutrition"
-                        android:textColor="#707873"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
 
@@ -507,14 +507,14 @@
                         android:background="@drawable/circle_tool_bg"
                         android:padding="16dp"
                         android:src="@drawable/ic_dumbbell"
-                        app:tint="#5A7766" />
+                        app:tint="@color/primary" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Activity"
-                        android:textColor="#707873"
+                        android:textColor="@color/text_secondary"
                         android:textSize="11sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -554,7 +554,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Deep Breathe."
-                            android:textColor="#FFFFFF"
+                            android:textColor="@color/text_on_primary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -574,10 +574,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="#5A7766"
+                android:backgroundTint="@color/primary"
                 android:text="@string/view_today_s_plan_u2192"
                 android:textAllCaps="false"
-                android:textColor="#FFFFFF"
+                android:textColor="@color/text_on_primary"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:cornerRadius="20dp" />

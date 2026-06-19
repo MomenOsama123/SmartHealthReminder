@@ -1,18 +1,17 @@
 package com.example.smarthealthreminder.features.activity
 
 import android.Manifest
-import android.content.Intent`r`nimport android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity`r`nimport androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
@@ -22,10 +21,11 @@ import com.example.smarthealthreminder.features.fragment.AlarmsFragment
 import com.example.smarthealthreminder.features.fragment.HomeFragment
 import com.example.smarthealthreminder.features.fragment.ScheduleFragment
 import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {`r`n        const val PREFS_NAME = "smart_health_settings"`r`n        const val KEY_DARK_MODE = "dark_mode_enabled"
+    companion object {
         const val EXTRA_START_DESTINATION = "extra_start_destination"
         const val DESTINATION_HOME = "home"
         const val DESTINATION_SCHEDULE = "schedule"
@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var homeFragment: HomeFragment
     private lateinit var scheduleFragment: ScheduleFragment
-    private lateinit var alarmsFragment: AlarmsFragment`r`n`r`n    private val prefs by lazy {`r`n        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)`r`n    }
+    private lateinit var alarmsFragment: AlarmsFragment
     private var activeFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,27 +44,36 @@ class MainActivity : AppCompatActivity() {
         requestNotificationPermissionIfNeeded()
 
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val requestedDestination = intent.getStringExtra(EXTRA_START_DESTINATION) ?: DESTINATION_HOME
 
         if (savedInstanceState == null) {
             homeFragment = HomeFragment()
             scheduleFragment = ScheduleFragment()
             alarmsFragment = AlarmsFragment()
-            activeFragment = homeFragment
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container, homeFragment, "home")
-                .add(R.id.fragment_container, scheduleFragment, "schedule").hide(scheduleFragment)
-                .add(R.id.fragment_container, alarmsFragment, "alarms").hide(alarmsFragment)
-                .commit()
+            activeFragment = when (requestedDestination) {
+                DESTINATION_SCHEDULE -> scheduleFragment
+                DESTINATION_ALARMS -> alarmsFragment
+                else -> homeFragment
+            }
+
+            supportFragmentManager.beginTransaction().apply {
+                add(R.id.fragment_container, homeFragment, "home")
+                add(R.id.fragment_container, scheduleFragment, "schedule")
+                add(R.id.fragment_container, alarmsFragment, "alarms")
+                listOf(homeFragment, scheduleFragment, alarmsFragment)
+                    .filter { it != activeFragment }
+                    .forEach { hide(it) }
+            }.commit()
         } else {
             homeFragment = supportFragmentManager.findFragmentByTag("home") as? HomeFragment ?: HomeFragment()
             scheduleFragment = supportFragmentManager.findFragmentByTag("schedule") as? ScheduleFragment ?: ScheduleFragment()
             alarmsFragment = supportFragmentManager.findFragmentByTag("alarms") as? AlarmsFragment ?: AlarmsFragment()
-            activeFragment = listOf(homeFragment, scheduleFragment, alarmsFragment).firstOrNull { !it.isHidden }
+            activeFragment = listOf(homeFragment, scheduleFragment, alarmsFragment)
+                .firstOrNull { !it.isHidden }
                 ?: homeFragment
         }
 
-        selectStartDestination(bottomNavigation, savedInstanceState == null)
+        selectStartDestination(bottomNavigation, requestedDestination)
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -87,16 +96,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun selectStartDestination(bottomNavigation: BottomNavigationView, canSwitchImmediately: Boolean) {
-        when (intent.getStringExtra(EXTRA_START_DESTINATION) ?: DESTINATION_HOME) {
-            DESTINATION_SCHEDULE -> {
-                bottomNavigation.selectedItemId = R.id.nav_schedule
-                if (canSwitchImmediately) switchFragment(scheduleFragment)
-            }
-            DESTINATION_ALARMS -> {
-                if (canSwitchImmediately) switchFragment(alarmsFragment)
-            }
-            else -> bottomNavigation.selectedItemId = R.id.nav_home
+    private fun selectStartDestination(bottomNavigation: BottomNavigationView, destination: String) {
+        bottomNavigation.selectedItemId = when (destination) {
+            DESTINATION_SCHEDULE -> R.id.nav_schedule
+            else -> R.id.nav_home
         }
     }
 
