@@ -10,6 +10,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clipToPadding="false"
         android:fillViewport="true">
 
         <LinearLayout
@@ -18,7 +19,7 @@
             android:orientation="vertical"
             android:paddingHorizontal="24dp"
             android:paddingTop="32dp"
-            android:paddingBottom="48dp">
+            android:paddingBottom="112dp">
 
             <!-- Header -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -591,6 +592,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
+        android:visibility="gone"
         android:src="@drawable/ic_app_logo"
         android:contentDescription="@string/chatbot"
         app:backgroundTint="@color/primary_dark"
@@ -600,5 +602,20 @@
         app:fabCustomSize="60dp"
         app:maxImageSize="36dp"
         app:shapeAppearanceOverlay="@style/CircleImageView" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/surface"
+        android:elevation="10dp"
+        app:itemActiveIndicatorStyle="@style/App.ActiveIndicator"
+        app:itemIconSize="24dp"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemRippleColor="@color/success_light"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

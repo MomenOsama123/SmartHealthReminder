@@ -9,11 +9,15 @@
         android:icon="@drawable/ic_schedule"
         android:title="Schedule" />
     <item
-        android:id="@+id/nav_health"
-        android:icon="@drawable/ic_health"
-        android:title="Health" />
+        android:id="@+id/nav_create"
+        android:icon="@drawable/ic_add"
+        android:title="Add" />
     <item
-        android:id="@+id/nav_settings"
-        android:icon="@drawable/ic_settings"
-        android:title="Settings" />
+        android:id="@+id/nav_ai"
+        android:icon="@drawable/ic_sparkle"
+        android:title="AI" />
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_person"
+        android:title="Profile" />
 </menu>

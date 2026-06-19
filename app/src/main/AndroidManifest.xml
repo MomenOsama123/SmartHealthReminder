@@ -15,6 +15,7 @@
 
 
     <application
+        android:name=".SmartHealthReminderApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -133,6 +134,13 @@
         <activity
             android:name=".features.Profileinfo.reports.ProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".features.Profileinfo.reports.ReportsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.settings.SettingsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
     </application>
 
 </manifest>

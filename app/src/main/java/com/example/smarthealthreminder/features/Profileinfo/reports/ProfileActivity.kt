@@ -1,5 +1,7 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowInsets
@@ -12,18 +14,26 @@ import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import com.example.smarthealthreminder.R
 
 
 class ProfileActivity : AppCompatActivity() {
 
+    companion object {
+        const val PREFS_NAME = "smart_health_settings"
+        const val KEY_DARK_MODE = "dark_mode_enabled"
+    }
+
+    private val prefs by lazy {
+        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
+
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun onCreate(savedInstanceState: Bundle?)
-    {
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        applySavedDarkMode()
         enableEdgeToEdge()
-
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
@@ -42,10 +52,15 @@ class ProfileActivity : AppCompatActivity() {
             finish() // دي بتقفل الصفحة الحالية وترجع للصفحة اللي قبلها
         }
 
-        // 3. تشغيل أيقونة الدارك مود (مؤقتاً بتظهر رسالة)
+        // 3. تشغيل أيقونة الدارك مود
         icDarkMode.setOnClickListener {
-            Toast.makeText(this, "Dark Mode Clicked!", Toast.LENGTH_SHORT).show()
-            // هنا تقدر تضيف كود تحويل التطبيق للوضع الليلي مستقبلاً
+            val currentDarkMode = prefs.getBoolean(KEY_DARK_MODE, false)
+            val newDarkMode = !currentDarkMode
+            prefs.edit().putBoolean(KEY_DARK_MODE, newDarkMode).apply()
+            AppCompatDelegate.setDefaultNightMode(
+                if (newDarkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+            )
+            recreate()
         }
 
         // 4. تشغيل قائمة اختيار النوع (Gender)
@@ -96,5 +111,13 @@ class ProfileActivity : AppCompatActivity() {
             editText.setText(options[which])
         }
         builder.show()
+    }
+
+    private fun applySavedDarkMode() {
+        val darkModeEnabled = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .getBoolean(KEY_DARK_MODE, false)
+        AppCompatDelegate.setDefaultNightMode(
+            if (darkModeEnabled) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
+        )
     }
 }
