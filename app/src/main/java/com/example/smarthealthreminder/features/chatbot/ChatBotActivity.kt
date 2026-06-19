@@ -1,6 +1,7 @@
 package com.example.smarthealthreminder.features.chatbot
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -12,6 +13,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -89,6 +91,8 @@ class ChatBotActivity : AppCompatActivity() {
             showTyping(true)
             sendToAI(userMessageText)
         }
+
+        setBackButtonClickListener()
     }
 
     private fun loadMessages() {
@@ -196,5 +200,11 @@ class ChatBotActivity : AppCompatActivity() {
                 addMessage(Message("Failure: ${t.message}", false))
             }
         })
+    }
+    private fun setBackButtonClickListener() {
+        binding.btnBack.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
     }
 }

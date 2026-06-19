@@ -9,27 +9,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.alarm.ReminderReceiver
+import com.example.smarthealthreminder.features.alarm.ReminderReceiver
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
 import kotlinx.coroutines.launch
 import java.util.*
-import android.content.Intent
-import com.example.smarthealthreminder.alarm.ReminderReceiver
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.os.Build
-import android.view.View
-
 
 class AddReminderActivity : AppCompatActivity() {
 
@@ -253,6 +246,8 @@ class AddReminderActivity : AppCompatActivity() {
                 repository.insertReminder(reminder)
             }
 
+            scheduleReminderNotification(reminder, reminderTimeMillis)
+
             Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
 
             val resultIntent = Intent().apply {
@@ -307,37 +302,6 @@ class AddReminderActivity : AppCompatActivity() {
         }
     }
 
-    private fun deleteReminder() {
-        existingReminderId?.let { id ->
-            androidx.appcompat.app.AlertDialog.Builder(this)
-                .setTitle("Delete Reminder")
-                .setMessage("Are you sure you want to delete this reminder?")
-                .setPositiveButton("Delete") { _, _ ->
-                    lifecycleScope.launch {
-                        repository.deleteReminderById(id)
-                        cancelReminderNotification(id)
-                        Toast.makeText(this@AddReminderActivity, "Reminder deleted", Toast.LENGTH_SHORT).show()
-                        finish()
-                    }
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
-        }
-    }
-
-    private fun cancelReminderNotification(reminderId: String) {
-        val intent = Intent(this, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            reminderId.hashCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
-    }
-}
-
     private fun scheduleReminderAlarm(
         reminder: ReminderEntity,
         triggerAtMillis: Long,
@@ -366,5 +330,35 @@ class AddReminderActivity : AppCompatActivity() {
             triggerAtMillis,
             pendingIntent
         )
+    }
+
+    private fun deleteReminder() {
+        existingReminderId?.let { id ->
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Delete Reminder")
+                .setMessage("Are you sure you want to delete this reminder?")
+                .setPositiveButton("Delete") { _, _ ->
+                    lifecycleScope.launch {
+                        repository.deleteReminderById(id)
+                        cancelReminderNotification(id)
+                        Toast.makeText(this@AddReminderActivity, "Reminder deleted", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
+
+    private fun cancelReminderNotification(reminderId: String) {
+        val intent = Intent(this, ReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            reminderId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
     }
 }

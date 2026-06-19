@@ -362,4 +362,5 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="today_s_air_is_clean_and_restorative">Today\'s air is clean and restorative.</string>
+    <string name="settings">Settings</string>
 </resources>

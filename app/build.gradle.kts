@@ -56,6 +56,7 @@ dependencies {
 
     // Firebase
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore)
     implementation("com.google.android.gms:play-services-auth:21.6.0")
 
     // Room Database

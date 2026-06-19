@@ -32,11 +32,17 @@ class SearchAdapter(
         private val ivType: ImageView = itemView.findViewById(R.id.iv_reminder_type)
         private val tvName: TextView = itemView.findViewById(R.id.tv_reminder_name)
         private val tvTime: TextView = itemView.findViewById(R.id.tv_reminder_time)
+        private val tvResultType: TextView = itemView.findViewById(R.id.tv_result_type)
 
         fun bind(result: SearchResult) {
             tvName.text = result.title
             tvTime.text = itemView.context.getString(R.string.due_at, result.time.ifEmpty { "--:--" })
             ivType.setImageResource(getReminderIcon(result.category))
+            
+            tvResultType.text = when (result) {
+                is SearchResult.Reminder -> "REMINDER"
+                is SearchResult.Alarm -> "ALARM"
+            }
 
             itemView.setOnClickListener {
                 onItemClick(result)

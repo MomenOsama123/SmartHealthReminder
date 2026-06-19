@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.alarm
+package com.example.smarthealthreminder.features.alarm
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

@@ -1,31 +1,33 @@
 package com.example.smarthealthreminder.features.activity
 
 import android.Manifest
-import android.content.Intent`r`nimport android.content.Context
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity`r`nimport androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
-import com.example.smarthealthreminder.features.Search.SearchActivity
+import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.fragment.AlarmsFragment
 import com.example.smarthealthreminder.features.fragment.HomeFragment
 import com.example.smarthealthreminder.features.fragment.ScheduleFragment
-import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    companion object {`r`n        const val PREFS_NAME = "smart_health_settings"`r`n        const val KEY_DARK_MODE = "dark_mode_enabled"
+    companion object {
+        const val PREFS_NAME = "smart_health_settings"
+        const val KEY_DARK_MODE = "dark_mode_enabled"
         const val EXTRA_START_DESTINATION = "extra_start_destination"
         const val DESTINATION_HOME = "home"
         const val DESTINATION_SCHEDULE = "schedule"
@@ -35,7 +37,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var homeFragment: HomeFragment
     private lateinit var scheduleFragment: ScheduleFragment
-    private lateinit var alarmsFragment: AlarmsFragment`r`n`r`n    private val prefs by lazy {`r`n        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)`r`n    }
+    private lateinit var alarmsFragment: AlarmsFragment
+
+    private val prefs by lazy {
+        getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+    }
     private var activeFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -159,10 +165,6 @@ class MainActivity : AppCompatActivity() {
                             "Add Health Goal feature coming soon",
                             Toast.LENGTH_SHORT
                         ).show()
-                        true
-                    }
-                    R.id.action_settings -> {
-                        startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
                         true
                     }
                     else -> false
