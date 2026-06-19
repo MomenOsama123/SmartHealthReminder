@@ -180,11 +180,11 @@
 
     <string name="vitamins">Vitamins</string>
 
-    //facebook
+    <!-- facebook -->
     <string name="facebook_app_id">924597597084563</string>
     <string name="fb_login_protocol_scheme">fb924597597084563</string>
     <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
-    ///////////
+    <!-- -->
     <string name="login_text">Login</string>
 
     <string name="create_account_title">Create Account</string>
@@ -276,10 +276,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="sign_up">Sign Up</string>
 
 
-
-<!--sdvvdsvvdsvdsvsdv-->
-
-
+    <!--sdvvdsvvdsvdsvsdv-->
 
 
     <string name="app_ename">HealthSync</string>
@@ -322,4 +319,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
 
 
     <string name="complete_profile_label">Complete Profile</string>
+    <string name="due_at">Due at %s</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

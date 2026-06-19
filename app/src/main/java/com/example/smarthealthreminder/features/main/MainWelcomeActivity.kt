@@ -19,6 +19,7 @@ import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.search.SearchActivity
 
 class MainWelcomeActivity : AppCompatActivity() {
 
@@ -37,6 +38,9 @@ class MainWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setupClickListeners() {
+        binding.searchIcon.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+        }
         binding.fabChatbot.setOnClickListener {
             startActivity(Intent(this, ChatBotActivity::class.java))
         }

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://tools.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFCF8">
+    android:background="#F5F2E9"> <!-- لون الخلفية الهادي المتناسق مع الصورة -->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -19,9 +19,9 @@
             android:orientation="vertical"
             android:paddingHorizontal="24dp"
             android:paddingTop="32dp"
-            android:paddingBottom="112dp">
+            android:paddingBottom="100dp"> <!-- مسافة مريحة تحت عشان الـ FAB ميغطيش على أخر زرار -->
 
-            <!-- Header -->
+            <!-- Header (Logo + App Title + Search & Notification & Profile) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -32,17 +32,17 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/circle_white"
-                    android:elevation="2dp"
+                    android:elevation="0dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_heart"
-                        app:tint="#374F41" />
+                        app:tint="#5A7766" />
                 </FrameLayout>
 
                 <!-- App Title -->
@@ -51,45 +51,70 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="@string/serenepulse"
-                    android:textColor="#374F41"
-                    android:textSize="18sp"
+                    android:textColor="#3D5A4A"
+                    android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/logo_container"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Profile Image -->
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id= "@+id/profileInfo"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_profile_placeholder"
+                <!-- Action Icons (Search + Notification + Profile) -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/CircleImageView" />
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:id="@+id/searchIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="#3D5A4A" />
+
+                    <ImageView
+                        android:id="@+id/notificationIcon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_notifications"
+                        app:tint="#3D5A4A" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profileInfo"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_profile_placeholder"
+                        app:shapeAppearanceOverlay="@style/CircleImageView" />
+                </LinearLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- Greeting Section -->
+            <!-- Tagline Section -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="28dp"
                 android:background="@drawable/bg_rounded_pill"
-                android:paddingHorizontal="12dp"
+                android:backgroundTint="#E6E1D3"
+                android:paddingHorizontal="14dp"
                 android:paddingVertical="6dp"
                 android:text="@string/rk_your_health_sanctuary"
                 android:textColor="#5A4A42"
-                android:textSize="10sp"
+                android:textSize="11sp"
                 android:textStyle="bold" />
 
+            <!-- Greeting Text -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="@string/welcome_back"
-                android:textColor="#374F41"
+                android:textColor="#3D5A4A"
                 android:textSize="32sp"
                 android:textStyle="bold" />
 
@@ -97,16 +122,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:lineSpacingExtra="4dp"
+                android:lineSpacingExtra="5dp"
                 android:text="@string/take_a_breath_your_wellness_journey_continues_today_with_personalized_reminders_and_gentle_insights_designed_for_your_tranquility"
-                android:textColor="#707873"
-                android:textSize="14sp" />
+                android:textColor="#6E7D75"
+                android:textSize="15sp" />
 
-            <!-- Reminders Card -->
+            <!-- Reminders Card Section -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="28dp"
                 app:cardBackgroundColor="#FFFFFF"
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
@@ -126,8 +151,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/today_s_reminders"
-                            android:textColor="#374F41"
-                            android:textSize="16sp"
+                            android:textColor="#3D5A4A"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <ImageView
@@ -138,26 +163,29 @@
                             app:tint="#B0B5B1" />
                     </RelativeLayout>
 
-                    <!-- Reminder 1 -->
+                    <!-- Reminder Item 1: Vitamins -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/bg_reminder_item"
                         android:gravity="center_vertical"
-                        android:padding="12dp">
+                        android:padding="16dp"
+                        android:layout_marginBottom="10dp">
 
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
                             android:background="@drawable/circle_white"
+                            android:backgroundTint="#F0F4F1"
                             android:padding="8dp"
                             android:src="@drawable/ic_pill"
                             app:tint="#5A7766" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
@@ -165,7 +193,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/vitamins"
                                 android:textColor="#1A1A1A"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -173,31 +201,38 @@
                                 android:layout_height="wrap_content"
                                 android:text="Due at 9:00 AM"
                                 android:textColor="#808080"
-                                android:textSize="12sp" />
+                                android:textSize="13sp" />
                         </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_check_circle"
+                            app:tint="#5A7766" />
                     </LinearLayout>
 
-                    <!-- Reminder 2 -->
+                    <!-- Reminder Item 2: Hydration -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
                         android:background="@drawable/bg_reminder_item"
                         android:gravity="center_vertical"
-                        android:padding="12dp">
+                        android:padding="16dp">
 
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
                             android:background="@drawable/circle_white"
+                            android:backgroundTint="#EDF5FA"
                             android:padding="8dp"
                             android:src="@drawable/ic_water"
                             app:tint="#4A90E2" />
 
                         <LinearLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
@@ -205,7 +240,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Hydration"
                                 android:textColor="#1A1A1A"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -213,57 +248,32 @@
                                 android:layout_height="wrap_content"
                                 android:text="4 of 8 glasses reached"
                                 android:textColor="#808080"
-                                android:textSize="12sp" />
+                                android:textSize="13sp" />
                         </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Reminder 3 -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_reminder_item"
-                        android:gravity="center_vertical"
-                        android:padding="12dp">
 
                         <ImageView
-                            android:layout_width="32dp"
-                            android:layout_height="32dp"
-                            android:background="@drawable/circle_white"
-                            android:padding="8dp"
-                            android:src="@drawable/ic_moon"
-                            app:tint="#8E44AD" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="12dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Sleep Routine"
-                                android:textColor="#1A1A1A"
-                                android:textSize="14sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Starts at 10:30 PM"
-                                android:textColor="#808080"
-                                android:textSize="12sp" />
-                        </LinearLayout>
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_circle_outline"
+                            app:tint="#D0D5D1" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Stats Grid -->
-            <LinearLayout
+            <!-- Personal Health Data (Stats Grid) -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="28dp"
+                android:layout_marginBottom="12dp"
+                android:text="Personal Health Data"
+                android:textColor="#3D5A4A"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
@@ -272,8 +282,8 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
-                    app:cardBackgroundColor="#496455"
+                    android:layout_weight="1.1"
+                    app:cardBackgroundColor="#4A6556"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="0dp">
 
@@ -298,15 +308,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/sleep_quality"
-                            android:textColor="#A5B8AD"
-                            android:textSize="12sp" />
+                            android:textColor="#BCCDC4"
+                            android:textSize="13sp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="88%"
                             android:textColor="#FFFFFF"
-                            android:textSize="28sp"
+                            android:textSize="32sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -314,12 +324,11 @@
                             android:layout_height="wrap_content"
                             android:text="@string/optimal"
                             android:textColor="#FFFFFF"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:textSize="15sp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Right Column -->
+                <!-- Right Grid Column -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -331,10 +340,10 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="6dp"
                         android:layout_weight="1"
-                        app:cardBackgroundColor="#EFECE2"
-                        app:cardCornerRadius="24dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
 
                         <LinearLayout
@@ -342,23 +351,23 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:orientation="vertical"
-                            android:padding="20dp">
+                            android:paddingHorizontal="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/daily_steps"
-                                android:textColor="#7A7A7A"
-                                android:textSize="10sp"
+                                android:textColor="#7A8A80"
+                                android:textSize="11sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="2dp"
                                 android:text="6,432"
-                                android:textColor="#374F41"
-                                android:textSize="20sp"
+                                android:textColor="#3D5A4A"
+                                android:textSize="22sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -367,10 +376,10 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="6dp"
                         android:layout_weight="1"
-                        app:cardBackgroundColor="#EAE4D3"
-                        app:cardCornerRadius="24dp"
+                        app:cardBackgroundColor="#FFFFFF"
+                        app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
 
                         <LinearLayout
@@ -378,23 +387,23 @@
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
                             android:orientation="vertical"
-                            android:padding="20dp">
+                            android:paddingHorizontal="16dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/fatigue"
-                                android:textColor="#7A7A7A"
-                                android:textSize="10sp"
+                                android:text="FATIGUE LEVEL"
+                                android:textColor="#7A8A80"
+                                android:textSize="11sp"
                                 android:textStyle="bold" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="Low"
-                                android:textColor="#1A1A1A"
-                                android:textSize="20sp"
+                                android:layout_marginTop="2dp"
+                                android:text="Low Fatigue"
+                                android:textColor="#3D5A4A"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
@@ -408,7 +417,7 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginBottom="16dp"
                 android:text="@string/essential_tools"
-                android:textColor="#374F41"
+                android:textColor="#3D5A4A"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -418,7 +427,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <!-- Tool 1 -->
+                <!-- Tool 1: Meds -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -427,23 +436,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:background="@drawable/circle_tool_bg"
-                        android:padding="16dp"
+                        android:backgroundTint="#E6EDE9"
+                        android:padding="14dp"
                         android:src="@drawable/ic_clipboard"
-                        app:tint="#5A7766" />
+                        app:tint="#3D5A4A" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Medications"
-                        android:textColor="#707873"
-                        android:textSize="11sp" />
+                        android:text="Meds"
+                        android:textColor="#5A6B61"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Tool 2 -->
+                <!-- Tool 2: Sleep -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -452,23 +463,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:background="@drawable/circle_tool_bg"
-                        android:padding="16dp"
+                        android:backgroundTint="#E6EDE9"
+                        android:padding="14dp"
                         android:src="@drawable/ic_moon_outline"
-                        app:tint="#5A7766" />
+                        app:tint="#3D5A4A" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="Sleep Track"
-                        android:textColor="#707873"
-                        android:textSize="11sp" />
+                        android:text="Sleep"
+                        android:textColor="#5A6B61"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Tool 3 -->
+                <!-- Tool 3: Nutrition -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -477,23 +490,25 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:background="@drawable/circle_tool_bg"
-                        android:padding="16dp"
+                        android:backgroundTint="#E6EDE9"
+                        android:padding="14dp"
                         android:src="@drawable/ic_apple"
-                        app:tint="#5A7766" />
+                        app:tint="#3D5A4A" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Nutrition"
-                        android:textColor="#707873"
-                        android:textSize="11sp" />
+                        android:textColor="#5A6B61"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <!-- Tool 4 -->
+                <!-- Tool 4: Activity -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -502,90 +517,42 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:background="@drawable/circle_tool_bg"
-                        android:padding="16dp"
+                        android:backgroundTint="#E6EDE9"
+                        android:padding="14dp"
                         android:src="@drawable/ic_dumbbell"
-                        app:tint="#5A7766" />
+                        app:tint="#3D5A4A" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:text="Activity"
-                        android:textColor="#707873"
-                        android:textSize="11sp" />
+                        android:textColor="#5A6B61"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Feature Banner -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginTop="32dp"
-                app:cardCornerRadius="24dp"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/img_breathe_bg" />
-
-                    <!-- Gradient Overlay for text readability -->
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/bg_gradient_bottom" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Deep Breathe."
-                            android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
-                            android:text="Today's air is clean and restorative."
-                            android:textColor="#E0E0E0"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                </RelativeLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Action Button -->
+            <!-- Action Button: View Today's Plan -->
             <com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="24dp"
-                android:backgroundTint="#5A7766"
-                android:text="@string/view_today_s_plan_u2192"
+                android:layout_height="60dp"
+                android:layout_marginTop="32dp"
+                android:backgroundTint="#4A6556"
+                android:text="View Today's Full Plan  →"
                 android:textAllCaps="false"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:cornerRadius="20dp" />
+                app:cornerRadius="24dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-
+    <!-- الـ FAB الذكي المخصص للشات بوت أسفل اليمين (الـ AI الأساسي والوحيد بالشاشة حالياً) -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_chatbot"
         android:layout_width="wrap_content"
@@ -593,14 +560,14 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="24dp"
         android:visibility="gone"
-        android:src="@drawable/ic_app_logo"
+        android:src="@drawable/chat"
         android:contentDescription="@string/chatbot"
-        app:backgroundTint="@color/primary_dark"
-        app:tint="@null"
+        app:backgroundTint="#4A6556"
+        app:tint="#FFFFFF"
         app:borderWidth="0dp"
-        app:elevation="8dp"
+        app:elevation="6dp"
         app:fabCustomSize="60dp"
-        app:maxImageSize="36dp"
+        app:maxImageSize="30dp"
         app:shapeAppearanceOverlay="@style/CircleImageView" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

@@ -22,8 +22,14 @@ import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
 import kotlinx.coroutines.launch
-import java.util.Calendar
-import java.util.UUID
+import java.util.*
+import android.content.Intent
+import com.example.smarthealthreminder.alarm.ReminderReceiver
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.os.Build
+import android.view.View
+
 
 class AddReminderActivity : AppCompatActivity() {
 
@@ -43,11 +49,15 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var switchVibration: androidx.appcompat.widget.SwitchCompat
     private lateinit var btnSave: com.google.android.material.button.MaterialButton
     private lateinit var btnCancel: TextView
+    private lateinit var btnDelete: TextView
 
     private var selectedDate: String = ""
     private var selectedTime: String = ""
     private var selectedCategory: String = "Medicine"
     private var selectedPriority: String = "Medium"
+
+    private var existingReminderId: String? = null
+    private var isEditMode = false
 
     private lateinit var repository: HealthRepository
 
@@ -59,7 +69,33 @@ class AddReminderActivity : AppCompatActivity() {
         repository = HealthRepository(db)
 
         initViews()
+        checkEditMode()
         setupListeners()
+    }
+
+    private fun checkEditMode() {
+        existingReminderId = intent.getStringExtra("reminder_id")
+        if (existingReminderId != null) {
+            isEditMode = true
+            btnSave.text = "Update Reminder"
+            btnDelete.visibility = View.VISIBLE
+            
+            etTitle.setText(intent.getStringExtra("reminder_title"))
+            etDescription.setText(intent.getStringExtra("reminder_desc"))
+            selectedDate = intent.getStringExtra("reminder_date") ?: ""
+            selectedTime = intent.getStringExtra("reminder_time") ?: ""
+            etDate.setText(selectedDate)
+            etTime.setText(selectedTime)
+            
+            selectedCategory = intent.getStringExtra("reminder_category") ?: "Medicine"
+            // Select category chip
+            when (selectedCategory) {
+                "Medicine" -> chipGroupCategory.check(R.id.chip_medicine)
+                "Appointment" -> chipGroupCategory.check(R.id.chip_appointment)
+                "Task" -> chipGroupCategory.check(R.id.chip_task)
+                "Custom" -> chipGroupCategory.check(R.id.chip_custom)
+            }
+        }
     }
 
     private fun initViews() {
@@ -73,6 +109,7 @@ class AddReminderActivity : AppCompatActivity() {
         switchVibration = findViewById(R.id.switch_vibration)
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
+        btnDelete = findViewById(R.id.btn_delete_reminder)
 
         val calendar = Calendar.getInstance()
         selectedDate = String.format(
@@ -128,6 +165,12 @@ class AddReminderActivity : AppCompatActivity() {
             finish()
         }
 
+        // Delete button
+        btnDelete.setOnClickListener {
+            deleteReminder()
+        }
+
+        // Back button
         findViewById<ImageButton>(R.id.btn_back)?.setOnClickListener {
             finish()
         }
@@ -190,7 +233,7 @@ class AddReminderActivity : AppCompatActivity() {
         }
 
         val reminder = ReminderEntity(
-            id = UUID.randomUUID().toString(),
+            id = existingReminderId ?: UUID.randomUUID().toString(),
             title = title,
             description = description,
             category = selectedCategory,
@@ -204,8 +247,11 @@ class AddReminderActivity : AppCompatActivity() {
         )
 
         lifecycleScope.launch {
-            repository.insertReminder(reminder)
-            scheduleReminderNotification(reminder, reminderTimeMillis)
+            if (isEditMode) {
+                repository.updateReminder(reminder)
+            } else {
+                repository.insertReminder(reminder)
+            }
 
             Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
 
@@ -260,6 +306,37 @@ class AddReminderActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun deleteReminder() {
+        existingReminderId?.let { id ->
+            androidx.appcompat.app.AlertDialog.Builder(this)
+                .setTitle("Delete Reminder")
+                .setMessage("Are you sure you want to delete this reminder?")
+                .setPositiveButton("Delete") { _, _ ->
+                    lifecycleScope.launch {
+                        repository.deleteReminderById(id)
+                        cancelReminderNotification(id)
+                        Toast.makeText(this@AddReminderActivity, "Reminder deleted", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+    }
+
+    private fun cancelReminderNotification(reminderId: String) {
+        val intent = Intent(this, ReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            reminderId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        alarmManager.cancel(pendingIntent)
+    }
+}
 
     private fun scheduleReminderAlarm(
         reminder: ReminderEntity,
