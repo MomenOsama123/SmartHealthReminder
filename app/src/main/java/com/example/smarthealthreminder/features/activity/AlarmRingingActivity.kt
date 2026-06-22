@@ -38,9 +38,9 @@ class AlarmRingingActivity : AppCompatActivity() {
 
         window.addFlags(
             WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
-                WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
-                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
-                WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                    WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD or
+                    WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                    WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
         )
 
         setContentView(R.layout.activity_alarm_ringing)
@@ -72,11 +72,15 @@ class AlarmRingingActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btn_snooze)?.setOnClickListener {
             val snoozed = alarmId?.let { id ->
+                val parts = alarmTime.trim().split(" ")
+                val timePart = parts.getOrNull(0) ?: alarmTime
+                val amPmPart = parts.getOrNull(1) ?: ""
+
                 val snoozeAlarm = com.example.smarthealthreminder.features.model.Alarm(
                     id = id,
                     label = alarmLabel,
-                    time = alarmTime,
-                    amPm = "",
+                    time = timePart,
+                    amPm = amPmPart,
                     category = alarmCategory
                 )
                 alarmHelper.snoozeAlarm(snoozeAlarm, 10)

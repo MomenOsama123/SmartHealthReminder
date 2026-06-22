@@ -24,6 +24,7 @@ import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
+import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
@@ -58,10 +59,6 @@ class MainWelcomeActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
-        // Check if rvTodayReminders exists in binding to avoid unresolved reference if XML is not updated yet
-        // In this case, we'll assume it will be added to XML or we can use try-catch/if-null if needed, 
-        // but ViewBinding usually handles it by not generating the field if it's missing.
-        // If it's missing in XML, this line will cause a compile error.
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
@@ -106,6 +103,9 @@ class MainWelcomeActivity : AppCompatActivity() {
         binding.profileInfo.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
+        binding.btnViewTodayPlan.setOnClickListener {
+            startActivity(Intent(this, com.example.smarthealthreminder.features.plan.TodayPlanActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {
@@ -118,7 +118,10 @@ class MainWelcomeActivity : AppCompatActivity() {
                     false
                 }
                 R.id.nav_create -> {
-                    showQuickActions(binding.bottomNavigation.findViewById(R.id.nav_create))
+                    QuickActionsBottomSheet().show(
+                        supportFragmentManager,
+                        QuickActionsBottomSheet.TAG
+                    )
                     false
                 }
                 R.id.nav_ai -> {

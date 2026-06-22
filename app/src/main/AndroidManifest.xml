@@ -141,6 +141,18 @@
             android:name=".features.settings.SettingsActivity"
             android:exported="false"
             android:theme="@style/Theme.ClinicalAlarms" />
+        <activity
+            android:name=".features.plan.TodayPlanActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
+        <activity
+            android:name=".features.schedule.details.DayDetailsActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
+        <activity
+            android:name=".features.activity.CreateScheduleEntryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms" />
     </application>
 
 </manifest>

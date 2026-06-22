@@ -472,6 +472,7 @@
 
             <!-- Action Button -->
             <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_view_today_plan"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:layout_marginTop="24dp"

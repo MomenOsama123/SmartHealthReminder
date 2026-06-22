@@ -81,11 +81,8 @@ class RemindersFragment : Fragment() {
                     val today = getTodayString()
 
                     val timelineItems = reminders.map { entity ->
-                        val sdf = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).apply {
-                            isLenient = false
-                        }
-                        val date = runCatching { sdf.parse(entity.date.orEmpty()) }.getOrNull()
-                        val cal = Calendar.getInstance().apply { time = date ?: Date() }
+                        // FIXED: Parse both old (MM/dd/yyyy) and new (yyyy-MM-dd) formats
+                        val cal = parseDate(entity.date)
 
                         TimelineItem(
                             id = entity.id,
@@ -102,8 +99,8 @@ class RemindersFragment : Fragment() {
 
                     timelineAdapter?.setItems(timelineItems)
 
-                    // Update counts
-                    val todayCount = reminders.count { it.date == today }
+                    // Update counts - FIXED: compare using normalized dates
+                    val todayCount = reminders.count { normalizeDate(it.date) == today }
                     val missedCount = reminders.count { it.status == "Missed" }
                     val completedCount = reminders.count { it.status == "Completed" }
 
@@ -115,11 +112,50 @@ class RemindersFragment : Fragment() {
         }
     }
 
+    // FIXED: Parse date in either format
+    private fun parseDate(dateStr: String?): Calendar {
+        val cal = Calendar.getInstance()
+        if (dateStr.isNullOrBlank()) return cal
+
+        return try {
+            // Try yyyy-MM-dd first (new format)
+            val sdf1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            sdf1.isLenient = false
+            cal.time = sdf1.parse(dateStr) ?: Date()
+            cal
+        } catch (e: Exception) {
+            try {
+                // Fall back to MM/dd/yyyy (old format)
+                val sdf2 = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+                sdf2.isLenient = false
+                cal.time = sdf2.parse(dateStr) ?: Date()
+                cal
+            } catch (e2: Exception) {
+                cal
+            }
+        }
+    }
+
+    // FIXED: Normalize any date format to yyyy-MM-dd
+    private fun normalizeDate(dateStr: String?): String {
+        if (dateStr.isNullOrBlank()) return ""
+        return try {
+            val cal = parseDate(dateStr)
+            String.format("%04d-%02d-%02d",
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH) + 1,
+                cal.get(Calendar.DAY_OF_MONTH))
+        } catch (e: Exception) {
+            dateStr
+        }
+    }
+
+    // FIXED: Return yyyy-MM-dd format
     private fun getTodayString(): String {
         val cal = Calendar.getInstance()
-        return String.format("%02d/%02d/%04d",
+        return String.format("%04d-%02d-%02d",
+            cal.get(Calendar.YEAR),
             cal.get(Calendar.MONTH) + 1,
-            cal.get(Calendar.DAY_OF_MONTH),
-            cal.get(Calendar.YEAR))
+            cal.get(Calendar.DAY_OF_MONTH))
     }
 }

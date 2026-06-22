@@ -151,7 +151,6 @@ class EditAlarmActivity : AppCompatActivity() {
             else -> hour24
         }
         val timeString = String.format("%02d:%02d", displayHour, minute)
-        // ← خليها 24h عشان AlarmHelper يحسب الوقت صح
         val time24String = String.format("%02d:%02d", hour24, minute)
 
         val selectedDays = getSelectedDays()
@@ -191,10 +190,11 @@ class EditAlarmActivity : AppCompatActivity() {
             val alarmModel = com.example.smarthealthreminder.features.model.Alarm(
                 id = alarm.id,
                 label = alarm.label,
-                time = time24String,  // ← 24h عشان AlarmHelper يشتغل صح
+                time = time24String,
                 amPm = alarm.amPm,
                 category = alarm.category,
-                isActive = alarm.isActive
+                isActive = alarm.isActive,
+                repeatDays = selectedDays
             )
 
             if (alarm.isActive) {
