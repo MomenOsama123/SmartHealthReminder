@@ -10,6 +10,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
+
+import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
+import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
+
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.fragment.AlarmsFragment

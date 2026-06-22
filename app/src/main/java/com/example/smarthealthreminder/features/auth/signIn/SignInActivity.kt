@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
-import com.example.smarthealthreminder.features.Search.SearchActivity
 import com.example.smarthealthreminder.features.auth.forget_password.ForgetPasswordActivity
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar

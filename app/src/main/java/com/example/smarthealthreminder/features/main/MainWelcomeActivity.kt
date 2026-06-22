@@ -9,21 +9,39 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.data.local.AppDatabase
+import com.example.smarthealthreminder.data.repository.HealthRepository
 import com.example.smarthealthreminder.databinding.ActivityMainWelcomeBinding
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
-import com.example.smarthealthreminder.features.Search.SearchActivity
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
+import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
+import com.example.smarthealthreminder.features.model.Reminder
+import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
+import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import kotlinx.coroutines.launch
 
 class MainWelcomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainWelcomeBinding
+    private lateinit var reminderAdapter: WelcomeReminderAdapter
+
+    private val viewModel: HealthViewModel by viewModels {
+        val db = AppDatabase.getDatabase(this)
+        val repository = HealthRepository(db)
+        HealthViewModelFactory(repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,12 +50,57 @@ class MainWelcomeActivity : AppCompatActivity() {
         binding = ActivityMainWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupRecyclerView()
         setupClickListeners()
         setupBottomNavigation()
         setupWindowInsets()
+        observeReminders()
+    }
+
+    private fun setupRecyclerView() {
+        reminderAdapter = WelcomeReminderAdapter()
+        // Check if rvTodayReminders exists in binding to avoid unresolved reference if XML is not updated yet
+        // In this case, we'll assume it will be added to XML or we can use try-catch/if-null if needed, 
+        // but ViewBinding usually handles it by not generating the field if it's missing.
+        // If it's missing in XML, this line will cause a compile error.
+        binding.rvTodayReminders.adapter = reminderAdapter
+
+        reminderAdapter.setOnReminderClickListener { reminder ->
+            Toast.makeText(this, "Clicked: ${reminder.title}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun observeReminders() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.pendingReminders.collect { entities ->
+                    val reminders = entities.map { entity ->
+                        Reminder(
+                            id = entity.id,
+                            title = entity.title,
+                            description = entity.description,
+                            category = entity.category,
+                            date = entity.date,
+                            time = entity.time,
+                            priority = entity.priority,
+                            status = entity.status,
+                            isRecurring = entity.isRecurring,
+                            recurrenceType = entity.recurrenceType,
+                            vibrationEnabled = entity.vibrationEnabled,
+                            earlyNotification = entity.earlyNotification,
+                            earlyNotificationMinutes = entity.earlyNotificationMinutes
+                        )
+                    }
+                    reminderAdapter.setReminders(reminders)
+                }
+            }
+        }
     }
 
     private fun setupClickListeners() {
+        binding.searchIcon.setOnClickListener {
+            startActivity(Intent(this, SearchActivity::class.java))
+        }
         binding.fabChatbot.setOnClickListener {
             startActivity(Intent(this, ChatBotActivity::class.java))
         }
@@ -47,6 +110,7 @@ class MainWelcomeActivity : AppCompatActivity() {
         binding.btnViewTodayPlan.setOnClickListener {
             startActivity(Intent(this, com.example.smarthealthreminder.features.plan.TodayPlanActivity::class.java))
         }
+
     }
 
     private fun setupBottomNavigation() {
@@ -85,6 +149,29 @@ class MainWelcomeActivity : AppCompatActivity() {
     }
 
 
+    private fun showQuickActions(anchor: View) {
+        PopupMenu(this, anchor).apply {
+            menuInflater.inflate(R.menu.quick_actions_menu, menu)
+            setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.reminder -> {
+                        startActivity(Intent(this@MainWelcomeActivity, AddReminderActivity::class.java))
+                        true
+                    }
+                    R.id.action_alarms -> {
+                        openMainSection(MainActivity.DESTINATION_ALARMS)
+                        true
+                    }
+                    R.id.action_reports -> {
+                        startActivity(Intent(this@MainWelcomeActivity, ReportsActivity::class.java))
+                        true
+                    }
+                    else -> true
+                }
+            }
+            show()
+        }
+    }
 
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->

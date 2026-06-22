@@ -16,8 +16,10 @@ import com.example.smarthealthreminder.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
 
 @Database(
+
     entities = [AlarmEntity::class, ReminderEntity::class, CalendarNoteEntity::class, ScheduleEntryEntity::class, ReportEntity::class],
     version = 3,
+
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
