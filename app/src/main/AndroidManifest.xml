@@ -87,7 +87,6 @@
             android:exported="false"
             android:theme="@style/Theme.ClinicalAlarms" />
 
-        <!-- Alarm Receiver - واحدة بس مع الـ BOOT_COMPLETED -->
         <receiver
             android:name=".alarm.AlarmReceiver"
             android:exported="true">

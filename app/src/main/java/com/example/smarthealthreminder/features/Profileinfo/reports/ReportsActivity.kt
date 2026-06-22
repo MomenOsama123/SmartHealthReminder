@@ -47,6 +47,11 @@ class ReportsActivity : AppCompatActivity() {
             Toast.makeText(this, "Downloading Report...", Toast.LENGTH_SHORT).show()
         }
 
+        val fabCreateReport = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab_create_report)
+        fabCreateReport?.setOnClickListener {
+            showCreateReportDialog()
+        }
+
         setupRecyclerView()
         observeReports()
         setupBottomNavigation()

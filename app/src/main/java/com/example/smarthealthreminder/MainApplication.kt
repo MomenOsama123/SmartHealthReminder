@@ -1,10 +1,12 @@
 package com.example.smarthealthreminder
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.search.SearchHistoryManager
 import com.example.smarthealthreminder.features.search.SearchViewModel
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -14,6 +16,12 @@ class MainApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        // Apply saved theme before any activity is created.
+        // Defaults to light mode if the user has never changed it.
+        AppCompatDelegate.setDefaultNightMode(
+            SettingsActivity.getSavedNightMode(this)
+        )
 
         startKoin {
             androidContext(this@MainApplication)

@@ -80,8 +80,15 @@ class HomeFragment : Fragment() {
 
         btnEdit?.setOnClickListener {
             currentReminder?.let { reminder ->
-                // TODO: Open AddReminderActivity in edit mode
-                Toast.makeText(context, "Edit: ${reminder.title}", Toast.LENGTH_SHORT).show()
+                val intent = Intent(requireContext(), AddReminderActivity::class.java).apply {
+                    putExtra("reminder_id", reminder.id)
+                    putExtra("reminder_title", reminder.title)
+                    putExtra("reminder_desc", reminder.description)
+                    putExtra("reminder_date", reminder.date)
+                    putExtra("reminder_time", reminder.time)
+                    putExtra("reminder_category", reminder.category)
+                }
+                startActivity(intent)
             } ?: showNoReminderToast()
         }
 

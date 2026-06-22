@@ -9,37 +9,63 @@ import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@ExperimentalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 class HealthViewModelTest {
 
     @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
+    val instantTaskRule = InstantTaskExecutorRule()
 
-    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testDispatcher = StandardTestDispatcher()
     private lateinit var repository: HealthRepository
     private lateinit var viewModel: HealthViewModel
+
+    private val sampleAlarm = AlarmEntity(
+        id = "a1", label = "Morning Meds", time = "08:00",
+        amPm = "AM", category = "MEDICINE", isActive = true
+    )
+    private val sampleReminder = ReminderEntity(
+        id = "r1", title = "Take Aspirin", status = "Pending",
+        date = "2025-06-22", time = "08:00", priority = "Medium"
+    )
+    private val sampleScheduleEntry = ScheduleEntryEntity(
+        id = "se1", title = "Doctor Visit", date = "2025-06-22",
+        time = "10:00", category = "Appointment"
+    )
+    private val sampleReport = ReportEntity(
+        id = "rep1", title = "Weekly Report", date = "2025-06-22"
+    )
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
         repository = mockk(relaxed = true)
+
+        every { repository.getAllAlarms() } returns flowOf(listOf(sampleAlarm))
+        every { repository.getAllReminders() } returns flowOf(listOf(sampleReminder))
+        every { repository.getRemindersByStatus("Pending") } returns flowOf(listOf(sampleReminder))
+        every { repository.getPendingCount() } returns flowOf(1)
+        every { repository.getCompletedCount() } returns flowOf(0)
+        every { repository.getMissedCount() } returns flowOf(0)
+        every { repository.getAllNoteDates() } returns flowOf(listOf("2025-06-22"))
+        every { repository.getAllScheduleEntries() } returns flowOf(listOf(sampleScheduleEntry))
+        every { repository.getAllReports() } returns flowOf(listOf(sampleReport))
+
         viewModel = HealthViewModel(repository)
     }
 
@@ -48,92 +74,212 @@ class HealthViewModelTest {
         Dispatchers.resetMain()
     }
 
-    @Test
-    fun `allAlarms emits empty list by default`() = runTest {
-        coEvery { repository.getAllAlarms() } returns flowOf(emptyList())
-        val factory = HealthViewModelFactory(repository)
-        val vm = factory.create(HealthViewModel::class.java)
-        assertEquals(emptyList<AlarmEntity>(), vm.allAlarms.value)
-    }
+    // ───── Alarms ─────
 
     @Test
-    fun `addReminder calls repository insertReminder`() = runTest {
-        val reminder = ReminderEntity(id = "1", title = "Test", status = "Pending")
-        coEvery { repository.insertReminder(reminder) } returns Unit
-        viewModel.addReminder(reminder)
-        coVerify(exactly = 1) { repository.insertReminder(reminder) }
-    }
-
-    @Test
-    fun `deleteReminderById calls repository deleteReminderById`() = runTest {
-        coEvery { repository.deleteReminderById("1") } returns Unit
-        viewModel.deleteReminderById("1")
-        coVerify(exactly = 1) { repository.deleteReminderById("1") }
-    }
-
-    @Test
-    fun `markReminderDone calls repository markReminderDone`() = runTest {
-        coEvery { repository.markReminderDone("1") } returns Unit
-        viewModel.markReminderDone("1")
-        coVerify(exactly = 1) { repository.markReminderDone("1") }
+    fun `allAlarms emits list from repository`() = runTest {
+        advanceUntilIdle()
+        assertEquals(listOf(sampleAlarm), viewModel.allAlarms.value)
     }
 
     @Test
     fun `addAlarm calls repository insertAlarm`() = runTest {
-        val alarm = AlarmEntity(id = "1", label = "Alarm", time = "08:00", amPm = "AM", category = "MEDICINE")
-        coEvery { repository.insertAlarm(alarm) } returns Unit
-        viewModel.addAlarm(alarm)
-        coVerify(exactly = 1) { repository.insertAlarm(alarm) }
+        viewModel.addAlarm(sampleAlarm)
+        advanceUntilIdle()
+        coVerify { repository.insertAlarm(sampleAlarm) }
+    }
+
+    @Test
+    fun `updateAlarm calls repository updateAlarm`() = runTest {
+        viewModel.updateAlarm(sampleAlarm)
+        advanceUntilIdle()
+        coVerify { repository.updateAlarm(sampleAlarm) }
+    }
+
+    @Test
+    fun `deleteAlarm calls repository deleteAlarm`() = runTest {
+        viewModel.deleteAlarm(sampleAlarm)
+        advanceUntilIdle()
+        coVerify { repository.deleteAlarm(sampleAlarm) }
+    }
+
+    @Test
+    fun `deleteAlarmById calls repository deleteAlarmById`() = runTest {
+        viewModel.deleteAlarmById("a1")
+        advanceUntilIdle()
+        coVerify { repository.deleteAlarmById("a1") }
     }
 
     @Test
     fun `toggleAlarm calls repository toggleAlarmStatus`() = runTest {
-        coEvery { repository.toggleAlarmStatus("1", true) } returns Unit
-        viewModel.toggleAlarm("1", true)
-        coVerify(exactly = 1) { repository.toggleAlarmStatus("1", true) }
+        viewModel.toggleAlarm("a1", false)
+        advanceUntilIdle()
+        coVerify { repository.toggleAlarmStatus("a1", false) }
+    }
+
+    // ───── Reminders ─────
+
+    @Test
+    fun `allReminders emits list from repository`() = runTest {
+        advanceUntilIdle()
+        assertEquals(listOf(sampleReminder), viewModel.allReminders.value)
     }
 
     @Test
-    fun `saveNote calls repository saveNote`() = runTest {
-        coEvery { repository.saveNote("2024-01-01", "Note text") } returns Unit
-        viewModel.saveNote("2024-01-01", "Note text")
-        coVerify(exactly = 1) { repository.saveNote("2024-01-01", "Note text") }
+    fun `pendingReminders emits only pending items`() = runTest {
+        advanceUntilIdle()
+        assertEquals(listOf(sampleReminder), viewModel.pendingReminders.value)
+    }
+
+    @Test
+    fun `pendingCount emits correct count`() = runTest {
+        advanceUntilIdle()
+        assertEquals(1, viewModel.pendingCount.value)
+    }
+
+    @Test
+    fun `completedCount emits correct count`() = runTest {
+        advanceUntilIdle()
+        assertEquals(0, viewModel.completedCount.value)
+    }
+
+    @Test
+    fun `missedCount emits correct count`() = runTest {
+        advanceUntilIdle()
+        assertEquals(0, viewModel.missedCount.value)
+    }
+
+    @Test
+    fun `addReminder calls repository insertReminder`() = runTest {
+        viewModel.addReminder(sampleReminder)
+        advanceUntilIdle()
+        coVerify { repository.insertReminder(sampleReminder) }
+    }
+
+    @Test
+    fun `updateReminder calls repository updateReminder`() = runTest {
+        viewModel.updateReminder(sampleReminder)
+        advanceUntilIdle()
+        coVerify { repository.updateReminder(sampleReminder) }
+    }
+
+    @Test
+    fun `deleteReminder calls repository deleteReminder`() = runTest {
+        viewModel.deleteReminder(sampleReminder)
+        advanceUntilIdle()
+        coVerify { repository.deleteReminder(sampleReminder) }
+    }
+
+    @Test
+    fun `deleteReminderById calls repository deleteReminderById`() = runTest {
+        viewModel.deleteReminderById("r1")
+        advanceUntilIdle()
+        coVerify { repository.deleteReminderById("r1") }
+    }
+
+    @Test
+    fun `markReminderDone calls repository markReminderDone`() = runTest {
+        viewModel.markReminderDone("r1")
+        advanceUntilIdle()
+        coVerify { repository.markReminderDone("r1") }
+    }
+
+    @Test
+    fun `markReminderMissed calls repository markReminderMissed`() = runTest {
+        viewModel.markReminderMissed("r1")
+        advanceUntilIdle()
+        coVerify { repository.markReminderMissed("r1") }
+    }
+
+    // ───── Schedule Entries ─────
+
+    @Test
+    fun `allScheduleEntries emits list from repository`() = runTest {
+        advanceUntilIdle()
+        assertEquals(listOf(sampleScheduleEntry), viewModel.allScheduleEntries.value)
     }
 
     @Test
     fun `addScheduleEntry calls repository insertScheduleEntry`() = runTest {
-        val entry = ScheduleEntryEntity(id = "1", title = "Entry", date = "2024-01-01")
-        coEvery { repository.insertScheduleEntry(entry) } returns Unit
-        viewModel.addScheduleEntry(entry)
-        coVerify(exactly = 1) { repository.insertScheduleEntry(entry) }
+        viewModel.addScheduleEntry(sampleScheduleEntry)
+        advanceUntilIdle()
+        coVerify { repository.insertScheduleEntry(sampleScheduleEntry) }
+    }
+
+    @Test
+    fun `deleteScheduleEntryById calls repository deleteScheduleEntryById`() = runTest {
+        viewModel.deleteScheduleEntryById("se1")
+        advanceUntilIdle()
+        coVerify { repository.deleteScheduleEntryById("se1") }
+    }
+
+    // ───── Reports ─────
+
+    @Test
+    fun `allReports emits list from repository`() = runTest {
+        advanceUntilIdle()
+        assertEquals(listOf(sampleReport), viewModel.allReports.value)
     }
 
     @Test
     fun `addReport calls repository insertReport`() = runTest {
-        val report = ReportEntity(id = "1", title = "Report", date = "2024-01-01")
-        coEvery { repository.insertReport(report) } returns Unit
-        viewModel.addReport(report)
-        coVerify(exactly = 1) { repository.insertReport(report) }
+        viewModel.addReport(sampleReport)
+        advanceUntilIdle()
+        coVerify { repository.insertReport(sampleReport) }
     }
 
     @Test
-    fun `loadNoteForDate updates currentNote`() = runTest {
-        val note = CalendarNoteEntity("2024-01-01", "Test note")
-        coEvery { repository.getNoteByDate("2024-01-01") } returns note
-        viewModel.loadNoteForDate("2024-01-01")
+    fun `deleteReportById calls repository deleteReportById`() = runTest {
+        viewModel.deleteReportById("rep1")
+        advanceUntilIdle()
+        coVerify { repository.deleteReportById("rep1") }
+    }
+
+    // ───── Calendar Notes ─────
+
+    @Test
+    fun `allNoteDates emits list from repository`() = runTest {
+        advanceUntilIdle()
+        assertEquals(listOf("2025-06-22"), viewModel.allNoteDates.value)
+    }
+
+    @Test
+    fun `loadNoteForDate sets currentNote from repository`() = runTest {
+        val note = CalendarNoteEntity("2025-06-22", "Drink water")
+        coEvery { repository.getNoteByDate("2025-06-22") } returns note
+
+        viewModel.loadNoteForDate("2025-06-22")
+        advanceUntilIdle()
+
         assertEquals(note, viewModel.currentNote.value)
     }
 
     @Test
-    fun `viewModelFactory creates correct instance`() {
+    fun `saveNote with non-blank text calls repository saveNote`() = runTest {
+        viewModel.saveNote("2025-06-22", "Drink water")
+        advanceUntilIdle()
+        coVerify { repository.saveNote("2025-06-22", "Drink water") }
+    }
+
+    @Test
+    fun `saveNote with blank text calls repository deleteNote`() = runTest {
+        viewModel.saveNote("2025-06-22", "")
+        advanceUntilIdle()
+        coVerify { repository.deleteNote("2025-06-22") }
+    }
+
+    // ───── ViewModel Factory ─────
+
+    @Test
+    fun `HealthViewModelFactory creates HealthViewModel`() {
         val factory = HealthViewModelFactory(repository)
         val vm = factory.create(HealthViewModel::class.java)
-        assertNotNull(vm)
+        assert(vm is HealthViewModel)
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun `viewModelFactory throws for unknown class`() {
+    fun `HealthViewModelFactory throws for unknown class`() {
         val factory = HealthViewModelFactory(repository)
-        factory.create(UnsupportedOperationException::class.java)
+        factory.create(androidx.lifecycle.AndroidViewModel::class.java)
     }
 }

@@ -31,10 +31,10 @@ class ScheduleFragmentTest {
     }
 
     @Test
-    fun noteSection_isVisible() {
+    fun scheduleStats_countersAreVisible() {
         launchFragmentInContainer<ScheduleFragment>(themeResId = R.style.Theme_SmartHealthReminder)
-        onView(withId(R.id.et_note)).check(matches(isDisplayed()))
-        onView(withId(R.id.btn_save_note)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_month_year)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_selected_date)).check(matches(isDisplayed()))
     }
 
     @Test
