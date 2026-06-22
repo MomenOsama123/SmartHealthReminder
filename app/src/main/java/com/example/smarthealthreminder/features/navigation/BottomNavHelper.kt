@@ -2,15 +2,22 @@ package com.example.smarthealthreminder.features.navigation
 
 import android.app.Activity
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
+import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
+/**
+ * Navigation helper for bottom navigation bar across all activities.
+ * The create (+) action is always global and static: it shows the QuickActionsBottomSheet
+ * on every screen for consistent behavior.
+ */
 object BottomNavHelper {
+
     fun setup(
         activity: Activity,
         bottomNavigation: BottomNavigationView,
@@ -29,7 +36,12 @@ object BottomNavHelper {
                     true
                 }
                 R.id.nav_create -> {
-                    activity.startActivity(Intent(activity, AddReminderActivity::class.java))
+                    if (activity is AppCompatActivity) {
+                        QuickActionsBottomSheet().show(
+                            activity.supportFragmentManager,
+                            QuickActionsBottomSheet.TAG
+                        )
+                    }
                     false
                 }
                 R.id.nav_ai -> {

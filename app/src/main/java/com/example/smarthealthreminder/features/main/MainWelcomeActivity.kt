@@ -19,6 +19,7 @@ import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 
 class MainWelcomeActivity : AppCompatActivity() {
 
@@ -43,7 +44,9 @@ class MainWelcomeActivity : AppCompatActivity() {
         binding.profileInfo.setOnClickListener {
             startActivity(Intent(this, ProfileActivity::class.java))
         }
-
+        binding.btnViewTodayPlan.setOnClickListener {
+            startActivity(Intent(this, com.example.smarthealthreminder.features.plan.TodayPlanActivity::class.java))
+        }
     }
 
     private fun setupBottomNavigation() {
@@ -56,7 +59,10 @@ class MainWelcomeActivity : AppCompatActivity() {
                     false
                 }
                 R.id.nav_create -> {
-                    showQuickActions(binding.bottomNavigation.findViewById(R.id.nav_create))
+                    QuickActionsBottomSheet().show(
+                        supportFragmentManager,
+                        QuickActionsBottomSheet.TAG
+                    )
                     false
                 }
                 R.id.nav_ai -> {
@@ -78,35 +84,7 @@ class MainWelcomeActivity : AppCompatActivity() {
         })
     }
 
-    private fun showQuickActions(anchor: View) {
-        PopupMenu(this, anchor).apply {
-            menuInflater.inflate(R.menu.quick_actions_menu, menu)
-            setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.reminder -> {
-                        startActivity(Intent(this@MainWelcomeActivity, AddReminderActivity::class.java))
-                        true
-                    }
-                    R.id.action_alarms -> {
-                        openMainSection(MainActivity.DESTINATION_ALARMS)
-                        true
-                    }
-                    R.id.action_reports -> {
-                        startActivity(Intent(this@MainWelcomeActivity, ReportsActivity::class.java))
-                        true
-                    }
-                    R.id.action_settings -> {
-                        startActivity(Intent(this@MainWelcomeActivity, SettingsActivity::class.java))
-                        true
-                    }
-                    else -> {
-                        true
-                    }
-                }
-            }
-            show()
-        }
-    }
+
 
     private fun setupWindowInsets() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->

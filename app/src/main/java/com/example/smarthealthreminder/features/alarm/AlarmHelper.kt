@@ -15,6 +15,37 @@ class AlarmHelper(private val context: Context) {
     fun scheduleAlarm(alarm: Alarm): Boolean {
         if (!canScheduleExactAlarm()) return false
 
+        val repeatDays = parseRepeatDays(alarm.repeatDays)
+
+        if (repeatDays.isEmpty()) {
+            scheduleOnce(alarm, alarm.id?.hashCode() ?: 0)
+        } else {
+            for (dayOfWeek in repeatDays) {
+                scheduleRepeatingForDay(alarm, dayOfWeek)
+            }
+        }
+
+        return true
+    }
+
+    private fun parseRepeatDays(repeatDays: String?): List<Int> {
+        if (repeatDays.isNullOrBlank()) return emptyList()
+
+        val dayNameMap = mapOf(
+            "Sun" to Calendar.SUNDAY,
+            "Mon" to Calendar.MONDAY,
+            "Tue" to Calendar.TUESDAY,
+            "Wed" to Calendar.WEDNESDAY,
+            "Thu" to Calendar.THURSDAY,
+            "Fri" to Calendar.FRIDAY,
+            "Sat" to Calendar.SATURDAY
+        )
+
+        return repeatDays.split(" ", ",")
+            .mapNotNull { dayNameMap[it.trim()] }
+    }
+
+    private fun scheduleOnce(alarm: Alarm, requestCode: Int) {
         val intent = Intent(context, AlarmReceiver::class.java).apply {
             putExtra("alarm_id", alarm.id)
             putExtra("alarm_label", alarm.label)
@@ -24,7 +55,7 @@ class AlarmHelper(private val context: Context) {
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarm.id?.hashCode() ?: 0,
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -35,7 +66,6 @@ class AlarmHelper(private val context: Context) {
             set(Calendar.MINUTE, minute)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
-            // If time already passed today, schedule for tomorrow
             if (timeInMillis < System.currentTimeMillis()) {
                 add(Calendar.DAY_OF_YEAR, 1)
             }
@@ -46,20 +76,75 @@ class AlarmHelper(private val context: Context) {
             calendar.timeInMillis,
             pendingIntent
         )
-
-        return true
     }
 
-    fun cancelAlarm(alarm: Alarm) {
-        val intent = Intent(context, AlarmReceiver::class.java)
+    // FIXED: Use setRepeating for weekly recurring alarms
+    private fun scheduleRepeatingForDay(alarm: Alarm, dayOfWeek: Int) {
+        val intent = Intent(context, AlarmReceiver::class.java).apply {
+            putExtra("alarm_id", alarm.id)
+            putExtra("alarm_label", alarm.label)
+            putExtra("alarm_time", formatDisplayTime(alarm.time, alarm.amPm))
+            putExtra("alarm_category", alarm.category)
+            putExtra("repeat_day", dayOfWeek)
+        }
+
+        val requestCode = (alarm.id?.hashCode() ?: 0) + dayOfWeek
+
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            alarm.id?.hashCode() ?: 0,
+            requestCode,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        alarmManager.cancel(pendingIntent)
-        pendingIntent?.cancel()
+
+        val (hour, minute) = parseAlarmTime(alarm.time, alarm.amPm)
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.DAY_OF_WEEK, dayOfWeek)
+            set(Calendar.HOUR_OF_DAY, hour)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+            if (timeInMillis < System.currentTimeMillis()) {
+                add(Calendar.WEEK_OF_YEAR, 1)
+            }
+        }
+
+        // FIXED: Use setRepeating with WEEKLY interval for recurring alarms
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY * 7,  // Repeat every 7 days
+            pendingIntent
+        )
+    }
+
+    fun cancelAlarm(alarm: Alarm) {
+        val repeatDays = parseRepeatDays(alarm.repeatDays)
+
+        if (repeatDays.isEmpty()) {
+            val intent = Intent(context, AlarmReceiver::class.java)
+            val pendingIntent = PendingIntent.getBroadcast(
+                context,
+                alarm.id?.hashCode() ?: 0,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
+        } else {
+            for (dayOfWeek in repeatDays) {
+                val intent = Intent(context, AlarmReceiver::class.java)
+                val requestCode = (alarm.id?.hashCode() ?: 0) + dayOfWeek
+                val pendingIntent = PendingIntent.getBroadcast(
+                    context,
+                    requestCode,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+                alarmManager.cancel(pendingIntent)
+                pendingIntent.cancel()
+            }
+        }
     }
 
     fun snoozeAlarm(alarm: Alarm, minutes: Int = 10): Boolean {

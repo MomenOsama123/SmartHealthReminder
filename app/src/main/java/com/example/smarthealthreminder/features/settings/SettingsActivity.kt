@@ -228,10 +228,11 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun setupBottomNavigation() {
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         BottomNavHelper.setup(
-            this,
-            findViewById<BottomNavigationView>(R.id.bottom_navigation),
-            R.id.action_settings
+            activity = this,
+            bottomNavigation = bottomNav,
+            selectedItemId = R.id.action_settings
         )
     }
 

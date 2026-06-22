@@ -34,6 +34,8 @@ class AddReminderActivity : AppCompatActivity() {
         const val EXTRA_REMINDER_RESULT = "reminder_result"
         private const val EARLY_NOTIFICATION_MINUTES = 5
         private const val EARLY_NOTIFICATION_REQUEST_OFFSET = 10_000
+        // UNIFIED DATE FORMAT: yyyy-MM-dd (same as ScheduleFragment)
+        const val DATE_FORMAT = "yyyy-MM-dd"
     }
 
     private lateinit var etTitle: EditText
@@ -83,11 +85,12 @@ class AddReminderActivity : AppCompatActivity() {
         switchVibration.isChecked = settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
         val calendar = Calendar.getInstance()
+        // FIXED: Use yyyy-MM-dd format (same as ScheduleFragment)
         selectedDate = String.format(
-            "%02d/%02d/%04d",
+            "%04d-%02d-%02d",
+            calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH),
-            calendar.get(Calendar.YEAR)
+            calendar.get(Calendar.DAY_OF_MONTH)
         )
         etDate.setText(selectedDate)
 
@@ -146,7 +149,8 @@ class AddReminderActivity : AppCompatActivity() {
         DatePickerDialog(
             this,
             { _, year, month, day ->
-                selectedDate = String.format("%02d/%02d/%04d", month + 1, day, year)
+                // FIXED: Use yyyy-MM-dd format
+                selectedDate = String.format("%04d-%02d-%02d", year, month + 1, day)
                 etDate.setText(selectedDate)
             },
             calendar.get(Calendar.YEAR),
@@ -227,15 +231,15 @@ class AddReminderActivity : AppCompatActivity() {
 
     private fun getReminderTimeMillis(): Long? {
         return try {
-            val dateParts = selectedDate.split("/")
+            val dateParts = selectedDate.split("-")  // FIXED: split by "-" not "/"
             val timeParts = selectedTime.split(":")
 
             if (dateParts.size < 3 || timeParts.size < 2) return null
 
             Calendar.getInstance().apply {
-                set(Calendar.MONTH, dateParts[0].toInt() - 1)
-                set(Calendar.DAY_OF_MONTH, dateParts[1].toInt())
-                set(Calendar.YEAR, dateParts[2].toInt())
+                set(Calendar.YEAR, dateParts[0].toInt())
+                set(Calendar.MONTH, dateParts[1].toInt() - 1)
+                set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
                 set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
                 set(Calendar.MINUTE, timeParts[1].toInt())
                 set(Calendar.SECOND, 0)

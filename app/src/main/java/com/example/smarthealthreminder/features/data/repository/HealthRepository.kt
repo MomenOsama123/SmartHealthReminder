@@ -2,8 +2,11 @@ package com.example.smarthealthreminder.data.repository
 
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
+import com.example.smarthealthreminder.data.local.entity.ReportEntity
+import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
 import kotlinx.coroutines.flow.Flow
+import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 
 class HealthRepository(private val database: AppDatabase) {
 
@@ -14,12 +17,12 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun updateAlarm(alarm: AlarmEntity) = database.alarmDao().updateAlarm(alarm)
     suspend fun deleteAlarm(alarm: AlarmEntity) = database.alarmDao().deleteAlarm(alarm)
     suspend fun deleteAlarmById(id: String) = database.alarmDao().deleteAlarmById(id)
-    suspend fun toggleAlarmStatus(id: String, isActive: Boolean) = 
+    suspend fun toggleAlarmStatus(id: String, isActive: Boolean) =
         database.alarmDao().updateAlarmStatus(id, isActive)
 
     // Reminder Operations
     fun getAllReminders(): Flow<List<ReminderEntity>> = database.reminderDao().getAllReminders()
-    fun getRemindersByStatus(status: String): Flow<List<ReminderEntity>> = 
+    fun getRemindersByStatus(status: String): Flow<List<ReminderEntity>> =
         database.reminderDao().getRemindersByStatus(status)
     suspend fun getReminderById(id: String) = database.reminderDao().getReminderById(id)
     suspend fun insertReminder(reminder: ReminderEntity) = database.reminderDao().insertReminder(reminder)
@@ -33,4 +36,33 @@ class HealthRepository(private val database: AppDatabase) {
     fun getPendingCount(): Flow<Int> = database.reminderDao().getPendingCount()
     fun getCompletedCount(): Flow<Int> = database.reminderDao().getCompletedCount()
     fun getMissedCount(): Flow<Int> = database.reminderDao().getMissedCount()
+
+    // Calendar Notes
+    suspend fun getNoteByDate(date: String): CalendarNoteEntity? =
+        database.calendarNoteDao().getNoteByDate(date)
+
+    fun getAllNoteDates(): Flow<List<String>> =
+        database.calendarNoteDao().getAllNoteDates()
+
+    suspend fun saveNote(date: String, note: String) =
+        database.calendarNoteDao().upsertNote(CalendarNoteEntity(date, note))
+
+    suspend fun deleteNote(date: String) =
+        database.calendarNoteDao().deleteNoteByDate(date)
+
+    // Schedule Entry Operations
+    fun getAllScheduleEntries(): Flow<List<ScheduleEntryEntity>> = database.scheduleEntryDao().getAllEntries()
+    fun getScheduleEntriesByDate(date: String): Flow<List<ScheduleEntryEntity>> = database.scheduleEntryDao().getEntriesByDate(date)
+    suspend fun insertScheduleEntry(entry: ScheduleEntryEntity) = database.scheduleEntryDao().insertEntry(entry)
+    suspend fun updateScheduleEntry(entry: ScheduleEntryEntity) = database.scheduleEntryDao().updateEntry(entry)
+    suspend fun deleteScheduleEntry(entry: ScheduleEntryEntity) = database.scheduleEntryDao().deleteEntry(entry)
+    suspend fun deleteScheduleEntryById(id: String) = database.scheduleEntryDao().deleteEntryById(id)
+
+    // Report Operations
+    fun getAllReports(): Flow<List<ReportEntity>> = database.reportDao().getAllReports()
+    fun getReportsByDate(date: String): Flow<List<ReportEntity>> = database.reportDao().getReportsByDate(date)
+    suspend fun insertReport(report: ReportEntity) = database.reportDao().insertReport(report)
+    suspend fun updateReport(report: ReportEntity) = database.reportDao().updateReport(report)
+    suspend fun deleteReport(report: ReportEntity) = database.reportDao().deleteReport(report)
+    suspend fun deleteReportById(id: String) = database.reportDao().deleteReportById(id)
 }
