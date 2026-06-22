@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_beige"
-    tools:context=".features.Profileinfo.reports.ProfileActivity">
+    tools:context=".features.Profileinfo.reports.ProfileActivity"
+    >
 
     <RelativeLayout
         android:id="@+id/top_bar"
@@ -14,7 +15,8 @@
         android:paddingHorizontal="16dp"
         android:paddingTop="24dp"
         android:paddingBottom="16dp"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="32dp">
 
         <ImageView
             android:id="@+id/btn_back"
@@ -63,7 +65,7 @@
                     android:id="@+id/profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/bg_logo_circle"
+                    android:src="@drawable/profile"
                     tools:ignore="ContentDescription" />
 
                 <ImageView

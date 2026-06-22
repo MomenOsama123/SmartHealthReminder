@@ -17,7 +17,9 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingTop="32dp"
-        android:paddingBottom="32dp">
+        android:paddingBottom="32dp"
+        android:layout_margin="32dp"
+        >
 
         <!-- Progress Step Section -->
         <RelativeLayout
@@ -100,7 +102,7 @@
                 android:id="@+id/img_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/bg_logo_circle"
+                android:src="@drawable/ic_app_logo"
                 android:padding="2dp"
                 android:background="@drawable/bg_input_white"
                 tools:ignore="ContentDescription" />
