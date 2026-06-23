@@ -1,3 +1,4 @@
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.android.application)
@@ -9,6 +10,13 @@ android {
     namespace = "com.example.smarthealthreminder"
     compileSdk = 36
 
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localProperties.load(localPropertiesFile.inputStream())
+    }
+    val groqApiKey = localProperties.getProperty("GROQ_API_KEY") ?: ""
+
     defaultConfig {
         applicationId = "com.example.smarthealthreminder"
         minSdk = 24
@@ -16,6 +24,8 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "GROQ_API_KEY", "\"$groqApiKey\"")
     }
 
     buildTypes {
@@ -33,12 +43,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-
-
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
+
 kotlin {
     compilerOptions {
         jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
@@ -83,6 +93,9 @@ dependencies {
     // Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
+    // Shimmer
+    implementation(libs.shimmer)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

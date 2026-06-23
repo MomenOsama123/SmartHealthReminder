@@ -2,8 +2,6 @@ package com.example.smarthealthreminder.features.chatbot
 
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -14,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smarthealthreminder.BuildConfig
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -141,6 +140,11 @@ class ChatBotActivity : AppCompatActivity() {
     private fun loadMessages() {
         val uid = auth.currentUser?.uid ?: return
 
+        // Show shimmer effect while loading
+        messages.clear()
+        repeat(3) { messages.add(Message(isLoading = true)) }
+        adapter.notifyDataSetChanged()
+
         db.collection("users").document(uid).collection("messages")
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .get()
@@ -156,6 +160,8 @@ class ChatBotActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { e ->
+                messages.clear()
+                adapter.notifyDataSetChanged()
                 android.util.Log.e("FirestoreChat", "Error loading messages", e)
             }
     }
@@ -189,27 +195,18 @@ class ChatBotActivity : AppCompatActivity() {
 
     private fun showTyping(show: Boolean) {
         if (show) {
-            binding.typingIndicator.visibility = View.VISIBLE
-            val baseText = getString(R.string.serenepulse_is_thinking).replace("...", "")
-            binding.typingIndicator.text = baseText
-            binding.typingIndicator.alpha = 0f
-            binding.typingIndicator.animate().alpha(1f).setDuration(300).start()
-
-            // Loop for "Thinking..." text animation
-            val handler = Handler(Looper.getMainLooper())
-            val runnable = object : Runnable {
-                var dots = 0
-                override fun run() {
-                    if (binding.typingIndicator.visibility == View.VISIBLE) {
-                        dots = (dots + 1) % 4
-                        binding.typingIndicator.text = baseText + ".".repeat(dots)
-                        handler.postDelayed(this, 500)
-                    }
-                }
-            }
-            handler.post(runnable)
+            // Add a shimmer loading message
+            val loadingMessage = Message(isLoading = true)
+            messages.add(loadingMessage)
+            adapter.notifyItemInserted(messages.size - 1)
+            binding.chatRecyclerView.smoothScrollToPosition(messages.size - 1)
         } else {
-            binding.typingIndicator.visibility = View.GONE
+            // Remove the shimmer loading message
+            val index = messages.indexOfFirst { it.isLoading }
+            if (index != -1) {
+                messages.removeAt(index)
+                adapter.notifyItemRemoved(index)
+            }
         }
     }
 
@@ -223,7 +220,7 @@ class ChatBotActivity : AppCompatActivity() {
         )
 
         RetrofitClient.api.sendMessage(
-            "Bearer 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",
+            "Bearer ${BuildConfig.GROQ_API_KEY}",
             "application/json",
             request
         ).enqueue(object : Callback<ChatResponse> {

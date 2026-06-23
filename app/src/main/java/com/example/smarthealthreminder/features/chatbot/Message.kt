@@ -8,6 +8,7 @@ data class Message(
     @get:PropertyName("isUser")
     @set:PropertyName("isUser")
     var isUser: Boolean = false,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val isLoading: Boolean = false
 )
 
