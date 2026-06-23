@@ -41,6 +41,14 @@
                 android:textColor="#8A8A8A"/>
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/infoIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_warning"
+            app:tint="@color/primary_green"
+            android:contentDescription="AI Disclaimer Info"
+            android:padding="2dp"/>
 
     </LinearLayout>
 

@@ -130,6 +130,7 @@
         <activity
             android:name="com.example.smarthealthreminder.features.chatbot.ChatBotActivity"
             android:exported="false"
+            android:theme="@style/Theme.ClinicalAlarms"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".features.Profileinfo.reports.ProfileActivity"

@@ -17,13 +17,25 @@
         <item name="postSplashScreenTheme">@style/Theme.SmartHealthReminder</item>
     </style>
 
-<style name="Theme.ClinicalAlarms" parent="Theme.Material3.DayNight.NoActionBar">
-    <item name="colorPrimary">@color/primary</item>
-    <item name="colorPrimaryDark">@color/primary_dark</item>
-    <item name="colorAccent">@color/primary</item>
-    <item name="android:statusBarColor">@color/background</item>
-    <item name="android:windowLightStatusBar">true</item>
-    <item name="android:navigationBarColor">@color/surface</item>
-    <item name="android:windowBackground">@color/background</item>
-</style>
+    <style name="Theme.ClinicalAlarms" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:statusBarColor">@color/background</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/surface</item>
+        <item name="android:windowBackground">@color/background</item>
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
+    </style>
+
+    <style name="AppAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/primary_green</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="shapeAppearanceOverlay">@style/RoundedAlertDialogShape</item>
+    </style>
+
+    <style name="RoundedAlertDialogShape" parent="">
+        <item name="cornerSize">20dp</item>
+    </style>
 </resources>

@@ -16,6 +16,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -70,6 +71,14 @@ class ChatBotActivity : AppCompatActivity() {
         api = RetrofitClient.api
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+
+        binding.infoIcon.setOnClickListener {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.medical_disclaimer_title))
+                .setMessage(getString(R.string.medical_disclaimer_message))
+                .setPositiveButton(getString(R.string.i_understand), null)
+                .show()
+        }
 
         // RecyclerView setup: default top-to-bottom layout
         val layoutManager = LinearLayoutManager(this)
