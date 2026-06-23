@@ -1,19 +1,21 @@
 package com.example.smarthealthreminder.features.chatbot
 
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
-import com.example.smarthealthreminder.features.activity.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -43,12 +45,25 @@ class ChatBotActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
 
+            // Check if keyboard is visible
+            val isKeyboardVisible = ime.bottom > systemBars.bottom
+
+            // Hide bottom navigation when keyboard is open to prevent it from being pushed on top
+            binding.bottomNavigation.visibility = if (isKeyboardVisible) View.GONE else View.VISIBLE
+
             v.setPadding(
                 systemBars.left,
                 systemBars.top,
                 systemBars.right,
                 maxOf(systemBars.bottom, ime.bottom)
             )
+
+            // Scroll to the latest message when keyboard opens
+            if (isKeyboardVisible && messages.isNotEmpty()) {
+                binding.chatRecyclerView.post {
+                    binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+                }
+            }
             insets
         }
 
@@ -62,6 +77,17 @@ class ChatBotActivity : AppCompatActivity() {
 
         adapter = ChatAdapter(messages)
         binding.chatRecyclerView.adapter = adapter
+
+        // Initial send button state
+        updateSendButtonState("")
+
+        binding.messageEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                updateSendButtonState(s?.toString() ?: "")
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
 
         // Load previous messages
         if (auth.currentUser != null) {
@@ -91,8 +117,16 @@ class ChatBotActivity : AppCompatActivity() {
             showTyping(true)
             sendToAI(userMessageText)
         }
+    }
 
-        setBackButtonClickListener()
+    private fun updateSendButtonState(text: String) {
+        val isNotEmpty = text.trim().isNotEmpty()
+        binding.sendButton.isEnabled = isNotEmpty
+        if (isNotEmpty) {
+            binding.sendButton.background.setTintList(null)
+        } else {
+            binding.sendButton.background.setTint(ContextCompat.getColor(this, R.color.text_tertiary))
+        }
     }
 
     private fun loadMessages() {
@@ -147,7 +181,8 @@ class ChatBotActivity : AppCompatActivity() {
     private fun showTyping(show: Boolean) {
         if (show) {
             binding.typingIndicator.visibility = View.VISIBLE
-            binding.typingIndicator.text = "SerenePulse is thinking."
+            val baseText = getString(R.string.serenepulse_is_thinking).replace("...", "")
+            binding.typingIndicator.text = baseText
             binding.typingIndicator.alpha = 0f
             binding.typingIndicator.animate().alpha(1f).setDuration(300).start()
 
@@ -158,7 +193,7 @@ class ChatBotActivity : AppCompatActivity() {
                 override fun run() {
                     if (binding.typingIndicator.visibility == View.VISIBLE) {
                         dots = (dots + 1) % 4
-                        binding.typingIndicator.text = "SerenePulse is thinking" + ".".repeat(dots)
+                        binding.typingIndicator.text = baseText + ".".repeat(dots)
                         handler.postDelayed(this, 500)
                     }
                 }
@@ -201,10 +236,5 @@ class ChatBotActivity : AppCompatActivity() {
             }
         })
     }
-    private fun setBackButtonClickListener() {
-        binding.btnBack.setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
-        }
-    }
+
 }
