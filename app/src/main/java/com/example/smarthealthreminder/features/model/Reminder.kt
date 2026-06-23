@@ -5,6 +5,7 @@ import android.os.Parcelable
 
 data class Reminder(
     var id: String? = null,
+    var userId: Int? = null,  // ✅ جديد
     var title: String? = null,
     var description: String? = null,
     var category: String? = null,
@@ -21,6 +22,7 @@ data class Reminder(
 
     constructor(parcel: Parcel) : this(
         id = parcel.readString(),
+        userId = parcel.readInt(),  // ✅ جديد
         title = parcel.readString(),
         description = parcel.readString(),
         category = parcel.readString(),
@@ -37,6 +39,7 @@ data class Reminder(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(id)
+        parcel.writeInt(userId ?: -1)  // ✅ جديد
         parcel.writeString(title)
         parcel.writeString(description)
         parcel.writeString(category)

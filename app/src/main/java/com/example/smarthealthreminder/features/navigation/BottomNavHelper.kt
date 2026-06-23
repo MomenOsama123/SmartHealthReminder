@@ -1,21 +1,18 @@
 package com.example.smarthealthreminder.features.navigation
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.ui.DashboardActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
+import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
-import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-/**
- * Navigation helper for bottom navigation bar across all activities.
- * The create (+) action is always global and static: it shows the QuickActionsBottomSheet
- * on every screen for consistent behavior.
- */
 object BottomNavHelper {
 
     fun setup(
@@ -27,59 +24,72 @@ object BottomNavHelper {
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
+
                 R.id.nav_home -> {
-                    openHome(activity)
+                    openDashboard(activity)
                     true
                 }
+
                 R.id.nav_schedule -> {
                     openMainDestination(activity, MainActivity.DESTINATION_SCHEDULE)
                     true
                 }
+
                 R.id.nav_create -> {
                     if (activity is AppCompatActivity) {
-                        QuickActionsBottomSheet().show(
-                            activity.supportFragmentManager,
-                            QuickActionsBottomSheet.TAG
-                        )
+                        QuickActionsBottomSheet.newInstance()
+                            .show(activity.supportFragmentManager, QuickActionsBottomSheet.TAG)
                     }
                     false
                 }
+
                 R.id.nav_ai -> {
-                    if (activity is ChatBotActivity) {
-                        true
-                    } else {
-                        activity.startActivity(Intent(activity, ChatBotActivity::class.java))
-                        false
+                    if (activity !is ChatBotActivity) {
+                        activity.startActivity(
+                            Intent(activity, ChatBotActivity::class.java)
+                        )
                     }
+                    true
                 }
+
                 R.id.action_settings -> {
-                    if (activity is SettingsActivity) {
-                        true
-                    } else {
-                        activity.startActivity(Intent(activity, SettingsActivity::class.java))
-                        activity.finish()
-                        true
+                    if (activity !is SettingsActivity) {
+                        activity.startActivity(
+                            Intent(activity, SettingsActivity::class.java)
+                        )
                     }
+                    true
                 }
+
                 else -> false
             }
         }
     }
 
     private fun openMainDestination(activity: Activity, destination: String) {
-        activity.startActivity(Intent(activity, MainActivity::class.java).apply {
+        val intent = Intent(activity, MainActivity::class.java).apply {
             putExtra(MainActivity.EXTRA_START_DESTINATION, destination)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        })
-        activity.finish()
+        }
+        activity.startActivity(intent)
     }
 
-    private fun openHome(activity: Activity) {
-        if (activity is MainWelcomeActivity) return
+    private fun openDashboard(activity: Activity) {
+        // ✅ Check if logged in
+        val sharedPref = activity.getSharedPreferences("HealthSyncPrefs", Context.MODE_PRIVATE)
+        val firebaseId = sharedPref.getString("FIREBASE_ID", "") ?: ""
 
-        activity.startActivity(Intent(activity, MainWelcomeActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        })
-        activity.finish()
+        if (firebaseId.isEmpty()) {
+            // Not logged in → go to Login
+            val intent = Intent(activity, SignInActivity::class.java)
+            activity.startActivity(intent)
+            activity.finish()
+            return
+        }
+
+        if (activity is DashboardActivity) return
+
+        // ✅ Simple start without flags
+        activity.startActivity(Intent(activity, DashboardActivity::class.java))
     }
 }

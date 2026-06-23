@@ -5,6 +5,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
+import com.example.smarthealthreminder.features.alarm.ReminderReceiver
 import com.example.smarthealthreminder.features.model.Alarm
 import java.util.Calendar
 
@@ -13,7 +15,10 @@ class AlarmHelper(private val context: Context) {
     private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
     fun scheduleAlarm(alarm: Alarm): Boolean {
-        if (!canScheduleExactAlarm()) return false
+        if (!canScheduleExactAlarm()) {
+            Log.e("ALARM_HELPER", "Cannot schedule exact alarms")
+            return false
+        }
 
         val repeatDays = parseRepeatDays(alarm.repeatDays)
 
@@ -46,11 +51,13 @@ class AlarmHelper(private val context: Context) {
     }
 
     private fun scheduleOnce(alarm: Alarm, requestCode: Int) {
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("alarm_id", alarm.id)
-            putExtra("alarm_label", alarm.label)
-            putExtra("alarm_time", formatDisplayTime(alarm.time, alarm.amPm))
-            putExtra("alarm_category", alarm.category)
+        val intent = Intent(context, ReminderReceiver::class.java).apply {
+            // ✅ استخدم ReminderReceiver بدل AlarmReceiver
+            putExtra(ReminderReceiver.EXTRA_ALARM_ID, alarm.id)
+            putExtra(ReminderReceiver.EXTRA_TITLE, alarm.label)
+            putExtra(ReminderReceiver.EXTRA_DESCRIPTION, formatDisplayTime(alarm.time, alarm.amPm))
+            putExtra(ReminderReceiver.EXTRA_TYPE, "alarm")
+            putExtra(ReminderReceiver.EXTRA_VIBRATION, alarm.vibrationEnabled)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -71,6 +78,8 @@ class AlarmHelper(private val context: Context) {
             }
         }
 
+        Log.d("ALARM_HELPER", "Scheduling alarm ${alarm.id} at ${calendar.time}")
+
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
@@ -78,13 +87,13 @@ class AlarmHelper(private val context: Context) {
         )
     }
 
-    // FIXED: Use setRepeating for weekly recurring alarms
     private fun scheduleRepeatingForDay(alarm: Alarm, dayOfWeek: Int) {
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("alarm_id", alarm.id)
-            putExtra("alarm_label", alarm.label)
-            putExtra("alarm_time", formatDisplayTime(alarm.time, alarm.amPm))
-            putExtra("alarm_category", alarm.category)
+        val intent = Intent(context, ReminderReceiver::class.java).apply {
+            putExtra(ReminderReceiver.EXTRA_ALARM_ID, alarm.id)
+            putExtra(ReminderReceiver.EXTRA_TITLE, alarm.label)
+            putExtra(ReminderReceiver.EXTRA_DESCRIPTION, formatDisplayTime(alarm.time, alarm.amPm))
+            putExtra(ReminderReceiver.EXTRA_TYPE, "alarm")
+            putExtra(ReminderReceiver.EXTRA_VIBRATION, alarm.vibrationEnabled)
             putExtra("repeat_day", dayOfWeek)
         }
 
@@ -109,20 +118,20 @@ class AlarmHelper(private val context: Context) {
             }
         }
 
-        // FIXED: Use setRepeating with WEEKLY interval for recurring alarms
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY * 7,  // Repeat every 7 days
+            AlarmManager.INTERVAL_DAY * 7,
             pendingIntent
         )
     }
 
+    // Cancel by Alarm object
     fun cancelAlarm(alarm: Alarm) {
         val repeatDays = parseRepeatDays(alarm.repeatDays)
 
         if (repeatDays.isEmpty()) {
-            val intent = Intent(context, AlarmReceiver::class.java)
+            val intent = Intent(context, ReminderReceiver::class.java)
             val pendingIntent = PendingIntent.getBroadcast(
                 context,
                 alarm.id?.hashCode() ?: 0,
@@ -133,7 +142,7 @@ class AlarmHelper(private val context: Context) {
             pendingIntent.cancel()
         } else {
             for (dayOfWeek in repeatDays) {
-                val intent = Intent(context, AlarmReceiver::class.java)
+                val intent = Intent(context, ReminderReceiver::class.java)
                 val requestCode = (alarm.id?.hashCode() ?: 0) + dayOfWeek
                 val pendingIntent = PendingIntent.getBroadcast(
                     context,
@@ -147,14 +156,32 @@ class AlarmHelper(private val context: Context) {
         }
     }
 
-    fun snoozeAlarm(alarm: Alarm, minutes: Int = 10): Boolean {
+    // Cancel by ID string
+    fun cancelAlarm(alarmId: String) {
+        val intent = Intent(context, ReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            alarmId.hashCode(),
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+        pendingIntent.cancel()
+        Log.d("ALARM_HELPER", "Cancelled alarm: $alarmId")
+    }
+
+    fun snoozeAlarm(alarm: Alarm, minutes: Int = 15): Boolean {
         if (!canScheduleExactAlarm()) return false
 
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
-            putExtra("alarm_id", alarm.id)
-            putExtra("alarm_label", alarm.label)
-            putExtra("alarm_time", formatDisplayTime(alarm.time, alarm.amPm))
-            putExtra("alarm_category", alarm.category)
+        // Cancel old alarm first
+        cancelAlarm(alarm)
+
+        val intent = Intent(context, ReminderReceiver::class.java).apply {
+            putExtra(ReminderReceiver.EXTRA_ALARM_ID, alarm.id)
+            putExtra(ReminderReceiver.EXTRA_TITLE, alarm.label)
+            putExtra(ReminderReceiver.EXTRA_DESCRIPTION, "Snoozed - ${formatDisplayTime(alarm.time, alarm.amPm)}")
+            putExtra(ReminderReceiver.EXTRA_TYPE, "alarm")
+            putExtra(ReminderReceiver.EXTRA_VIBRATION, alarm.vibrationEnabled)
             putExtra("is_snooze", true)
         }
 
@@ -166,6 +193,8 @@ class AlarmHelper(private val context: Context) {
         )
 
         val snoozeTime = System.currentTimeMillis() + (minutes * 60 * 1000)
+
+        Log.d("ALARM_HELPER", "Snoozing alarm ${alarm.id} for $minutes minutes")
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,

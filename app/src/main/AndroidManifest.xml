@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- ================= PERMISSIONS ================= -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -12,7 +13,6 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-
 
     <application
         android:name=".MainApplication"
@@ -25,135 +25,95 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHealthReminder">
 
-        <!-- Welcome & Auth Activities -->
-        <activity
-            android:name=".features.search.SearchActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
-        <activity
-            android:name=".features.auth.forget_password.ForgetPasswordActivity"
-            android:exported="false" />
-
-        <activity
-            android:name=".features.welcome.WelcomeActivity2"
-            android:exported="false" />
-        <activity
-            android:name=".features.auth.signup.SignupActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.auth.signIn.SignInActivity"
-            android:exported="false" />
-
-
+        <!-- ================= SPLASH (START HERE) ================= -->
         <activity
             android:name=".features.welcome.WelcomeActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmartHealthReminder.Splash" >
+            android:theme="@style/Theme.SmartHealthReminder.Splash">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <!-- Main Activity -->
+        <!-- ================= LOGIN ================= -->
         <activity
-            android:name=".features.activity.MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms">
+            android:name=".features.auth.signIn.SignInActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SmartHealthReminder" />
 
-        </activity>
+        <!-- ================= AUTH ================= -->
+        <activity android:name=".features.auth.signup.SignupActivity" android:exported="false" />
+        <activity android:name=".features.auth.forget_password.ForgetPasswordActivity" android:exported="false" />
+        <activity android:name=".features.auth.signup.CompleteProfileActivity" android:exported="false" />
 
+        <!-- ================= WELCOME ================= -->
+        <activity android:name=".features.welcome.WelcomeActivity2" android:exported="false" />
 
-        <!-- Alarm Ringing Activity -->
+        <!-- ================= MAIN ================= -->
+        <activity android:name=".features.activity.MainActivity" android:exported="false" />
+        <activity android:name=".features.activity.AddReminderActivity" android:exported="false" />
+        <activity android:name=".features.activity.EditAlarmActivity" android:exported="false" />
+        <activity android:name=".features.activity.CreateScheduleEntryActivity" android:exported="false" />
+
         <activity
             android:name=".features.activity.AlarmRingingActivity"
-            android:excludeFromRecents="true"
             android:exported="false"
+            android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true"
-            android:theme="@style/Theme.ClinicalAlarms" />
+            android:turnScreenOn="true" />
 
-        <!-- Edit Alarm Activity -->
+        <!-- ================= DASHBOARD ================= -->
         <activity
-            android:name=".features.activity.EditAlarmActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
+            android:name=".ui.DashboardActivity"
+            android:exported="false" />
 
-        <!-- Add Reminder Activity -->
-        <activity
-            android:name=".features.activity.AddReminderActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
+        <!-- ================= OTHER SCREENS ================= -->
+        <activity android:name=".features.search.SearchActivity" android:exported="false" />
+        <activity android:name=".features.main.MainWelcomeActivity" android:exported="false" />
+        <activity android:name=".features.chatbot.ChatBotActivity" android:exported="false" />
+        <activity android:name=".features.Profileinfo.reports.ProfileActivity" android:exported="false" />
+        <activity android:name=".features.Profileinfo.reports.ReportsActivity" android:exported="false" />
+        <activity android:name=".features.settings.SettingsActivity" android:exported="false" />
+        <activity android:name=".features.plan.TodayPlanActivity" android:exported="false" />
+        <activity android:name=".features.schedule.details.DayDetailsActivity" android:exported="false" />
 
+        <!-- ================= RECEIVERS ================= -->
         <receiver
             android:name=".alarm.AlarmReceiver"
-            android:exported="true">
+            android:exported="false">  <!-- ⬅️⬅️⬅️ غيّر لـ false -->
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
-        <!-- Alarm Service -->
+        <receiver
+            android:name=".features.alarm.ReminderReceiver"
+            android:exported="false" />
+
+        <!-- ================= SERVICE ================= -->
         <service
             android:name=".alarm.AlarmService"
             android:exported="false"
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="alarm"/>
+                android:value="alarm" />
         </service>
-        <receiver
-            android:name=".features.alarm.ReminderReceiver"
-            android:exported="false" />
 
-        <!-- Meta Data -->
+        <!-- ================= META ================= -->
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
+
         <meta-data
             android:name="com.facebook.sdk.ClientToken"
             android:value="@string/facebook_client_token" />
 
-        <activity
-            android:name=".features.main.MainWelcomeActivity"
-            android:exported="false" />
-
-        <!-- CompleteProfileActivity -->
-        <activity
-            android:name=".features.auth.signup.CompleteProfileActivity"
-            android:exported="false"
-            android:label="@string/complete_profile_label"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name="com.example.smarthealthreminder.features.chatbot.ChatBotActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".features.Profileinfo.reports.ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.Profileinfo.reports.ReportsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.settings.SettingsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
-        <activity
-            android:name=".features.plan.TodayPlanActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
-        <activity
-            android:name=".features.schedule.details.DayDetailsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
-        <activity
-            android:name=".features.activity.CreateScheduleEntryActivity"
-            android:exported="false"
-            android:theme="@style/Theme.ClinicalAlarms" />
     </application>
 
 </manifest>
