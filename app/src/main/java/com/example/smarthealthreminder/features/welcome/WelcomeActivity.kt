@@ -6,12 +6,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
+import com.google.firebase.auth.FirebaseAuth
 
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()//test
+        
+        val auth = FirebaseAuth.getInstance()
+        if (auth.currentUser != null) {
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+        }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityWelcomeBinding.inflate(layoutInflater)

@@ -363,4 +363,9 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="delete">Delete</string>
     <string name="today_s_air_is_clean_and_restorative">Today\'s air is clean and restorative.</string>
     <string name="settings">Settings</string>
+
+    <!-- ChatBot Disclaimer -->
+    <string name="medical_disclaimer_title">Medical Disclaimer</string>
+    <string name="medical_disclaimer_message">Please consult your doctor for any medical concerns. This AI assistant is for informational purposes only and should not be relied upon for diagnosis or treatment.</string>
+    <string name="i_understand">I Understand</string>
 </resources>

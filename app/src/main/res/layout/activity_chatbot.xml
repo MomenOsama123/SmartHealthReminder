@@ -20,23 +20,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:contentDescription="@string/back_arrow_into_the_main_page"
-            android:src="@drawable/arrow_back"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            />
-
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:paddingStart="12dp">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_height="wrap_content"
@@ -53,6 +41,14 @@
                 android:textColor="#8A8A8A"/>
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/infoIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_warning"
+            app:tint="@color/primary_green"
+            android:contentDescription="AI Disclaimer Info"
+            android:padding="2dp"/>
 
     </LinearLayout>
 
