@@ -2,9 +2,9 @@
 
 ## Smart Health Reminder & Wellness Assistant
 
-Trusta is an Android healthcare application designed to help users manage their daily health routines through smart reminders, alarms, progress tracking, and AI-powered assistance.
+Trusta is an Android healthcare application designed to help users manage medications, reminders, alarms, daily health routines, reports, and AI-powered assistance through a modern and user-friendly experience.
 
-The application aims to improve treatment adherence, reduce missed reminders, and provide users with an organized and user-friendly health management experience.
+The application aims to improve medication adherence, reduce missed doses, and provide users with organized health management tools supported by intelligent guidance and tracking features.
 
 ---
 
@@ -15,19 +15,20 @@ The application aims to improve treatment adherence, reduce missed reminders, an
 - Secure Login
 - Google Sign-In
 - Password Recovery
+- Firebase Authentication Integration
 
 ### Reminder Management
 - Create, Edit, and Delete Reminders
+- Medication Scheduling
 - Reminder Status Tracking
-- Daily Reminder Organization
 - Local Storage using Room Database
 
 ### Alarm System
 - Create and Manage Alarms
 - Alarm Scheduling
 - Alarm Ringing Activity
-- Background Alarm Handling
 - Enable / Disable Alarms
+- Background Alarm Handling
 
 ### Search System
 - Real-Time Search
@@ -38,40 +39,43 @@ The application aims to improve treatment adherence, reduce missed reminders, an
 
 ### Daily Planning
 - Today Plan Overview
-- Upcoming Activities
 - Daily Health Routine Management
+- Upcoming Activities Tracking
 
 ### Reports & Tracking
+- Progress Monitoring
 - Activity Reports
-- Progress Tracking
-- Reminder Monitoring
+- Reminder Tracking
+- User Health Progress Overview
 
 ### AI Assistant
 - AI-Powered Health Guidance
 - Medication Information Assistance
-- General Health Support
+- Missed Dose Guidance
+- Interactive Health Support Chatbot
 
 ### User Experience
 - Welcome / Onboarding Screens
 - Empty State Handling
+- Material Design UI
 - Light Theme
 - Dark Theme
 - System Theme Support
-- Modern Material Design UI
 
 ---
 
-## Tech Stack
+## Technologies Used
 
 ### Development
 - Kotlin
 - Android Studio
 
 ### Architecture
-- MVVM (Model-View-ViewModel)
+- MVVM (Model–View–ViewModel)
 
 ### Database
 - Room Database
+- Firebase Firestore
 
 ### Authentication
 - Firebase Authentication
@@ -79,19 +83,27 @@ The application aims to improve treatment adherence, reduce missed reminders, an
 ### Networking
 - Retrofit
 
-### UI & Android Components
+### Dependency Injection
+- Koin
+
+### Asynchronous Programming
+- Kotlin Coroutines
+
+### Navigation
+- Android Navigation Component
+
+### UI
 - XML Layouts
+- ViewBinding
 - Material Design Components
 - Android Jetpack Libraries
-- RecyclerView
-- Navigation Components
-- ViewBinding
+- Splash Screen API
 
 ---
 
 ## Architecture Overview
 
-The application follows the MVVM architecture pattern to ensure maintainable, scalable, and organized code.
+The project follows the MVVM architecture pattern combined with a feature-based modular organization to improve maintainability, scalability, and code separation.
 
 ```text
 UI Layer
@@ -108,14 +120,12 @@ Room Database / Firebase / APIs
 - Activities & Fragments
 - ViewModels
 - Repositories
-- DAOs
-- Room Database
-- Firebase Authentication
+- Room DAOs
+- Firebase Services
 - Retrofit API Services
+- AI Assistant Module
 
 ---
-
-## Project Structure
 
 ## Project Structure
 
@@ -123,14 +133,17 @@ Room Database / Firebase / APIs
 app
 └── src
     ├── features
-    │   ├── activity
-    │   ├── fragment
+    │   ├── auth
+    │   ├── alarm
+    │   ├── chatbot
+    │   ├── search
     │   ├── plan
-    │   ├── schedule
-    │   ├── details
     │   ├── settings
+    │   ├── welcome
     │   ├── profileinfo
-    │   └── reports
+    │   ├── reports
+    │   ├── schedule
+    │   └── navigation
     │
     ├── data
     │   ├── dao
@@ -138,37 +151,56 @@ app
     │   ├── repository
     │   └── database
     │
+    ├── api
     ├── services
     ├── receivers
-    ├── api
     ├── utils
     └── viewmodels
 ```
+
+---
+
+## Testing
+
+The project includes testing support for several modules, including:
+
+- Reports Module Testing
+- Today Plan Testing
+- Settings Testing
+- Home Fragment Testing
+- Reminder Features Testing
+
 ---
 
 ## Installation
 
-### 1. Clone the Repository
+### Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/Trusta.git
+git clone https://github.com/YOUR_USERNAME/Trusta.git
 ```
 
-### 2. Open the Project
+### Open the Project
 
 Open the project using Android Studio.
 
-### 3. Sync Dependencies
+### Configure Firebase
+
+Add your Firebase configuration file:
+
+```text
+google-services.json
+```
+
+inside the app module.
+
+### Sync Dependencies
 
 Allow Android Studio to download and sync all required dependencies.
 
-### 4. Configure Firebase
+### Run the Application
 
-Add your Firebase configuration file (`google-services.json`) if required.
-
-### 5. Run the Application
-
-Run the application on an Android device or emulator.
+Run the project on an Android device or emulator.
 
 ---
 
@@ -182,9 +214,9 @@ Screenshots will be added after the final UI version is completed.
 
 - Advanced Health Analytics
 - PDF Report Export
-- Enhanced Progress Tracking
-- Smart Recommendations
-- Improved AI Features
+- Smart Health Recommendations
+- Enhanced AI Features
+- Improved Cloud Synchronization
 - Expanded Health Monitoring Capabilities
 
 ---
@@ -194,3 +226,9 @@ Screenshots will be added after the final UI version is completed.
 🚧 Active Development
 
 Trusta is currently being enhanced with additional dashboard, reporting, and user experience improvements as part of the graduation project development process.
+
+---
+
+## License
+
+This project was developed for educational and graduation project purposes.
