@@ -5,10 +5,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.ui.DashboardActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
-import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,7 +24,9 @@ object BottomNavHelper {
             when (item.itemId) {
 
                 R.id.nav_home -> {
-                    openDashboard(activity)
+                    if (activity !is MainActivity) {
+                        openMainDestination(activity, MainActivity.DESTINATION_HOME)
+                    }
                     true
                 }
 
@@ -44,11 +44,7 @@ object BottomNavHelper {
                 }
 
                 R.id.nav_ai -> {
-                    if (activity !is ChatBotActivity) {
-                        activity.startActivity(
-                            Intent(activity, ChatBotActivity::class.java)
-                        )
-                    }
+                    openMainDestination(activity, "chatbot")
                     true
                 }
 
@@ -72,24 +68,5 @@ object BottomNavHelper {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         activity.startActivity(intent)
-    }
-
-    private fun openDashboard(activity: Activity) {
-        // ✅ Check if logged in
-        val sharedPref = activity.getSharedPreferences("HealthSyncPrefs", Context.MODE_PRIVATE)
-        val firebaseId = sharedPref.getString("FIREBASE_ID", "") ?: ""
-
-        if (firebaseId.isEmpty()) {
-            // Not logged in → go to Login
-            val intent = Intent(activity, SignInActivity::class.java)
-            activity.startActivity(intent)
-            activity.finish()
-            return
-        }
-
-        if (activity is DashboardActivity) return
-
-        // ✅ Simple start without flags
-        activity.startActivity(Intent(activity, DashboardActivity::class.java))
     }
 }

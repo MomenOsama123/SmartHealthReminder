@@ -26,7 +26,7 @@ import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
-import com.example.smarthealthreminder.ui.DashboardActivity
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.util.*
@@ -300,9 +300,9 @@ class AddReminderActivity : AppCompatActivity() {
     }
 
     private fun navigateToDashboard() {
-        val intent = Intent(this, DashboardActivity::class.java).apply {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_HOME)
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("REFRESH_DATA", true)
         }
         startActivity(intent)
         finish()

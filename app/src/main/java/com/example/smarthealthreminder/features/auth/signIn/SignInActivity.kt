@@ -12,7 +12,6 @@ import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
-import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.model_d.User
 
@@ -226,7 +225,7 @@ class SignInActivity : AppCompatActivity() {
                     .apply()
 
                 val intent = if (isCompleted) {
-                    Intent(this, MainWelcomeActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
                 } else {
                     Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
                 }
@@ -239,7 +238,7 @@ class SignInActivity : AppCompatActivity() {
                     .getBoolean("isProfileCompleted", false)
                 
                 val intent = if (localCompleted) {
-                    Intent(this, MainWelcomeActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
                 } else {
                     Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
                 }

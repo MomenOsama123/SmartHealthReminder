@@ -9,7 +9,7 @@ import android.widget.Toast
 import com.example.smarthealthreminder.databinding.BottomSheetQuickActionsBinding
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
-import com.example.smarthealthreminder.ui.DashboardActivity
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class QuickActionsBottomSheet : BottomSheetDialogFragment() {
@@ -45,7 +45,11 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
         }
 
         binding.actionViewDashboard.setOnClickListener {
-            startActivity(Intent(requireContext(), DashboardActivity::class.java))
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_HOME)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
             dismiss()
         }
     }

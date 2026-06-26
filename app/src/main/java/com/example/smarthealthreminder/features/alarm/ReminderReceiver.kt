@@ -16,7 +16,7 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
-import com.example.smarthealthreminder.ui.DashboardActivity
+import com.example.smarthealthreminder.features.activity.MainActivity
 import java.util.Calendar
 import java.util.Locale
 
@@ -108,8 +108,9 @@ class ReminderReceiver : BroadcastReceiver() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        val contentIntent = Intent(context, DashboardActivity::class.java).apply {
+        val contentIntent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+            putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_HOME)
             putExtra("OPEN_FROM_NOTIFICATION", true)
             putExtra(EXTRA_REMINDER_ID, id)
         }

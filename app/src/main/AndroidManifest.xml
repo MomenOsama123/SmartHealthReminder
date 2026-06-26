@@ -67,15 +67,8 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
 
-        <!-- ================= DASHBOARD ================= -->
-        <activity
-            android:name=".ui.DashboardActivity"
-            android:exported="false" />
-
         <!-- ================= OTHER SCREENS ================= -->
         <activity android:name=".features.search.SearchActivity" android:exported="false" />
-        <activity android:name=".features.main.MainWelcomeActivity" android:exported="false" />
-        <activity android:name=".features.chatbot.ChatBotActivity" android:exported="false" />
         <activity android:name=".features.Profileinfo.reports.ProfileActivity" android:exported="false" />
         <activity android:name=".features.Profileinfo.reports.ReportsActivity" android:exported="false" />
         <activity android:name=".features.settings.SettingsActivity" android:exported="false" />

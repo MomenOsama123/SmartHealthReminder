@@ -10,15 +10,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
-import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
-import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
+import com.example.smarthealthreminder.features.chatbot.ChatBotFragment
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.fragment.AlarmsFragment
 import com.example.smarthealthreminder.features.fragment.HomeFragment
 import com.example.smarthealthreminder.features.fragment.RemindersFragment
 import com.example.smarthealthreminder.features.fragment.ScheduleFragment
-import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -41,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var scheduleFragment: ScheduleFragment
     private lateinit var alarmsFragment: AlarmsFragment
     private lateinit var remindersFragment: RemindersFragment
+    private lateinit var chatBotFragment: ChatBotFragment
     private lateinit var bottomNavigation: BottomNavigationView
     private var activeFragment: Fragment? = null
 
@@ -56,11 +54,13 @@ class MainActivity : AppCompatActivity() {
             scheduleFragment = ScheduleFragment()
             alarmsFragment = AlarmsFragment()
             remindersFragment = RemindersFragment()
+            chatBotFragment = ChatBotFragment()
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, scheduleFragment, TAG_SCHEDULE).hide(scheduleFragment)
                 .add(R.id.fragment_container, alarmsFragment, TAG_ALARMS).hide(alarmsFragment)
                 .add(R.id.fragment_container, remindersFragment, TAG_REMINDERS).hide(remindersFragment)
+                .add(R.id.fragment_container, chatBotFragment, "chatbot").hide(chatBotFragment)
                 .add(R.id.fragment_container, homeFragment, TAG_HOME)
                 .commit()
 
@@ -70,33 +70,44 @@ class MainActivity : AppCompatActivity() {
             scheduleFragment = supportFragmentManager.findFragmentByTag(TAG_SCHEDULE) as ScheduleFragment
             alarmsFragment = supportFragmentManager.findFragmentByTag(TAG_ALARMS) as AlarmsFragment
             remindersFragment = supportFragmentManager.findFragmentByTag(TAG_REMINDERS) as RemindersFragment
-            activeFragment = supportFragmentManager.fragments.find { !it.isHidden }
+            chatBotFragment = supportFragmentManager.findFragmentByTag("chatbot") as ChatBotFragment
+            activeFragment = supportFragmentManager.fragments.find { !it.isHidden } ?: homeFragment
         }
 
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_home -> {
-                    startActivity(Intent(this, MainWelcomeActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    })
-                    finish()
-                    true
-                }
+                R.id.nav_home -> showFragment(homeFragment)
                 R.id.nav_schedule -> showFragment(scheduleFragment)
                 R.id.nav_create -> {
-                    QuickActionsBottomSheet().show(supportFragmentManager, QuickActionsBottomSheet.TAG)
+                    QuickActionsBottomSheet.newInstance().show(supportFragmentManager, QuickActionsBottomSheet.TAG)
                     false
                 }
-                R.id.nav_ai -> {
-                    startActivity(Intent(this, ChatBotActivity::class.java))
-                    false
-                }
+                R.id.nav_ai -> showFragment(chatBotFragment)
                 R.id.action_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
-                    true
+                    false
                 }
                 else -> false
             }
+        }
+
+        // Handle Back button to return to Home fragment before exiting
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (activeFragment != homeFragment) {
+                    bottomNavigation.selectedItemId = R.id.nav_home
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+
+        // Handle Keyboard visibility to hide/show Bottom Navigation
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
+            val imeVisible = insets.isVisible(androidx.core.view.WindowInsetsCompat.Type.ime())
+            bottomNavigation.visibility = if (imeVisible) android.view.View.GONE else android.view.View.VISIBLE
+            insets
         }
 
         val destination = intent.getStringExtra(EXTRA_START_DESTINATION) ?: DESTINATION_HOME
@@ -113,19 +124,33 @@ class MainActivity : AppCompatActivity() {
     private fun navigateToDestination(destination: String) {
         when (destination) {
             DESTINATION_SCHEDULE -> {
-                bottomNavigation.selectedItemId = R.id.nav_schedule
+                if (bottomNavigation.selectedItemId != R.id.nav_schedule) {
+                    bottomNavigation.selectedItemId = R.id.nav_schedule
+                }
                 showFragment(scheduleFragment)
             }
             DESTINATION_ALARMS -> {
-                bottomNavigation.selectedItemId = R.id.nav_schedule
+                if (bottomNavigation.selectedItemId != R.id.nav_schedule) {
+                    bottomNavigation.selectedItemId = R.id.nav_schedule
+                }
                 showFragment(alarmsFragment)
             }
             DESTINATION_REMINDERS -> {
-                bottomNavigation.selectedItemId = R.id.nav_schedule
+                if (bottomNavigation.selectedItemId != R.id.nav_schedule) {
+                    bottomNavigation.selectedItemId = R.id.nav_schedule
+                }
                 showFragment(remindersFragment)
             }
+            "chatbot", "ai" -> {
+                if (bottomNavigation.selectedItemId != R.id.nav_ai) {
+                    bottomNavigation.selectedItemId = R.id.nav_ai
+                }
+                showFragment(chatBotFragment)
+            }
             else -> {
-                bottomNavigation.selectedItemId = R.id.nav_home
+                if (bottomNavigation.selectedItemId != R.id.nav_home) {
+                    bottomNavigation.selectedItemId = R.id.nav_home
+                }
                 showFragment(homeFragment)
             }
         }

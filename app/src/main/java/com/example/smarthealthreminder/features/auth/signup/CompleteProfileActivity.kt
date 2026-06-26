@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.ActivityCompleteProfileBinding
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
-import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.model_d.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -185,7 +184,7 @@ class CompleteProfileActivity : AppCompatActivity() {
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this, MainWelcomeActivity::class.java)
+        val intent = Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()

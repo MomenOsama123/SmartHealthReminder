@@ -8,7 +8,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity
-import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.model_d.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -75,7 +74,7 @@ class WelcomeActivity : AppCompatActivity() {
                 }
 
                 val intent = if (isCompleted) {
-                    Intent(this, MainWelcomeActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
                 } else {
                     Intent(this, CompleteProfileActivity::class.java)
                 }
@@ -89,7 +88,7 @@ class WelcomeActivity : AppCompatActivity() {
                     .getBoolean("isProfileCompleted", false)
                 
                 val intent = if (isCompleted) {
-                    Intent(this, MainWelcomeActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
                 } else {
                     Intent(this, CompleteProfileActivity::class.java)
                 }
