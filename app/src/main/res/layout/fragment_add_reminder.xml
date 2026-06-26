@@ -399,6 +399,17 @@
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_secondary"/>
 
+            <TextView
+                android:id="@+id/btn_delete_reminder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="Delete Reminder"
+                android:textAppearance="@style/TextBody1"
+                android:textColor="@color/error_red"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

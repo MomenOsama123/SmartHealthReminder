@@ -117,7 +117,7 @@ class AddReminderActivity : AppCompatActivity() {
         switchVibration = findViewById(R.id.switch_vibration)
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
-       // btnDelete = findViewById(R.id.btn_delete_reminder)
+        btnDelete = findViewById(R.id.btn_delete_reminder)
 
         val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
         switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)

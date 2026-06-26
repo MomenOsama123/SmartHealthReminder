@@ -3,6 +3,7 @@ package com.example.smarthealthreminder.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.MainActivity
@@ -31,7 +32,9 @@ object BottomNavHelper {
                 }
 
                 R.id.nav_schedule -> {
-                    openMainDestination(activity, MainActivity.DESTINATION_SCHEDULE)
+                    if (activity !is MainActivity) {
+                        openMainDestination(activity, MainActivity.DESTINATION_SCHEDULE)
+                    }
                     true
                 }
 

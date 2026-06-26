@@ -89,7 +89,8 @@ class ReportsActivity : AppCompatActivity() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         BottomNavHelper.setup(
             activity = this,
-            bottomNavigation = bottomNav
+            bottomNavigation = bottomNav,
+            selectedItemId = R.id.nav_create
         )
     }
 
