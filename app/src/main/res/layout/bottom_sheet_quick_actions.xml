@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="28dp"
     android:background="@drawable/bg_bottom_sheet">
 
     <!-- Handle -->
@@ -13,217 +16,214 @@
         android:layout_width="40dp"
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/bg_bottom_sheet_handle"/>
+
+    <!-- Header -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:text="Quick Access"
+        android:textAppearance="@style/TextHeading3"
+        android:textColor="@color/text_primary"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:text="Create New"
-        android:textAppearance="@style/TextHeading3"
-        android:textColor="@color/text_primary"/>
+        android:text="Go to a section to manage your health data"
+        android:textAppearance="@style/TextCaption"
+        android:textColor="@color/text_tertiary"/>
 
-    <!-- Add Reminder -->
+    <!-- 2-column grid of cards -->
     <LinearLayout
-        android:id="@+id/action_add_reminder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
+        android:weightSum="2"
+        android:layout_marginBottom="12dp">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_tool_bg"
-            android:padding="10dp"
-            android:src="@drawable/ic_pill"
-            app:tint="@color/primary"/>
-
+        <!-- Reminders card -->
         <LinearLayout
+            android:id="@+id/action_add_reminder"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
+            android:layout_marginEnd="6dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/bg_quick_action_card"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_tool_bg"
+                android:padding="10dp"
+                android:src="@drawable/ic_pill"
+                android:layout_marginBottom="10dp"
+                app:tint="@color/primary"
+                android:contentDescription="Reminders"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Reminder"
+                android:text="Reminders"
                 android:textAppearance="@style/TextBody1"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary"
+                android:gravity="center"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Set a medication or health reminder"
-                android:textAppearance="@style/TextCaption"/>
+                android:text="View all reminders"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:layout_marginTop="2dp"/>
+
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_right"
-            app:tint="@color/text_tertiary"/>
+        <!-- Alarms card -->
+        <LinearLayout
+            android:id="@+id/action_add_alarm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/bg_quick_action_card"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_tool_bg"
+                android:padding="10dp"
+                android:src="@drawable/ic_bell"
+                android:layout_marginBottom="10dp"
+                app:tint="@color/urgent"
+                android:contentDescription="Alarms"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alarms"
+                android:textAppearance="@style/TextBody1"
+                android:textColor="@color/text_primary"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View all alarms"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:layout_marginTop="2dp"/>
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="8dp"
-        android:background="@color/divider"/>
-
-    <!-- Add Alarm -->
     <LinearLayout
-        android:id="@+id/action_add_alarm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
+        android:weightSum="2">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_tool_bg"
-            android:padding="10dp"
-            android:src="@drawable/ic_bell"
-            app:tint="@color/urgent"/>
-
+        <!-- Reports card -->
         <LinearLayout
+            android:id="@+id/action_add_report"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
+            android:layout_marginEnd="6dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/bg_quick_action_card"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_tool_bg"
+                android:padding="10dp"
+                android:src="@drawable/ic_chart"
+                android:layout_marginBottom="10dp"
+                app:tint="@color/primary_dark"
+                android:contentDescription="Reports"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Alarm"
+                android:text="Reports"
                 android:textAppearance="@style/TextBody1"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary"
+                android:gravity="center"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Set a wake-up or health alarm"
-                android:textAppearance="@style/TextCaption"/>
+                android:text="View health reports"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:layout_marginTop="2dp"/>
+
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_right"
-            app:tint="@color/text_tertiary"/>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="8dp"
-        android:background="@color/divider"/>
-
-    <!-- Add Report -->
-    <LinearLayout
-        android:id="@+id/action_add_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_tool_bg"
-            android:padding="10dp"
-            android:src="@drawable/ic_chart"
-            app:tint="@color/primary_dark"/>
-
+        <!-- Dashboard card -->
         <LinearLayout
+            android:id="@+id/action_view_dashboard"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
+            android:layout_marginStart="6dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/bg_quick_action_card"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_tool_bg"
+                android:padding="10dp"
+                android:src="@drawable/dashboard"
+                android:layout_marginBottom="10dp"
+                app:tint="@color/success"
+                android:contentDescription="Dashboard"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Report"
+                android:text="Dashboard"
                 android:textAppearance="@style/TextBody1"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary"
+                android:gravity="center"/>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Log a health report entry"
-                android:textAppearance="@style/TextCaption"/>
+                android:text="Your health overview"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:layout_marginTop="2dp"/>
+
         </LinearLayout>
 
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_right"
-            app:tint="@color/text_tertiary"/>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginVertical="8dp"
-        android:background="@color/divider"/>
-
-    <!-- View Dashboard -->
-    <LinearLayout
-        android:id="@+id/action_view_dashboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingVertical="12dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true">
-
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/circle_tool_bg"
-            android:padding="10dp"
-            android:src="@drawable/dashboard"
-            app:tint="@color/success"/>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="16dp"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View Dashboard"
-                android:textAppearance="@style/TextBody1"
-                android:textColor="@color/text_primary"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="View your health dashboard"
-                android:textAppearance="@style/TextCaption"/>
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_right"
-            app:tint="@color/text_tertiary"/>
     </LinearLayout>
 
 </LinearLayout>

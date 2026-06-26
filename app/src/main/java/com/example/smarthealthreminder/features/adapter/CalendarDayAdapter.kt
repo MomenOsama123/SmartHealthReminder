@@ -20,7 +20,11 @@ data class CalendarDay(
     val hasNotes: Boolean = false,
     val hasReports: Boolean = false,
     val hasScheduleEntries: Boolean = false
-)
+) {
+    /** True if this day has ANY content that should show a dot */
+    val hasContent: Boolean
+        get() = hasEvents || hasNotes || hasReports || hasScheduleEntries
+}
 
 class CalendarDayAdapter(
     private val onDayClick: (String) -> Unit
@@ -44,46 +48,72 @@ class CalendarDayAdapter(
         val day = days[position]
         val context = holder.itemView.context
 
+        // Empty padding cell
         if (day.dayNumber == 0) {
             holder.tvDay.text = ""
             holder.tvDay.background = null
+            holder.tvDay.alpha = 0f
             holder.viewDot.visibility = View.INVISIBLE
+            holder.itemView.isClickable = false
             return
         }
 
         holder.tvDay.text = day.dayNumber.toString()
+        holder.tvDay.alpha = if (day.isCurrentMonth) 1f else 0.35f
+        holder.itemView.isClickable = true
+
+        val isSelected = day.date == selectedDate
 
         when {
-            day.date == selectedDate -> {
+            isSelected -> {
+                // Filled white circle, primary-colored text
                 holder.tvDay.setBackgroundResource(R.drawable.circle_white)
                 holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.primary))
                 holder.tvDay.typeface = Typeface.DEFAULT_BOLD
+                holder.tvDay.paintFlags = 0
+                // Hide dot when selected — the circle already highlights it
+                holder.viewDot.visibility = View.INVISIBLE
             }
             day.isToday -> {
+                // Today: no background, bold + underline in white
                 holder.tvDay.background = null
                 holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.white))
                 holder.tvDay.typeface = Typeface.DEFAULT_BOLD
-                holder.tvDay.paintFlags = holder.tvDay.paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
-            }
-            !day.isCurrentMonth -> {
-                holder.tvDay.background = null
-                holder.tvDay.paintFlags = 0
-                holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.primary_light))
-                holder.tvDay.typeface = Typeface.DEFAULT
+                holder.tvDay.paintFlags =
+                    holder.tvDay.paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
+                holder.viewDot.visibility =
+                    if (day.hasContent) View.VISIBLE else View.INVISIBLE
             }
             else -> {
+                // Normal day
                 holder.tvDay.background = null
                 holder.tvDay.paintFlags = 0
-                holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.white))
+                holder.tvDay.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        if (day.isCurrentMonth) R.color.white else R.color.text_on_primary
+                    )
+                )
                 holder.tvDay.typeface = Typeface.DEFAULT
+                holder.viewDot.visibility =
+                    if (day.hasContent && day.isCurrentMonth) View.VISIBLE else View.INVISIBLE
             }
         }
 
-        holder.viewDot.visibility =
-            if (day.hasEvents && day.date != selectedDate) View.VISIBLE else View.INVISIBLE
+        // Dot color: notes = soft yellow, everything else = white dot
+        if (holder.viewDot.visibility == View.VISIBLE) {
+            val dotColorRes = if (day.hasNotes && !day.hasEvents && !day.hasReports && !day.hasScheduleEntries)
+                R.color.pending   // note-only days get a different dot
+            else
+                R.color.white
+            holder.viewDot.backgroundTintList =
+                android.content.res.ColorStateList.valueOf(
+                    ContextCompat.getColor(context, dotColorRes)
+                )
+        }
 
         holder.itemView.setOnClickListener {
-            if (day.dayNumber != 0 && day.isCurrentMonth) {
+            if (day.isCurrentMonth) {
                 val old = selectedDate
                 selectedDate = day.date
                 val oldIndex = days.indexOfFirst { it.date == old }
@@ -92,16 +122,6 @@ class CalendarDayAdapter(
                 onDayClick(day.date)
             }
         }
-        val dotColor = when {
-            day.hasEvents -> R.color.primary
-            day.hasReports -> R.color.urgent
-            day.hasNotes -> R.color.pending
-            else -> R.color.primary
-        }
-        holder.viewDot.backgroundTintList =
-            android.content.res.ColorStateList.valueOf(
-                ContextCompat.getColor(holder.itemView.context, dotColor)
-            )
     }
 
     override fun getItemCount() = days.size

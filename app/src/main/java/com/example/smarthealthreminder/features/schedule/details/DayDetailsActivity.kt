@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -35,21 +35,34 @@ class DayDetailsActivity : AppCompatActivity() {
     private lateinit var viewModel: HealthViewModel
     private lateinit var scheduleAdapter: ScheduleAdapter
     private lateinit var recyclerView: RecyclerView
-    private lateinit var emptyView: View
-    private lateinit var tvDate: TextView
-    private lateinit var tvNote: TextView
+
+    // Empty state views
+    private lateinit var layoutEmpty: View
+    private lateinit var tvEmptyMessage: TextView
     private lateinit var btnAddNote: MaterialButton
+
+    // Content header
+    private lateinit var tvDate: TextView
 
     private var date: String = ""
     private var dateDisplay: String = ""
+    private var currentNoteText: String = ""
+
+    private val addNoteLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // Note was saved — reload so dot appears and list refreshes
+            viewModel.loadNoteForDate(date)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_day_details)
 
         date = intent.getStringExtra(EXTRA_DATE) ?: run {
-            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-            sdf.format(Date())
+            SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
         }
         dateDisplay = intent.getStringExtra(EXTRA_DATE_DISPLAY) ?: date
 
@@ -60,7 +73,7 @@ class DayDetailsActivity : AppCompatActivity() {
         initViews()
         setupRecyclerView()
         observeData()
-        loadNote()
+        viewModel.loadNoteForDate(date)
     }
 
     private fun initViews() {
@@ -69,21 +82,25 @@ class DayDetailsActivity : AppCompatActivity() {
         tvDate = findViewById(R.id.tv_date)
         tvDate.text = dateDisplay
 
-        tvNote = findViewById(R.id.tv_note)
-        btnAddNote = findViewById(R.id.btn_add_note)
-        emptyView = findViewById(R.id.layout_empty)
         recyclerView = findViewById(R.id.recycler_events)
+        layoutEmpty = findViewById(R.id.layout_empty)
+        tvEmptyMessage = findViewById(R.id.tv_empty_message)
+        btnAddNote = findViewById(R.id.btn_add_note)
 
         btnAddNote.setOnClickListener {
-            val noteText = tvNote.text.toString()
-            viewModel.saveNote(date, noteText)
-            Toast.makeText(this, "Note saved", Toast.LENGTH_SHORT).show()
+            addNoteLauncher.launch(
+                Intent(this, AddNoteActivity::class.java).apply {
+                    putExtra(AddNoteActivity.EXTRA_DATE, date)
+                    putExtra(AddNoteActivity.EXTRA_DATE_DISPLAY, dateDisplay)
+                    putExtra(AddNoteActivity.EXTRA_EXISTING_NOTE, currentNoteText)
+                }
+            )
         }
 
+        // Quick action buttons (always visible at bottom)
         findViewById<MaterialButton>(R.id.btn_add_reminder).setOnClickListener {
             startActivity(Intent(this, AddReminderActivity::class.java))
         }
-
         findViewById<MaterialButton>(R.id.btn_add_alarm).setOnClickListener {
             startActivity(Intent(this, EditAlarmActivity::class.java))
         }
@@ -98,28 +115,28 @@ class DayDetailsActivity : AppCompatActivity() {
     private fun observeData() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allReminders.collect { reminders ->
-                    refreshEventList()
-                }
+                viewModel.allReminders.collect { refreshEventList() }
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allAlarms.collect { alarms ->
-                    refreshEventList()
-                }
+                viewModel.allAlarms.collect { refreshEventList() }
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allScheduleEntries.collect { entries ->
-                    refreshEventList()
-                }
+                viewModel.allScheduleEntries.collect { refreshEventList() }
             }
         }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.allReports.collect { reports ->
+                viewModel.allReports.collect { refreshEventList() }
+            }
+        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentNote.collect { note ->
+                    currentNoteText = note?.note ?: ""
                     refreshEventList()
                 }
             }
@@ -127,23 +144,23 @@ class DayDetailsActivity : AppCompatActivity() {
     }
 
     private fun refreshEventList() {
-        val reminderItems = viewModel.allReminders.value.filter {
-            normalizeDate(it.date) == date
-        }.map { reminder ->
-            ScheduleItem(
-                id = reminder.id,
-                title = reminder.title,
-                date = normalizeDate(reminder.date),
-                time = reminder.time ?: "No time",
-                category = reminder.category ?: "General",
-                priority = reminder.priority ?: "NORMAL",
-                status = reminder.status,
-                earlyNotification = reminder.earlyNotification,
-                earlyNotificationMinutes = reminder.earlyNotificationMinutes,
-                isAlarm = false,
-                itemType = ScheduleItem.TYPE_REMINDER
-            )
-        }
+        val reminderItems = viewModel.allReminders.value
+            .filter { normalizeDate(it.date) == date }
+            .map { reminder ->
+                ScheduleItem(
+                    id = reminder.id,
+                    title = reminder.title,
+                    date = normalizeDate(reminder.date),
+                    time = reminder.time ?: "No time",
+                    category = reminder.category ?: "General",
+                    priority = reminder.priority ?: "NORMAL",
+                    status = reminder.status,
+                    earlyNotification = reminder.earlyNotification,
+                    earlyNotificationMinutes = reminder.earlyNotificationMinutes,
+                    isAlarm = false,
+                    itemType = ScheduleItem.TYPE_REMINDER
+                )
+            }
 
         val alarmItems = viewModel.allAlarms.value.filter { it.isActive }.map { alarm ->
             ScheduleItem(
@@ -159,71 +176,75 @@ class DayDetailsActivity : AppCompatActivity() {
             )
         }
 
-        val scheduleEntryItems = viewModel.allScheduleEntries.value.filter {
-            it.date == date
-        }.map { entry ->
-            ScheduleItem(
-                id = entry.id,
-                title = entry.title,
-                date = entry.date ?: "",
-                time = entry.time ?: "No time",
-                category = entry.category ?: "Schedule",
-                priority = "NORMAL",
-                status = "Pending",
-                isAlarm = false,
-                itemType = ScheduleItem.TYPE_SCHEDULE_ENTRY
-            )
-        }
+        val scheduleEntryItems = viewModel.allScheduleEntries.value
+            .filter { it.date == date }
+            .map { entry ->
+                ScheduleItem(
+                    id = entry.id,
+                    title = entry.title,
+                    date = entry.date ?: "",
+                    time = entry.time ?: "No time",
+                    category = entry.category ?: "Schedule",
+                    priority = "NORMAL",
+                    status = "Pending",
+                    isAlarm = false,
+                    itemType = ScheduleItem.TYPE_SCHEDULE_ENTRY
+                )
+            }
 
-        val reportItems = viewModel.allReports.value.filter {
-            it.date == date
-        }.map { report ->
-            ScheduleItem(
-                id = report.id,
-                title = report.title,
-                date = report.date ?: "",
-                time = "Report",
-                category = "Report",
-                priority = "NORMAL",
-                status = "Completed",
-                isAlarm = false,
-                itemType = ScheduleItem.TYPE_REPORT
-            )
-        }
+        val reportItems = viewModel.allReports.value
+            .filter { it.date == date }
+            .map { report ->
+                ScheduleItem(
+                    id = report.id,
+                    title = report.title,
+                    date = report.date ?: "",
+                    time = "Report",
+                    category = "Report",
+                    priority = "NORMAL",
+                    status = "Completed",
+                    isAlarm = false,
+                    itemType = ScheduleItem.TYPE_REPORT
+                )
+            }
 
-        val noteItem = viewModel.currentNote.value?.takeIf { it.note.isNotBlank() }?.let { note ->
-            ScheduleItem(
-                id = note.date,
-                title = note.note.take(50) + if (note.note.length > 50) "..." else "",
-                date = note.date,
-                time = "Note",
-                category = "Note",
-                priority = "NORMAL",
-                status = "Completed",
-                isAlarm = false,
-                itemType = ScheduleItem.TYPE_NOTE
-            )
-        }
+        val noteItem = viewModel.currentNote.value
+            ?.takeIf { it.note.isNotBlank() }
+            ?.let { note ->
+                ScheduleItem(
+                    id = note.date,
+                    title = note.note.take(60) + if (note.note.length > 60) "…" else "",
+                    date = note.date,
+                    time = "Note",
+                    category = "Note",
+                    priority = "NORMAL",
+                    status = "Completed",
+                    isAlarm = false,
+                    itemType = ScheduleItem.TYPE_NOTE
+                )
+            }
 
-        val allItems = (reminderItems + alarmItems + scheduleEntryItems + reportItems + listOfNotNull(noteItem)).sortedBy { it.time }
+        val allItems = (reminderItems + alarmItems + scheduleEntryItems + reportItems +
+                listOfNotNull(noteItem)).sortedBy { it.time }
+
         scheduleAdapter.submitList(allItems)
 
         val isEmpty = allItems.isEmpty()
-        emptyView.visibility = if (isEmpty) View.VISIBLE else View.GONE
-        recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
-    }
 
-    private fun listOfNotNull(item: ScheduleItem?): List<ScheduleItem> = if (item != null) listOf(item) else emptyList()
-
-    private fun loadNote() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.currentNote.collect { note ->
-                    tvNote.setText(note?.note ?: "")
-                }
-            }
+        if (isEmpty) {
+            // Empty state — show Add Note prompt
+            layoutEmpty.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+            tvEmptyMessage.text = "No events for this day.\nYou can add a note to remember something."
+            btnAddNote.visibility = View.VISIBLE
+        } else {
+            // Has content — show list; note button still accessible via edit icon if note exists
+            layoutEmpty.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+            // Show "Edit / Add Note" button below the list always
+            btnAddNote.visibility = View.VISIBLE
+            btnAddNote.text = if (currentNoteText.isNotBlank()) "Edit Note" else "Add Note"
         }
-        viewModel.loadNoteForDate(date)
     }
 
     private fun normalizeDate(dateStr: String?): String {

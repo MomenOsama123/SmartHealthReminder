@@ -1,6 +1,7 @@
 package com.example.smarthealthreminder.features.chatbot
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityChatbotBinding
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -88,6 +90,13 @@ class ChatBotActivity : AppCompatActivity() {
 
         adapter = ChatAdapter(messages)
         binding.chatRecyclerView.adapter = adapter
+
+        // Wire up bottom navigation
+        BottomNavHelper.setup(
+            activity = this,
+            bottomNavigation = binding.bottomNavigation,
+            selectedItemId = R.id.nav_ai
+        )
 
         // Initial send button state
         updateSendButtonState("")

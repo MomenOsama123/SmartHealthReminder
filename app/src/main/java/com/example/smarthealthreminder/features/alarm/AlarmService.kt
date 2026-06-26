@@ -36,6 +36,13 @@ class AlarmService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val alarmId = intent?.getStringExtra("alarm_id")
+        val label = intent?.getStringExtra("alarm_label") ?: "Alarm"
+        val alarmTime = intent?.getStringExtra("alarm_time")
+        val alarmCategory = intent?.getStringExtra("alarm_category")
+
+        // ⚠️ MUST call startForeground first when started via startForegroundService()
+        startForeground(NOTIFICATION_ID, buildNotification(label, alarmId ?: "", alarmTime, alarmCategory))
 
         // لو جه أمر stop — وقف كل حاجة فوراً
         if (intent?.action == ACTION_STOP) {
@@ -48,10 +55,11 @@ class AlarmService : Service() {
         }
 
         // لو الصوت شغال بالفعل، متشغلوش تاني
-        if (isRunning) return START_NOT_STICKY
+        if (isRunning) {
+            return START_NOT_STICKY
+        }
         isRunning = true
 
-        val alarmId = intent?.getStringExtra("alarm_id")
         if (alarmId.isNullOrBlank()) {
             stopForeground(true)
             stopSelf()
@@ -59,11 +67,6 @@ class AlarmService : Service() {
             return START_NOT_STICKY
         }
 
-        val label = intent.getStringExtra("alarm_label") ?: "Alarm"
-        val alarmTime = intent?.getStringExtra("alarm_time")
-        val alarmCategory = intent?.getStringExtra("alarm_category")
-
-        startForeground(NOTIFICATION_ID, buildNotification(label, alarmId, alarmTime, alarmCategory))
         playAlarmSound()
         startVibration()
 

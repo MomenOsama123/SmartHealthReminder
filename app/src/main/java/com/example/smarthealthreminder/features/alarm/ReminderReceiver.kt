@@ -1,16 +1,13 @@
-package com.example.smarthealthreminder.features.alarm
+package com.example.smarthealthreminder.alarm
 
-import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
@@ -28,61 +25,24 @@ class ReminderReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_SNOOZE = "com.example.smarthealthreminder.ACTION_SNOOZE"
-        const val ACTION_MARK_TAKEN = "com.example.smarthealthreminder.ACTION_MARK_TAKEN"
-        const val ACTION_DISMISS = "com.example.smarthealthreminder.ACTION_DISMISS"
-        const val CHANNEL_ID = "reminder_channel"
-        const val CHANNEL_NAME = "Health Reminders"
         const val EXTRA_REMINDER_ID = "reminder_id"
-        const val EXTRA_ALARM_ID = "alarm_id"
-        const val EXTRA_TITLE = "reminder_title"
-        const val EXTRA_DESCRIPTION = "reminder_description"
         const val EXTRA_TYPE = "reminder_type"
         const val EXTRA_VIBRATION = "vibration_enabled"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("REMINDER_RECEIVER", "onReceive action=${intent.action}, extras=${intent.extras?.keySet()?.toList()}")
-
         val settings = context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
         if (!settings.getBoolean(SettingsActivity.KEY_NOTIFICATIONS, true)) {
-            Log.d("REMINDER_RECEIVER", "Notifications disabled in settings")
             return
         }
 
-        when (intent.action) {
-            ACTION_SNOOZE -> handleSnooze(context, intent)
-            ACTION_MARK_TAKEN -> handleMarkTaken(context, intent)
-            ACTION_DISMISS -> dismissNotification(context, intent)
-            else -> handleAlarmTrigger(context, intent)
-        }
-    }
+        val reminderId = intent.getStringExtra("reminder_id") ?: return
+        val title = intent.getStringExtra("reminder_title") ?: "Health Reminder"
+        val description = intent.getStringExtra("reminder_description") ?: ""
+        val vibrationEnabled = intent.getBooleanExtra("vibration_enabled", false) &&
+            settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
-    private fun handleAlarmTrigger(context: Context, intent: Intent) {
-        val reminderId = intent.getStringExtra(EXTRA_REMINDER_ID)
-            ?: intent.getStringExtra(EXTRA_ALARM_ID)
-            ?: intent.getStringExtra("alarm_id")
-            ?: return
-
-        val title = intent.getStringExtra(EXTRA_TITLE)
-            ?: intent.getStringExtra("alarm_label")
-            ?: intent.getStringExtra("reminder_title")
-            ?: "Health Reminder"
-
-        val description = intent.getStringExtra(EXTRA_DESCRIPTION)
-            ?: intent.getStringExtra("alarm_time")
-            ?: intent.getStringExtra("reminder_description")
-            ?: ""
-
-        val type = intent.getStringExtra(EXTRA_TYPE)
-            ?: if (intent.hasExtra("alarm_id")) "alarm" else "reminder"
-
-        val vibrationEnabled = intent.getBooleanExtra(EXTRA_VIBRATION, false) &&
-                context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
-                    .getBoolean(SettingsActivity.KEY_VIBRATION, true)
-
-        Log.d("REMINDER_RECEIVER", "Showing notification: id=$reminderId, title=$title, type=$type")
-
-        showNotification(context, reminderId, title, description, type)
+        showNotification(context, reminderId, title, description)
 
         if (vibrationEnabled) {
             vibrate(context)
@@ -91,49 +51,24 @@ class ReminderReceiver : BroadcastReceiver() {
 
     private fun showNotification(
         context: Context,
-        id: String,
+        reminderId: String,
         title: String,
-        description: String,
-        type: String
+        description: String
     ) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channelId = "reminder_channel"
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                CHANNEL_ID,
-                CHANNEL_NAME,
+                channelId,
+                "Health Reminders",
                 NotificationManager.IMPORTANCE_HIGH
             )
             channel.description = "Notifications for health reminders"
             channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(0, 500, 200, 500)
-            channel.setBypassDnd(true)
-            notificationManager.createNotificationChannel(channel)
+            notificationManager.createNotificationChannel(channel)  // ← جوه الـ if
         }
-
-        val contentIntent = Intent(context, DashboardActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("OPEN_FROM_NOTIFICATION", true)
-            putExtra(EXTRA_REMINDER_ID, id)
-        }
-        val contentPendingIntent = PendingIntent.getActivity(
-            context,
-            id.hashCode(),
-            contentIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val snoozeIntent = Intent(context, ReminderReceiver::class.java).apply {
-            action = ACTION_SNOOZE
-            putExtra(EXTRA_REMINDER_ID, id)
-            putExtra(EXTRA_TYPE, type)
-        }
-        val snoozePendingIntent = PendingIntent.getBroadcast(
-            context,
-            id.hashCode() + 1000,
-            snoozeIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
 
         val takenIntent = Intent(context, ReminderReceiver::class.java).apply {
             action = ACTION_MARK_TAKEN

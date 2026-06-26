@@ -5,10 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.example.smarthealthreminder.databinding.BottomSheetQuickActionsBinding
-import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.ui.DashboardActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
@@ -30,12 +29,22 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.actionAddReminder.setOnClickListener {
-            startActivity(Intent(requireContext(), AddReminderActivity::class.java))
+            startActivity(
+                Intent(requireContext(), MainActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REMINDERS)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+            )
             dismiss()
         }
 
         binding.actionAddAlarm.setOnClickListener {
-            Toast.makeText(requireContext(), "Add Alarm - coming soon", Toast.LENGTH_SHORT).show()
+            startActivity(
+                Intent(requireContext(), MainActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_ALARMS)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+            )
             dismiss()
         }
 
