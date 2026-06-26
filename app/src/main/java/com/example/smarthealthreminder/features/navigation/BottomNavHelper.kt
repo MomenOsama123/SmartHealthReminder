@@ -1,7 +1,6 @@
 package com.example.smarthealthreminder.features.navigation
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
@@ -75,21 +74,15 @@ object BottomNavHelper {
     }
 
     private fun openDashboard(activity: Activity) {
-        // ✅ Check if logged in
-        val sharedPref = activity.getSharedPreferences("HealthSyncPrefs", Context.MODE_PRIVATE)
-        val firebaseId = sharedPref.getString("FIREBASE_ID", "") ?: ""
-
-        if (firebaseId.isEmpty()) {
-            // Not logged in → go to Login
-            val intent = Intent(activity, SignInActivity::class.java)
-            activity.startActivity(intent)
+        // Check live Firebase session — not just cached UID
+        val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            activity.startActivity(Intent(activity, SignInActivity::class.java))
             activity.finish()
             return
         }
 
         if (activity is DashboardActivity) return
-
-        // ✅ Simple start without flags
         activity.startActivity(Intent(activity, DashboardActivity::class.java))
     }
 }

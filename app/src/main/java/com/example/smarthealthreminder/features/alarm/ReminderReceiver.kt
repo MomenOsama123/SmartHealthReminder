@@ -14,9 +14,13 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
+import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.ui.DashboardActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 
@@ -34,7 +38,6 @@ class ReminderReceiver : BroadcastReceiver() {
         const val EXTRA_DESCRIPTION = "reminder_description"
         const val EXTRA_TYPE = "reminder_type"
         const val EXTRA_VIBRATION = "vibration_enabled"
-        const val SNOOZE_MINUTES = 15
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -155,6 +158,8 @@ class ReminderReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val snoozeMinutes = getSnoozeMinutesForType(context, type)
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("💊 $title")
             .setContentText(description.ifEmpty { "Time for your health reminder!" })
@@ -164,7 +169,7 @@ class ReminderReceiver : BroadcastReceiver() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setContentIntent(contentPendingIntent)
-            .addAction(R.drawable.ic_snooze, "Snooze ${SNOOZE_MINUTES}m", snoozePendingIntent)
+            .addAction(R.drawable.ic_snooze, "Snooze ${snoozeMinutes}m", snoozePendingIntent)
             .addAction(R.drawable.ic_check, "Taken", takenPendingIntent)
             .addAction(R.drawable.ic_close, "Dismiss", dismissPendingIntent)
             .setDeleteIntent(dismissPendingIntent)
@@ -181,8 +186,10 @@ class ReminderReceiver : BroadcastReceiver() {
 
         dismissNotification(context, intent)
 
+        val snoozeMinutes = getSnoozeMinutesForType(context, type)
+
         val calendar = Calendar.getInstance().apply {
-            add(Calendar.MINUTE, SNOOZE_MINUTES)
+            add(Calendar.MINUTE, snoozeMinutes)
         }
         val newHour = calendar.get(Calendar.HOUR_OF_DAY)
         val newMinute = calendar.get(Calendar.MINUTE)
@@ -194,6 +201,10 @@ class ReminderReceiver : BroadcastReceiver() {
         val dbHelper = DatabaseHelper(context)
 
         if (type == "alarm") {
+            CoroutineScope(Dispatchers.IO).launch {
+                AppDatabase.getDatabase(context).alarmDao().updateLastTriggeredStatus(id, "Snoozed")
+            }
+
             val success = dbHelper.snoozeAlarmByTime(id, newTime, newAmPm)
             if (!success) {
                 Log.e("REMINDER_RECEIVER", "Failed to update database for snooze")
@@ -269,7 +280,9 @@ class ReminderReceiver : BroadcastReceiver() {
 
         when (type) {
             "alarm" -> {
-                dbHelper.markAlarmAsTaken(id)
+                CoroutineScope(Dispatchers.IO).launch {
+                    AppDatabase.getDatabase(context).alarmDao().updateLastTriggeredStatus(id, "Completed")
+                }
                 AlarmHelper(context).cancelAlarm(id)
             }
             "reminder" -> {
@@ -285,6 +298,14 @@ class ReminderReceiver : BroadcastReceiver() {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(id.hashCode())
         Log.d("REMINDER_RECEIVER", "Notification dismissed: $id")
+    }
+
+    private fun getSnoozeMinutesForType(context: Context, type: String): Int {
+        return if (type == "alarm") {
+            SettingsActivity.getAlarmSnoozeMinutes(context)
+        } else {
+            SettingsActivity.getReminderSnoozeMinutes(context)
+        }
     }
 
     private fun vibrate(context: Context) {

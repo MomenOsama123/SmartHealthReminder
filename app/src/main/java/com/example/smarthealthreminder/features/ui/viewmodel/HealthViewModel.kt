@@ -74,6 +74,9 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
     fun deleteAlarm(alarm: AlarmEntity) = viewModelScope.launch { repository.deleteAlarm(alarm) }
     fun deleteAlarmById(id: String) = viewModelScope.launch { repository.deleteAlarmById(id) }
     fun toggleAlarm(id: String, isActive: Boolean) = viewModelScope.launch { repository.toggleAlarmStatus(id, isActive) }
+    fun markAlarmCompleted(id: String) = viewModelScope.launch { repository.markAlarmCompleted(id) }
+    fun markAlarmSnoozed(id: String) = viewModelScope.launch { repository.markAlarmSnoozed(id) }
+    fun resetAlarmToPending(id: String) = viewModelScope.launch { repository.resetAlarmToPending(id) }
 
     // Reminder Operations
     fun addReminder(reminder: ReminderEntity) = viewModelScope.launch { repository.insertReminder(reminder) }

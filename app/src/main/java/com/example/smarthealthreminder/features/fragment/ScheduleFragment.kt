@@ -27,6 +27,7 @@ import com.example.smarthealthreminder.features.model.ScheduleItem
 import com.example.smarthealthreminder.features.schedule.details.DayDetailsActivity
 import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -119,7 +120,9 @@ class ScheduleFragment : Fragment() {
     }
 
     private suspend fun collectRemindersAndAlarms() {
-        viewModel.allReminders.collect { reminders ->
+        combine(viewModel.allReminders, viewModel.allAlarms) { reminders, alarms ->
+            reminders to alarms
+        }.collect { (reminders, alarms) ->
             val reminderItems = reminders.map {
                 ScheduleItem(
                     id = it.id,
@@ -135,7 +138,7 @@ class ScheduleFragment : Fragment() {
                     itemType = ScheduleItem.TYPE_REMINDER
                 )
             }
-            val alarmItems = viewModel.allAlarms.value.filter { it.isActive }.map {
+            val alarmItems = alarms.filter { it.isActive }.map {
                 ScheduleItem(
                     id = it.id,
                     title = it.label,
@@ -143,7 +146,7 @@ class ScheduleFragment : Fragment() {
                     time = "${it.time} ${it.amPm}",
                     category = it.category ?: "Alarm",
                     priority = "NORMAL",
-                    status = "Pending",
+                    status = it.lastTriggeredStatus,
                     isAlarm = true,
                     itemType = ScheduleItem.TYPE_ALARM
                 )

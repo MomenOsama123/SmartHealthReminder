@@ -13,16 +13,17 @@ import com.google.firebase.auth.FirebaseAuth
 class WelcomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWelcomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()//test
-        
+        installSplashScreen()
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
+            return
         }
 
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityWelcomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

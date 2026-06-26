@@ -15,7 +15,9 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.NumberPicker
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,11 @@ class SettingsActivity : AppCompatActivity() {
         const val KEY_NOTIFICATIONS = "notifications_enabled"
         const val KEY_VIBRATION = "vibration_enabled"
         const val KEY_EARLY_REMINDERS = "early_reminders_enabled"
+        const val KEY_ALARM_SNOOZE_MINUTES = "alarm_snooze_minutes"
+        const val KEY_REMINDER_SNOOZE_MINUTES = "reminder_snooze_minutes"
+        const val DEFAULT_SNOOZE_MINUTES = 10
+        const val MIN_SNOOZE_MINUTES = 1
+        const val MAX_SNOOZE_MINUTES = 120
         const val KEY_DARK_MODE = "dark_mode_enabled"
         const val KEY_THEME_MODE = "theme_mode"
         const val THEME_LIGHT = "light"
@@ -56,6 +63,18 @@ class SettingsActivity : AppCompatActivity() {
                 else -> AppCompatDelegate.MODE_NIGHT_NO
             }
         }
+
+        fun getAlarmSnoozeMinutes(context: Context): Int {
+            return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getInt(KEY_ALARM_SNOOZE_MINUTES, DEFAULT_SNOOZE_MINUTES)
+                .coerceIn(MIN_SNOOZE_MINUTES, MAX_SNOOZE_MINUTES)
+        }
+
+        fun getReminderSnoozeMinutes(context: Context): Int {
+            return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+                .getInt(KEY_REMINDER_SNOOZE_MINUTES, DEFAULT_SNOOZE_MINUTES)
+                .coerceIn(MIN_SNOOZE_MINUTES, MAX_SNOOZE_MINUTES)
+        }
     }
 
     private val prefs by lazy {
@@ -66,6 +85,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var switchVibration: SwitchCompat
     private lateinit var switchEarlyReminders: SwitchCompat
     private lateinit var themeModeSpinner: Spinner
+    private lateinit var tvAlarmSnoozeValue: TextView
+    private lateinit var tvReminderSnoozeValue: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(getSavedNightMode(this))
@@ -91,6 +112,8 @@ class SettingsActivity : AppCompatActivity() {
         switchVibration = findViewById(R.id.switch_vibration)
         switchEarlyReminders = findViewById(R.id.switch_early_reminders)
         themeModeSpinner = findViewById(R.id.spinner_theme_mode)
+        tvAlarmSnoozeValue = findViewById(R.id.tv_alarm_snooze_value)
+        tvReminderSnoozeValue = findViewById(R.id.tv_reminder_snooze_value)
     }
 
     private fun loadValues() {
@@ -103,6 +126,16 @@ class SettingsActivity : AppCompatActivity() {
             listOf("Light", "Dark", "Same as device")
         )
         themeModeSpinner.setSelection(themeModeToPosition(prefs.getString(KEY_THEME_MODE, THEME_LIGHT)))
+        updateSnoozeValueLabels()
+    }
+
+    private fun updateSnoozeValueLabels() {
+        tvAlarmSnoozeValue.text = formatSnoozeMinutes(getAlarmSnoozeMinutes(this))
+        tvReminderSnoozeValue.text = formatSnoozeMinutes(getReminderSnoozeMinutes(this))
+    }
+
+    private fun formatSnoozeMinutes(minutes: Int): String {
+        return getString(R.string.settings_snooze_minutes_value, minutes)
     }
 
     private fun setupListeners() {
@@ -139,6 +172,24 @@ class SettingsActivity : AppCompatActivity() {
 
         findViewById<LinearLayout>(R.id.row_exact_alarm).setOnClickListener {
             openExactAlarmSettings()
+        }
+
+        findViewById<LinearLayout>(R.id.row_alarm_snooze).setOnClickListener {
+            showSnoozeDurationDialog(
+                title = getString(R.string.settings_alarm_snooze_title),
+                currentMinutes = getAlarmSnoozeMinutes(this),
+                prefKey = KEY_ALARM_SNOOZE_MINUTES,
+                valueView = tvAlarmSnoozeValue
+            )
+        }
+
+        findViewById<LinearLayout>(R.id.row_reminder_snooze).setOnClickListener {
+            showSnoozeDurationDialog(
+                title = getString(R.string.settings_reminder_snooze_title),
+                currentMinutes = getReminderSnoozeMinutes(this),
+                prefKey = KEY_REMINDER_SNOOZE_MINUTES,
+                valueView = tvReminderSnoozeValue
+            )
         }
 
         findViewById<LinearLayout>(R.id.row_profile).setOnClickListener {
@@ -210,6 +261,36 @@ class SettingsActivity : AppCompatActivity() {
         } else {
             Toast.makeText(this, "Exact alarm permission is already available", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun showSnoozeDurationDialog(
+        title: String,
+        currentMinutes: Int,
+        prefKey: String,
+        valueView: TextView
+    ) {
+        val picker = NumberPicker(this).apply {
+            minValue = MIN_SNOOZE_MINUTES
+            maxValue = MAX_SNOOZE_MINUTES
+            value = currentMinutes
+            wrapSelectorWheel = false
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle(title)
+            .setView(picker)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.save) { _, _ ->
+                val minutes = picker.value.coerceIn(MIN_SNOOZE_MINUTES, MAX_SNOOZE_MINUTES)
+                prefs.edit().putInt(prefKey, minutes).apply()
+                valueView.text = formatSnoozeMinutes(minutes)
+                Toast.makeText(
+                    this,
+                    getString(R.string.settings_snooze_saved, minutes),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+            .show()
     }
 
     private fun confirmLogout() {

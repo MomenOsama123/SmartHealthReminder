@@ -20,6 +20,7 @@ import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.alarm.ReminderReceiver
+import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 
@@ -279,7 +280,10 @@ class DashboardActivity : AppCompatActivity() {
 
             Toast.makeText(
                 this,
-                "Reminder snoozed for 15 minutes",
+                getString(
+                    R.string.snoozed_for_minutes,
+                    SettingsActivity.getReminderSnoozeMinutes(this)
+                ),
                 Toast.LENGTH_SHORT
             ).show()
 
@@ -471,7 +475,14 @@ class DashboardActivity : AppCompatActivity() {
         }
         sendBroadcast(snoozeIntent)
 
-        Toast.makeText(this, "Snoozed for 15 minutes", Toast.LENGTH_SHORT).show()
+        Toast.makeText(
+            this,
+            getString(
+                R.string.snoozed_for_minutes,
+                SettingsActivity.getAlarmSnoozeMinutes(this)
+            ),
+            Toast.LENGTH_SHORT
+        ).show()
         loadDashboardData()
     }
 
@@ -625,7 +636,10 @@ class DashboardActivity : AppCompatActivity() {
 
                             Toast.makeText(
                                 this,
-                                "Reminder snoozed for 15 minutes",
+                                getString(
+                                    R.string.snoozed_for_minutes,
+                                    SettingsActivity.getReminderSnoozeMinutes(this)
+                                ),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }

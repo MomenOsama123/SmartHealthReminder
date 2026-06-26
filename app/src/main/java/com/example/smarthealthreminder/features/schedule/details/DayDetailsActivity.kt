@@ -153,7 +153,7 @@ class DayDetailsActivity : AppCompatActivity() {
                 time = "${alarm.time} ${alarm.amPm}",
                 category = alarm.category ?: "Alarm",
                 priority = "NORMAL",
-                status = "Pending",
+                status = alarm.lastTriggeredStatus,
                 isAlarm = true,
                 itemType = ScheduleItem.TYPE_ALARM
             )

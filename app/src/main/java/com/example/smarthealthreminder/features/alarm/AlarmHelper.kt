@@ -170,18 +170,20 @@ class AlarmHelper(private val context: Context) {
         Log.d("ALARM_HELPER", "Cancelled alarm: $alarmId")
     }
 
-    fun snoozeAlarm(alarm: Alarm, minutes: Int = 15): Boolean {
+    fun snoozeAlarm(alarm: Alarm, minutes: Int = 10): Boolean {
         if (!canScheduleExactAlarm()) return false
 
-        // Cancel old alarm first
+        // Cancel both the original alarm and any previous snooze pending intent
         cancelAlarm(alarm)
+        cancelSnoozePendingIntent(alarm.id)
 
-        val intent = Intent(context, ReminderReceiver::class.java).apply {
-            putExtra(ReminderReceiver.EXTRA_ALARM_ID, alarm.id)
-            putExtra(ReminderReceiver.EXTRA_TITLE, alarm.label)
-            putExtra(ReminderReceiver.EXTRA_DESCRIPTION, "Snoozed - ${formatDisplayTime(alarm.time, alarm.amPm)}")
-            putExtra(ReminderReceiver.EXTRA_TYPE, "alarm")
-            putExtra(ReminderReceiver.EXTRA_VIBRATION, alarm.vibrationEnabled)
+        // Snooze must use AlarmReceiver so AlarmService is started and the
+        // ringing screen appears again — ReminderReceiver only shows a notification
+        val intent = Intent(context, com.example.smarthealthreminder.alarm.AlarmReceiver::class.java).apply {
+            putExtra("alarm_id", alarm.id)
+            putExtra("alarm_label", alarm.label)
+            putExtra("alarm_time", formatDisplayTime(alarm.time, alarm.amPm))
+            putExtra("alarm_category", alarm.category)
             putExtra("is_snooze", true)
         }
 
@@ -192,7 +194,7 @@ class AlarmHelper(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val snoozeTime = System.currentTimeMillis() + (minutes * 60 * 1000)
+        val snoozeTime = System.currentTimeMillis() + (minutes * 60 * 1000L)
 
         Log.d("ALARM_HELPER", "Snoozing alarm ${alarm.id} for $minutes minutes")
 
@@ -203,6 +205,19 @@ class AlarmHelper(private val context: Context) {
         )
 
         return true
+    }
+
+    /** Cancels only the snooze PendingIntent for the given alarm ID. */
+    fun cancelSnoozePendingIntent(alarmId: String?) {
+        val intent = Intent(context, com.example.smarthealthreminder.alarm.AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            (alarmId ?: "0").hashCode() + 1000,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+        pendingIntent.cancel()
     }
 
     fun canScheduleExactAlarm(): Boolean {
