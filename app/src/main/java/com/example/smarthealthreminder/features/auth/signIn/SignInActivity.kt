@@ -13,8 +13,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.main.MainWelcomeActivity
-import com.example.smarthealthreminder.data.DatabaseHelper
-import com.example.smarthealthreminder.model_d.User
+import com.example.smarthealthreminder.features.data_d.DatabaseHelper
+import com.example.smarthealthreminder.features.model_d.User
 
 class SignInActivity : AppCompatActivity() {
 
@@ -77,7 +77,6 @@ class SignInActivity : AppCompatActivity() {
 
                             if (existingUser == null) {
                                 val user = User(
-                                    id = 0,
                                     firebaseId = firebaseId,
                                     name = firebaseUser?.displayName ?: "User",
                                     email = firebaseUser?.email ?: email
@@ -89,10 +88,7 @@ class SignInActivity : AppCompatActivity() {
                             Snackbar.make(binding.root, "Welcome Back", Snackbar.LENGTH_SHORT).show()
 
                             // ✅ روح Dashboard من غير flags
-                            val intent = Intent(this, MainWelcomeActivity::class.java)
-                            startActivity(intent)
-                            finish()
-
+                            checkProfileCompletion(firebaseId)
                         } else {
                             Log.e(TAG, "Login failed: ${task.exception?.message}")
                             Snackbar.make(
@@ -152,7 +148,6 @@ class SignInActivity : AppCompatActivity() {
 
                 if (existingUser == null) {
                     val user = User(
-                        id = 0,
                         firebaseId = firebaseId,
                         name = firebaseUser?.displayName ?: "User",
                         email = firebaseUser?.email ?: ""
@@ -164,10 +159,7 @@ class SignInActivity : AppCompatActivity() {
                 Toast.makeText(this, "Successfully logged in via Google!", Toast.LENGTH_LONG).show()
 
                 // ✅ روح Dashboard من غير flags
-                val intent = Intent(this, MainWelcomeActivity::class.java)
-                startActivity(intent)
-                finish()
-
+                checkProfileCompletion(firebaseId)
             } else {
                 Log.e(TAG, "Google login failed: $errorMessage")
                 Toast.makeText(
@@ -210,5 +202,49 @@ class SignInActivity : AppCompatActivity() {
         }
 
         return isValid
+    }
+
+    private fun checkProfileCompletion(uid: String) {
+        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { document ->
+                // Robust check: try multiple field names and object mapping
+                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?: 
+                                       document.getBoolean("profileCompleted") ?: 
+                                       (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                
+                // Fallback to local storage if Firestore is uncertain
+                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .getBoolean("isProfileCompleted", false)
+                
+                val isCompleted = firestoreCompleted || localCompleted
+                
+                // Sync local storage if Firestore confirms completion
+                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isProfileCompleted", isCompleted)
+                    .apply()
+
+                val intent = if (isCompleted) {
+                    Intent(this, MainWelcomeActivity::class.java)
+                } else {
+                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
+                }
+                startActivity(intent)
+                finish()
+            }
+            .addOnFailureListener {
+                // Fallback to local on network error
+                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .getBoolean("isProfileCompleted", false)
+                
+                val intent = if (localCompleted) {
+                    Intent(this, MainWelcomeActivity::class.java)
+                } else {
+                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
+                }
+                startActivity(intent)
+                finish()
+            }
     }
 }

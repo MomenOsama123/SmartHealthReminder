@@ -1,10 +1,12 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
+import android.app.DatePickerDialog
 import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -13,10 +15,30 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.WindowCompat
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.model_d.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Calendar
 
 
 class ProfileActivity : AppCompatActivity() {
+
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val db by lazy { FirebaseFirestore.getInstance() }
+    private val localDb by lazy { DatabaseHelper(this) }
+
+    private lateinit var fullNameInput: EditText
+    private lateinit var dobInput: EditText
+    private lateinit var genderInput: EditText
+    private lateinit var bloodTypeInput: EditText
+    private lateinit var weightInput: EditText
+    private lateinit var heightInput: EditText
+    private lateinit var diseasesInput: EditText
+    private lateinit var allergiesInput: EditText
+    private lateinit var emergencyContactInput: EditText
+    private lateinit var userNameDisplay: TextView
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,69 +47,140 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // ربط الكلاس بملف الـ XML بتاع الواجهة
         setContentView(R.layout.activity_profile_info)
 
-        // 1. تعريف العناصر (Views) اللي هنتعامل معاها من الـ XML
-        val btnBack = findViewById<ImageView>(R.id.btn_back)
-        val btnSave = findViewById<Button>(R.id.save_btn)
-        val genderInput = findViewById<EditText>(R.id.gender_input)
-        val bloodTypeInput = findViewById<EditText>(R.id.blood_type_input)
+        initViews()
+        loadUserData()
+        setupListeners()
+    }
 
-        // 2. تشغيل زر الرجوع (Top Bar)
-        btnBack.setOnClickListener {
-            finish() // دي بتقفل الصفحة الحالية وترجع للصفحة اللي قبلها
+    private fun initViews() {
+        fullNameInput = findViewById(R.id.full_name_input)
+        dobInput = findViewById(R.id.dob_input)
+        genderInput = findViewById(R.id.gender_input)
+        bloodTypeInput = findViewById(R.id.blood_type_input)
+        weightInput = findViewById(R.id.weight_input)
+        heightInput = findViewById(R.id.height_input)
+        diseasesInput = findViewById(R.id.diseases_input)
+        allergiesInput = findViewById(R.id.allergies_input)
+        emergencyContactInput = findViewById(R.id.emergency_contact_input)
+        userNameDisplay = findViewById(R.id.tv_user_name)
+    }
+
+    private fun loadUserData() {
+        val uid = auth.currentUser?.uid ?: return
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val user = document.toObject(User::class.java)
+                    user?.let {
+                        fullNameInput.setText(it.name)
+                        userNameDisplay.text = it.name
+                        dobInput.setText(it.dob)
+                        genderInput.setText(it.gender)
+                        bloodTypeInput.setText(it.bloodType)
+                        weightInput.setText(it.weight)
+                        heightInput.setText(it.height)
+                        diseasesInput.setText(it.chronicDiseases)
+                        allergiesInput.setText(it.allergies)
+                        emergencyContactInput.setText(it.emergencyContact)
+                    }
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to load profile: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun setupListeners() {
+        findViewById<ImageView>(R.id.btn_back).setOnClickListener {
+            finish()
         }
 
-        // 3. تشغيل أيقونة الدارك مود
-        // 4. تشغيل قائمة اختيار النوع (Gender)
+        dobInput.setOnClickListener {
+            showDatePickerDialog(dobInput)
+        }
+
         genderInput.setOnClickListener {
             showGenderDialog(genderInput)
         }
 
-        // 5. تشغيل قائمة اختيار فصيلة الدم (Blood Type)
         bloodTypeInput.setOnClickListener {
             showBloodTypeDialog(bloodTypeInput)
         }
 
-        // 6. تشغيل زر حفظ البيانات
-        btnSave.setOnClickListener {
-            // هنا تقدر تجيب الداتا من الحقول وتحفظها في الداتا بيز
-            Toast.makeText(this, "saved", Toast.LENGTH_LONG).show()
+        findViewById<Button>(R.id.save_btn).setOnClickListener {
+            saveUserData()
         }
     }
 
-    // ================= الدوال المساعدة (Helper Functions) =================
-
-    // دالة لإظهار نافذة اختيار النوع
-    private fun showGenderDialog(editText: EditText) {
-        val options = arrayOf("Female", "Male", "Non-Binary", "Other")
-
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select Gender")
-        builder.setItems(options) { dialog, which ->
-            // لما المستخدم يختار، بنحط الاختيار جوه الحقل
-            editText.setText(options[which])
-        }
-        builder.show()
-    }
-
-    // دالة لإظهار نافذة اختيار فصيلة الدم
-    private fun showBloodTypeDialog(editText: EditText) {
-        val options = arrayOf(
-            "A Positive (A+)", "A Negative (A-)",
-            "B Positive (B+)", "B Negative (B-)",
-            "O Positive (O+)", "O Negative (O-)",
-            "AB Positive (AB+)", "AB Negative (AB-)"
+    private fun saveUserData() {
+        val uid = auth.currentUser?.uid ?: return
+        
+        val updatedUser = User(
+            firebaseId = uid,
+            name = fullNameInput.text.toString().trim(),
+            email = auth.currentUser?.email ?: "",
+            dob = dobInput.text.toString().trim(),
+            gender = genderInput.text.toString().trim(),
+            bloodType = bloodTypeInput.text.toString().trim(),
+            weight = weightInput.text.toString().trim(),
+            height = heightInput.text.toString().trim(),
+            chronicDiseases = diseasesInput.text.toString().trim(),
+            allergies = allergiesInput.text.toString().trim(),
+            emergencyContact = emergencyContactInput.text.toString().trim(),
+            isProfileCompleted = true
         )
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Select Blood Type")
-        builder.setItems(options) { dialog, which ->
-            // لما المستخدم يختار، بنحط الاختيار جوه الحقل
-            editText.setText(options[which])
-        }
-        builder.show()
+        db.collection("users").document(uid)
+            .set(updatedUser)
+            .addOnSuccessListener {
+                // Sync with Local Database
+                val existingLocalUser = localDb.getUserByFirebaseId(uid)
+                if (existingLocalUser != null) {
+                    localDb.updateUser(updatedUser)
+                } else {
+                    localDb.insertUser(updatedUser)
+                }
+
+                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
+                userNameDisplay.text = updatedUser.name
+                finish()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Update failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
     }
 
+    private fun showDatePickerDialog(editText: EditText) {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+        DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+            val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
+            editText.setText(formattedDate)
+        }, year, month, day).show()
+    }
+
+    private fun showGenderDialog(editText: EditText) {
+        val options = arrayOf("Female", "Male", "Non-Binary", "Other")
+        AlertDialog.Builder(this)
+            .setTitle("Select Gender")
+            .setItems(options) { _, which ->
+                editText.setText(options[which])
+            }
+            .show()
+    }
+
+    private fun showBloodTypeDialog(editText: EditText) {
+        val options = arrayOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
+        AlertDialog.Builder(this)
+            .setTitle("Select Blood Type")
+            .setItems(options) { _, which ->
+                editText.setText(options[which])
+            }
+            .show()
+    }
 }

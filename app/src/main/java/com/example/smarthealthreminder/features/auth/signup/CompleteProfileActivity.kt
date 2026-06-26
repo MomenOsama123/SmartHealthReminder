@@ -8,12 +8,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.databinding.ActivityCompleteProfileBinding
+import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.main.MainWelcomeActivity
+import com.example.smarthealthreminder.features.model_d.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 
 class CompleteProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCompleteProfileBinding
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val db by lazy { FirebaseFirestore.getInstance() }
+    private val localDb by lazy { DatabaseHelper(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,15 +66,15 @@ class CompleteProfileActivity : AppCompatActivity() {
             saveProfileAndNavigate()
         }
 
-        // 5. Skip button logic
-        binding.btnSkip.setOnClickListener {
-            Toast.makeText(this, "Profile setup skipped", Toast.LENGTH_SHORT).show()
-            navigateToMain()
-        }
+        // Handle back press to force profile completion
+        onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Toast.makeText(this@CompleteProfileActivity, "Please complete your profile to continue", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun setupAutoScroll() {
-        // Setup auto-scroll logic for the bottom fields
         val bottomFields = listOf(
             binding.etWeight,
             binding.etHeight,
@@ -88,14 +95,79 @@ class CompleteProfileActivity : AppCompatActivity() {
     }
 
     private fun saveProfileAndNavigate() {
-        // Here you should save the user's data to your database (e.g., Room or Firebase)
+        val uid = auth.currentUser?.uid ?: return
+        val fullName = binding.etFullName.text.toString().trim()
+        val dob = binding.etDob.text.toString().trim()
+        val gender = binding.tvGender.text.toString().trim()
+        val bloodType = binding.tvBloodType.text.toString().trim()
+        val weight = binding.etWeight.text.toString().trim()
+        val height = binding.etHeight.text.toString().trim()
         
-        // Save in SharedPreferences that the profile is completed
-        val sharedPreferences = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean("isProfileCompleted", true).apply()
+        // Optional fields
+        val chronicDiseases = binding.etChronicDiseases.text.toString().trim()
+        val allergies = binding.etAllergies.text.toString().trim()
+        val emergencyContact = binding.etEmergencyContact.text.toString().trim()
 
-        Toast.makeText(this, "Profile Saved!", Toast.LENGTH_SHORT).show()
-        navigateToMain()
+        if (fullName.isEmpty() || dob == "mm/dd/yyyy" || gender == "Gender" || bloodType == "Blood Type" || weight.isEmpty() || height.isEmpty()) {
+            Toast.makeText(this, "Please fill all mandatory fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val userMap = hashMapOf(
+            "firebaseId" to uid,
+            "name" to fullName,
+            "email" to auth.currentUser?.email.orEmpty(),
+            "dob" to dob,
+            "gender" to gender,
+            "bloodType" to bloodType,
+            "weight" to weight,
+            "height" to height,
+            "chronicDiseases" to chronicDiseases,
+            "allergies" to allergies,
+            "emergencyContact" to emergencyContact,
+            "isProfileCompleted" to true
+        )
+
+        binding.btnContinue.isEnabled = false
+        db.collection("users").document(uid)
+            .set(userMap)
+            .addOnSuccessListener {
+                // Sync with Local Database
+                val userProfile = User(
+                    firebaseId = uid,
+                    name = fullName,
+                    email = auth.currentUser?.email.orEmpty(),
+                    dob = dob,
+                    gender = gender,
+                    bloodType = bloodType,
+                    weight = weight,
+                    height = height,
+                    chronicDiseases = chronicDiseases,
+                    allergies = allergies,
+                    emergencyContact = emergencyContact,
+                    isProfileCompleted = true
+                )
+                
+                val existingLocalUser = localDb.getUserByFirebaseId(uid)
+                if (existingLocalUser != null) {
+                    localDb.updateUser(userProfile)
+                } else {
+                    localDb.insertUser(userProfile)
+                }
+
+                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isProfileCompleted", true)
+                    .apply()
+                
+                Toast.makeText(this, "Profile Saved!", Toast.LENGTH_SHORT).show()
+                navigateToMain()
+            }
+            .addOnFailureListener { e ->
+                binding.btnContinue.isEnabled = true
+                Toast.makeText(this, "Failed to save profile: ${e.message}", Toast.LENGTH_SHORT).show()
+            println("--------------------------------Failed to save profile: ${e.message}")
+            }
     }
 
     private fun showDatePickerDialog(editText: EditText) {

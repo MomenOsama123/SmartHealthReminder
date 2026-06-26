@@ -82,6 +82,7 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/yehia_abdo"
@@ -263,15 +264,60 @@
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/white"
-                android:hint="None reported. Mild hypertension managed by diet."
+                android:hint="None reported."
                 android:textColor="@color/text_dark"
                 android:inputType="textMultiLine"
                 android:gravity="top|start"
                 android:padding="16dp"
                 android:drawableStart="@drawable/outline_check_circle"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
-                tools:ignore="HardcodedText" />
+                android:drawableTint="@color/primary_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Allergies"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp" />
+            <EditText
+                android:id="@+id/allergies_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="None reported."
+                android:textColor="@color/text_dark"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:padding="16dp"
+                android:drawableStart="@drawable/ic_warning"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Emergency Contact"
+                android:textColor="@color/text_dark"
+                android:layout_marginStart="4dp" />
+            <EditText
+                android:id="@+id/emergency_contact_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/white"
+                android:hint="Phone number"
+                android:textColor="@color/text_dark"
+                android:inputType="phone"
+                android:paddingStart="16dp"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green" />
 
             <Button
                 android:id="@+id/save_btn"

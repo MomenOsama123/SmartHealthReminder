@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.model_d
+package com.example.smarthealthreminder.features.model_d
 
 data class Medication(
     val id: Int = 0,

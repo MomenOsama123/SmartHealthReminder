@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.alarm.ReminderReceiver
-import com.example.smarthealthreminder.data.DatabaseHelper
+import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository

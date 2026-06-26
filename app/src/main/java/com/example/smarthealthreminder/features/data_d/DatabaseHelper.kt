@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.data
+package com.example.smarthealthreminder.features.data_d
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.smarthealthreminder.features.model.Alarm
 import com.example.smarthealthreminder.features.model.Reminder
-import com.example.smarthealthreminder.model_d.User
-import com.example.smarthealthreminder.model_d.Medication
-import com.example.smarthealthreminder.model_d.DailyDose
-import com.example.smarthealthreminder.model_d.DoseStatus
-import com.example.smarthealthreminder.model_d.HealthMetric
-import com.example.smarthealthreminder.model_d.MetricType
-import com.example.smarthealthreminder.model_d.MedicationStats
+import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.model_d.Medication
+import com.example.smarthealthreminder.features.model_d.DailyDose
+import com.example.smarthealthreminder.features.model_d.DoseStatus
+import com.example.smarthealthreminder.features.model_d.HealthMetric
+import com.example.smarthealthreminder.features.model_d.MetricType
+import com.example.smarthealthreminder.features.model_d.MedicationStats
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,6 +28,15 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 firebase_id TEXT,
                 name TEXT NOT NULL,
                 email TEXT,
+                dob TEXT,
+                gender TEXT,
+                blood_type TEXT,
+                weight TEXT,
+                height TEXT,
+                chronic_diseases TEXT,
+                allergies TEXT,
+                emergency_contact TEXT,
+                is_profile_completed INTEGER DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         """)
@@ -131,10 +140,39 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
             put("firebase_id", user.firebaseId)
             put("name", user.name)
             put("email", user.email)
+            put("dob", user.dob)
+            put("gender", user.gender)
+            put("blood_type", user.bloodType)
+            put("weight", user.weight)
+            put("height", user.height)
+            put("chronic_diseases", user.chronicDiseases)
+            put("allergies", user.allergies)
+            put("emergency_contact", user.emergencyContact)
+            put("is_profile_completed", if (user.isProfileCompleted) 1 else 0)
         }
         val id = db.insert("users", null, values)
         db.close()
         return id
+    }
+
+    fun updateUser(user: User): Int {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("name", user.name)
+            put("email", user.email)
+            put("dob", user.dob)
+            put("gender", user.gender)
+            put("blood_type", user.bloodType)
+            put("weight", user.weight)
+            put("height", user.height)
+            put("chronic_diseases", user.chronicDiseases)
+            put("allergies", user.allergies)
+            put("emergency_contact", user.emergencyContact)
+            put("is_profile_completed", if (user.isProfileCompleted) 1 else 0)
+        }
+        val rows = db.update("users", values, "firebase_id = ?", arrayOf(user.firebaseId))
+        db.close()
+        return rows
     }
 
     fun getUserById(userId: Int): User? {
@@ -146,7 +184,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 id = cursor.getInt(0),
                 firebaseId = cursor.getString(1) ?: "",
                 name = cursor.getString(2),
-                email = cursor.getString(3)
+                email = cursor.getString(3),
+                dob = cursor.getString(4) ?: "",
+                gender = cursor.getString(5) ?: "",
+                bloodType = cursor.getString(6) ?: "",
+                weight = cursor.getString(7) ?: "",
+                height = cursor.getString(8) ?: "",
+                chronicDiseases = cursor.getString(9) ?: "",
+                allergies = cursor.getString(10) ?: "",
+                emergencyContact = cursor.getString(11) ?: "",
+                isProfileCompleted = cursor.getInt(12) == 1
             )
         }
         cursor.close()
@@ -163,7 +210,16 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 id = cursor.getInt(0),
                 firebaseId = cursor.getString(1) ?: "",
                 name = cursor.getString(2),
-                email = cursor.getString(3)
+                email = cursor.getString(3),
+                dob = cursor.getString(4) ?: "",
+                gender = cursor.getString(5) ?: "",
+                bloodType = cursor.getString(6) ?: "",
+                weight = cursor.getString(7) ?: "",
+                height = cursor.getString(8) ?: "",
+                chronicDiseases = cursor.getString(9) ?: "",
+                allergies = cursor.getString(10) ?: "",
+                emergencyContact = cursor.getString(11) ?: "",
+                isProfileCompleted = cursor.getInt(12) == 1
             )
         }
         cursor.close()

@@ -14,7 +14,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
-import com.example.smarthealthreminder.data.DatabaseHelper
+import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.ui.DashboardActivity
 import java.util.Calendar
