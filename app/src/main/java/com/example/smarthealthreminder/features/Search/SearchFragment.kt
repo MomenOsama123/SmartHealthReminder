@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()

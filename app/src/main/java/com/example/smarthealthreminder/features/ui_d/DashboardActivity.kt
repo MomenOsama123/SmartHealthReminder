@@ -19,7 +19,7 @@ import com.example.smarthealthreminder.features.model.Alarm
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.alarm.AlarmHelper
-import com.example.smarthealthreminder.features.alarm.ReminderReceiver
+import com.example.smarthealthreminder.alarm.ReminderReceiver
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*

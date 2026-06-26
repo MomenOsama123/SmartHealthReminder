@@ -1,17 +1,20 @@
 package com.example.smarthealthreminder.alarm
 
+import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
-import com.example.smarthealthreminder.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.data.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.ui.DashboardActivity
@@ -25,21 +28,44 @@ class ReminderReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_SNOOZE = "com.example.smarthealthreminder.ACTION_SNOOZE"
+        const val ACTION_MARK_TAKEN = "com.example.smarthealthreminder.ACTION_MARK_TAKEN"
+        const val ACTION_DISMISS = "com.example.smarthealthreminder.ACTION_DISMISS"
         const val EXTRA_REMINDER_ID = "reminder_id"
         const val EXTRA_TYPE = "reminder_type"
         const val EXTRA_VIBRATION = "vibration_enabled"
+        const val EXTRA_TITLE = "reminder_title"
+        const val EXTRA_DESCRIPTION = "reminder_description"
+        const val CHANNEL_ID = "reminder_channel"
     }
 
     override fun onReceive(context: Context, intent: Intent) {
+        val action = intent.action
+        Log.d("REMINDER_RECEIVER", "onReceive: action=$action")
+
+        when (action) {
+            ACTION_SNOOZE -> {
+                handleSnooze(context, intent)
+                return
+            }
+            ACTION_MARK_TAKEN -> {
+                handleMarkTaken(context, intent)
+                return
+            }
+            ACTION_DISMISS -> {
+                dismissNotification(context, intent)
+                return
+            }
+        }
+
         val settings = context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
         if (!settings.getBoolean(SettingsActivity.KEY_NOTIFICATIONS, true)) {
             return
         }
 
-        val reminderId = intent.getStringExtra("reminder_id") ?: return
-        val title = intent.getStringExtra("reminder_title") ?: "Health Reminder"
-        val description = intent.getStringExtra("reminder_description") ?: ""
-        val vibrationEnabled = intent.getBooleanExtra("vibration_enabled", false) &&
+        val reminderId = intent.getStringExtra(EXTRA_REMINDER_ID) ?: return
+        val title = intent.getStringExtra(EXTRA_TITLE) ?: "Health Reminder"
+        val description = intent.getStringExtra(EXTRA_DESCRIPTION) ?: ""
+        val vibrationEnabled = intent.getBooleanExtra(EXTRA_VIBRATION, false) &&
             settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
         showNotification(context, reminderId, title, description)
@@ -55,45 +81,56 @@ class ReminderReceiver : BroadcastReceiver() {
         title: String,
         description: String
     ) {
-        val channelId = "reminder_channel"
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
-                channelId,
+                CHANNEL_ID,
                 "Health Reminders",
                 NotificationManager.IMPORTANCE_HIGH
             )
             channel.description = "Notifications for health reminders"
             channel.enableVibration(true)
-            notificationManager.createNotificationChannel(channel)  // ← جوه الـ if
+            notificationManager.createNotificationChannel(channel)
         }
 
         val takenIntent = Intent(context, ReminderReceiver::class.java).apply {
             action = ACTION_MARK_TAKEN
-            putExtra(EXTRA_REMINDER_ID, id)
-            putExtra(EXTRA_TYPE, type)
+            putExtra(EXTRA_REMINDER_ID, reminderId)
+            putExtra(EXTRA_TYPE, "reminder")
         }
         val takenPendingIntent = PendingIntent.getBroadcast(
             context,
-            id.hashCode() + 2000,
+            reminderId.hashCode() + 2000,
             takenIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val dismissIntent = Intent(context, ReminderReceiver::class.java).apply {
             action = ACTION_DISMISS
-            putExtra(EXTRA_REMINDER_ID, id)
+            putExtra(EXTRA_REMINDER_ID, reminderId)
         }
         val dismissPendingIntent = PendingIntent.getBroadcast(
             context,
-            id.hashCode() + 3000,
+            reminderId.hashCode() + 3000,
             dismissIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val snoozeMinutes = getSnoozeMinutesForType(context, type)
+        val snoozeIntent = Intent(context, ReminderReceiver::class.java).apply {
+            action = ACTION_SNOOZE
+            putExtra(EXTRA_REMINDER_ID, reminderId)
+            putExtra(EXTRA_TYPE, "reminder")
+        }
+        val snoozePendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminderId.hashCode() + 1000,
+            snoozeIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        val snoozeMinutes = getSnoozeMinutesForType(context, "reminder")
 
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("💊 $title")
@@ -103,14 +140,13 @@ class ReminderReceiver : BroadcastReceiver() {
             .setCategory(NotificationCompat.CATEGORY_REMINDER)
             .setAutoCancel(false)
             .setOngoing(true)
-            .setContentIntent(contentPendingIntent)
             .addAction(R.drawable.ic_snooze, "Snooze ${snoozeMinutes}m", snoozePendingIntent)
             .addAction(R.drawable.ic_check, "Taken", takenPendingIntent)
             .addAction(R.drawable.ic_close, "Dismiss", dismissPendingIntent)
             .setDeleteIntent(dismissPendingIntent)
             .build()
 
-        notificationManager.notify(id.hashCode(), notification)
+        notificationManager.notify(reminderId.hashCode(), notification)
     }
 
     private fun handleSnooze(context: Context, intent: Intent) {

@@ -1,12 +1,12 @@
-package com.example.smarthealthreminder.ui.viewmodel
+package com.example.smarthealthreminder.features.ui.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
-import com.example.smarthealthreminder.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
+import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

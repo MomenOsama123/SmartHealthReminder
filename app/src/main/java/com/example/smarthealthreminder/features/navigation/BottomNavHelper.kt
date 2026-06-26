@@ -5,10 +5,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.MainActivity
+import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.main.MainWelcomeActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.ui.DashboardActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
@@ -28,7 +30,7 @@ object BottomNavHelper {
         bottomNavigation.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_home -> {
-                    openHome(activity)
+                    openDashboard(activity)
                     true
                 }
                 R.id.nav_schedule -> {

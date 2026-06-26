@@ -215,4 +215,45 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         db.close()
         return rows > 0
     }
+
+    fun getAlarmById(id: String): Alarm? {
+        val db = readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM alarms WHERE id = ?", arrayOf(id))
+        var alarm: Alarm? = null
+        if (cursor.moveToFirst()) {
+            alarm = Alarm(
+                id = cursor.getString(0),
+                userId = cursor.getInt(1),
+                label = cursor.getString(2),
+                time = cursor.getString(3),
+                amPm = cursor.getString(4),
+                category = cursor.getString(5),
+                repeatDays = cursor.getString(6),
+                dosage = cursor.getString(7),
+                instructions = cursor.getString(8),
+                isActive = cursor.getInt(9) == 1,
+                status = cursor.getString(10)?.uppercase() ?: "PENDING",
+                sound = cursor.getString(11),
+                vibrationEnabled = cursor.getInt(12) == 1,
+                gradualVolume = cursor.getInt(13) == 1,
+                autoSnoozeMinutes = cursor.getInt(14),
+                cognitiveLockEnabled = cursor.getInt(15) == 1
+            )
+        }
+        cursor.close()
+        db.close()
+        return alarm
+    }
+
+    fun snoozeAlarmByTime(id: String, newTime: String, newAmPm: String): Boolean {
+        val db = writableDatabase
+        val values = ContentValues().apply {
+            put("time", newTime)
+            put("am_pm", newAmPm)
+            put("status", "SNOOZED")
+        }
+        val rows = db.update("alarms", values, "id = ?", arrayOf(id))
+        db.close()
+        return rows > 0
+    }
 }

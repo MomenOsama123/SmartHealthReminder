@@ -1,19 +1,19 @@
-package com.example.smarthealthreminder.data.local
+package com.example.smarthealthreminder.features.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.smarthealthreminder.data.local.dao.AlarmDao
-import com.example.smarthealthreminder.data.local.dao.CalendarNoteDao
-import com.example.smarthealthreminder.data.local.dao.ReminderDao
-import com.example.smarthealthreminder.data.local.dao.ReportDao
-import com.example.smarthealthreminder.data.local.dao.ScheduleEntryDao
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
-import com.example.smarthealthreminder.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.dao.AlarmDao
+import com.example.smarthealthreminder.features.data.local.dao.CalendarNoteDao
+import com.example.smarthealthreminder.features.data.local.dao.ReminderDao
+import com.example.smarthealthreminder.features.data.local.dao.ReportDao
+import com.example.smarthealthreminder.features.data.local.dao.ScheduleEntryDao
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
+import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
 
 @Database(
     entities = [AlarmEntity::class, ReminderEntity::class, CalendarNoteEntity::class, ScheduleEntryEntity::class, ReportEntity::class],

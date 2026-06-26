@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.data.local.entity
+package com.example.smarthealthreminder.features.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

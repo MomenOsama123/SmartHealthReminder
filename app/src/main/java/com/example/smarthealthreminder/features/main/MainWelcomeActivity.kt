@@ -14,8 +14,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.databinding.ActivityMainWelcomeBinding
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
@@ -28,8 +28,8 @@ import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.settings.SettingsActivity
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
 
 class MainWelcomeActivity : AppCompatActivity() {

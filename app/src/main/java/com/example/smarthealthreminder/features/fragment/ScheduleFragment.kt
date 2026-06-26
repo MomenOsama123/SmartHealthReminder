@@ -15,13 +15,14 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.adapter.CalendarDay
 import com.example.smarthealthreminder.features.adapter.CalendarDayAdapter
+import com.example.smarthealthreminder.features.model.ScheduleItem
 import com.example.smarthealthreminder.features.schedule.details.DayDetailsActivity
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -39,6 +40,9 @@ class ScheduleFragment : Fragment() {
     private var noteDates = setOf<String>()          // notes
     private var reportDates = setOf<String>()        // reports
     private var scheduleEntryDates = setOf<String>() // schedule entries
+
+    // Combined items list for filtering
+    private var allItems = listOf<ScheduleItem>()
 
     private val dateSdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val monthSdf = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
@@ -105,8 +109,7 @@ class ScheduleFragment : Fragment() {
     private fun observeData() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch { collectReminders() }
-                launch { collectAlarms() }
+                launch { collectRemindersAndAlarms() }
                 launch { collectScheduleEntries() }
                 launch { collectReports() }
                 launch { collectNotes() }

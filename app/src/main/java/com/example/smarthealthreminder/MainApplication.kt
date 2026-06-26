@@ -2,8 +2,8 @@ package com.example.smarthealthreminder
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.search.SearchHistoryManager
 import com.example.smarthealthreminder.features.search.SearchViewModel
 import com.example.smarthealthreminder.features.settings.SettingsActivity
@@ -41,5 +41,5 @@ val appModule = module {
     single { SearchHistoryManager(get()) }
     
     // ViewModels
-    viewModel { SearchViewModel(get(), get()) }
+//    viewModel { SearchViewModel(get(), get()) }
 }

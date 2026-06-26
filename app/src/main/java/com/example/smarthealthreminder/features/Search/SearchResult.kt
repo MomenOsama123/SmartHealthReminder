@@ -1,7 +1,7 @@
 package com.example.smarthealthreminder.features.search
 
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 
 sealed class SearchResult {
     data class Reminder(val entity: ReminderEntity) : SearchResult()
