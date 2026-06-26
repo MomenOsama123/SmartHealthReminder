@@ -11,15 +11,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.databinding.FragmentHomeDashboardBinding
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.search.SearchActivity
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {

@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.smarthealthreminder.features.model.Alarm
 import com.example.smarthealthreminder.features.model.Reminder
-import com.example.smarthealthreminder.model_d.User
+import com.example.smarthealthreminder.features.model_d.User
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
     context, "health_sync.db", null, 6

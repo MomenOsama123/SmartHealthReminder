@@ -21,9 +21,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.alarm.ReminderReceiver
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
@@ -117,7 +117,7 @@ class AddReminderActivity : AppCompatActivity() {
         switchVibration = findViewById(R.id.switch_vibration)
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
-        btnDelete = findViewById(R.id.btn_delete_reminder)
+       // btnDelete = findViewById(R.id.btn_delete_reminder)
 
         val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
         switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
