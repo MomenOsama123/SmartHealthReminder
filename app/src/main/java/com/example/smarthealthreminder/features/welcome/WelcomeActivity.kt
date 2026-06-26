@@ -17,6 +17,10 @@ class WelcomeActivity : AppCompatActivity() {
         
         val auth = FirebaseAuth.getInstance()
         if (auth.currentUser != null) {
+            getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                .edit()
+                .putString("FIREBASE_ID", auth.currentUser!!.uid)
+                .apply()
             startActivity(Intent(this, MainActivity::class.java))
             finish()
         }

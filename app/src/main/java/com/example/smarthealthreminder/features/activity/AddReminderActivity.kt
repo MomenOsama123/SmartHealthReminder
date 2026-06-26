@@ -9,27 +9,24 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.TimePicker
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.alarm.ReminderReceiver
-import com.example.smarthealthreminder.data.DatabaseHelper
+import com.example.smarthealthreminder.alarm.ReminderReceiver
 import com.example.smarthealthreminder.data.local.AppDatabase
 import com.example.smarthealthreminder.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
-import com.example.smarthealthreminder.ui.DashboardActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Calendar
+import java.util.UUID
 
 class AddReminderActivity : AppCompatActivity() {
 
@@ -37,6 +34,7 @@ class AddReminderActivity : AppCompatActivity() {
         const val EXTRA_REMINDER_RESULT = "reminder_result"
         private const val EARLY_NOTIFICATION_MINUTES = 5
         private const val EARLY_NOTIFICATION_REQUEST_OFFSET = 10_000
+        // UNIFIED DATE FORMAT: yyyy-MM-dd (same as ScheduleFragment)
         const val DATE_FORMAT = "yyyy-MM-dd"
     }
 
@@ -50,18 +48,13 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var switchVibration: androidx.appcompat.widget.SwitchCompat
     private lateinit var btnSave: com.google.android.material.button.MaterialButton
     private lateinit var btnCancel: TextView
-    private lateinit var btnDelete: TextView
 
     private var selectedDate: String = ""
     private var selectedTime: String = ""
     private var selectedCategory: String = "Medicine"
     private var selectedPriority: String = "Medium"
 
-    private var existingReminderId: String? = null
-    private var isEditMode = false
-
     private lateinit var repository: HealthRepository
-    private lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,41 +62,10 @@ class AddReminderActivity : AppCompatActivity() {
 
         val db = AppDatabase.getDatabase(this)
         repository = HealthRepository(db)
-        dbHelper = DatabaseHelper(this)
 
         initViews()
-        checkEditMode()
         setupListeners()
-        setupBottomNavigation()
-    }
-
-    private fun setupBottomNavigation() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        BottomNavHelper.setup(this, bottomNav, R.id.nav_create)
-    }
-
-    private fun checkEditMode() {
-        existingReminderId = intent.getStringExtra("reminder_id")
-        if (existingReminderId != null) {
-            isEditMode = true
-            btnSave.text = "Update Reminder"
-            btnDelete.visibility = View.VISIBLE
-
-            etTitle.setText(intent.getStringExtra("reminder_title"))
-            etDescription.setText(intent.getStringExtra("reminder_desc"))
-            selectedDate = intent.getStringExtra("reminder_date") ?: ""
-            selectedTime = intent.getStringExtra("reminder_time") ?: ""
-            etDate.setText(selectedDate)
-            etTime.setText(selectedTime)
-
-            selectedCategory = intent.getStringExtra("reminder_category") ?: "Medicine"
-            when (selectedCategory) {
-                "Medicine" -> chipGroupCategory.check(R.id.chip_medicine)
-                "Appointment" -> chipGroupCategory.check(R.id.chip_appointment)
-                "Task" -> chipGroupCategory.check(R.id.chip_task)
-                "Custom" -> chipGroupCategory.check(R.id.chip_custom)
-            }
-        }
+        BottomNavHelper.setup(this, findViewById<BottomNavigationView>(R.id.bottom_navigation))
     }
 
     private fun initViews() {
@@ -117,13 +79,13 @@ class AddReminderActivity : AppCompatActivity() {
         switchVibration = findViewById(R.id.switch_vibration)
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
-        btnDelete = findViewById(R.id.btn_delete_reminder)
 
         val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
         switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
         switchVibration.isChecked = settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
         val calendar = Calendar.getInstance()
+        // FIXED: Use yyyy-MM-dd format (same as ScheduleFragment)
         selectedDate = String.format(
             "%04d-%02d-%02d",
             calendar.get(Calendar.YEAR),
@@ -141,8 +103,13 @@ class AddReminderActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        etDate.setOnClickListener { showDatePicker() }
-        etTime.setOnClickListener { showTimePicker() }
+        etDate.setOnClickListener {
+            showDatePicker()
+        }
+
+        etTime.setOnClickListener {
+            showTimePicker()
+        }
 
         chipGroupCategory.setOnCheckedStateChangeListener { _, checkedIds ->
             when (checkedIds.firstOrNull()) {
@@ -164,10 +131,17 @@ class AddReminderActivity : AppCompatActivity() {
             }
         }
 
-        btnSave.setOnClickListener { saveReminder() }
-        btnCancel.setOnClickListener { navigateToDashboard() }
-        btnDelete.setOnClickListener { deleteReminder() }
-        findViewById<ImageButton>(R.id.btn_back)?.setOnClickListener { navigateToDashboard() }
+        btnSave.setOnClickListener {
+            saveReminder()
+        }
+
+        btnCancel.setOnClickListener {
+            finish()
+        }
+
+        findViewById<ImageButton>(R.id.btn_back)?.setOnClickListener {
+            finish()
+        }
     }
 
     private fun showDatePicker() {
@@ -175,6 +149,7 @@ class AddReminderActivity : AppCompatActivity() {
         DatePickerDialog(
             this,
             { _, year, month, day ->
+                // FIXED: Use yyyy-MM-dd format
                 selectedDate = String.format("%04d-%02d-%02d", year, month + 1, day)
                 etDate.setText(selectedDate)
             },
@@ -226,10 +201,8 @@ class AddReminderActivity : AppCompatActivity() {
             return
         }
 
-        val reminderId = existingReminderId ?: UUID.randomUUID().toString()
-
         val reminder = ReminderEntity(
-            id = reminderId,
+            id = UUID.randomUUID().toString(),
             title = title,
             description = description,
             category = selectedCategory,
@@ -243,74 +216,22 @@ class AddReminderActivity : AppCompatActivity() {
         )
 
         lifecycleScope.launch {
-            if (isEditMode) {
-                repository.updateReminder(reminder)
-            } else {
-                repository.insertReminder(reminder)
-            }
-
-            // ✅✅✅ احفظ في DatabaseHelper كمان عشان Dashboard تشوفه
-            saveToDatabaseHelper(reminderId, title, description, selectedTime, selectedCategory)
-
+            repository.insertReminder(reminder)
             scheduleReminderNotification(reminder, reminderTimeMillis)
 
             Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
 
-            navigateToDashboard()
-        }
-    }
-
-    // ✅✅✅ مصلّح: أضفت id كـ parameter
-    private fun saveToDatabaseHelper(reminderId: String, title: String, description: String, time: String, category: String) {
-        try {
-            val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-            val firebaseId = sharedPref.getString("FIREBASE_ID", "") ?: ""
-            val user = dbHelper.getUserByFirebaseId(firebaseId)
-            val userId = user?.id ?: -1
-
-            Log.d("ADD_REMINDER", "saveToDatabaseHelper: userId=$userId, firebaseId='$firebaseId', reminderId='$reminderId'")
-
-            if (userId != -1) {
-                val values = android.content.ContentValues().apply {
-                    put("id", reminderId)  // ✅✅✅ أضف الـ id هنا!
-                    put("user_id", userId)
-                    put("title", title)
-                    put("description", description)
-                    put("time", time)
-                    put("category", category)
-                    put("status", "Pending")
-                    put("date", selectedDate)
-                    put("priority", selectedPriority)
-                    put("is_recurring", 0)
-                    put("vibration_enabled", if (switchVibration.isChecked) 1 else 0)
-                    put("early_notification", if (switchEarlyNotification.isChecked) 1 else 0)
-                    put("early_notification_minutes", if (switchEarlyNotification.isChecked) 5 else 0)
-                }
-
-                val db = dbHelper.writableDatabase
-                val rowId = db.insert("reminders", null, values)
-                Log.d("ADD_REMINDER", "Inserted reminder rowId=$rowId, id=$reminderId")
-                db.close()
-            } else {
-                Log.e("ADD_REMINDER", "Cannot save: userId=-1")
+            val resultIntent = Intent().apply {
+                putExtra(EXTRA_REMINDER_RESULT, reminder.id)
             }
-        } catch (e: Exception) {
-            Log.e("ADD_REMINDER", "Failed to save to DatabaseHelper", e)
+            setResult(RESULT_OK, resultIntent)
+            finish()
         }
-    }
-
-    private fun navigateToDashboard() {
-        val intent = Intent(this, DashboardActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-            putExtra("REFRESH_DATA", true)
-        }
-        startActivity(intent)
-        finish()
     }
 
     private fun getReminderTimeMillis(): Long? {
         return try {
-            val dateParts = selectedDate.split("-")
+            val dateParts = selectedDate.split("-")  // FIXED: split by "-" not "/"
             val timeParts = selectedTime.split(":")
 
             if (dateParts.size < 3 || timeParts.size < 2) return null
@@ -380,35 +301,5 @@ class AddReminderActivity : AppCompatActivity() {
             triggerAtMillis,
             pendingIntent
         )
-    }
-
-    private fun deleteReminder() {
-        existingReminderId?.let { id ->
-            AlertDialog.Builder(this)
-                .setTitle("Delete Reminder")
-                .setMessage("Are you sure you want to delete this reminder?")
-                .setPositiveButton("Delete") { _, _ ->
-                    lifecycleScope.launch {
-                        repository.deleteReminderById(id)
-                        cancelReminderNotification(id)
-                        Toast.makeText(this@AddReminderActivity, "Reminder deleted", Toast.LENGTH_SHORT).show()
-                        navigateToDashboard()
-                    }
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
-        }
-    }
-
-    private fun cancelReminderNotification(reminderId: String) {
-        val intent = Intent(this, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            reminderId.hashCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
     }
 }

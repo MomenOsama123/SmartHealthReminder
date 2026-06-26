@@ -92,7 +92,7 @@
         </receiver>
 
         <receiver
-            android:name=".features.alarm.ReminderReceiver"
+            android:name=".alarm.ReminderReceiver"
             android:exported="false" />
 
         <!-- ================= SERVICE ================= -->

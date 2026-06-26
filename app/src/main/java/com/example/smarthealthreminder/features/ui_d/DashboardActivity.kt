@@ -19,7 +19,7 @@ import com.example.smarthealthreminder.features.model.Alarm
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.alarm.AlarmHelper
-import com.example.smarthealthreminder.features.alarm.ReminderReceiver
+import com.example.smarthealthreminder.alarm.ReminderReceiver
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.*
 
@@ -66,7 +66,10 @@ class DashboardActivity : AppCompatActivity() {
         setContentView(R.layout.activity_dashboard)
 
         val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        firebaseId = sharedPref.getString("FIREBASE_ID", "") ?: ""
+        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+
+        // ✅ Fallback: if SharedPreferences is empty but Firebase user is logged in, use Firebase UID
+        firebaseId = auth.currentUser?.uid ?: sharedPref.getString("FIREBASE_ID", "") ?: ""
 
         Log.d("DASH_DEBUG", "firebaseId = '$firebaseId'")
 
@@ -77,15 +80,36 @@ class DashboardActivity : AppCompatActivity() {
             return
         }
 
+        // Ensure FIREBASE_ID is persisted for next time
+        if (sharedPref.getString("FIREBASE_ID", "")?.isEmpty() == true) {
+            sharedPref.edit().putString("FIREBASE_ID", firebaseId).apply()
+        }
+
         dbHelper = DatabaseHelper(this)
 
-        val user = dbHelper.getUserByFirebaseId(firebaseId)
+        // ✅ Auto-insert user into SQLite if not present
+        var user = dbHelper.getUserByFirebaseId(firebaseId)
+        if (user == null) {
+            val userName = auth.currentUser?.displayName ?: "User"
+            val userEmail = auth.currentUser?.email ?: ""
+            dbHelper.insertUser(
+                com.example.smarthealthreminder.model_d.User(
+                    id = 0,
+                    firebaseId = firebaseId,
+                    name = userName,
+                    email = userEmail
+                )
+            )
+            user = dbHelper.getUserByFirebaseId(firebaseId)
+            Log.d("DASH_DEBUG", "Auto-inserted user into SQLite: $firebaseId")
+        }
+
         Log.d("DASH_DEBUG", "user = $user, userId = ${user?.id}")
 
         currentUserId = user?.id ?: -1
 
         if (currentUserId == -1) {
-            Log.d("DASH_DEBUG", "user not found in DB, going to SignIn")
+            Log.d("DASH_DEBUG", "user not found in DB after insert, going to SignIn")
             sharedPref.edit().remove("FIREBASE_ID").apply()
             startActivity(Intent(this, SignInActivity::class.java))
             finish()

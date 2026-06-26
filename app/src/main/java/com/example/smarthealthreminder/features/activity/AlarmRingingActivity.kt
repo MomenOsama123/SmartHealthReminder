@@ -83,7 +83,7 @@ class AlarmRingingActivity : AppCompatActivity() {
                     amPm = amPmPart,
                     category = alarmCategory
                 )
-                alarmHelper.snoozeAlarm(snoozeAlarm, 15)
+                alarmHelper.snoozeAlarm(snoozeAlarm, 10)
             } ?: false
 
             if (snoozed) {
