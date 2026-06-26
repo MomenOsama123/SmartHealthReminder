@@ -183,11 +183,13 @@ class SignInActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
         val email = binding.etEmail.text.toString().trim()
         val password = binding.etPassword.text.toString().trim()
-
         var isValid = true
 
         if (email.isEmpty()) {
             binding.etEmail.error = "Required"
+            isValid = false
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.etEmail.error = "Enter a valid email address"
             isValid = false
         } else {
             binding.etEmail.error = null

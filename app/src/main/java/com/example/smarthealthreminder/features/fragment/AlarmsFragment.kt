@@ -18,13 +18,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.adapter.AlarmAdapter
 import com.example.smarthealthreminder.features.model.Alarm
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
 
 class AlarmsFragment : Fragment() {

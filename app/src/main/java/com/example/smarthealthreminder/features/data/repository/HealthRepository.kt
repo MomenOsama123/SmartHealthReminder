@@ -1,12 +1,12 @@
-package com.example.smarthealthreminder.data.repository
+package com.example.smarthealthreminder.features.data.repository
 
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
-import com.example.smarthealthreminder.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
+import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
 import kotlinx.coroutines.flow.Flow
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 
 class HealthRepository(private val database: AppDatabase) {
 
@@ -19,6 +19,12 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun deleteAlarmById(id: String) = database.alarmDao().deleteAlarmById(id)
     suspend fun toggleAlarmStatus(id: String, isActive: Boolean) =
         database.alarmDao().updateAlarmStatus(id, isActive)
+    suspend fun markAlarmCompleted(id: String) =
+        database.alarmDao().updateLastTriggeredStatus(id, "Completed")
+    suspend fun markAlarmSnoozed(id: String) =
+        database.alarmDao().updateLastTriggeredStatus(id, "Snoozed")
+    suspend fun resetAlarmToPending(id: String) =
+        database.alarmDao().updateLastTriggeredStatus(id, "Pending")
 
     // Reminder Operations
     fun getAllReminders(): Flow<List<ReminderEntity>> = database.reminderDao().getAllReminders()

@@ -10,9 +10,9 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.model.Alarm
 import kotlinx.coroutines.launch
 import java.util.*
@@ -181,41 +181,48 @@ class EditAlarmActivity : AppCompatActivity() {
         )
 
         lifecycleScope.launch {
-            if (isEditMode) {
+            val alarmToSave = if (isEditMode) {
                 repository.updateAlarm(alarm)
+                alarm
             } else {
                 repository.insertAlarm(alarm)
+                alarm
             }
 
             val alarmModel = com.example.smarthealthreminder.features.model.Alarm(
-                id = alarm.id,
-                label = alarm.label,
+                id = alarmToSave.id,
+                label = alarmToSave.label,
                 time = time24String,
-                amPm = alarm.amPm,
-                category = alarm.category,
-                isActive = alarm.isActive,
+                amPm = alarmToSave.amPm,
+                category = alarmToSave.category,
+                isActive = alarmToSave.isActive,
                 repeatDays = selectedDays
             )
 
-            if (alarm.isActive) {
-                val scheduled = alarmHelper.scheduleAlarm(alarmModel)
+            var scheduled = false
+            if (alarmToSave.isActive) {
+                scheduled = alarmHelper.scheduleAlarm(alarmModel)
                 if (!scheduled) {
+                    // Deactivate alarm in DB since it couldn't be scheduled
+                    repository.updateAlarm(alarmToSave.copy(isActive = false))
                     Toast.makeText(
                         this@EditAlarmActivity,
-                        "Allow exact alarms so this alarm can ring on time",
+                        "Alarm saved but deactivated — allow exact alarms to enable it",
                         Toast.LENGTH_LONG
                     ).show()
                 }
             }
 
-            Toast.makeText(
-                this@EditAlarmActivity,
-                "Alarm ${if (isEditMode) "updated" else "saved"}: $label",
-                Toast.LENGTH_SHORT
-            ).show()
+            if (scheduled) {
+                Toast.makeText(
+                    this@EditAlarmActivity,
+                    "Alarm ${if (isEditMode) "updated" else "saved"}: $label",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
             val resultIntent = Intent().apply {
-                putExtra(EXTRA_ALARM_RESULT, alarm.id)
+                putExtra(EXTRA_ALARM_RESULT, alarmToSave.id)
             }
             setResult(RESULT_ALARM_SAVED, resultIntent)
             finish()

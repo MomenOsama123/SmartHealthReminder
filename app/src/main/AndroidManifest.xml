@@ -77,6 +77,10 @@
         <activity android:name=".features.settings.SettingsActivity" android:exported="false" />
         <activity android:name=".features.plan.TodayPlanActivity" android:exported="false" />
         <activity android:name=".features.schedule.details.DayDetailsActivity" android:exported="false" />
+        <activity
+            android:name=".features.schedule.details.AddNoteActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- ================= RECEIVERS ================= -->
         <receiver
@@ -88,7 +92,7 @@
         </receiver>
 
         <receiver
-            android:name=".features.alarm.ReminderReceiver"
+            android:name=".alarm.ReminderReceiver"
             android:exported="false" />
 
         <!-- ================= SERVICE ================= -->

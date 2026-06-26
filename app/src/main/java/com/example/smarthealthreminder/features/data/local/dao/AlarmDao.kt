@@ -1,8 +1,8 @@
-package com.example.smarthealthreminder.data.local.dao
+package com.example.smarthealthreminder.features.data.local.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
 
 @Dao
 interface AlarmDao {
@@ -30,6 +30,9 @@ interface AlarmDao {
 
     @Query("UPDATE alarms SET is_active = :isActive WHERE id = :alarmId")
     suspend fun updateAlarmStatus(alarmId: String, isActive: Boolean)
+
+    @Query("UPDATE alarms SET last_triggered_status = :status WHERE id = :alarmId")
+    suspend fun updateLastTriggeredStatus(alarmId: String, status: String)
 
     @Query("SELECT COUNT(*) FROM alarms WHERE is_active = 1")
     fun getActiveAlarmCount(): Flow<Int>

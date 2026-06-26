@@ -18,7 +18,7 @@
     <string name="med_time">09:00 AM</string>
 
     <string name="mark_taken">Mark as Taken</string>
-    <string name="snooze">Snooze 15m</string>
+    <string name="snooze">Snooze</string>
 
     <string name="total_meds">TOTAL MEDS</string>
     <string name="taken_today">TAKEN TODAY</string>
@@ -363,6 +363,15 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="delete">Delete</string>
     <string name="today_s_air_is_clean_and_restorative">Today\'s air is clean and restorative.</string>
     <string name="settings">Settings</string>
+    <string name="settings_alarm_snooze_title">Alarm snooze duration</string>
+    <string name="settings_alarm_snooze_subtitle">How long alarms wait before ringing again.</string>
+    <string name="settings_reminder_snooze_title">Reminder snooze duration</string>
+    <string name="settings_reminder_snooze_subtitle">How long reminders wait before alerting again.</string>
+    <string name="settings_snooze_minutes_value">%1$d min</string>
+    <string name="settings_snooze_saved">Snooze duration set to %1$d minutes</string>
+    <string name="snoozed_for_minutes">Snoozed for %1$d minutes</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
 
     <!-- ChatBot Disclaimer -->
     <string name="medical_disclaimer_title">Medical Disclaimer</string>

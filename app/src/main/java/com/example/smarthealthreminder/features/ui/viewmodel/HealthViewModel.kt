@@ -1,12 +1,12 @@
-package com.example.smarthealthreminder.ui.viewmodel
+package com.example.smarthealthreminder.features.ui.viewmodel
 
 import androidx.lifecycle.*
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
-import com.example.smarthealthreminder.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
-import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
+import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
+import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -74,6 +74,9 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
     fun deleteAlarm(alarm: AlarmEntity) = viewModelScope.launch { repository.deleteAlarm(alarm) }
     fun deleteAlarmById(id: String) = viewModelScope.launch { repository.deleteAlarmById(id) }
     fun toggleAlarm(id: String, isActive: Boolean) = viewModelScope.launch { repository.toggleAlarmStatus(id, isActive) }
+    fun markAlarmCompleted(id: String) = viewModelScope.launch { repository.markAlarmCompleted(id) }
+    fun markAlarmSnoozed(id: String) = viewModelScope.launch { repository.markAlarmSnoozed(id) }
+    fun resetAlarmToPending(id: String) = viewModelScope.launch { repository.resetAlarmToPending(id) }
 
     // Reminder Operations
     fun addReminder(reminder: ReminderEntity) = viewModelScope.launch { repository.insertReminder(reminder) }

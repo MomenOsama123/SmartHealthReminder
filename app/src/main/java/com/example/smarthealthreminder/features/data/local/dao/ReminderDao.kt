@@ -1,8 +1,8 @@
-package com.example.smarthealthreminder.data.local.dao
+package com.example.smarthealthreminder.features.data.local.dao
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 
 @Dao
 interface ReminderDao {
