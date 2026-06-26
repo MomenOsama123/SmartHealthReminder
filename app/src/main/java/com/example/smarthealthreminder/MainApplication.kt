@@ -41,5 +41,5 @@ val appModule = module {
     single { SearchHistoryManager(get()) }
     
     // ViewModels
-//    viewModel { SearchViewModel(get(), get()) }
+    viewModel { SearchViewModel(get(), get()) }
 }
