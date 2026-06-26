@@ -2,27 +2,40 @@ package com.example.smarthealthreminder.features.search
 
 import android.content.Context
 import android.content.SharedPreferences
+import org.json.JSONArray
 
 class SearchHistoryManager(context: Context) {
-    private val prefs: SharedPreferences = context.getSharedPreferences("search_history", Context.MODE_PRIVATE)
+
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("search_history", Context.MODE_PRIVATE)
+
+    companion object {
+        private const val KEY = "history_json"
+        private const val MAX_ITEMS = 5
+    }
 
     fun saveSearch(query: String) {
         if (query.isBlank()) return
         val history = getHistory().toMutableList()
-        history.remove(query)
-        history.add(0, query)
-        val limitedHistory = if (history.size > 5) history.take(5) else history
-        prefs.edit().putStringSet("history", limitedHistory.toSet()).apply()
-        // SharedPreferences doesn't guarantee order for StringSet, let's use a string with separator
-        prefs.edit().putString("history_ordered", limitedHistory.joinToString("|")).apply()
+        history.remove(query)          // remove duplicate
+        history.add(0, query)          // most-recent first
+        val limited = history.take(MAX_ITEMS)
+        // Single atomic write — no pipe-character corruption
+        val json = JSONArray().apply { limited.forEach { put(it) } }.toString()
+        prefs.edit().putString(KEY, json).apply()
     }
 
     fun getHistory(): List<String> {
-        val historyString = prefs.getString("history_ordered", "") ?: ""
-        return if (historyString.isBlank()) emptyList() else historyString.split("|")
+        val json = prefs.getString(KEY, null) ?: return emptyList()
+        return try {
+            val arr = JSONArray(json)
+            List(arr.length()) { arr.getString(it) }
+        } catch (e: Exception) {
+            emptyList()
+        }
     }
 
     fun clearHistory() {
-        prefs.edit().clear().apply()
+        prefs.edit().remove(KEY).apply()
     }
 }

@@ -131,6 +131,68 @@
                 android:background="@color/divider" />
 
             <LinearLayout
+                android:id="@+id/row_alarm_snooze"
+                style="@style/SettingsRow"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    style="@style/SettingsIcon"
+                    android:src="@drawable/ic_snooze" />
+                <LinearLayout
+                    style="@style/SettingsTextGroup">
+                    <TextView
+                        style="@style/SettingsTitle"
+                        android:text="@string/settings_alarm_snooze_title" />
+                    <TextView
+                        style="@style/SettingsSubtitle"
+                        android:text="@string/settings_alarm_snooze_subtitle" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_alarm_snooze_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    tools:text="10 min" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
+            <LinearLayout
+                android:id="@+id/row_reminder_snooze"
+                style="@style/SettingsRow"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    style="@style/SettingsIcon"
+                    android:src="@drawable/ic_snooze" />
+                <LinearLayout
+                    style="@style/SettingsTextGroup">
+                    <TextView
+                        style="@style/SettingsTitle"
+                        android:text="@string/settings_reminder_snooze_title" />
+                    <TextView
+                        style="@style/SettingsSubtitle"
+                        android:text="@string/settings_reminder_snooze_subtitle" />
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_reminder_snooze_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    tools:text="10 min" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
+            <LinearLayout
                 android:id="@+id/row_exact_alarm"
                 style="@style/SettingsRow"
                 android:clickable="true"

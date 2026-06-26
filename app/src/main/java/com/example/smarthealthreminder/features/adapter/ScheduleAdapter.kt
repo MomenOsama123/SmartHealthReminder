@@ -64,6 +64,7 @@ class ScheduleAdapter : ListAdapter<ScheduleItem, ScheduleAdapter.ViewHolder>(Di
         val (statusText, statusColor) = when (item.status.uppercase()) {
             "DONE", "COMPLETED" -> "Done" to Color.parseColor("#4CAF50")
             "MISSED" -> "Missed" to Color.parseColor("#FF5252")
+            "SNOOZED" -> "Snoozed" to Color.parseColor("#2196F3")
             else -> "Pending" to Color.parseColor("#FF9800")
         }
         holder.status.text = statusText

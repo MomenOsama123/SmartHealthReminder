@@ -74,12 +74,16 @@ object BottomNavHelper {
         activity.finish()
     }
 
-    private fun openHome(activity: Activity) {
-        if (activity is MainWelcomeActivity) return
+    private fun openDashboard(activity: Activity) {
+        // Check live Firebase session — not just cached UID
+        val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
+        if (currentUser == null) {
+            activity.startActivity(Intent(activity, SignInActivity::class.java))
+            activity.finish()
+            return
+        }
 
-        activity.startActivity(Intent(activity, MainWelcomeActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        })
-        activity.finish()
+        if (activity is DashboardActivity) return
+        activity.startActivity(Intent(activity, DashboardActivity::class.java))
     }
 }

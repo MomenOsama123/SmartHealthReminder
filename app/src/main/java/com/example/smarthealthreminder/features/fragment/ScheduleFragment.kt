@@ -22,6 +22,7 @@ import com.example.smarthealthreminder.features.adapter.CalendarDayAdapter
 import com.example.smarthealthreminder.features.schedule.details.DayDetailsActivity
 import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -113,11 +114,40 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-    private suspend fun collectReminders() {
-        viewModel.allReminders.collect { reminders ->
-            eventDates = reminders
-                .mapNotNull { normalizeDate(it.date).takeIf { d -> d.isNotBlank() } }
-                .toSet()
+    private suspend fun collectRemindersAndAlarms() {
+        combine(viewModel.allReminders, viewModel.allAlarms) { reminders, alarms ->
+            reminders to alarms
+        }.collect { (reminders, alarms) ->
+            val reminderItems = reminders.map {
+                ScheduleItem(
+                    id = it.id,
+                    title = it.title,
+                    date = normalizeDate(it.date),
+                    time = it.time ?: "No time",
+                    category = it.category ?: "General",
+                    priority = it.priority ?: "NORMAL",
+                    status = it.status,
+                    earlyNotification = it.earlyNotification,
+                    earlyNotificationMinutes = it.earlyNotificationMinutes,
+                    isAlarm = false,
+                    itemType = ScheduleItem.TYPE_REMINDER
+                )
+            }
+            val alarmItems = alarms.filter { it.isActive }.map {
+                ScheduleItem(
+                    id = it.id,
+                    title = it.label,
+                    date = "daily",
+                    time = "${it.time} ${it.amPm}",
+                    category = it.category ?: "Alarm",
+                    priority = "NORMAL",
+                    status = it.lastTriggeredStatus,
+                    isAlarm = true,
+                    itemType = ScheduleItem.TYPE_ALARM
+                )
+            }
+            allItems = (allItems.filter { it.itemType != ScheduleItem.TYPE_REMINDER && it.itemType != ScheduleItem.TYPE_ALARM } + reminderItems + alarmItems).sortedBy { it.time }
+            eventDates = (eventDates + reminderItems.map { it.date }.filter { it.isNotBlank() && it != "daily" }).toSet()
             buildCalendar()
         }
     }

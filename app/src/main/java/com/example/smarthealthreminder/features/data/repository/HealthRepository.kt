@@ -19,6 +19,12 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun deleteAlarmById(id: String) = database.alarmDao().deleteAlarmById(id)
     suspend fun toggleAlarmStatus(id: String, isActive: Boolean) =
         database.alarmDao().updateAlarmStatus(id, isActive)
+    suspend fun markAlarmCompleted(id: String) =
+        database.alarmDao().updateLastTriggeredStatus(id, "Completed")
+    suspend fun markAlarmSnoozed(id: String) =
+        database.alarmDao().updateLastTriggeredStatus(id, "Snoozed")
+    suspend fun resetAlarmToPending(id: String) =
+        database.alarmDao().updateLastTriggeredStatus(id, "Pending")
 
     // Reminder Operations
     fun getAllReminders(): Flow<List<ReminderEntity>> = database.reminderDao().getAllReminders()

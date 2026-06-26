@@ -31,6 +31,9 @@ interface AlarmDao {
     @Query("UPDATE alarms SET is_active = :isActive WHERE id = :alarmId")
     suspend fun updateAlarmStatus(alarmId: String, isActive: Boolean)
 
+    @Query("UPDATE alarms SET last_triggered_status = :status WHERE id = :alarmId")
+    suspend fun updateLastTriggeredStatus(alarmId: String, status: String)
+
     @Query("SELECT COUNT(*) FROM alarms WHERE is_active = 1")
     fun getActiveAlarmCount(): Flow<Int>
 

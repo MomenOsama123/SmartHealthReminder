@@ -35,6 +35,8 @@ class ChatBotActivity : AppCompatActivity() {
     private lateinit var adapter: ChatAdapter
     private val messages = mutableListOf<Message>()
     private lateinit var api: ApiService
+    private val typingHandler = Handler(Looper.getMainLooper())
+    private var typingRunnable: Runnable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -197,6 +199,8 @@ class ChatBotActivity : AppCompatActivity() {
     }
 
     private fun showTyping(show: Boolean) {
+        typingHandler.removeCallbacksAndMessages(null)  // always cancel previous runnable
+        typingRunnable = null
         if (show) {
             binding.typingIndicator.visibility = View.VISIBLE
             val baseText = getString(R.string.serenepulse_is_thinking).replace("...", "")
@@ -204,22 +208,26 @@ class ChatBotActivity : AppCompatActivity() {
             binding.typingIndicator.alpha = 0f
             binding.typingIndicator.animate().alpha(1f).setDuration(300).start()
 
-            // Loop for "Thinking..." text animation
-            val handler = Handler(Looper.getMainLooper())
+            var dots = 0
             val runnable = object : Runnable {
-                var dots = 0
                 override fun run() {
                     if (binding.typingIndicator.visibility == View.VISIBLE) {
                         dots = (dots + 1) % 4
                         binding.typingIndicator.text = baseText + ".".repeat(dots)
-                        handler.postDelayed(this, 500)
+                        typingHandler.postDelayed(this, 500)
                     }
                 }
             }
-            handler.post(runnable)
+            typingRunnable = runnable
+            typingHandler.post(runnable)
         } else {
             binding.typingIndicator.visibility = View.GONE
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        typingHandler.removeCallbacksAndMessages(null)
     }
 
     private fun sendToAI(userMessage: String) {

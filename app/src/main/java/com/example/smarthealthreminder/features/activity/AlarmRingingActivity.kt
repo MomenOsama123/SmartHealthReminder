@@ -7,9 +7,15 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.alarm.AlarmService
+import com.example.smarthealthreminder.data.local.AppDatabase
+import com.example.smarthealthreminder.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.ui.viewmodel.HealthViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -31,6 +37,7 @@ class AlarmRingingActivity : AppCompatActivity() {
     private var alarmTime: String = ""
     private var alarmCategory: String = ""
     private lateinit var alarmHelper: AlarmHelper
+    private lateinit var viewModel: HealthViewModel
     private var isStopped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +53,9 @@ class AlarmRingingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_alarm_ringing)
 
         alarmHelper = AlarmHelper(this)
+
+        val repository = HealthRepository(AppDatabase.getDatabase(this))
+        viewModel = ViewModelProvider(this, HealthViewModelFactory(repository))[HealthViewModel::class.java]
 
         alarmId = intent.getStringExtra(EXTRA_ALARM_ID)
         if (alarmId.isNullOrBlank()) {
@@ -71,6 +81,7 @@ class AlarmRingingActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.tv_room_info)?.text = roomInfo
 
         findViewById<Button>(R.id.btn_snooze)?.setOnClickListener {
+            val snoozeMinutes = SettingsActivity.getAlarmSnoozeMinutes(this)
             val snoozed = alarmId?.let { id ->
                 val parts = alarmTime.trim().split(" ")
                 val timePart = parts.getOrNull(0) ?: alarmTime
@@ -83,13 +94,18 @@ class AlarmRingingActivity : AppCompatActivity() {
                     amPm = amPmPart,
                     category = alarmCategory
                 )
-                alarmHelper.snoozeAlarm(snoozeAlarm, 10)
+                alarmHelper.snoozeAlarm(snoozeAlarm, snoozeMinutes)
             } ?: false
 
             if (snoozed) {
                 isStopped = true
+                alarmId?.let { viewModel.markAlarmSnoozed(it) }
                 stopAlarmService()
-                Toast.makeText(this, "Snoozed for 10 minutes", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    getString(R.string.snoozed_for_minutes, snoozeMinutes),
+                    Toast.LENGTH_SHORT
+                ).show()
                 finish()
             } else {
                 Toast.makeText(
@@ -102,6 +118,7 @@ class AlarmRingingActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.btn_stop_alarm)?.setOnClickListener {
             isStopped = true
+            alarmId?.let { viewModel.markAlarmCompleted(it) }
             stopAlarmService()
             finish()
         }

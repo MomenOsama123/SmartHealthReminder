@@ -32,5 +32,9 @@ data class AlarmEntity(
     val autoSnoozeMinutes: Int = 0,
 
     @ColumnInfo(name = "cognitive_lock_enabled")
-    val cognitiveLockEnabled: Boolean = false
+    val cognitiveLockEnabled: Boolean = false,
+
+    /** Tracks the last time this alarm fired: "Pending", "Completed", or "Snoozed" */
+    @ColumnInfo(name = "last_triggered_status", defaultValue = "Pending")
+    val lastTriggeredStatus: String = "Pending"
 )

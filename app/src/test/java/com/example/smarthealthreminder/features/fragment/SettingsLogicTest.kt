@@ -128,6 +128,21 @@ class SettingsLogicTest {
         assertEquals(SettingsActivity.THEME_SYSTEM, mode)
     }
 
+    @Test
+    fun `DEFAULT_SNOOZE_MINUTES is 10`() {
+        assertEquals(10, SettingsActivity.DEFAULT_SNOOZE_MINUTES)
+    }
+
+    @Test
+    fun `KEY_ALARM_SNOOZE_MINUTES is correct`() {
+        assertEquals("alarm_snooze_minutes", SettingsActivity.KEY_ALARM_SNOOZE_MINUTES)
+    }
+
+    @Test
+    fun `KEY_REMINDER_SNOOZE_MINUTES is correct`() {
+        assertEquals("reminder_snooze_minutes", SettingsActivity.KEY_REMINDER_SNOOZE_MINUTES)
+    }
+
     // ─── Helpers matching private SettingsActivity methods ───
 
     private fun positionToThemeMode(position: Int): String {

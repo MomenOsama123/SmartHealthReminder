@@ -164,7 +164,13 @@ class AlarmHelper(private val context: Context) {
     fun snoozeAlarm(alarm: Alarm, minutes: Int = 10): Boolean {
         if (!canScheduleExactAlarm()) return false
 
-        val intent = Intent(context, AlarmReceiver::class.java).apply {
+        // Cancel both the original alarm and any previous snooze pending intent
+        cancelAlarm(alarm)
+        cancelSnoozePendingIntent(alarm.id)
+
+        // Snooze must use AlarmReceiver so AlarmService is started and the
+        // ringing screen appears again — ReminderReceiver only shows a notification
+        val intent = Intent(context, com.example.smarthealthreminder.alarm.AlarmReceiver::class.java).apply {
             putExtra("alarm_id", alarm.id)
             putExtra("alarm_label", alarm.label)
             putExtra("alarm_time", formatDisplayTime(alarm.time, alarm.amPm))
@@ -179,7 +185,7 @@ class AlarmHelper(private val context: Context) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val snoozeTime = System.currentTimeMillis() + (minutes * 60 * 1000)
+        val snoozeTime = System.currentTimeMillis() + (minutes * 60 * 1000L)
 
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
@@ -188,6 +194,19 @@ class AlarmHelper(private val context: Context) {
         )
 
         return true
+    }
+
+    /** Cancels only the snooze PendingIntent for the given alarm ID. */
+    fun cancelSnoozePendingIntent(alarmId: String?) {
+        val intent = Intent(context, com.example.smarthealthreminder.alarm.AlarmReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            (alarmId ?: "0").hashCode() + 1000,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+        alarmManager.cancel(pendingIntent)
+        pendingIntent.cancel()
     }
 
     fun canScheduleExactAlarm(): Boolean {

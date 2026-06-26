@@ -162,21 +162,19 @@ class DayDetailsActivity : AppCompatActivity() {
                 )
             }
 
-        val alarmItems = viewModel.allAlarms.value
-            .filter { it.isActive }
-            .map { alarm ->
-                ScheduleItem(
-                    id = alarm.id,
-                    title = alarm.label,
-                    date = "daily",
-                    time = "${alarm.time} ${alarm.amPm}",
-                    category = alarm.category ?: "Alarm",
-                    priority = "NORMAL",
-                    status = "Pending",
-                    isAlarm = true,
-                    itemType = ScheduleItem.TYPE_ALARM
-                )
-            }
+        val alarmItems = viewModel.allAlarms.value.filter { it.isActive }.map { alarm ->
+            ScheduleItem(
+                id = alarm.id,
+                title = alarm.label,
+                date = "daily",
+                time = "${alarm.time} ${alarm.amPm}",
+                category = alarm.category ?: "Alarm",
+                priority = "NORMAL",
+                status = alarm.lastTriggeredStatus,
+                isAlarm = true,
+                itemType = ScheduleItem.TYPE_ALARM
+            )
+        }
 
         val scheduleEntryItems = viewModel.allScheduleEntries.value
             .filter { it.date == date }
