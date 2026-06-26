@@ -53,7 +53,10 @@
         <activity android:name=".features.welcome.WelcomeActivity2" android:exported="false" />
 
         <!-- ================= MAIN ================= -->
-        <activity android:name=".features.activity.MainActivity" android:exported="false" />
+        <activity
+            android:name=".features.activity.MainActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".features.activity.AddReminderActivity" android:exported="false" />
         <activity android:name=".features.activity.EditAlarmActivity" android:exported="false" />
         <activity android:name=".features.activity.CreateScheduleEntryActivity" android:exported="false" />

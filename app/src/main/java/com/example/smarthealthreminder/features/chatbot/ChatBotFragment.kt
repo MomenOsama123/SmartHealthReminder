@@ -62,12 +62,34 @@ class ChatBotFragment : Fragment() {
 
     private fun setupRecyclerView() {
         adapter = ChatAdapter(messages)
-        binding.chatRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        val layoutManager = LinearLayoutManager(requireContext())
+        layoutManager.stackFromEnd = false // Show messages from top
+        binding.chatRecyclerView.layoutManager = layoutManager
         binding.chatRecyclerView.adapter = adapter
     }
 
     private fun setupInput() {
         updateSendButtonState("")
+        
+        // Handle keyboard insets to keep EditText above the keyboard
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            val bottomInset = imeInsets.bottom
+            
+            // Adjust inputLayout bottom margin to account for keyboard
+            val params = binding.inputLayout.layoutParams as ViewGroup.MarginLayoutParams
+            params.bottomMargin = bottomInset
+            binding.inputLayout.layoutParams = params
+            
+            // Scroll to bottom if keyboard opened to keep latest message visible
+            if (bottomInset > 0 && messages.isNotEmpty()) {
+                binding.chatRecyclerView.post {
+                    binding.chatRecyclerView.scrollToPosition(messages.size - 1)
+                }
+            }
+            insets
+        }
+
         binding.messageEditText.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
