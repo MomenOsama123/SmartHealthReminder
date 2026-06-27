@@ -9,7 +9,7 @@ import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.model_d.User
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
-    context, "health_sync.db", null, 6
+    context, "health_sync.db", null, 7
 ) {
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -95,10 +95,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         var user: User? = null
         if (cursor.moveToFirst()) {
             user = User(
-                id = cursor.getInt(0),
-                firebaseId = cursor.getString(1) ?: "",
-                name = cursor.getString(2),
-                email = cursor.getString(3)
+                id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                firebaseId = cursor.getString(cursor.getColumnIndexOrThrow("firebase_id")) ?: "",
+                name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                email = cursor.getString(cursor.getColumnIndexOrThrow("email"))
             )
         }
         cursor.close()
@@ -115,10 +115,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         var user: User? = null
         if (cursor.moveToFirst()) {
             user = User(
-                id = cursor.getInt(0),
-                firebaseId = cursor.getString(1) ?: "",
-                name = cursor.getString(2),
-                email = cursor.getString(3)
+                id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
+                firebaseId = cursor.getString(cursor.getColumnIndexOrThrow("firebase_id")) ?: "",
+                name = cursor.getString(cursor.getColumnIndexOrThrow("name")),
+                email = cursor.getString(cursor.getColumnIndexOrThrow("email"))
             )
         }
         cursor.close()
@@ -137,22 +137,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
             do {
                 alarms.add(
                     Alarm(
-                        id = cursor.getString(0),
-                        userId = cursor.getInt(1),
-                        label = cursor.getString(2),
-                        time = cursor.getString(3),
-                        amPm = cursor.getString(4),
-                        category = cursor.getString(5),
-                        repeatDays = cursor.getString(6),
-                        dosage = cursor.getString(7),
-                        instructions = cursor.getString(8),
-                        isActive = cursor.getInt(9) == 1,
-                        status = cursor.getString(10)?.uppercase() ?: "PENDING",
-                        sound = cursor.getString(11),
-                        vibrationEnabled = cursor.getInt(12) == 1,
-                        gradualVolume = cursor.getInt(13) == 1,
-                        autoSnoozeMinutes = cursor.getInt(14),
-                        cognitiveLockEnabled = cursor.getInt(15) == 1
+                        id = cursor.getString(cursor.getColumnIndexOrThrow("id")),
+                        userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
+                        label = cursor.getString(cursor.getColumnIndexOrThrow("label")),
+                        time = cursor.getString(cursor.getColumnIndexOrThrow("time")),
+                        amPm = cursor.getString(cursor.getColumnIndexOrThrow("am_pm")),
+                        category = cursor.getString(cursor.getColumnIndexOrThrow("category")),
+                        repeatDays = cursor.getString(cursor.getColumnIndexOrThrow("repeat_days")),
+                        dosage = cursor.getString(cursor.getColumnIndexOrThrow("dosage")),
+                        instructions = cursor.getString(cursor.getColumnIndexOrThrow("instructions")),
+                        isActive = cursor.getInt(cursor.getColumnIndexOrThrow("is_active")) == 1,
+                        status = cursor.getString(cursor.getColumnIndexOrThrow("status"))?.uppercase() ?: "PENDING",
+                        sound = cursor.getString(cursor.getColumnIndexOrThrow("sound")),
+                        vibrationEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("vibration_enabled")) == 1,
+                        gradualVolume = cursor.getInt(cursor.getColumnIndexOrThrow("gradual_volume")) == 1,
+                        autoSnoozeMinutes = cursor.getInt(cursor.getColumnIndexOrThrow("auto_snooze_minutes")),
+                        cognitive_lock_enabled = cursor.getInt(cursor.getColumnIndexOrThrow("cognitive_lock_enabled")) == 1
                     )
                 )
             } while (cursor.moveToNext())
@@ -173,20 +173,20 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
             do {
                 reminders.add(
                     Reminder(
-                        id = cursor.getString(0),
-                        userId = cursor.getInt(1),
-                        title = cursor.getString(2),
-                        description = cursor.getString(3),
-                        category = cursor.getString(4),
-                        date = cursor.getString(5),
-                        time = cursor.getString(6),
-                        priority = cursor.getString(7),
-                        status = cursor.getString(8),
-                        isRecurring = cursor.getInt(9) == 1,
-                        recurrenceType = cursor.getString(10),
-                        vibrationEnabled = cursor.getInt(11) == 1,
-                        earlyNotification = cursor.getInt(12) == 1,
-                        earlyNotificationMinutes = cursor.getInt(13)
+                        id = cursor.getString(cursor.getColumnIndexOrThrow("id")),
+                        userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
+                        title = cursor.getString(cursor.getColumnIndexOrThrow("title")),
+                        description = cursor.getString(cursor.getColumnIndexOrThrow("description")),
+                        category = cursor.getString(cursor.getColumnIndexOrThrow("category")),
+                        date = cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                        time = cursor.getString(cursor.getColumnIndexOrThrow("time")),
+                        priority = cursor.getString(cursor.getColumnIndexOrThrow("priority")),
+                        status = cursor.getString(cursor.getColumnIndexOrThrow("status")),
+                        isRecurring = cursor.getInt(cursor.getColumnIndexOrThrow("is_recurring")) == 1,
+                        recurrenceType = cursor.getString(cursor.getColumnIndexOrThrow("recurrence_type")),
+                        vibrationEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("vibration_enabled")) == 1,
+                        earlyNotification = cursor.getInt(cursor.getColumnIndexOrThrow("early_notification")) == 1,
+                        earlyNotificationMinutes = cursor.getInt(cursor.getColumnIndexOrThrow("early_notification_minutes"))
                     )
                 )
             } while (cursor.moveToNext())
@@ -222,22 +222,22 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
         var alarm: Alarm? = null
         if (cursor.moveToFirst()) {
             alarm = Alarm(
-                id = cursor.getString(0),
-                userId = cursor.getInt(1),
-                label = cursor.getString(2),
-                time = cursor.getString(3),
-                amPm = cursor.getString(4),
-                category = cursor.getString(5),
-                repeatDays = cursor.getString(6),
-                dosage = cursor.getString(7),
-                instructions = cursor.getString(8),
-                isActive = cursor.getInt(9) == 1,
-                status = cursor.getString(10)?.uppercase() ?: "PENDING",
-                sound = cursor.getString(11),
-                vibrationEnabled = cursor.getInt(12) == 1,
-                gradualVolume = cursor.getInt(13) == 1,
-                autoSnoozeMinutes = cursor.getInt(14),
-                cognitiveLockEnabled = cursor.getInt(15) == 1
+                id = cursor.getString(cursor.getColumnIndexOrThrow("id")),
+                userId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id")),
+                label = cursor.getString(cursor.getColumnIndexOrThrow("label")),
+                time = cursor.getString(cursor.getColumnIndexOrThrow("time")),
+                amPm = cursor.getString(cursor.getColumnIndexOrThrow("am_pm")),
+                category = cursor.getString(cursor.getColumnIndexOrThrow("category")),
+                repeatDays = cursor.getString(cursor.getColumnIndexOrThrow("repeat_days")),
+                dosage = cursor.getString(cursor.getColumnIndexOrThrow("dosage")),
+                instructions = cursor.getString(cursor.getColumnIndexOrThrow("instructions")),
+                isActive = cursor.getInt(cursor.getColumnIndexOrThrow("is_active")) == 1,
+                status = cursor.getString(cursor.getColumnIndexOrThrow("status"))?.uppercase() ?: "PENDING",
+                sound = cursor.getString(cursor.getColumnIndexOrThrow("sound")),
+                vibrationEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("vibration_enabled")) == 1,
+                gradualVolume = cursor.getInt(cursor.getColumnIndexOrThrow("gradual_volume")) == 1,
+                autoSnoozeMinutes = cursor.getInt(cursor.getColumnIndexOrThrow("auto_snooze_minutes")),
+                cognitive_lock_enabled = cursor.getInt(cursor.getColumnIndexOrThrow("cognitive_lock_enabled")) == 1
             )
         }
         cursor.close()

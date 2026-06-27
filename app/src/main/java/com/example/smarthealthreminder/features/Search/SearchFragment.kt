@@ -146,14 +146,7 @@ class SearchFragment : Fragment() {
                 }
                 is SearchResult.Reminder -> {
                     val intent = Intent(requireContext(), AddReminderActivity::class.java).apply {
-                        putExtra("reminder_id", result.entity.id)
-                        putExtra("reminder_title", result.entity.title)
-                        putExtra("reminder_desc", result.entity.description)
-                        putExtra("reminder_time", result.entity.time)
-                        putExtra("reminder_date", result.entity.date)
-                        putExtra("reminder_category", result.entity.category)
-                        putExtra("reminder_is_recurring", result.entity.isRecurring)
-                        putExtra("reminder_recurrence_type", result.entity.recurrenceType)
+                        putExtra(AddReminderActivity.EXTRA_REMINDER_ID, result.entity.id)
                     }
                     startActivity(intent)
                 }
