@@ -3,23 +3,29 @@ package com.example.smarthealthreminder.features.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.model.TimelineItem
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 
 class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
 
     private val items = ArrayList<TimelineItem>()
-    private var listener: OnItemClickListener? = null
+    private var actionListener: OnItemActionListener? = null
 
-    interface OnItemClickListener {
+    interface OnItemActionListener {
         fun onItemClick(item: TimelineItem)
+        fun onMarkDone(item: TimelineItem)
+        fun onMarkMissed(item: TimelineItem)
+        fun onDelete(item: TimelineItem)
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        this.listener = listener
+    fun setOnItemActionListener(listener: OnItemActionListener) {
+        this.actionListener = listener
     }
 
     fun setItems(items: List<TimelineItem>) {
@@ -38,6 +44,14 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
         if (index != -1) {
             items[index] = item
             notifyItemChanged(index)
+        }
+    }
+
+    fun removeItem(item: TimelineItem) {
+        val index = items.indexOfFirst { it.id == item.id }
+        if (index != -1) {
+            items.removeAt(index)
+            notifyItemRemoved(index)
         }
     }
 
@@ -62,12 +76,21 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
         private val tvStatus: TextView = itemView.findViewById(R.id.tv_status)
         private val chipCategory: Chip = itemView.findViewById(R.id.chip_category)
         private val statusIndicator: View = itemView.findViewById(R.id.status_indicator)
+        private val btnMoreActions: ImageView = itemView.findViewById(R.id.btn_more_actions)
 
         init {
+            // Click anywhere on the item to show the detail dialog
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    listener?.onItemClick(items[position])
+                    showDetailDialog(items[position])
+                }
+            }
+            // The "..." button also opens the detail dialog
+            btnMoreActions.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    showDetailDialog(items[position])
                 }
             }
         }
@@ -96,6 +119,12 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
                     statusIndicator.backgroundTintList =
                         itemView.context.getColorStateList(R.color.success)
                 }
+                "SNOOZED" -> {
+                    tvStatus.setBackgroundResource(R.drawable.bg_rounded_card)
+                    tvStatus.setTextColor(itemView.context.getColor(R.color.pending))
+                    statusIndicator.backgroundTintList =
+                        itemView.context.getColorStateList(R.color.pending)
+                }
                 else -> {
                     tvStatus.setBackgroundResource(R.drawable.bg_rounded_card)
                     tvStatus.setTextColor(itemView.context.getColor(R.color.pending))
@@ -103,6 +132,105 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
                         itemView.context.getColorStateList(R.color.pending)
                 }
             }
+        }
+
+        private fun showDetailDialog(item: TimelineItem) {
+            val context = itemView.context
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_reminder_detail, null)
+
+            // Bind data to dialog views
+            dialogView.findViewById<TextView>(R.id.tv_dialog_title).text = item.title ?: "Reminder"
+            dialogView.findViewById<TextView>(R.id.tv_dialog_description).text =
+                if (item.description.isNullOrBlank()) "No description provided." else item.description
+
+            // Date
+            val dateText = if (!item.date.isNullOrBlank()) {
+                "${item.month ?: ""} ${item.day ?: ""}, ${item.date}"
+            } else {
+                "${item.month ?: ""} ${item.day ?: ""}"
+            }
+            dialogView.findViewById<TextView>(R.id.tv_dialog_date).text = dateText
+
+            // Time
+            dialogView.findViewById<TextView>(R.id.tv_dialog_time).text = item.time ?: "--:--"
+
+            // Category
+            dialogView.findViewById<TextView>(R.id.tv_dialog_category).text = item.category ?: "General"
+
+            // Status chip
+            val statusChip = dialogView.findViewById<Chip>(R.id.chip_dialog_status)
+            val status = item.status ?: "PENDING"
+            statusChip.text = status
+            when (status.uppercase()) {
+                "MISSED" -> {
+                    statusChip.setTextColor(context.getColor(R.color.missed))
+                    statusChip.chipBackgroundColor = context.getColorStateList(R.color.missed_light)
+                }
+                "DONE", "COMPLETED" -> {
+                    statusChip.setTextColor(context.getColor(R.color.success))
+                    statusChip.chipBackgroundColor = context.getColorStateList(R.color.success_light)
+                }
+                "SNOOZED" -> {
+                    statusChip.setTextColor(context.getColor(R.color.pending))
+                    statusChip.chipBackgroundColor = context.getColorStateList(R.color.surface_variant)
+                }
+                else -> {
+                    statusChip.setTextColor(context.getColor(R.color.pending))
+                    statusChip.chipBackgroundColor = context.getColorStateList(R.color.surface_variant)
+                }
+            }
+
+            // Build dialog
+            val dialog = AlertDialog.Builder(context)
+                .setView(dialogView)
+                .create()
+
+            // Action buttons
+            val btnMarkDone = dialogView.findViewById<MaterialButton>(R.id.btn_mark_done)
+            val btnMarkMissed = dialogView.findViewById<MaterialButton>(R.id.btn_mark_missed)
+            val btnDelete = dialogView.findViewById<MaterialButton>(R.id.btn_delete)
+
+            // Show/hide buttons based on current status
+            val statusUpper = status.uppercase()
+            when (statusUpper) {
+                "COMPLETED", "DONE" -> {
+                    btnMarkDone.visibility = View.GONE
+                    btnMarkMissed.visibility = View.VISIBLE
+                }
+                "MISSED" -> {
+                    btnMarkDone.visibility = View.VISIBLE
+                    btnMarkMissed.visibility = View.GONE
+                }
+                else -> {
+                    btnMarkDone.visibility = View.VISIBLE
+                    btnMarkMissed.visibility = View.VISIBLE
+                }
+            }
+
+            btnMarkDone.setOnClickListener {
+                actionListener?.onMarkDone(item)
+                dialog.dismiss()
+            }
+
+            btnMarkMissed.setOnClickListener {
+                actionListener?.onMarkMissed(item)
+                dialog.dismiss()
+            }
+
+            btnDelete.setOnClickListener {
+                // Confirm before delete
+                AlertDialog.Builder(context)
+                    .setTitle("Delete Reminder")
+                    .setMessage("Are you sure you want to delete \"${item.title ?: "this reminder"}\"?")
+                    .setPositiveButton("Delete") { _, _ ->
+                        actionListener?.onDelete(item)
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+            }
+
+            dialog.show()
         }
     }
 }

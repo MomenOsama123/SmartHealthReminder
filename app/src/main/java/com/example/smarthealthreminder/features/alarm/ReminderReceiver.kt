@@ -14,9 +14,15 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.alarm.ReminderScheduler
+import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 
@@ -34,7 +40,6 @@ class ReminderReceiver : BroadcastReceiver() {
         const val EXTRA_DESCRIPTION = "reminder_description"
         const val EXTRA_TYPE = "reminder_type"
         const val EXTRA_VIBRATION = "vibration_enabled"
-        const val SNOOZE_MINUTES = 15
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -47,8 +52,26 @@ class ReminderReceiver : BroadcastReceiver() {
         }
 
         when (intent.action) {
-            ACTION_SNOOZE -> handleSnooze(context, intent)
-            ACTION_MARK_TAKEN -> handleMarkTaken(context, intent)
+            ACTION_SNOOZE -> {
+                val pendingResult = goAsync()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        handleSnooze(context, intent)
+                    } finally {
+                        pendingResult.finish()
+                    }
+                }
+            }
+            ACTION_MARK_TAKEN -> {
+                val pendingResult = goAsync()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        handleMarkTaken(context, intent)
+                    } finally {
+                        pendingResult.finish()
+                    }
+                }
+            }
             ACTION_DISMISS -> dismissNotification(context, intent)
             else -> handleAlarmTrigger(context, intent)
         }
@@ -83,6 +106,44 @@ class ReminderReceiver : BroadcastReceiver() {
 
         if (vibrationEnabled) {
             vibrate(context)
+        }
+
+        if (type == "reminder") {
+            val isRecurring = intent.getBooleanExtra("is_recurring", false)
+            val recurrenceType = intent.getStringExtra("recurrence_type")
+            if (RecurrenceHelper.isRecurring(recurrenceType) || isRecurring) {
+                val pendingResult = goAsync()
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        rescheduleRecurringReminder(context, reminderId, recurrenceType)
+                    } finally {
+                        pendingResult.finish()
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun rescheduleRecurringReminder(
+        context: Context,
+        reminderId: String,
+        recurrenceType: String?
+    ) {
+        try {
+            val db = AppDatabase.getDatabase(context)
+            val reminder = db.reminderDao().getReminderById(reminderId) ?: return
+            if (!reminder.isRecurring && !RecurrenceHelper.isRecurring(recurrenceType)) return
+
+            val nextMillis = RecurrenceHelper.computeNextTriggerMillis(
+                date = reminder.date,
+                time = reminder.time,
+                recurrenceType = reminder.recurrenceType ?: recurrenceType
+            ) ?: return
+
+            ReminderScheduler.scheduleReminder(context, reminder, nextMillis)
+            Log.d("REMINDER_RECEIVER", "Scheduled next occurrence for recurring reminder $reminderId")
+        } catch (e: Exception) {
+            Log.e("REMINDER_RECEIVER", "Failed to reschedule recurring reminder", e)
         }
     }
 
@@ -156,6 +217,8 @@ class ReminderReceiver : BroadcastReceiver() {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
+        val snoozeMinutes = SettingsActivity.getReminderSnoozeMinutes(context)
+
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle("💊 $title")
             .setContentText(description.ifEmpty { "Time for your health reminder!" })
@@ -165,7 +228,7 @@ class ReminderReceiver : BroadcastReceiver() {
             .setAutoCancel(false)
             .setOngoing(true)
             .setContentIntent(contentPendingIntent)
-            .addAction(R.drawable.ic_snooze, "Snooze ${SNOOZE_MINUTES}m", snoozePendingIntent)
+            .addAction(R.drawable.ic_snooze, "Snooze ${snoozeMinutes}m", snoozePendingIntent)
             .addAction(R.drawable.ic_check, "Taken", takenPendingIntent)
             .addAction(R.drawable.ic_close, "Dismiss", dismissPendingIntent)
             .setDeleteIntent(dismissPendingIntent)
@@ -174,7 +237,7 @@ class ReminderReceiver : BroadcastReceiver() {
         notificationManager.notify(id.hashCode(), notification)
     }
 
-    private fun handleSnooze(context: Context, intent: Intent) {
+    private suspend fun handleSnooze(context: Context, intent: Intent) {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID) ?: return
         val type = intent.getStringExtra(EXTRA_TYPE) ?: "alarm"
 
@@ -182,15 +245,16 @@ class ReminderReceiver : BroadcastReceiver() {
 
         dismissNotification(context, intent)
 
+        val snoozeMinutes = SettingsActivity.getReminderSnoozeMinutes(context)
         val calendar = Calendar.getInstance().apply {
-            add(Calendar.MINUTE, SNOOZE_MINUTES)
+            add(Calendar.MINUTE, snoozeMinutes)
         }
         val newHour = calendar.get(Calendar.HOUR_OF_DAY)
         val newMinute = calendar.get(Calendar.MINUTE)
         val newAmPm = if (calendar.get(Calendar.AM_PM) == Calendar.AM) "AM" else "PM"
         val newTime = String.format(Locale.getDefault(), "%02d:%02d", newHour, newMinute)
 
-        Log.d("REMINDER_RECEIVER", "New snooze time: $newTime $newAmPm")
+        Log.d("REMINDER_RECEIVER", "New snooze time: $newTime $newAmPm (snoozeMinutes=$snoozeMinutes)")
 
         val dbHelper = DatabaseHelper(context)
 
@@ -201,36 +265,52 @@ class ReminderReceiver : BroadcastReceiver() {
                 return
             }
 
+            // Update Room alarm status
+            try {
+                val db = AppDatabase.getDatabase(context)
+                db.alarmDao().updateLastTriggeredStatus(id, "Snoozed")
+                Log.d("REMINDER_RECEIVER", "Room alarm status updated to Snoozed")
+            } catch (e: Exception) {
+                Log.e("REMINDER_RECEIVER", "Failed to update Room alarm status", e)
+            }
+
             val alarmHelper = AlarmHelper(context)
             val updatedAlarm = dbHelper.getAlarmById(id)
 
             if (updatedAlarm != null) {
-                alarmHelper.cancelAlarm(id)
                 alarmHelper.scheduleAlarm(updatedAlarm)
                 Log.d("REMINDER_RECEIVER", "Alarm snooze scheduled: $id at $newTime $newAmPm")
             }
         } else {
-            // ✅ Use updateReminderStatus instead of updateReminderStatusSnoozed
-            val success = dbHelper.updateReminderStatus(id, "Snoozed")
-            if (!success) {
-                Log.e("REMINDER_RECEIVER", "Failed to update reminder status to Snoozed")
-                return
+            // Update SQLite
+            val sqliteSuccess = dbHelper.updateReminderStatus(id, "Snoozed")
+            if (!sqliteSuccess) {
+                Log.e("REMINDER_RECEIVER", "Failed to update reminder status to Snoozed in SQLite")
             }
 
-            // Update time in database for the snoozed reminder
+            // Update Room
+            try {
+                val db = AppDatabase.getDatabase(context)
+                db.reminderDao().updateReminderStatus(id, "Snoozed")
+                Log.d("REMINDER_RECEIVER", "Room reminder status updated to Snoozed")
+            } catch (e: Exception) {
+                Log.e("REMINDER_RECEIVER", "Failed to update Room reminder status", e)
+            }
+
+            // Update time in SQLite database for the snoozed reminder
             val values = android.content.ContentValues().apply {
                 put("time", newTime)
             }
-            val db = dbHelper.writableDatabase
-            db.update("reminders", values, "id = ?", arrayOf(id))
-            db.close()
+            val sqliteDb = dbHelper.writableDatabase
+            sqliteDb.update("reminders", values, "id = ?", arrayOf(id))
+            sqliteDb.close()
 
-            scheduleReminderSnooze(context, id, calendar.timeInMillis)
-            Log.d("REMINDER_RECEIVER", "Reminder snoozed: $id at $newTime")
+            scheduleReminderSnooze(context, id, calendar.timeInMillis, snoozeMinutes)
+            Log.d("REMINDER_RECEIVER", "Reminder snoozed: $id at $newTime (snoozeMinutes=$snoozeMinutes)")
         }
     }
 
-    private fun scheduleReminderSnooze(context: Context, reminderId: String, triggerAtMillis: Long) {
+    private fun scheduleReminderSnooze(context: Context, reminderId: String, triggerAtMillis: Long, snoozeMinutes: Int) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             Log.e("REMINDER_RECEIVER", "Cannot schedule exact alarms")
@@ -246,7 +326,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            reminderId.hashCode(),
+            reminderId.hashCode() + 5000,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -257,10 +337,10 @@ class ReminderReceiver : BroadcastReceiver() {
             pendingIntent
         )
 
-        Log.d("REMINDER_RECEIVER", "Reminder snooze scheduled at $triggerAtMillis")
+        Log.d("REMINDER_RECEIVER", "Reminder snooze scheduled at $triggerAtMillis (snoozeMinutes=$snoozeMinutes)")
     }
 
-    private fun handleMarkTaken(context: Context, intent: Intent) {
+    private suspend fun handleMarkTaken(context: Context, intent: Intent) {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID) ?: return
         val type = intent.getStringExtra(EXTRA_TYPE) ?: "alarm"
 
@@ -272,9 +352,38 @@ class ReminderReceiver : BroadcastReceiver() {
             "alarm" -> {
                 dbHelper.markAlarmAsTaken(id)
                 AlarmHelper(context).cancelAlarm(id)
+                try {
+                    val db = AppDatabase.getDatabase(context)
+                    db.alarmDao().updateLastTriggeredStatus(id, "Completed")
+                } catch (e: Exception) {
+                    Log.e("REMINDER_RECEIVER", "Failed to update Room alarm status", e)
+                }
             }
             "reminder" -> {
-                dbHelper.updateReminderStatus(id, "Done")
+                val db = AppDatabase.getDatabase(context)
+                val reminder = db.reminderDao().getReminderById(id)
+
+                if (reminder != null && reminder.isRecurring && RecurrenceHelper.isRecurring(reminder.recurrenceType)) {
+                    val nextMillis = RecurrenceHelper.computeNextTriggerMillis(
+                        date = reminder.date,
+                        time = reminder.time,
+                        recurrenceType = reminder.recurrenceType
+                    )
+
+                    if (nextMillis != null) {
+                        db.reminderDao().updateReminderStatus(id, "Pending")
+                        dbHelper.updateReminderStatus(id, "Pending")
+                        ReminderScheduler.scheduleReminder(context, reminder, nextMillis)
+                        Log.d("REMINDER_RECEIVER", "Recurring reminder marked taken, next alarm scheduled")
+                    } else {
+                        dbHelper.updateReminderStatus(id, "Done")
+                        db.reminderDao().updateReminderStatus(id, "Completed")
+                    }
+                } else {
+                    dbHelper.updateReminderStatus(id, "Done")
+                    db.reminderDao().updateReminderStatus(id, "Completed")
+                    Log.d("REMINDER_RECEIVER", "Room reminder status updated to Completed")
+                }
             }
         }
 

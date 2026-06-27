@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
@@ -17,28 +17,14 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <ImageButton
-                android:id="@+id/btn_menu"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_more"
-                android:contentDescription="Menu"/>
-
             <TextView
+                android:id="@+id/tv_title_reminders"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Reminders"
-                android:textAppearance="@style/TextHeading3"/>
-
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_notifications"
-                android:contentDescription="Notifications"/>
+                android:textAppearance="@style/TextHeading3"
+                android:textColor="@color/text_primary"/>
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -57,12 +43,16 @@
 
             <!-- Today's Reminders Header -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/surface">
+                app:cardBackgroundColor="@color/surface"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -112,12 +102,16 @@
 
             <!-- Missed Card -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_missed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/missed_light">
+                app:cardBackgroundColor="@color/missed_light"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -171,12 +165,16 @@
 
             <!-- Completed Card -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_completed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
-                app:cardBackgroundColor="@color/success_light">
+                app:cardBackgroundColor="@color/success_light"
+                android:foreground="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -244,11 +242,17 @@
                     android:textAppearance="@style/TextHeading3"/>
 
                 <TextView
+                    android:id="@+id/tv_view_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Calendar"
+                    android:text="View Calendar →"
                     android:textAppearance="@style/TextBody2"
-                    android:textColor="@color/primary"/>
+                    android:textColor="@color/primary"
+                    android:background="?attr/selectableItemBackground"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:clickable="true"
+                    android:focusable="true"/>
 
             </LinearLayout>
 

@@ -105,13 +105,13 @@
             android:windowSoftInputMode="adjustResize" /> <!-- ================= RECEIVERS ================= -->
         <receiver
             android:name=".alarm.AlarmReceiver"
-            android:exported="false"> <!-- ⬅️⬅️⬅️ غيّر لـ false -->
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".alarm.ReminderReceiver"
+            android:name=".features.alarm.ReminderReceiver"
             android:exported="false" /> <!-- ================= SERVICE ================= -->
         <service
             android:name=".alarm.AlarmService"

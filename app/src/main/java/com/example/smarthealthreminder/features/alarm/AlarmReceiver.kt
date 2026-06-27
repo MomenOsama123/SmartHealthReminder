@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
+import com.example.smarthealthreminder.features.alarm.ReminderReceiver
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.model.Alarm
 import kotlinx.coroutines.CoroutineScope
@@ -20,26 +22,8 @@ class AlarmReceiver : BroadcastReceiver() {
             val pendingResult = goAsync()
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    val db = AppDatabase.getDatabase(context)
-                    val alarms = db.alarmDao().getAllAlarms().first()
-                    val alarmHelper = AlarmHelper(context)
-                    alarms.filter { it.isActive }.forEach { entity ->
-                        val alarm = Alarm(
-                            id = entity.id,
-                            label = entity.label,
-                            time = entity.time,
-                            amPm = entity.amPm,
-                            category = entity.category,
-                            isActive = entity.isActive,
-                            repeatDays = entity.repeatDays,
-                            sound = entity.sound,
-                            vibrationEnabled = entity.vibrationEnabled,
-                            gradualVolume = entity.gradualVolume,
-                            autoSnoozeMinutes = entity.autoSnoozeMinutes,
-                            cognitiveLockEnabled = entity.cognitiveLockEnabled
-                        )
-                        alarmHelper.scheduleAlarm(alarm)
-                    }
+                    rescheduleAlarms(context)
+                    rescheduleReminders(context)
                 } finally {
                     pendingResult.finish()
                 }
@@ -131,6 +115,101 @@ class AlarmReceiver : BroadcastReceiver() {
             } finally {
                 pendingResult.finish()
             }
+        }
+    }
+
+    private suspend fun rescheduleAlarms(context: Context) {
+        try {
+            val db = AppDatabase.getDatabase(context)
+            val alarms = db.alarmDao().getAllAlarms().first()
+            val alarmHelper = AlarmHelper(context)
+            alarms.filter { it.isActive }.forEach { entity ->
+                val alarm = Alarm(
+                    id = entity.id,
+                    label = entity.label,
+                    time = entity.time,
+                    amPm = entity.amPm,
+                    category = entity.category,
+                    isActive = entity.isActive,
+                    repeatDays = entity.repeatDays,
+                    sound = entity.sound,
+                    vibrationEnabled = entity.vibrationEnabled,
+                    gradualVolume = entity.gradualVolume,
+                    autoSnoozeMinutes = entity.autoSnoozeMinutes,
+                    cognitiveLockEnabled = entity.cognitiveLockEnabled
+                )
+                alarmHelper.scheduleAlarm(alarm)
+                Log.d("AlarmReceiver", "Rescheduled alarm: ${alarm.id}")
+            }
+        } catch (e: Exception) {
+            Log.e("AlarmReceiver", "Failed to reschedule alarms", e)
+        }
+    }
+
+    private suspend fun rescheduleReminders(context: Context) {
+        try {
+            val db = AppDatabase.getDatabase(context)
+            val reminders = db.reminderDao().getAllReminders().first()
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            val now = System.currentTimeMillis()
+
+            reminders.filter { it.status == "Pending" || it.status == "Snoozed" }.forEach { reminder ->
+                try {
+                    val dateParts = reminder.date?.split("-") ?: return@forEach
+                    val timeParts = reminder.time?.split(":") ?: return@forEach
+                    if (dateParts.size < 3 || timeParts.size < 2) return@forEach
+
+                    val calendar = Calendar.getInstance().apply {
+                        set(Calendar.YEAR, dateParts[0].toInt())
+                        set(Calendar.MONTH, dateParts[1].toInt() - 1)
+                        set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
+                        set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+                        set(Calendar.MINUTE, timeParts[1].toInt())
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
+                    }
+
+                    // If the reminder time is in the past, mark it as Missed
+                    if (calendar.timeInMillis < now) {
+                        db.reminderDao().updateReminderStatus(reminder.id, "Missed")
+                        Log.d("AlarmReceiver", "Marked past reminder as missed: ${reminder.id}")
+                        return@forEach
+                    }
+
+                    // Schedule the reminder
+                    val intent = Intent(context, ReminderReceiver::class.java).apply {
+                        putExtra(ReminderReceiver.EXTRA_REMINDER_ID, reminder.id)
+                        putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title)
+                        putExtra(ReminderReceiver.EXTRA_DESCRIPTION, reminder.description ?: "Time for your health reminder!")
+                        putExtra(ReminderReceiver.EXTRA_TYPE, "reminder")
+                        putExtra(ReminderReceiver.EXTRA_VIBRATION, reminder.vibrationEnabled)
+                    }
+
+                    val pendingIntent = PendingIntent.getBroadcast(
+                        context,
+                        reminder.id.hashCode(),
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+                        Log.e("AlarmReceiver", "Cannot schedule exact alarms for reminder: ${reminder.id}")
+                        return@forEach
+                    }
+
+                    alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        pendingIntent
+                    )
+                    Log.d("AlarmReceiver", "Rescheduled reminder: ${reminder.id} at ${reminder.date} ${reminder.time}")
+                } catch (e: Exception) {
+                    Log.e("AlarmReceiver", "Failed to reschedule reminder: ${reminder.id}", e)
+                }
+            }
+        } catch (e: Exception) {
+            Log.e("AlarmReceiver", "Failed to reschedule reminders", e)
         }
     }
 }

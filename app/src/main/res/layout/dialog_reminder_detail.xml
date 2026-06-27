@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textAppearance="@style/TextHeading2"
+        android:textColor="@color/text_primary"/>
+
+    <!-- Status chip -->
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_dialog_status"
+        style="@style/Widget.App.Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text=""
+        android:textColor="@color/pending"
+        app:chipBackgroundColor="@color/pending_light"
+        app:chipIconSize="14dp"/>
+
+    <!-- Description label -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Description"
+        android:textAppearance="@style/TextCaption"
+        android:textColor="@color/text_tertiary"/>
+
+    <!-- Description content -->
+    <TextView
+        android:id="@+id/tv_dialog_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text=""
+        android:textAppearance="@style/TextBody2"
+        android:textColor="@color/text_primary"
+        android:lineSpacingMultiplier="1.2"/>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/divider"/>
+
+    <!-- Info rows -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"/>
+
+            <TextView
+                android:id="@+id/tv_dialog_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text=""
+                android:textAppearance="@style/TextBody2"
+                android:textColor="@color/text_primary"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"/>
+
+            <TextView
+                android:id="@+id/tv_dialog_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text=""
+                android:textAppearance="@style/TextBody2"
+                android:textColor="@color/text_primary"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Category -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category:"
+            android:textAppearance="@style/TextCaption"
+            android:textColor="@color/text_tertiary"/>
+
+        <TextView
+            android:id="@+id/tv_dialog_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text=""
+            android:textAppearance="@style/TextBody2"
+            android:textColor="@color/primary"/>
+
+    </LinearLayout>
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/divider"/>
+
+    <!-- Action buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_mark_done"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:text="Mark Done"
+            android:textAppearance="@style/TextButton"
+            android:textColor="@color/text_on_primary"
+            android:background="@drawable/bg_rounded_button_primary"
+            app:backgroundTint="@color/success"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_check"
+            app:iconTint="@color/text_on_primary"
+            app:iconGravity="textStart"
+            app:iconSize="16dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_mark_missed"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:layout_marginStart="4dp"
+            android:text="Missed"
+            android:textAppearance="@style/TextButton"
+            android:textColor="@color/text_on_primary"
+            android:background="@drawable/bg_rounded_button_primary"
+            app:backgroundTint="@color/missed"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_warning"
+            app:iconTint="@color/text_on_primary"
+            app:iconGravity="textStart"
+            app:iconSize="16dp"/>
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:text="Delete"
+        android:textAppearance="@style/TextButton"
+        android:textColor="@color/urgent"
+        android:background="@drawable/bg_rounded_button_secondary"
+        app:backgroundTint="@color/urgent_light"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/ic_delete"
+        app:iconTint="@color/urgent"
+        app:iconGravity="textStart"
+        app:iconSize="16dp"/>
+
+</LinearLayout>

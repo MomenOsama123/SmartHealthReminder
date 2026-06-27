@@ -157,6 +157,8 @@ class SearchFragment : Fragment() {
                         putExtra("reminder_time", result.entity.time)
                         putExtra("reminder_date", result.entity.date)
                         putExtra("reminder_category", result.entity.category)
+                        putExtra("reminder_is_recurring", result.entity.isRecurring)
+                        putExtra("reminder_recurrence_type", result.entity.recurrenceType)
                     }
                     startActivity(intent)
                 }

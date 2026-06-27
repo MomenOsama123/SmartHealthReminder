@@ -130,6 +130,15 @@
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="2dp"/>
 
+                <ImageView
+                    android:id="@+id/btn_more_actions"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_more"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="Actions"/>
+
             </LinearLayout>
 
         </LinearLayout>

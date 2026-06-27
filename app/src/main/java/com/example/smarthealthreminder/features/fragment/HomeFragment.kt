@@ -18,6 +18,9 @@ import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActiv
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.search.SearchActivity
+import com.example.smarthealthreminder.features.activity.MainActivity
+import com.example.smarthealthreminder.features.util.RecurrenceHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
@@ -54,6 +57,7 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
+        binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
@@ -71,13 +75,34 @@ class HomeFragment : Fragment() {
         binding.btnViewTodayPlan.setOnClickListener {
             startActivity(Intent(requireContext(), com.example.smarthealthreminder.features.plan.TodayPlanActivity::class.java))
         }
+        binding.calendarIcon.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_SCHEDULE)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
     }
 
     private fun observeReminders() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.pendingReminders.collect { entities ->
-                    val reminders = entities.map { entity ->
+                viewModel.allReminders.collect { entities ->
+                    val today = RecurrenceHelper.getTodayString()
+                    val todayReminders = entities
+                        .filter { entity ->
+                            val isActive = entity.status.equals("Pending", ignoreCase = true) ||
+                                    entity.status.equals("Snoozed", ignoreCase = true)
+                            isActive && RecurrenceHelper.isDueOnDate(
+                                reminderDate = entity.date,
+                                recurrenceType = entity.recurrenceType,
+                                isRecurring = entity.isRecurring,
+                                targetDate = today
+                            )
+                        }
+                        .sortedBy { it.time ?: "99:99" }
+
+                    val reminders = todayReminders.map { entity ->
                         Reminder(
                             id = entity.id,
                             title = entity.title,

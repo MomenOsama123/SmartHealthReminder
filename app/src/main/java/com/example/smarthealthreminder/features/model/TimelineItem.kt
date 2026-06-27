@@ -7,6 +7,7 @@ data class TimelineItem(
     var id: String? = null,
     var month: String? = null,
     var day: String? = null,
+    var date: String? = null,
     var title: String? = null,
     var description: String? = null,
     var category: String? = null,
@@ -19,6 +20,7 @@ data class TimelineItem(
         id = parcel.readString(),
         month = parcel.readString(),
         day = parcel.readString(),
+        date = parcel.readString(),
         title = parcel.readString(),
         description = parcel.readString(),
         category = parcel.readString(),
@@ -31,6 +33,7 @@ data class TimelineItem(
         parcel.writeString(id)
         parcel.writeString(month)
         parcel.writeString(day)
+        parcel.writeString(date)
         parcel.writeString(title)
         parcel.writeString(description)
         parcel.writeString(category)

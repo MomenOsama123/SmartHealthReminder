@@ -130,10 +130,14 @@
                             android:textStyle="bold" />
 
                         <ImageView
+                            android:id="@+id/calendarIcon"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_calendar"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:focusable="true"
                             app:tint="@color/text_tertiary" />
                     </RelativeLayout>
 

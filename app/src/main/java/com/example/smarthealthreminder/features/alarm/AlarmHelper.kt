@@ -161,11 +161,11 @@ class AlarmHelper(private val context: Context) {
         pendingIntent.cancel()
     }
 
-    fun snoozeAlarm(alarm: Alarm, minutes: Int = 10): Boolean {
+    fun snoozeAlarm(alarm: Alarm, minutes: Int = 15): Boolean {
         if (!canScheduleExactAlarm()) return false
 
-        // Cancel both the original alarm and any previous snooze pending intent
-        cancelAlarm(alarm)
+        // Cancel any previous snooze pending intent but keep the original alarm
+        // so repeating alarms continue to schedule and one-time alarms are not lost.
         cancelSnoozePendingIntent(alarm.id)
 
         // Snooze must use AlarmReceiver so AlarmService is started and the

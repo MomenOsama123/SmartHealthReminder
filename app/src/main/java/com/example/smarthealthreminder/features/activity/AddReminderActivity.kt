@@ -2,7 +2,6 @@ package com.example.smarthealthreminder.features.activity
 
 import android.app.AlarmManager
 import android.app.DatePickerDialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
@@ -19,7 +18,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.alarm.ReminderReceiver
+import com.example.smarthealthreminder.features.alarm.ReminderScheduler
+import com.example.smarthealthreminder.features.util.RecurrenceHelper
+import android.widget.LinearLayout
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
@@ -51,11 +52,14 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var btnSave: com.google.android.material.button.MaterialButton
     private lateinit var btnCancel: TextView
     private lateinit var btnDelete: TextView
+    private lateinit var rowRecurrence: LinearLayout
+    private lateinit var tvRecurrenceValue: TextView
 
     private var selectedDate: String = ""
     private var selectedTime: String = ""
     private var selectedCategory: String = "Medicine"
     private var selectedPriority: String = "Medium"
+    private var selectedRecurrence: String = RecurrenceHelper.NONE
 
     private var existingReminderId: String? = null
     private var isEditMode = false
@@ -103,6 +107,11 @@ class AddReminderActivity : AppCompatActivity() {
                 "Task" -> chipGroupCategory.check(R.id.chip_task)
                 "Custom" -> chipGroupCategory.check(R.id.chip_custom)
             }
+
+            selectedRecurrence = intent.getStringExtra("reminder_recurrence_type")
+                ?: if (intent.getBooleanExtra("reminder_is_recurring", false)) RecurrenceHelper.DAILY
+                else RecurrenceHelper.NONE
+            tvRecurrenceValue.text = selectedRecurrence
         }
     }
 
@@ -118,6 +127,8 @@ class AddReminderActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.btn_save_reminder)
         btnCancel = findViewById(R.id.btn_cancel)
         btnDelete = findViewById(R.id.btn_delete_reminder)
+        rowRecurrence = findViewById(R.id.row_recurrence)
+        tvRecurrenceValue = findViewById(R.id.tv_recurrence_value)
 
         val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
         switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
@@ -168,6 +179,20 @@ class AddReminderActivity : AppCompatActivity() {
         btnCancel.setOnClickListener { navigateToDashboard() }
         btnDelete.setOnClickListener { deleteReminder() }
         findViewById<ImageButton>(R.id.btn_back)?.setOnClickListener { navigateToDashboard() }
+        rowRecurrence.setOnClickListener { showRecurrencePicker() }
+    }
+
+    private fun showRecurrencePicker() {
+        val currentIndex = RecurrenceHelper.OPTIONS.indexOf(selectedRecurrence).coerceAtLeast(0)
+        AlertDialog.Builder(this)
+            .setTitle("Recurrence")
+            .setSingleChoiceItems(RecurrenceHelper.OPTIONS, currentIndex) { dialog, which ->
+                selectedRecurrence = RecurrenceHelper.OPTIONS[which]
+                tvRecurrenceValue.text = selectedRecurrence
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun showDatePicker() {
@@ -206,13 +231,19 @@ class AddReminderActivity : AppCompatActivity() {
         }
 
         val description = etDescription.text.toString().trim()
-        val reminderTimeMillis = getReminderTimeMillis()
+        val isRecurring = RecurrenceHelper.isRecurring(selectedRecurrence)
+        val reminderTimeMillis = if (isRecurring) {
+            RecurrenceHelper.computeNextTriggerMillis(selectedDate, selectedTime, selectedRecurrence)
+        } else {
+            getReminderTimeMillis()
+        }
+
         if (reminderTimeMillis == null) {
             Toast.makeText(this, "Please choose a valid date and time", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (reminderTimeMillis <= System.currentTimeMillis()) {
+        if (!isRecurring && reminderTimeMillis <= System.currentTimeMillis()) {
             Toast.makeText(this, "Please choose a future time", Toast.LENGTH_SHORT).show()
             return
         }
@@ -237,6 +268,8 @@ class AddReminderActivity : AppCompatActivity() {
             time = selectedTime,
             priority = selectedPriority,
             status = "Pending",
+            isRecurring = isRecurring,
+            recurrenceType = if (isRecurring) selectedRecurrence else null,
             vibrationEnabled = switchVibration.isChecked,
             earlyNotification = switchEarlyNotification.isChecked,
             earlyNotificationMinutes = if (switchEarlyNotification.isChecked) EARLY_NOTIFICATION_MINUTES else 0
@@ -252,7 +285,7 @@ class AddReminderActivity : AppCompatActivity() {
             // ✅✅✅ احفظ في DatabaseHelper كمان عشان Dashboard تشوفه
             saveToDatabaseHelper(reminderId, title, description, selectedTime, selectedCategory)
 
-            scheduleReminderNotification(reminder, reminderTimeMillis)
+            ReminderScheduler.scheduleReminder(this@AddReminderActivity, reminder, reminderTimeMillis)
 
             Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
 
@@ -281,7 +314,8 @@ class AddReminderActivity : AppCompatActivity() {
                     put("status", "Pending")
                     put("date", selectedDate)
                     put("priority", selectedPriority)
-                    put("is_recurring", 0)
+                    put("is_recurring", if (RecurrenceHelper.isRecurring(selectedRecurrence)) 1 else 0)
+                    put("recurrence_type", if (RecurrenceHelper.isRecurring(selectedRecurrence)) selectedRecurrence else null)
                     put("vibration_enabled", if (switchVibration.isChecked) 1 else 0)
                     put("early_notification", if (switchEarlyNotification.isChecked) 1 else 0)
                     put("early_notification_minutes", if (switchEarlyNotification.isChecked) 5 else 0)
@@ -329,59 +363,6 @@ class AddReminderActivity : AppCompatActivity() {
         }
     }
 
-    private fun scheduleReminderNotification(reminder: ReminderEntity, reminderTimeMillis: Long) {
-        scheduleReminderAlarm(
-            reminder = reminder,
-            triggerAtMillis = reminderTimeMillis,
-            requestCode = reminder.id.hashCode(),
-            title = reminder.title,
-            description = reminder.description ?: "Time for your health reminder!"
-        )
-
-        if (reminder.earlyNotification) {
-            val earlyTimeMillis = reminderTimeMillis - EARLY_NOTIFICATION_MINUTES * 60 * 1000L
-            if (earlyTimeMillis > System.currentTimeMillis()) {
-                scheduleReminderAlarm(
-                    reminder = reminder,
-                    triggerAtMillis = earlyTimeMillis,
-                    requestCode = reminder.id.hashCode() + EARLY_NOTIFICATION_REQUEST_OFFSET,
-                    title = reminder.title,
-                    description = "Upcoming in $EARLY_NOTIFICATION_MINUTES minutes"
-                )
-            }
-        }
-    }
-
-    private fun scheduleReminderAlarm(
-        reminder: ReminderEntity,
-        triggerAtMillis: Long,
-        requestCode: Int,
-        title: String,
-        description: String
-    ) {
-        val intent = Intent(this, ReminderReceiver::class.java).apply {
-            putExtra("reminder_id", reminder.id)
-            putExtra("reminder_title", title)
-            putExtra("reminder_description", description)
-            putExtra("reminder_time", reminder.time)
-            putExtra("vibration_enabled", reminder.vibrationEnabled)
-        }
-
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            requestCode,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            triggerAtMillis,
-            pendingIntent
-        )
-    }
-
     private fun deleteReminder() {
         existingReminderId?.let { id ->
             AlertDialog.Builder(this)
@@ -401,14 +382,6 @@ class AddReminderActivity : AppCompatActivity() {
     }
 
     private fun cancelReminderNotification(reminderId: String) {
-        val intent = Intent(this, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            reminderId.hashCode(),
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManager.cancel(pendingIntent)
+        ReminderScheduler.cancelReminderAlarms(this, reminderId)
     }
 }
