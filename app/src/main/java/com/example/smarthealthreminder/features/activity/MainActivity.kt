@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chatBotFragment: ChatBotFragment
     private lateinit var bottomNavigation: BottomNavigationView
     private var activeFragment: Fragment? = null
+    private var isProgrammaticSelection = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,13 +81,15 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> showFragment(homeFragment)
                 R.id.nav_schedule -> showFragment(scheduleFragment)
                 R.id.nav_create -> {
-                    QuickActionsBottomSheet.newInstance().show(supportFragmentManager, QuickActionsBottomSheet.TAG)
-                    false
+                    if (!isProgrammaticSelection) {
+                        QuickActionsBottomSheet.newInstance().show(supportFragmentManager, QuickActionsBottomSheet.TAG)
+                    }
+                    true
                 }
                 R.id.nav_ai -> showFragment(chatBotFragment)
                 R.id.action_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
-                    false
+                    true
                 }
                 else -> false
             }
@@ -122,6 +126,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToDestination(destination: String) {
+        isProgrammaticSelection = true
         when (destination) {
             DESTINATION_SCHEDULE -> {
                 if (bottomNavigation.selectedItemId != R.id.nav_schedule) {
@@ -130,14 +135,14 @@ class MainActivity : AppCompatActivity() {
                 showFragment(scheduleFragment)
             }
             DESTINATION_ALARMS -> {
-                if (bottomNavigation.selectedItemId != R.id.nav_schedule) {
-                    bottomNavigation.selectedItemId = R.id.nav_schedule
+                if (bottomNavigation.selectedItemId != R.id.nav_create) {
+                    bottomNavigation.selectedItemId = R.id.nav_create
                 }
                 showFragment(alarmsFragment)
             }
             DESTINATION_REMINDERS -> {
-                if (bottomNavigation.selectedItemId != R.id.nav_schedule) {
-                    bottomNavigation.selectedItemId = R.id.nav_schedule
+                if (bottomNavigation.selectedItemId != R.id.nav_create) {
+                    bottomNavigation.selectedItemId = R.id.nav_create
                 }
                 showFragment(remindersFragment)
             }
@@ -154,6 +159,7 @@ class MainActivity : AppCompatActivity() {
                 showFragment(homeFragment)
             }
         }
+        isProgrammaticSelection = false
     }
 
     private fun showFragment(fragment: Fragment): Boolean {
