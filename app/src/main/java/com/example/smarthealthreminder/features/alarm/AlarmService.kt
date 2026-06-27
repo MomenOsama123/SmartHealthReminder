@@ -25,7 +25,7 @@ class AlarmService : Service() {
 
     companion object {
         const val CHANNEL_ID = "alarm_channel"
-        const val NOTIFICATION_ID = 1001
+        const val NOTIFICATION_ID_BASE = 1001
         const val EXTRA_ALARM_LABEL = "alarm_label"
         const val ACTION_STOP = "ACTION_STOP"
     }
@@ -40,9 +40,10 @@ class AlarmService : Service() {
         val label = intent?.getStringExtra("alarm_label") ?: "Alarm"
         val alarmTime = intent?.getStringExtra("alarm_time")
         val alarmCategory = intent?.getStringExtra("alarm_category")
+        val notificationId = alarmId?.hashCode()?.let { NOTIFICATION_ID_BASE + (it and 0xFFFF) } ?: NOTIFICATION_ID_BASE
 
         // ⚠️ MUST call startForeground first when started via startForegroundService()
-        startForeground(NOTIFICATION_ID, buildNotification(label, alarmId ?: "", alarmTime, alarmCategory))
+        startForeground(notificationId, buildNotification(label, alarmId ?: "", alarmTime, alarmCategory, notificationId))
 
         // لو جه أمر stop — وقف كل حاجة فوراً
         if (intent?.action == ACTION_STOP) {
@@ -114,7 +115,8 @@ class AlarmService : Service() {
         label: String,
         alarmId: String,
         alarmTime: String?,
-        alarmCategory: String?
+        alarmCategory: String?,
+        notificationId: Int
     ): Notification {
         val intent = Intent(this, AlarmRingingActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -124,7 +126,7 @@ class AlarmService : Service() {
             putExtra(AlarmRingingActivity.EXTRA_ALARM_CATEGORY, alarmCategory)
         }
         val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent,
+            this, notificationId, intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 

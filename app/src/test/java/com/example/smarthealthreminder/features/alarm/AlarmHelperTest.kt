@@ -8,12 +8,12 @@ import com.example.smarthealthreminder.features.model.Alarm
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk
-import io.mockk.verify
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import junit.framework.TestCase.assertEquals
+import java.util.Calendar
 
 class AlarmHelperTest {
 
@@ -94,6 +94,36 @@ class AlarmHelperTest {
         val alarm = Alarm(id = "a1", label = "Test", time = "08:00", amPm = "AM", category = "MEDICINE")
         val result = alarmHelper.snoozeAlarm(alarm, 10)
         assertTrue(result)
+    }
+
+    @Test
+    fun `parseRepeatDays handles mixed formats and case`() {
+        val days = AlarmHelper.parseRepeatDays("mon, WED;Fri Sun")
+        assertEquals(4, days.size)
+        assertTrue(days.contains(Calendar.MONDAY))
+        assertTrue(days.contains(Calendar.WEDNESDAY))
+        assertTrue(days.contains(Calendar.FRIDAY))
+        assertTrue(days.contains(Calendar.SUNDAY))
+    }
+
+    @Test
+    fun `parseRepeatDays returns empty for malformed input`() {
+        assertTrue(AlarmHelper.parseRepeatDays("invalid gibberish").isEmpty())
+        assertTrue(AlarmHelper.parseRepeatDays(null).isEmpty())
+        assertTrue(AlarmHelper.parseRepeatDays("").isEmpty())
+    }
+
+    @Test
+    fun `parseRepeatDays deduplicates days`() {
+        val days = AlarmHelper.parseRepeatDays("Mon Mon Tue")
+        assertEquals(2, days.size)
+    }
+
+    @Test
+    fun `isValidTime rejects invalid values`() {
+        assertFalse(AlarmHelper.isValidTime(25, 0))
+        assertFalse(AlarmHelper.isValidTime(8, 60))
+        assertTrue(AlarmHelper.isValidTime(8, 30))
     }
 
     // ───── Alarm model ─────

@@ -1,7 +1,5 @@
 package com.example.smarthealthreminder.alarm
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -14,15 +12,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 class AlarmReceiver : BroadcastReceiver() {
+
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
             val pendingResult = goAsync()
             CoroutineScope(Dispatchers.IO).launch {
                 try {
-                    rescheduleAlarms(context)
+                    rescheduleAlarmsAfterBoot(context)
                     rescheduleReminders(context)
                 } finally {
                     pendingResult.finish()
@@ -31,7 +29,8 @@ class AlarmReceiver : BroadcastReceiver() {
             return
         }
 
-        val alarmId = intent.getStringExtra("alarm_id")
+        val alarmId = intent.getStringExtra(AlarmHelper.EXTRA_ALARM_ID)
+            ?: intent.getStringExtra("alarm_id")
         if (alarmId.isNullOrBlank()) {
             return
         }
@@ -39,91 +38,81 @@ class AlarmReceiver : BroadcastReceiver() {
         val pendingResult = goAsync()
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val isSnooze = intent.getBooleanExtra("is_snooze", false)
-                val repeatDay = intent.getIntExtra("repeat_day", -1)
-
-                val alarm = AppDatabase.getDatabase(context)
-                    .alarmDao()
-                    .getActiveAlarmById(alarmId)
-
-                if (alarm == null && !isSnooze) {
-                    return@launch
-                }
-
-                val serviceIntent = Intent(context, AlarmService::class.java).apply {
-                    putExtra("alarm_id", alarmId)
-                    putExtra("alarm_label", alarm?.label ?: intent.getStringExtra("alarm_label"))
-                    putExtra("alarm_time", intent.getStringExtra("alarm_time") ?: alarm?.time)
-                    putExtra("alarm_category", alarm?.category ?: intent.getStringExtra("alarm_category"))
-                    putExtra("is_snooze", isSnooze)
-                }
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    context.startForegroundService(serviceIntent)
-                } else {
-                    context.startService(serviceIntent)
-                }
-
-                if (repeatDay != -1 && !isSnooze && alarm != null) {
-                    val rescheduleIntent = Intent(context, AlarmReceiver::class.java).apply {
-                        putExtra("alarm_id", alarmId)
-                        putExtra("alarm_label", alarm.label)
-                        putExtra("alarm_time", intent.getStringExtra("alarm_time") ?: alarm.time)
-                        putExtra("alarm_category", alarm.category)
-                        putExtra("repeat_day", repeatDay)
-                    }
-
-                    val requestCode = alarmId.hashCode() + repeatDay
-                    val pendingIntent = PendingIntent.getBroadcast(
-                        context,
-                        requestCode,
-                        rescheduleIntent,
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                    )
-
-                    val timeStr = alarm.time
-                    val parts = timeStr.split(":")
-                    var hour = parts.getOrNull(0)?.toIntOrNull() ?: 8
-                    val minute = parts.getOrNull(1)?.trim()?.toIntOrNull() ?: 0
-
-                    val amPm = alarm.amPm
-                    if (hour in 1..12 && (amPm == "AM" || amPm == "PM")) {
-                        hour = when {
-                            hour == 12 && amPm == "AM" -> 0
-                            hour < 12 && amPm == "PM" -> hour + 12
-                            else -> hour
-                        }
-                    }
-
-                    val calendar = Calendar.getInstance().apply {
-                        set(Calendar.DAY_OF_WEEK, repeatDay)
-                        set(Calendar.HOUR_OF_DAY, hour)
-                        set(Calendar.MINUTE, minute)
-                        set(Calendar.SECOND, 0)
-                        set(Calendar.MILLISECOND, 0)
-                        add(Calendar.WEEK_OF_YEAR, 1)
-                    }
-
-                    val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.timeInMillis,
-                        pendingIntent
-                    )
-                }
-
+                handleAlarmTrigger(context, intent, alarmId)
             } finally {
                 pendingResult.finish()
             }
         }
     }
 
-    private suspend fun rescheduleAlarms(context: Context) {
+    private suspend fun handleAlarmTrigger(context: Context, intent: Intent, alarmId: String) {
+        val isSnooze = intent.getBooleanExtra(AlarmHelper.EXTRA_IS_SNOOZE, false)
+            || intent.getBooleanExtra("is_snooze", false)
+        val repeatDay = intent.getIntExtra(AlarmHelper.EXTRA_REPEAT_DAY, -1)
+
+        val alarmEntity = AppDatabase.getDatabase(context)
+            .alarmDao()
+            .getActiveAlarmById(alarmId)
+
+        if (alarmEntity == null) {
+            if (!isSnooze) {
+                AlarmHelper(context).cancelAllPendingIntents(alarmId)
+                Log.d(TAG, "Cleaned orphan PendingIntents for missing alarm: $alarmId")
+            }
+            return
+        }
+
+        val serviceIntent = Intent(context, AlarmService::class.java).apply {
+            putExtra(AlarmHelper.EXTRA_ALARM_ID, alarmId)
+            putExtra(AlarmHelper.EXTRA_ALARM_LABEL, alarmEntity.label)
+            putExtra(
+                AlarmHelper.EXTRA_ALARM_TIME,
+                intent.getStringExtra(AlarmHelper.EXTRA_ALARM_TIME)
+                    ?: AlarmHelper.formatDisplayTime(alarmEntity.time, alarmEntity.amPm)
+            )
+            putExtra(AlarmHelper.EXTRA_ALARM_CATEGORY, alarmEntity.category)
+            putExtra(AlarmHelper.EXTRA_IS_SNOOZE, isSnooze)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(serviceIntent)
+        } else {
+            context.startService(serviceIntent)
+        }
+
+        if (repeatDay != -1 && !isSnooze) {
+            val alarm = Alarm(
+                id = alarmEntity.id,
+                label = alarmEntity.label,
+                time = alarmEntity.time,
+                amPm = alarmEntity.amPm,
+                category = alarmEntity.category,
+                isActive = alarmEntity.isActive,
+                repeatDays = alarmEntity.repeatDays
+            )
+            AlarmHelper(context).rescheduleWeeklyOccurrence(alarm, repeatDay)
+            Log.d(TAG, "Rescheduled weekly alarm ${alarm.id} for day $repeatDay")
+        }
+    }
+
+    private suspend fun rescheduleAlarmsAfterBoot(context: Context) {
         try {
             val db = AppDatabase.getDatabase(context)
-            val alarms = db.alarmDao().getAllAlarms().first()
             val alarmHelper = AlarmHelper(context)
+
+            if (!alarmHelper.canScheduleExactAlarm()) {
+                Log.w(TAG, "Cannot reschedule alarms after boot — exact alarm permission missing")
+                return
+            }
+
+            val alarms = db.alarmDao().getAllAlarms().first()
             alarms.filter { it.isActive }.forEach { entity ->
+                val stillExists = db.alarmDao().getAlarmById(entity.id)
+                if (stillExists == null || !stillExists.isActive) {
+                    alarmHelper.cancelAllPendingIntents(entity.id)
+                    return@forEach
+                }
+
                 val alarm = Alarm(
                     id = entity.id,
                     label = entity.label,
@@ -139,10 +128,10 @@ class AlarmReceiver : BroadcastReceiver() {
                     cognitiveLockEnabled = entity.cognitiveLockEnabled
                 )
                 alarmHelper.scheduleAlarm(alarm)
-                Log.d("AlarmReceiver", "Rescheduled alarm: ${alarm.id}")
+                Log.d(TAG, "Restored alarm after boot: ${alarm.id}")
             }
         } catch (e: Exception) {
-            Log.e("AlarmReceiver", "Failed to reschedule alarms", e)
+            Log.e(TAG, "Failed to reschedule alarms after boot", e)
         }
     }
 
@@ -150,7 +139,7 @@ class AlarmReceiver : BroadcastReceiver() {
         try {
             val db = AppDatabase.getDatabase(context)
             val reminders = db.reminderDao().getAllReminders().first()
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
 
             val now = System.currentTimeMillis()
 
@@ -160,24 +149,22 @@ class AlarmReceiver : BroadcastReceiver() {
                     val timeParts = reminder.time?.split(":") ?: return@forEach
                     if (dateParts.size < 3 || timeParts.size < 2) return@forEach
 
-                    val calendar = Calendar.getInstance().apply {
-                        set(Calendar.YEAR, dateParts[0].toInt())
-                        set(Calendar.MONTH, dateParts[1].toInt() - 1)
-                        set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
-                        set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
-                        set(Calendar.MINUTE, timeParts[1].toInt())
-                        set(Calendar.SECOND, 0)
-                        set(Calendar.MILLISECOND, 0)
+                    val calendar = java.util.Calendar.getInstance().apply {
+                        set(java.util.Calendar.YEAR, dateParts[0].toInt())
+                        set(java.util.Calendar.MONTH, dateParts[1].toInt() - 1)
+                        set(java.util.Calendar.DAY_OF_MONTH, dateParts[2].toInt())
+                        set(java.util.Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+                        set(java.util.Calendar.MINUTE, timeParts[1].toInt())
+                        set(java.util.Calendar.SECOND, 0)
+                        set(java.util.Calendar.MILLISECOND, 0)
                     }
 
-                    // If the reminder time is in the past, mark it as Missed
                     if (calendar.timeInMillis < now) {
                         db.reminderDao().updateReminderStatus(reminder.id, "Missed")
-                        Log.d("AlarmReceiver", "Marked past reminder as missed: ${reminder.id}")
+                        Log.d(TAG, "Marked past reminder as missed: ${reminder.id}")
                         return@forEach
                     }
 
-                    // Schedule the reminder
                     val intent = Intent(context, ReminderReceiver::class.java).apply {
                         putExtra(ReminderReceiver.EXTRA_REMINDER_ID, reminder.id)
                         putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title)
@@ -186,30 +173,34 @@ class AlarmReceiver : BroadcastReceiver() {
                         putExtra(ReminderReceiver.EXTRA_VIBRATION, reminder.vibrationEnabled)
                     }
 
-                    val pendingIntent = PendingIntent.getBroadcast(
+                    val pendingIntent = android.app.PendingIntent.getBroadcast(
                         context,
                         reminder.id.hashCode(),
                         intent,
-                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                        android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
                     )
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-                        Log.e("AlarmReceiver", "Cannot schedule exact alarms for reminder: ${reminder.id}")
+                        Log.e(TAG, "Cannot schedule exact alarms for reminder: ${reminder.id}")
                         return@forEach
                     }
 
                     alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
+                        android.app.AlarmManager.RTC_WAKEUP,
                         calendar.timeInMillis,
                         pendingIntent
                     )
-                    Log.d("AlarmReceiver", "Rescheduled reminder: ${reminder.id} at ${reminder.date} ${reminder.time}")
+                    Log.d(TAG, "Rescheduled reminder: ${reminder.id} at ${reminder.date} ${reminder.time}")
                 } catch (e: Exception) {
-                    Log.e("AlarmReceiver", "Failed to reschedule reminder: ${reminder.id}", e)
+                    Log.e(TAG, "Failed to reschedule reminder: ${reminder.id}", e)
                 }
             }
         } catch (e: Exception) {
-            Log.e("AlarmReceiver", "Failed to reschedule reminders", e)
+            Log.e(TAG, "Failed to reschedule reminders", e)
         }
+    }
+
+    companion object {
+        private const val TAG = "AlarmReceiver"
     }
 }

@@ -7,13 +7,16 @@ import android.os.Bundle
 import android.os.Build
 import android.provider.Settings
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.model.Alarm
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -23,8 +26,14 @@ class EditAlarmActivity : AppCompatActivity() {
         const val RESULT_ALARM_SAVED = Activity.RESULT_FIRST_USER + 1
         const val RESULT_ALARM_DELETED = Activity.RESULT_FIRST_USER + 2
         const val EXTRA_ALARM_RESULT = "alarm_result"
+        const val EXTRA_ALARM_ID = "alarm_id"
+
+        private const val STATE_ALARM_ID = "state_alarm_id"
+        private const val STATE_IS_SAVING = "state_is_saving"
+        private const val STATE_PENDING_PERMISSION = "state_pending_permission"
     }
 
+    private lateinit var rootView: androidx.coordinatorlayout.widget.CoordinatorLayout
     private lateinit var etLabel: EditText
     private lateinit var timePicker: TimePicker
     private lateinit var chipGroupDays: com.google.android.material.chip.ChipGroup
@@ -33,8 +42,13 @@ class EditAlarmActivity : AppCompatActivity() {
 
     private var existingAlarmId: String? = null
     private var isEditMode = false
+    private var isSaving = false
+    private var pendingSaveAfterPermission = false
+    private var loadedEntity: AlarmEntity? = null
+    private var pendingDeleteEntity: AlarmEntity? = null
 
     private lateinit var repository: HealthRepository
+    private lateinit var alarmHelper: AlarmHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,106 +56,162 @@ class EditAlarmActivity : AppCompatActivity() {
 
         val db = AppDatabase.getDatabase(this)
         repository = HealthRepository(db)
+        alarmHelper = AlarmHelper(this)
 
         initViews()
-        checkEditMode()
+
+        existingAlarmId = savedInstanceState?.getString(STATE_ALARM_ID)
+            ?: intent.getStringExtra(EXTRA_ALARM_ID)
+            ?: intent.getStringExtra("alarm_id")
+
+        isSaving = savedInstanceState?.getBoolean(STATE_IS_SAVING, false) ?: false
+        pendingSaveAfterPermission = savedInstanceState?.getBoolean(STATE_PENDING_PERMISSION, false) ?: false
+
+        if (existingAlarmId != null) {
+            isEditMode = true
+            loadAlarmFromDatabase(existingAlarmId!!)
+        } else {
+            setupNewAlarmDefaults()
+        }
+
         setupListeners()
+        updateSaveButtonState()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_ALARM_ID, existingAlarmId)
+        outState.putBoolean(STATE_IS_SAVING, isSaving)
+        outState.putBoolean(STATE_PENDING_PERMISSION, pendingSaveAfterPermission)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (pendingSaveAfterPermission && alarmHelper.canScheduleExactAlarm()) {
+            pendingSaveAfterPermission = false
+            saveAlarm()
+        }
     }
 
     private fun initViews() {
+        rootView = findViewById(R.id.edit_alarm_root)
         etLabel = findViewById(R.id.et_label)
         timePicker = findViewById(R.id.time_picker)
         chipGroupDays = findViewById(R.id.chip_group_days)
         btnSave = findViewById(R.id.btn_save)
         btnDelete = findViewById(R.id.btn_delete)
-
         timePicker.setIs24HourView(false)
     }
 
-    private fun checkEditMode() {
-        existingAlarmId = intent.getStringExtra("alarm_id")
+    private fun setupNewAlarmDefaults() {
+        isEditMode = false
+        btnSave.text = getString(R.string.save_alarm)
+        btnDelete.visibility = android.view.View.GONE
+        etLabel.setText("")
+        val calendar = Calendar.getInstance()
+        timePicker.hour = calendar.get(Calendar.HOUR_OF_DAY)
+        timePicker.minute = calendar.get(Calendar.MINUTE)
+    }
 
-        if (existingAlarmId != null) {
-            isEditMode = true
-            btnSave.text = "Update Alarm"
-            btnDelete.visibility = android.view.View.VISIBLE
-
-            // Fill existing data dynamically from intent
-            etLabel.setText(intent.getStringExtra("alarm_label") ?: "")
-            val time = intent.getStringExtra("alarm_time") ?: "08:00"
-            val parts = time.split(":")
-            if (parts.size == 2) {
-                val hour = parts[0].toInt()
-                val minute = parts[1].toInt()
-                // Convert to 24h for TimePicker
-                val isPm = intent.getStringExtra("alarm_am_pm") == "PM"
-                val hour24 = when {
-                    hour == 12 && !isPm -> 0
-                    hour == 12 && isPm -> 12
-                    isPm -> hour + 12
-                    else -> hour
-                }
-                timePicker.hour = hour24
-                timePicker.minute = minute
+    private fun loadAlarmFromDatabase(alarmId: String) {
+        lifecycleScope.launch {
+            val entity = repository.getAlarmById(alarmId)
+            if (entity == null) {
+                Toast.makeText(this@EditAlarmActivity, "Alarm not found", Toast.LENGTH_SHORT).show()
+                finish()
+                return@launch
             }
+            loadedEntity = entity
+            populateUi(entity)
+        }
+    }
 
-            // Select repeat days
-            val repeatDays = intent.getStringExtra("alarm_repeat_days") ?: ""
-            selectDays(repeatDays)
-        } else {
-            isEditMode = false
-            btnSave.text = "Save Alarm"
-            btnDelete.visibility = android.view.View.GONE
-            // Time picker starts at current time
-            etLabel.setText("")
-            val calendar = Calendar.getInstance()
-            timePicker.hour = calendar.get(Calendar.HOUR_OF_DAY)
-            timePicker.minute = calendar.get(Calendar.MINUTE)
+    private fun populateUi(entity: AlarmEntity) {
+        btnSave.text = "Update Alarm"
+        btnDelete.visibility = android.view.View.VISIBLE
+        etLabel.setText(entity.label)
+
+        val (hour24, minute) = AlarmHelper.parseAlarmTime(entity.time, entity.amPm)
+        timePicker.hour = hour24
+        timePicker.minute = minute
+
+        clearDaySelection()
+        selectDays(entity.repeatDays.orEmpty())
+    }
+
+    private fun clearDaySelection() {
+        listOf(
+            R.id.chip_sun, R.id.chip_mon, R.id.chip_tue, R.id.chip_wed,
+            R.id.chip_thu, R.id.chip_fri, R.id.chip_sat
+        ).forEach { chipId ->
+            findViewById<com.google.android.material.chip.Chip>(chipId)?.isChecked = false
         }
     }
 
     private fun selectDays(days: String) {
         val dayMap = mapOf(
-            "Sun" to R.id.chip_sun,
-            "Mon" to R.id.chip_mon,
-            "Tue" to R.id.chip_tue,
-            "Wed" to R.id.chip_wed,
-            "Thu" to R.id.chip_thu,
-            "Fri" to R.id.chip_fri,
-            "Sat" to R.id.chip_sat,
-            "M" to R.id.chip_mon,
-            "W" to R.id.chip_wed,
-            "F" to R.id.chip_fri
+            Calendar.SUNDAY to R.id.chip_sun,
+            Calendar.MONDAY to R.id.chip_mon,
+            Calendar.TUESDAY to R.id.chip_tue,
+            Calendar.WEDNESDAY to R.id.chip_wed,
+            Calendar.THURSDAY to R.id.chip_thu,
+            Calendar.FRIDAY to R.id.chip_fri,
+            Calendar.SATURDAY to R.id.chip_sat
         )
-        days.split(" ").forEach { day ->
-            dayMap[day]?.let { chipId ->
-                val chip = findViewById<com.google.android.material.chip.Chip>(chipId)
-                chip?.isChecked = true
+        AlarmHelper.parseRepeatDays(days).forEach { dayOfWeek ->
+            dayMap[dayOfWeek]?.let { chipId ->
+                findViewById<com.google.android.material.chip.Chip>(chipId)?.isChecked = true
             }
         }
     }
 
     private fun setupListeners() {
-        btnSave.setOnClickListener {
-            saveAlarm()
-        }
-
-        btnDelete.setOnClickListener {
-            deleteAlarm()
-        }
-
-        findViewById<ImageButton>(R.id.btn_back).setOnClickListener {
-            finish()
-        }
+        btnSave.setOnClickListener { saveAlarm() }
+        btnDelete.setOnClickListener { confirmDeleteAlarm() }
+        findViewById<ImageButton>(R.id.btn_back).setOnClickListener { finish() }
     }
 
-    private fun saveAlarm() {
+    private fun validateInput(): Boolean {
         val label = etLabel.text.toString().trim()
         if (label.isEmpty()) {
             etLabel.error = "Please enter alarm name"
+            etLabel.requestFocus()
+            return false
+        }
+
+        val hour24 = timePicker.hour
+        val minute = timePicker.minute
+        if (!AlarmHelper.isValidTime(hour24, minute)) {
+            Toast.makeText(this, "Invalid time selected", Toast.LENGTH_SHORT).show()
+            return false
+        }
+
+        val selectedDays = getSelectedDays()
+        if (selectedDays.isNotEmpty()) {
+            val parsedDays = AlarmHelper.parseRepeatDays(selectedDays)
+            val selectedCount = chipGroupDays.checkedChipIds.size
+            if (parsedDays.isEmpty() || parsedDays.size != selectedCount) {
+                Toast.makeText(this, "Invalid repeat day selection", Toast.LENGTH_SHORT).show()
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun saveAlarm() {
+        if (isSaving) return
+        if (!validateInput()) return
+
+        if (!alarmHelper.canScheduleExactAlarm()) {
+            requestExactAlarmPermission()
             return
         }
 
+        isSaving = true
+        updateSaveButtonState()
+
+        val label = etLabel.text.toString().trim()
         val hour24 = timePicker.hour
         val minute = timePicker.minute
         val amPm = if (hour24 < 12) "AM" else "PM"
@@ -150,130 +220,185 @@ class EditAlarmActivity : AppCompatActivity() {
             hour24 > 12 -> hour24 - 12
             else -> hour24
         }
-        val timeString = String.format("%02d:%02d", displayHour, minute)
-        val time24String = String.format("%02d:%02d", hour24, minute)
-
+        val timeString = String.format(Locale.US, "%02d:%02d", displayHour, minute)
         val selectedDays = getSelectedDays()
-        val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(this@EditAlarmActivity)
-
-        if (!alarmHelper.canScheduleExactAlarm()) {
-            Toast.makeText(
-                this,
-                "Allow exact alarms so this alarm can ring on time",
-                Toast.LENGTH_LONG
-            ).show()
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = Uri.parse("package:$packageName")
-                })
-            }
-            return
-        }
 
         val alarm = AlarmEntity(
             id = existingAlarmId ?: UUID.randomUUID().toString(),
             label = label,
             time = timeString,
             amPm = amPm,
-            category = "MEDICINE",
-            isActive = true,
-            repeatDays = selectedDays
+            category = loadedEntity?.category ?: "MEDICINE",
+            isActive = loadedEntity?.isActive ?: true,
+            repeatDays = selectedDays.ifBlank { null },
+            sound = loadedEntity?.sound,
+            vibrationEnabled = loadedEntity?.vibrationEnabled ?: false,
+            gradualVolume = loadedEntity?.gradualVolume ?: false,
+            autoSnoozeMinutes = loadedEntity?.autoSnoozeMinutes ?: 0,
+            cognitiveLockEnabled = loadedEntity?.cognitiveLockEnabled ?: false,
+            lastTriggeredStatus = loadedEntity?.lastTriggeredStatus ?: "Pending"
         )
 
         lifecycleScope.launch {
-            val alarmToSave = if (isEditMode) {
-                repository.updateAlarm(alarm)
-                alarm
-            } else {
-                repository.insertAlarm(alarm)
-                alarm
-            }
+            try {
+                if (isEditMode) {
+                    repository.updateAlarm(alarm)
+                } else {
+                    repository.insertAlarm(alarm)
+                }
 
-            val alarmModel = com.example.smarthealthreminder.features.model.Alarm(
-                id = alarmToSave.id,
-                label = alarmToSave.label,
-                time = time24String,
-                amPm = alarmToSave.amPm,
-                category = alarmToSave.category,
-                isActive = alarmToSave.isActive,
-                repeatDays = selectedDays
-            )
+                val alarmModel = toAlarmModel(alarm)
+                var scheduled = false
+                if (alarm.isActive) {
+                    scheduled = alarmHelper.scheduleAlarm(alarmModel)
+                    if (!scheduled) {
+                        repository.updateAlarm(alarm.copy(isActive = false))
+                        Toast.makeText(
+                            this@EditAlarmActivity,
+                            "Alarm saved but deactivated — allow exact alarms to enable it",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                } else {
+                    alarmHelper.cancelAlarm(alarm.id)
+                    scheduled = true
+                }
 
-            var scheduled = false
-            if (alarmToSave.isActive) {
-                scheduled = alarmHelper.scheduleAlarm(alarmModel)
-                if (!scheduled) {
-                    // Deactivate alarm in DB since it couldn't be scheduled
-                    repository.updateAlarm(alarmToSave.copy(isActive = false))
+                if (scheduled && alarm.isActive) {
                     Toast.makeText(
                         this@EditAlarmActivity,
-                        "Alarm saved but deactivated — allow exact alarms to enable it",
-                        Toast.LENGTH_LONG
+                        "Alarm ${if (isEditMode) "updated" else "saved"}: $label",
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
+
+                setResult(RESULT_ALARM_SAVED, Intent().apply {
+                    putExtra(EXTRA_ALARM_RESULT, alarm.id)
+                })
+                finish()
+            } finally {
+                isSaving = false
+                updateSaveButtonState()
+            }
+        }
+    }
+
+    private fun requestExactAlarmPermission() {
+        AlertDialog.Builder(this)
+            .setTitle("Exact alarm permission required")
+            .setMessage(
+                "Smart Health Reminder needs permission to schedule exact alarms " +
+                        "so your alarm rings at the correct time. You'll be taken to Settings to allow this."
+            )
+            .setPositiveButton("Open Settings") { _, _ ->
+                pendingSaveAfterPermission = true
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
+                        data = Uri.parse("package:$packageName")
+                    })
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun confirmDeleteAlarm() {
+        AlertDialog.Builder(this)
+            .setTitle("Delete Alarm")
+            .setMessage("Are you sure you want to delete this alarm?")
+            .setPositiveButton("Delete") { _, _ -> deleteAlarmWithUndo() }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteAlarmWithUndo() {
+        val id = existingAlarmId ?: return
+        if (isSaving) return
+
+        lifecycleScope.launch {
+            val entity = repository.getAlarmById(id) ?: run {
+                Toast.makeText(this@EditAlarmActivity, "Alarm not found", Toast.LENGTH_SHORT).show()
+                finish()
+                return@launch
             }
 
-            if (scheduled) {
-                Toast.makeText(
-                    this@EditAlarmActivity,
-                    "Alarm ${if (isEditMode) "updated" else "saved"}: $label",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+            alarmHelper.cancelAllPendingIntents(id)
+            repository.deleteAlarmById(id)
+            pendingDeleteEntity = entity
+            btnDelete.isEnabled = false
+            btnSave.isEnabled = false
 
-            val resultIntent = Intent().apply {
-                putExtra(EXTRA_ALARM_RESULT, alarmToSave.id)
+            Snackbar.make(rootView, "Alarm deleted", Snackbar.LENGTH_LONG)
+                .setAction("Undo") {
+                    restoreDeletedAlarm()
+                }
+                .addCallback(object : Snackbar.Callback() {
+                    override fun onDismissed(transientBottomBar: Snackbar, event: Int) {
+                        if (event != DISMISS_EVENT_ACTION && pendingDeleteEntity != null) {
+                            setResult(RESULT_ALARM_DELETED, Intent().apply {
+                                putExtra("deleted_alarm_id", id)
+                            })
+                            finish()
+                        }
+                    }
+                })
+                .show()
+        }
+    }
+
+    private fun restoreDeletedAlarm() {
+        val entity = pendingDeleteEntity ?: return
+        lifecycleScope.launch {
+            repository.insertAlarm(entity)
+            if (entity.isActive) {
+                alarmHelper.scheduleAlarm(toAlarmModel(entity))
             }
-            setResult(RESULT_ALARM_SAVED, resultIntent)
-            finish()
+            pendingDeleteEntity = null
+            btnDelete.isEnabled = true
+            btnSave.isEnabled = true
+            Toast.makeText(this@EditAlarmActivity, "Alarm restored", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun getSelectedDays(): String {
-        val days = StringBuilder()
         val chipIds = mapOf(
-            R.id.chip_sun to "Sun",
-            R.id.chip_mon to "Mon",
-            R.id.chip_tue to "Tue",
-            R.id.chip_wed to "Wed",
-            R.id.chip_thu to "Thu",
-            R.id.chip_fri to "Fri",
-            R.id.chip_sat to "Sat"
+            R.id.chip_sun to Calendar.SUNDAY,
+            R.id.chip_mon to Calendar.MONDAY,
+            R.id.chip_tue to Calendar.TUESDAY,
+            R.id.chip_wed to Calendar.WEDNESDAY,
+            R.id.chip_thu to Calendar.THURSDAY,
+            R.id.chip_fri to Calendar.FRIDAY,
+            R.id.chip_sat to Calendar.SATURDAY
         )
 
+        val days = mutableListOf<Int>()
         chipIds.forEach { (id, day) ->
-            val chip = findViewById<com.google.android.material.chip.Chip>(id)
-            if (chip?.isChecked == true) {
-                days.append("$day ")
+            if (findViewById<com.google.android.material.chip.Chip>(id)?.isChecked == true) {
+                days.add(day)
             }
         }
-
-        return days.toString().trim()
+        return AlarmHelper.formatRepeatDays(days)
     }
 
-    private fun deleteAlarm() {
-        lifecycleScope.launch {
-            existingAlarmId?.let { id ->
-                val alarmModel = com.example.smarthealthreminder.features.model.Alarm(
-                    id = id,
-                    label = "",
-                    time = "",
-                    amPm = "",
-                    category = ""
-                )
-                val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(this@EditAlarmActivity)
-                alarmHelper.cancelAlarm(alarmModel)
+    private fun toAlarmModel(entity: AlarmEntity): Alarm {
+        return Alarm(
+            id = entity.id,
+            label = entity.label,
+            time = entity.time,
+            amPm = entity.amPm,
+            category = entity.category,
+            isActive = entity.isActive,
+            repeatDays = entity.repeatDays,
+            sound = entity.sound,
+            vibrationEnabled = entity.vibrationEnabled,
+            gradualVolume = entity.gradualVolume,
+            autoSnoozeMinutes = entity.autoSnoozeMinutes,
+            cognitiveLockEnabled = entity.cognitiveLockEnabled
+        )
+    }
 
-                repository.deleteAlarmById(id)
-
-                val resultIntent = Intent().apply {
-                    putExtra("deleted_alarm_id", id)
-                }
-                setResult(RESULT_ALARM_DELETED, resultIntent)
-
-                Toast.makeText(this@EditAlarmActivity, "Alarm deleted", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-        }
+    private fun updateSaveButtonState() {
+        btnSave.isEnabled = !isSaving
+        btnSave.alpha = if (isSaving) 0.6f else 1f
     }
 }
