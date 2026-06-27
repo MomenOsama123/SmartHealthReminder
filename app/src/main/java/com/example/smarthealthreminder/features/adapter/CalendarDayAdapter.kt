@@ -1,6 +1,7 @@
 package com.example.smarthealthreminder.features.adapter
 
 import android.graphics.Typeface
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,7 +22,6 @@ data class CalendarDay(
     val hasReports: Boolean = false,
     val hasScheduleEntries: Boolean = false
 ) {
-    /** True if this day has ANY content that should show a dot */
     val hasContent: Boolean
         get() = hasEvents || hasNotes || hasReports || hasScheduleEntries
 }
@@ -32,6 +32,7 @@ class CalendarDayAdapter(
 
     private var days = listOf<CalendarDay>()
     private var selectedDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    var isWeekMode: Boolean = false
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvDay: TextView = view.findViewById(R.id.tv_day_number)
@@ -41,6 +42,23 @@ class CalendarDayAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_calendar_day, parent, false)
+
+        if (isWeekMode) {
+            val cellWidth = if (parent.width > 0) {
+                parent.width / 7
+            } else {
+                TypedValue.applyDimension(
+                    TypedValue.COMPLEX_UNIT_DIP,
+                    48f,
+                    parent.resources.displayMetrics
+                ).toInt()
+            }
+            view.layoutParams = RecyclerView.LayoutParams(
+                cellWidth,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
+        }
+
         return ViewHolder(view)
     }
 
@@ -48,7 +66,6 @@ class CalendarDayAdapter(
         val day = days[position]
         val context = holder.itemView.context
 
-        // Empty padding cell
         if (day.dayNumber == 0) {
             holder.tvDay.text = ""
             holder.tvDay.background = null
@@ -59,23 +76,20 @@ class CalendarDayAdapter(
         }
 
         holder.tvDay.text = day.dayNumber.toString()
-        holder.tvDay.alpha = if (day.isCurrentMonth) 1f else 0.35f
+        holder.tvDay.alpha = if (day.isCurrentMonth || isWeekMode) 1f else 0.35f
         holder.itemView.isClickable = true
 
         val isSelected = day.date == selectedDate
 
         when {
             isSelected -> {
-                // Filled white circle, primary-colored text
                 holder.tvDay.setBackgroundResource(R.drawable.circle_white)
                 holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.primary))
                 holder.tvDay.typeface = Typeface.DEFAULT_BOLD
                 holder.tvDay.paintFlags = 0
-                // Hide dot when selected — the circle already highlights it
                 holder.viewDot.visibility = View.INVISIBLE
             }
             day.isToday -> {
-                // Today: no background, bold + underline in white
                 holder.tvDay.background = null
                 holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.white))
                 holder.tvDay.typeface = Typeface.DEFAULT_BOLD
@@ -85,25 +99,23 @@ class CalendarDayAdapter(
                     if (day.hasContent) View.VISIBLE else View.INVISIBLE
             }
             else -> {
-                // Normal day
                 holder.tvDay.background = null
                 holder.tvDay.paintFlags = 0
                 holder.tvDay.setTextColor(
                     ContextCompat.getColor(
                         context,
-                        if (day.isCurrentMonth) R.color.white else R.color.text_on_primary
+                        if (day.isCurrentMonth || isWeekMode) R.color.white else R.color.text_on_primary
                     )
                 )
                 holder.tvDay.typeface = Typeface.DEFAULT
                 holder.viewDot.visibility =
-                    if (day.hasContent && day.isCurrentMonth) View.VISIBLE else View.INVISIBLE
+                    if (day.hasContent && (day.isCurrentMonth || isWeekMode)) View.VISIBLE else View.INVISIBLE
             }
         }
 
-        // Dot color: notes = soft yellow, everything else = white dot
         if (holder.viewDot.visibility == View.VISIBLE) {
             val dotColorRes = if (day.hasNotes && !day.hasEvents && !day.hasReports && !day.hasScheduleEntries)
-                R.color.pending   // note-only days get a different dot
+                R.color.pending
             else
                 R.color.white
             holder.viewDot.backgroundTintList =
@@ -113,7 +125,8 @@ class CalendarDayAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            if (day.isCurrentMonth) {
+            val clickable = day.isCurrentMonth || isWeekMode
+            if (clickable) {
                 val old = selectedDate
                 selectedDate = day.date
                 val oldIndex = days.indexOfFirst { it.date == old }

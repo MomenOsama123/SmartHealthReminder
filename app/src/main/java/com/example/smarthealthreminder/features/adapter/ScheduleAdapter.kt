@@ -12,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.model.ScheduleItem
 
-class ScheduleAdapter : ListAdapter<ScheduleItem, ScheduleAdapter.ViewHolder>(DiffCallback()) {
+class ScheduleAdapter(
+    private val onItemClick: (() -> Unit)? = null
+) : ListAdapter<ScheduleItem, ScheduleAdapter.ViewHolder>(DiffCallback()) {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val priorityBar: View = view.findViewById(R.id.view_priority_bar)
@@ -78,6 +80,10 @@ class ScheduleAdapter : ListAdapter<ScheduleItem, ScheduleAdapter.ViewHolder>(Di
         } else {
             holder.earlyNotifIcon.visibility = View.GONE
             holder.earlyNotifText.visibility = View.GONE
+        }
+
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke()
         }
     }
 
