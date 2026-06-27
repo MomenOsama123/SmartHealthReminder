@@ -140,12 +140,7 @@ class SearchFragment : Fragment() {
             when (result) {
                 is SearchResult.Alarm -> {
                     val intent = Intent(requireContext(), EditAlarmActivity::class.java).apply {
-                        putExtra("alarm_id", result.entity.id)
-                        putExtra("alarm_label", result.entity.label)
-                        putExtra("alarm_time", result.entity.time)
-                        putExtra("alarm_am_pm", result.entity.amPm)
-                        putExtra("alarm_category", result.entity.category)
-                        putExtra("alarm_repeat_days", result.entity.repeatDays)
+                        putExtra(EditAlarmActivity.EXTRA_ALARM_ID, result.entity.id)
                     }
                     startActivity(intent)
                 }

@@ -62,12 +62,7 @@ class AlarmsFragment : Fragment() {
         alarmAdapter?.setOnAlarmClickListener(object : AlarmAdapter.OnAlarmClickListener {
             override fun onAlarmClick(alarm: Alarm) {
                 val intent = Intent(requireContext(), EditAlarmActivity::class.java).apply {
-                    putExtra("alarm_id", alarm.id)
-                    putExtra("alarm_label", alarm.label)
-                    putExtra("alarm_time", alarm.time)
-                    putExtra("alarm_am_pm", alarm.amPm)
-                    putExtra("alarm_category", alarm.category)
-                    putExtra("alarm_repeat_days", alarm.repeatDays)
+                    putExtra(EditAlarmActivity.EXTRA_ALARM_ID, alarm.id)
                 }
                 startActivity(intent)
             }
@@ -79,13 +74,9 @@ class AlarmsFragment : Fragment() {
                 alarm.id?.let { id ->
                     val alarmHelper = com.example.smarthealthreminder.alarm.AlarmHelper(requireContext())
                     if (isActive) {
-                        val scheduled = alarmHelper.scheduleAlarm(alarm)
-                        if (scheduled) {
-                            viewModel.toggleAlarm(id, true)
-                        } else {
+                        if (!alarmHelper.canScheduleExactAlarm()) {
                             alarm.isActive = false
                             alarmAdapter?.updateAlarm(alarm)
-                            viewModel.toggleAlarm(id, false)
                             Toast.makeText(
                                 requireContext(),
                                 "Allow exact alarms so this alarm can ring on time",
@@ -96,10 +87,24 @@ class AlarmsFragment : Fragment() {
                                     data = Uri.parse("package:${requireContext().packageName}")
                                 })
                             }
+                            return
+                        }
+                        val scheduled = alarmHelper.scheduleAlarm(alarm)
+                        if (scheduled) {
+                            viewModel.toggleAlarm(id, true)
+                        } else {
+                            alarm.isActive = false
+                            alarmAdapter?.updateAlarm(alarm)
+                            viewModel.toggleAlarm(id, false)
+                            Toast.makeText(
+                                requireContext(),
+                                "Could not schedule alarm. Please try again.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        viewModel.toggleAlarm(id, false)
                         alarmHelper.cancelAlarm(alarm)
+                        viewModel.toggleAlarm(id, false)
                     }
                 }
             }
