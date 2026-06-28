@@ -180,6 +180,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.85"
                     android:background="@drawable/et_shape"
+                    android:id="@+id/progress_green"
+
                     android:backgroundTint="@color/primary_green"/>
                 <View
                     android:layout_width="0dp"
@@ -191,6 +193,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/you_took_85_of_your_medications_this_week_you_missed_only_2_evening_doses"
+                android:id="@+id/tv_adherence_message"
+
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
                 android:layout_marginTop="16dp" />
@@ -257,6 +261,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mild_fatigue_reported_more_frequently_on_wednesday_and_saturday"
+                android:id="@+id/tv_symptoms_overview"
+
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
                 android:layout_marginTop="16dp" />
@@ -313,6 +319,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="@string/try_not_to_miss_evening_doses_to_maintain_consistent_levels"
+                    android:id="@+id/tv_insight1"
+
                     android:textColor="@color/text_dark"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -334,6 +342,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:text="@string/symptoms_increased_this_week_monitor_fatigue_levels_closely_tomorrow"
+                    android:id="@+id/tv_insight2"
                     android:textColor="@color/text_dark"
                     android:textSize="14sp" />
             </LinearLayout>

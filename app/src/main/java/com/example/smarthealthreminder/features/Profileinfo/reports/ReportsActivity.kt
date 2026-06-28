@@ -1,126 +1,102 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
-import android.app.AlertDialog
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
+import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.data.local.AppDatabase
-import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.features.data.repository.HealthRepository
-import com.example.smarthealthreminder.features.adapter.ScheduleAdapter
-import com.example.smarthealthreminder.features.model.ScheduleItem
-import com.example.smarthealthreminder.features.navigation.BottomNavHelper
-import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.data.repository.ReportRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ReportsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: HealthViewModel
-    private lateinit var scheduleAdapter: ScheduleAdapter
+    private lateinit var viewModel: ReportViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reportsactivity)
+        // 1. تجهيز قاعدة البيانات والـ ViewModel
+        val database = AppDatabase.getDatabase(this)
+        val repository = ReportRepository(database.reportDao())
+        val reminderDao = AppDatabase.getDatabase(this).reminderDao() // جيبنا الـ Dao
+        val factory = ReportViewModelFactory(repository, reminderDao) // بعتنا الـ Dao للمصنع
+        viewModel = ViewModelProvider(this, factory)[ReportViewModel::class.java]
 
-        val db = AppDatabase.getDatabase(this)
-        val repository = HealthRepository(db)
-        viewModel = HealthViewModelFactory(repository).create(HealthViewModel::class.java)
-
+        // 2. تعريف العناصر (Views)
         val btnBack = findViewById<ImageView>(R.id.btn_back)
-        val btnDownload = findViewById<Button>(R.id.download_btn)
+        val fabCreateReport = findViewById<FloatingActionButton>(R.id.fab_create_report)
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val recyclerReports = findViewById<RecyclerView>(R.id.recycler_reports)
 
+        // عناصر التقرير الديناميكية (تأكد إنك ضفت الـ IDs دي في الـ XML زي ما اتفقنا)
+        val tvPercentage = findViewById<TextView>(R.id.tv_percentage)
+        val tvAdherenceMessage = findViewById<TextView>(R.id.tv_adherence_message)
+        val tvSymptomsOverview = findViewById<TextView>(R.id.tv_symptoms_overview)
+        val tvInsight1 = findViewById<TextView>(R.id.tv_insight1)
+        val tvInsight2 = findViewById<TextView>(R.id.tv_insight2)
+        val progressGreen = findViewById<View>(R.id.progress_green)
+
+        // تجهيز الـ RecyclerView (عشان لو حبيت تعرض لستة التقارير القديمة بعدين)
+        recyclerReports.layoutManager = LinearLayoutManager(this)
+
+        // 3. تشغيل الأزرار الأساسية
         btnBack.setOnClickListener { finish() }
 
-        btnDownload.setOnClickListener {
-            Toast.makeText(this, "Downloading Report...", Toast.LENGTH_SHORT).show()
+        // لما نضغط على زرار (+) هنخليه يعمل تقرير تجريبي ويحفظه في الداتابيز
+        fabCreateReport.setOnClickListener {
+            fabCreateReport.setOnClickListener {
+                viewModel.generateRealReport() // دي الدالة اللي عملناها وبتحسب الداتا الحقيقية
+                Toast.makeText(this, "Generating Real Report...", Toast.LENGTH_SHORT).show()
+            }
         }
 
-        val fabCreateReport = findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.fab_create_report)
-        fabCreateReport?.setOnClickListener {
-            showCreateReportDialog()
+        // تشغيل الشريط السفلي
+        bottomNavigation.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                // هنا بتضيف الانتقالات بتاعتك لباقي الصفحات
+                // R.id.nav_home -> startActivity(...)
+            }
+            true
         }
 
-        setupRecyclerView()
-        observeReports()
-        setupBottomNavigation()
-    }
-
-    private fun setupRecyclerView() {
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_reports)
-        scheduleAdapter = ScheduleAdapter()
-        recyclerView?.layoutManager = LinearLayoutManager(this)
-        recyclerView?.adapter = scheduleAdapter
-    }
-
-    private fun observeReports() {
+        // 4. مراقبة الداتابيز (تحديث الشاشة تلقائياً)
         lifecycleScope.launch {
-            viewModel.allReports.collect { reports ->
-                val items = reports.map { report ->
-                    ScheduleItem(
-                        id = report.id,
-                        title = report.title,
-                        date = report.date ?: "",
-                        time = "Report",
-                        category = "Report",
-                        priority = "NORMAL",
-                        status = "Completed",
-                        isAlarm = false,
-                        itemType = ScheduleItem.TYPE_REPORT
-                    )
+            // الكود ده بيشتغل لوحده أول ما أي تقرير جديد يتضاف في الداتابيز
+            viewModel.allReports.collect { reportsList ->
+
+                if (reportsList.isNotEmpty()) {
+                    // هناخد أحدث تقرير (أول واحد في اللستة)
+                    val latestReport = reportsList.first()
+
+                    // تحديث الأرقام والنصوص في الشاشة برمجياً
+                    tvPercentage.text = "${latestReport.adherencePercentage}%"
+
+                    // تحديث الرسالة
+                    tvAdherenceMessage?.text = "You took ${latestReport.adherencePercentage}% of your medications this week. You missed only ${latestReport.missedDoses} doses."
+
+                    // تحديث الأعراض والنصائح
+                    tvSymptomsOverview?.text = latestReport.symptomsOverview
+                    tvInsight1?.text = latestReport.aiInsight1
+                    tvInsight2?.text = latestReport.aiInsight2
+
+                    // تحديث شريط التقدم الأخضر برمجياً
+                    progressGreen?.let { view ->
+                        val layoutParams = view.layoutParams as LinearLayout.LayoutParams
+                        layoutParams.weight = latestReport.adherencePercentage / 100f
+                        view.layoutParams = layoutParams
+                    }
                 }
-                scheduleAdapter.submitList(items)
             }
         }
-    }
-
-    private fun setupBottomNavigation() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        BottomNavHelper.setup(
-            activity = this,
-            bottomNavigation = bottomNav,
-            selectedItemId = R.id.nav_create
-        )
-    }
-
-    private fun showCreateReportDialog() {
-        val dialogView = layoutInflater.inflate(R.layout.dialog_create_report, null)
-        val etTitle = dialogView.findViewById<EditText>(R.id.et_report_title)
-        val etDescription = dialogView.findViewById<EditText>(R.id.et_report_description)
-
-        AlertDialog.Builder(this)
-            .setTitle("Create Report")
-            .setView(dialogView)
-            .setPositiveButton("Save") { _, _ ->
-                val title = etTitle.text.toString().trim()
-                val description = etDescription.text.toString().trim()
-                if (title.isNotEmpty()) {
-                    val report = ReportEntity(
-                        id = UUID.randomUUID().toString(),
-                        title = title,
-                        description = description,
-                        date = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-                    )
-                    lifecycleScope.launch {
-                        viewModel.addReport(report)
-                        Toast.makeText(this@ReportsActivity, "Report '$title' created", Toast.LENGTH_SHORT).show()
-                    }
-                } else {
-                    Toast.makeText(this, "Title is required", Toast.LENGTH_SHORT).show()
-                }
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 }
