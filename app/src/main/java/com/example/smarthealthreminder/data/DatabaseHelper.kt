@@ -152,7 +152,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                         vibrationEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("vibration_enabled")) == 1,
                         gradualVolume = cursor.getInt(cursor.getColumnIndexOrThrow("gradual_volume")) == 1,
                         autoSnoozeMinutes = cursor.getInt(cursor.getColumnIndexOrThrow("auto_snooze_minutes")),
-                        cognitive_lock_enabled = cursor.getInt(cursor.getColumnIndexOrThrow("cognitive_lock_enabled")) == 1
+                        cognitiveLockEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("cognitive_lock_enabled")) == 1
                     )
                 )
             } while (cursor.moveToNext())
@@ -237,7 +237,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 vibrationEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("vibration_enabled")) == 1,
                 gradualVolume = cursor.getInt(cursor.getColumnIndexOrThrow("gradual_volume")) == 1,
                 autoSnoozeMinutes = cursor.getInt(cursor.getColumnIndexOrThrow("auto_snooze_minutes")),
-                cognitive_lock_enabled = cursor.getInt(cursor.getColumnIndexOrThrow("cognitive_lock_enabled")) == 1
+                cognitiveLockEnabled = cursor.getInt(cursor.getColumnIndexOrThrow("cognitive_lock_enabled")) == 1
             )
         }
         cursor.close()
