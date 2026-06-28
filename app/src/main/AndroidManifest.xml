@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- ================= PERMISSIONS ================= -->
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -13,8 +14,11 @@
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
+    <!-- Fix: Package Visibility for Android 11+ (API 30+) -->
     <queries>
         <package android:name="com.google.android.gms" />
+        <package android:name="com.android.vending" />
+        <package android:name="com.google.android.gsf" />
         <intent>
             <action android:name="com.google.android.gms.auth.api.signin.SERVICE" />
         </intent>
@@ -30,24 +34,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SmartHealthReminder">
+
+        <!-- Ensure GMS version is linked -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity
             android:name=".features.ui_d.DashboardActivity"
             android:exported="false" />
-        <!-- ================= SPLASH (START HERE) ================= -->
+
         <activity
             android:name=".features.welcome.WelcomeActivity"
             android:exported="true"
             android:theme="@style/Theme.SmartHealthReminder.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- ================= LOGIN ================= -->
+        </activity>
+
         <activity
             android:name=".features.auth.signIn.SignInActivity"
             android:exported="true"
-            android:theme="@style/Theme.SmartHealthReminder" /> <!-- ================= AUTH ================= -->
+            android:theme="@style/Theme.SmartHealthReminder" />
+
         <activity
             android:name=".features.auth.signup.SignupActivity"
             android:exported="false" />
@@ -56,10 +67,10 @@
             android:exported="false" />
         <activity
             android:name=".features.auth.signup.CompleteProfileActivity"
-            android:exported="false" /> <!-- ================= WELCOME ================= -->
+            android:exported="false" />
         <activity
             android:name=".features.welcome.WelcomeActivity2"
-            android:exported="false" /> <!-- ================= MAIN ================= -->
+            android:exported="false" />
         <activity
             android:name=".features.activity.MainActivity"
             android:exported="false"
@@ -80,7 +91,8 @@
             android:launchMode="singleTask"
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
-            android:turnScreenOn="true" /> <!-- ================= OTHER SCREENS ================= -->
+            android:turnScreenOn="true" />
+
         <activity
             android:name=".features.search.SearchActivity"
             android:exported="false" />
@@ -102,7 +114,8 @@
         <activity
             android:name=".features.schedule.details.AddNoteActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize" /> <!-- ================= RECEIVERS ================= -->
+            android:windowSoftInputMode="adjustResize" />
+
         <receiver
             android:name=".alarm.AlarmReceiver"
             android:exported="true">
@@ -110,9 +123,11 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
         <receiver
             android:name=".features.alarm.ReminderReceiver"
-            android:exported="false" /> <!-- ================= SERVICE ================= -->
+            android:exported="false" />
+
         <service
             android:name=".alarm.AlarmService"
             android:exported="false"
@@ -120,7 +135,8 @@
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
                 android:value="alarm" />
-        </service> <!-- ================= META ================= -->
+        </service>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

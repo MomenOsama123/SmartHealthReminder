@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.auth.api.signin.*
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
@@ -16,13 +18,13 @@ class GoogleAuthHelper(
 
     companion object {
         const val RC_SIGN_IN = 1001
+        private const val TAG = "GOOGLE_AUTH"
     }
 
     private val googleSignInClient: GoogleSignInClient
 
     init {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            // Ensure this ID matches the one in your Firebase Console (Web Client ID)
             .requestIdToken(activity.getString(com.example.smarthealthreminder.R.string.default_web_client_id))
             .requestEmail()
             .build()
@@ -31,10 +33,22 @@ class GoogleAuthHelper(
     }
 
     fun startLogin() {
+        val availability = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity)
+        if (availability != ConnectionResult.SUCCESS) {
+            GoogleApiAvailability.getInstance().getErrorDialog(activity, availability, 9000)?.show()
+            onResult(false, "Google Play Services are not available.")
+            return
+        }
+
         // Sign out first to ensure the account picker always appears
         googleSignInClient.signOut().addOnCompleteListener {
-            val signInIntent = googleSignInClient.signInIntent
-            activity.startActivityForResult(signInIntent, RC_SIGN_IN)
+            try {
+                val signInIntent = googleSignInClient.signInIntent
+                activity.startActivityForResult(signInIntent, RC_SIGN_IN)
+            } catch (e: Exception) {
+                Log.e(TAG, "Error starting login intent: ${e.message}")
+                onResult(false, "Failed to start Google Sign-In: ${e.message}")
+            }
         }
     }
 
@@ -52,7 +66,7 @@ class GoogleAuthHelper(
                     12501 -> "Sign-in cancelled by user."
                     else -> "Google Sign-In Error (${e.statusCode}): ${e.message}"
                 }
-                Log.e("GOOGLE_AUTH", errorMessage)
+                Log.e(TAG, errorMessage)
                 onResult(false, errorMessage)
             }
         }

@@ -6,15 +6,16 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.model.TimelineItem
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 
-class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
+class TimelineAdapter : ListAdapter<TimelineItem, TimelineAdapter.ViewHolder>(DiffCallback()) {
 
-    private val items = ArrayList<TimelineItem>()
     private var actionListener: OnItemActionListener? = null
 
     interface OnItemActionListener {
@@ -29,30 +30,7 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
     }
 
     fun setItems(items: List<TimelineItem>) {
-        this.items.clear()
-        this.items.addAll(items)
-        notifyDataSetChanged()
-    }
-
-    fun addItem(item: TimelineItem) {
-        this.items.add(item)
-        notifyItemInserted(items.size - 1)
-    }
-
-    fun updateItem(item: TimelineItem) {
-        val index = items.indexOfFirst { it.id == item.id }
-        if (index != -1) {
-            items[index] = item
-            notifyItemChanged(index)
-        }
-    }
-
-    fun removeItem(item: TimelineItem) {
-        val index = items.indexOfFirst { it.id == item.id }
-        if (index != -1) {
-            items.removeAt(index)
-            notifyItemRemoved(index)
-        }
+        submitList(items)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -62,10 +40,8 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(getItem(position))
     }
-
-    override fun getItemCount(): Int = items.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvMonth: TextView = itemView.findViewById(R.id.tv_month)
@@ -79,18 +55,16 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
         private val btnMoreActions: ImageView = itemView.findViewById(R.id.btn_more_actions)
 
         init {
-            // Click anywhere on the item to show the detail dialog
             itemView.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    showDetailDialog(items[position])
+                    showDetailDialog(getItem(position))
                 }
             }
-            // The "..." button also opens the detail dialog
             btnMoreActions.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    showDetailDialog(items[position])
+                    showDetailDialog(getItem(position))
                 }
             }
         }
@@ -103,7 +77,6 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
             tvTime.text = item.time ?: ""
             chipCategory.text = item.category ?: "General"
 
-            // Set status
             val status = item.status ?: "PENDING"
             tvStatus.text = status
             when (status.uppercase()) {
@@ -138,26 +111,19 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
             val context = itemView.context
             val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_reminder_detail, null)
 
-            // Bind data to dialog views
             dialogView.findViewById<TextView>(R.id.tv_dialog_title).text = item.title ?: "Reminder"
             dialogView.findViewById<TextView>(R.id.tv_dialog_description).text =
                 if (item.description.isNullOrBlank()) "No description provided." else item.description
 
-            // Date
             val dateText = if (!item.date.isNullOrBlank()) {
                 "${item.month ?: ""} ${item.day ?: ""}, ${item.date}"
             } else {
                 "${item.month ?: ""} ${item.day ?: ""}"
             }
             dialogView.findViewById<TextView>(R.id.tv_dialog_date).text = dateText
-
-            // Time
             dialogView.findViewById<TextView>(R.id.tv_dialog_time).text = item.time ?: "--:--"
-
-            // Category
             dialogView.findViewById<TextView>(R.id.tv_dialog_category).text = item.category ?: "General"
 
-            // Status chip
             val statusChip = dialogView.findViewById<Chip>(R.id.chip_dialog_status)
             val status = item.status ?: "PENDING"
             statusChip.text = status
@@ -180,19 +146,15 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
                 }
             }
 
-            // Build dialog
             val dialog = AlertDialog.Builder(context)
                 .setView(dialogView)
                 .create()
 
-            // Action buttons
             val btnMarkDone = dialogView.findViewById<MaterialButton>(R.id.btn_mark_done)
             val btnMarkMissed = dialogView.findViewById<MaterialButton>(R.id.btn_mark_missed)
             val btnDelete = dialogView.findViewById<MaterialButton>(R.id.btn_delete)
 
-            // Show/hide buttons based on current status
-            val statusUpper = status.uppercase()
-            when (statusUpper) {
+            when (status.uppercase()) {
                 "COMPLETED", "DONE" -> {
                     btnMarkDone.visibility = View.GONE
                     btnMarkMissed.visibility = View.VISIBLE
@@ -218,7 +180,6 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
             }
 
             btnDelete.setOnClickListener {
-                // Confirm before delete
                 AlertDialog.Builder(context)
                     .setTitle("Delete Reminder")
                     .setMessage("Are you sure you want to delete \"${item.title ?: "this reminder"}\"?")
@@ -231,6 +192,16 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.ViewHolder>() {
             }
 
             dialog.show()
+        }
+    }
+
+    private class DiffCallback : DiffUtil.ItemCallback<TimelineItem>() {
+        override fun areItemsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
+            return oldItem.id != null && oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: TimelineItem, newItem: TimelineItem): Boolean {
+            return oldItem == newItem
         }
     }
 }

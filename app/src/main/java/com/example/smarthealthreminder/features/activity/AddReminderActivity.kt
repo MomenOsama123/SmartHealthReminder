@@ -36,8 +36,10 @@ class AddReminderActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_REMINDER_RESULT = "reminder_result"
+        const val EXTRA_REMINDER_ID = "reminder_id"
+        private const val STATE_REMINDER_ID = "state_reminder_id"
+        private const val STATE_IS_SAVING = "state_is_saving"
         private const val EARLY_NOTIFICATION_MINUTES = 5
-        private const val EARLY_NOTIFICATION_REQUEST_OFFSET = 10_000
         const val DATE_FORMAT = "yyyy-MM-dd"
     }
 
@@ -63,6 +65,8 @@ class AddReminderActivity : AppCompatActivity() {
 
     private var existingReminderId: String? = null
     private var isEditMode = false
+    private var isSaving = false
+    private var loadedEntity: ReminderEntity? = null
 
     private lateinit var repository: HealthRepository
     private lateinit var dbHelper: DatabaseHelper
@@ -75,10 +79,23 @@ class AddReminderActivity : AppCompatActivity() {
         repository = HealthRepository(db)
         dbHelper = DatabaseHelper(this)
 
+        existingReminderId = savedInstanceState?.getString(STATE_REMINDER_ID)
+            ?: intent.getStringExtra(EXTRA_REMINDER_ID)
+            ?: intent.getStringExtra("reminder_id")
+        isEditMode = existingReminderId != null
+        isSaving = savedInstanceState?.getBoolean(STATE_IS_SAVING, false) ?: false
+
         initViews()
         checkEditMode()
         setupListeners()
         setupBottomNavigation()
+        updateSaveButtonState()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(STATE_REMINDER_ID, existingReminderId)
+        outState.putBoolean(STATE_IS_SAVING, isSaving)
     }
 
     private fun setupBottomNavigation() {
@@ -87,32 +104,55 @@ class AddReminderActivity : AppCompatActivity() {
     }
 
     private fun checkEditMode() {
-        existingReminderId = intent.getStringExtra("reminder_id")
         if (existingReminderId != null) {
-            isEditMode = true
             btnSave.text = "Update Reminder"
             btnDelete.visibility = View.VISIBLE
-
-            etTitle.setText(intent.getStringExtra("reminder_title"))
-            etDescription.setText(intent.getStringExtra("reminder_desc"))
-            selectedDate = intent.getStringExtra("reminder_date") ?: ""
-            selectedTime = intent.getStringExtra("reminder_time") ?: ""
-            etDate.setText(selectedDate)
-            etTime.setText(selectedTime)
-
-            selectedCategory = intent.getStringExtra("reminder_category") ?: "Medicine"
-            when (selectedCategory) {
-                "Medicine" -> chipGroupCategory.check(R.id.chip_medicine)
-                "Appointment" -> chipGroupCategory.check(R.id.chip_appointment)
-                "Task" -> chipGroupCategory.check(R.id.chip_task)
-                "Custom" -> chipGroupCategory.check(R.id.chip_custom)
-            }
-
-            selectedRecurrence = intent.getStringExtra("reminder_recurrence_type")
-                ?: if (intent.getBooleanExtra("reminder_is_recurring", false)) RecurrenceHelper.DAILY
-                else RecurrenceHelper.NONE
-            tvRecurrenceValue.text = selectedRecurrence
+            loadReminderFromDatabase(existingReminderId!!)
         }
+    }
+
+    private fun loadReminderFromDatabase(reminderId: String) {
+        lifecycleScope.launch {
+            val entity = repository.getReminderById(reminderId)
+            if (entity == null) {
+                Toast.makeText(this@AddReminderActivity, "Reminder not found", Toast.LENGTH_SHORT).show()
+                finish()
+                return@launch
+            }
+            loadedEntity = entity
+            populateUi(entity)
+        }
+    }
+
+    private fun populateUi(entity: ReminderEntity) {
+        etTitle.setText(entity.title)
+        etDescription.setText(entity.description.orEmpty())
+        selectedDate = entity.date.orEmpty()
+        selectedTime = entity.time.orEmpty()
+        etDate.setText(selectedDate)
+        etTime.setText(selectedTime)
+
+        selectedCategory = entity.category ?: "Medicine"
+        when (selectedCategory) {
+            "Medicine" -> chipGroupCategory.check(R.id.chip_medicine)
+            "Appointment" -> chipGroupCategory.check(R.id.chip_appointment)
+            "Task" -> chipGroupCategory.check(R.id.chip_task)
+            "Custom" -> chipGroupCategory.check(R.id.chip_custom)
+        }
+
+        selectedPriority = entity.priority ?: "Medium"
+        when (selectedPriority) {
+            "Low" -> togglePriority.check(R.id.btn_low)
+            "High" -> togglePriority.check(R.id.btn_high)
+            else -> togglePriority.check(R.id.btn_medium)
+        }
+
+        selectedRecurrence = entity.recurrenceType?.takeIf { RecurrenceHelper.isRecurring(it) }
+            ?: if (entity.isRecurring) RecurrenceHelper.DAILY else RecurrenceHelper.NONE
+        tvRecurrenceValue.text = selectedRecurrence
+
+        switchEarlyNotification.isChecked = entity.earlyNotification
+        switchVibration.isChecked = entity.vibrationEnabled
     }
 
     private fun initViews() {
@@ -134,21 +174,23 @@ class AddReminderActivity : AppCompatActivity() {
         switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
         switchVibration.isChecked = settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
 
-        val calendar = Calendar.getInstance()
-        selectedDate = String.format(
-            "%04d-%02d-%02d",
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH) + 1,
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        etDate.setText(selectedDate)
+        if (!isEditMode) {
+            val calendar = Calendar.getInstance()
+            selectedDate = String.format(
+                "%04d-%02d-%02d",
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH) + 1,
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            etDate.setText(selectedDate)
 
-        selectedTime = String.format(
-            "%02d:%02d",
-            calendar.get(Calendar.HOUR_OF_DAY),
-            calendar.get(Calendar.MINUTE)
-        )
-        etTime.setText(selectedTime)
+            selectedTime = String.format(
+                "%02d:%02d",
+                calendar.get(Calendar.HOUR_OF_DAY),
+                calendar.get(Calendar.MINUTE)
+            )
+            etTime.setText(selectedTime)
+        }
     }
 
     private fun setupListeners() {
@@ -224,6 +266,8 @@ class AddReminderActivity : AppCompatActivity() {
     }
 
     private fun saveReminder() {
+        if (isSaving) return
+
         val title = etTitle.text.toString().trim()
         if (title.isEmpty()) {
             etTitle.error = "Please enter a title"
@@ -267,7 +311,7 @@ class AddReminderActivity : AppCompatActivity() {
             date = selectedDate,
             time = selectedTime,
             priority = selectedPriority,
-            status = "Pending",
+            status = loadedEntity?.status ?: "Pending",
             isRecurring = isRecurring,
             recurrenceType = if (isRecurring) selectedRecurrence else null,
             vibrationEnabled = switchVibration.isChecked,
@@ -275,22 +319,33 @@ class AddReminderActivity : AppCompatActivity() {
             earlyNotificationMinutes = if (switchEarlyNotification.isChecked) EARLY_NOTIFICATION_MINUTES else 0
         )
 
+        isSaving = true
+        updateSaveButtonState()
+
         lifecycleScope.launch {
-            if (isEditMode) {
-                repository.updateReminder(reminder)
-            } else {
-                repository.insertReminder(reminder)
+            try {
+                if (isEditMode) {
+                    repository.updateReminder(reminder)
+                } else {
+                    repository.insertReminder(reminder)
+                }
+
+                saveToDatabaseHelper(reminderId, title, description, selectedTime, selectedCategory)
+
+                ReminderScheduler.scheduleReminder(this@AddReminderActivity, reminder, reminderTimeMillis)
+
+                Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
+                navigateToDashboard()
+            } finally {
+                isSaving = false
+                updateSaveButtonState()
             }
-
-            // ✅✅✅ احفظ في DatabaseHelper كمان عشان Dashboard تشوفه
-            saveToDatabaseHelper(reminderId, title, description, selectedTime, selectedCategory)
-
-            ReminderScheduler.scheduleReminder(this@AddReminderActivity, reminder, reminderTimeMillis)
-
-            Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
-
-            navigateToDashboard()
         }
+    }
+
+    private fun updateSaveButtonState() {
+        btnSave.isEnabled = !isSaving
+        btnSave.alpha = if (isSaving) 0.6f else 1f
     }
 
     // ✅✅✅ مصلّح: أضفت id كـ parameter

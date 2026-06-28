@@ -19,6 +19,8 @@ object ReminderScheduler {
         title: String = reminder.title,
         description: String = reminder.description ?: "Time for your health reminder!"
     ) {
+        cancelReminderAlarms(context, reminder.id)
+
         scheduleAlarm(
             context = context,
             reminder = reminder,
@@ -68,9 +70,10 @@ object ReminderScheduler {
                 context,
                 requestCode,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
+                PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
+            ) ?: return@forEach
             alarmManager.cancel(pendingIntent)
+            pendingIntent.cancel()
         }
     }
 
