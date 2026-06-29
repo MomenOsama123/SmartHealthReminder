@@ -1,245 +1,199 @@
-# 🩺 Trusta – Smart Health Reminder & Wellness Assistant
+# 🩺 Trusta
 
-Trusta is an Android healthcare application designed to help users manage medications, reminders, alarms, daily health routines, and wellness through a modern, intelligent, and user-friendly experience.
+> **Your Trusted Health Assistant**
 
-The application combines medication reminders, alarm scheduling, AI-powered assistance, daily planning, and health tracking into one centralized platform to help users stay organized and improve medication adherence.
+Trusta is a modern Android healthcare application designed to help users manage medications, reminders, alarms, and daily health routines through a simple, intelligent, and user-friendly experience.
 
----
-
-## ✨ Features
-
-### 🔐 Authentication
-
-* Email & Password Authentication
-* Google Sign-In
-* Password Recovery
-* Secure Firebase Authentication
-
-### 💊 Medication Reminders
-
-* Create, Edit and Delete Reminders
-* Recurring Reminders
-* Reminder Status Tracking
-* Today's Reminder Dashboard
-* Reminder Search
-
-### ⏰ Alarm Management
-
-* Schedule Medication Alarms
-* Enable / Disable Alarms
-* Alarm Notifications
-* Alarm History
-
-### 📅 Daily Planning
-
-* Today's Plan
-* Daily Schedule
-* Calendar Notes
-* Upcoming Activities
-
-### 🔍 Smart Search
-
-* Real-Time Search
-* Search History
-* Reminder & Alarm Filtering
-* Fast Search using Room Database
-
-### 📊 Dashboard
-
-* Today's Reminders
-* Pending Reminders
-* Completed Reminders
-* Daily Health Tips
-* Quick Navigation
-
-### 🤖 AI Health Assistant
-
-* AI-powered Health Guidance
-* Medication Assistance
-* Interactive Chat Experience
-
-### 📈 Reports
-
-* Reminder Reports
-* Activity Tracking
-* Health Progress Overview
-
-### ⚙️ User Settings
-
-* Light Theme
-* Dark Theme
-* System Theme
-* User Profile Management
+Whether you're taking medications daily or simply trying to build healthier habits, Trusta helps you stay organized with smart reminders, AI assistance, daily planning, and personalized wellness features.
 
 ---
 
-# 🏗️ Architecture
+# ✨ Key Features
 
-The project follows the **MVVM (Model–View–ViewModel)** architecture combined with the Repository Pattern for better scalability and maintainability.
-
-```
-UI
-│
-├── Activities
-├── Fragments
-│
-▼
-ViewModels
-│
-▼
-Repository
-│
-├── Room Database
-├── Firebase
-└── Retrofit APIs
-```
+## 🔐 Secure Authentication
+- Email & Password Sign-In
+- Google Sign-In
+- Password Recovery
+- Secure Firebase Authentication
 
 ---
 
-# 🛠️ Tech Stack
+## 💊 Medication Reminders
+- Create, edit, and delete reminders
+- Recurring reminders
+- Reminder status tracking
+- Today's reminders
+- Reminder management
 
-### Language
+---
 
-* Kotlin
+## ⏰ Alarm Management
+- Create medication alarms
+- Enable / Disable alarms
+- Smart notifications
+- Alarm scheduling
+
+---
+
+## 📊 Smart Dashboard
+- Today's reminders overview
+- Pending reminders
+- Completed reminders
+- Daily Health Tip
+- Quick access to important features
+
+---
+
+## 🔍 Smart Search
+- Real-time search
+- Search history
+- Search reminders and alarms
+- Fast filtering
+
+---
+
+## 🤖 AI Health Assistant
+- Health guidance
+- Medication assistance
+- Interactive AI conversations
+
+---
+
+## 📅 Daily Planner
+- Daily schedule management
+- Calendar notes
+- Organize daily activities
+
+---
+
+## 📈 Reports
+- Track reminder activity
+- Daily health reports
+- Progress overview
+
+---
+
+## 🎨 Personalization
+- Light Theme
+- Dark Theme
+- System Theme
+
+---
+
+# 📱 Application Screenshots
+
+> Screenshots will be added in the next update.
+
+---
+
+# 📥 Download
+
+### Latest Version
+
+**v0.8.0 Beta**
+
+Download the latest APK from the GitHub Releases page:
+
+**➡️ https://github.com/MomenOsama123/SmartHealthReminder/releases**
+
+---
+
+# 🏗️ Application Architecture
+
+Trusta is built using modern Android development practices to provide a scalable, maintainable, and reliable application.
 
 ### Architecture
+- MVVM (Model–View–ViewModel)
+- Repository Pattern
+- Modular Feature-Based Structure
 
-* MVVM Architecture
-* Repository Pattern
-
-### Local Database
-
-* Room Database
-
-### Cloud Services
-
-* Firebase Authentication
-* Firebase Firestore
+### Data Management
+- Room Database
+- Firebase Authentication
+- Firebase Firestore
 
 ### Networking
-
-* Retrofit
+- Retrofit
 
 ### Dependency Injection
+- Koin
 
-* Koin
+### Asynchronous Programming
+- Kotlin Coroutines
+- Kotlin Flow
 
-### Concurrency
-
-* Kotlin Coroutines
-* Flow
-
-### UI
-
-* XML Layouts
-* Material Design 3
-* ViewBinding
-* Navigation Component
-* Splash Screen API
+### User Interface
+- XML Layouts
+- Material Design 3
+- ViewBinding
+- Navigation Component
 
 ---
 
-# 📂 Project Structure
+# 🚀 Application Highlights
 
-```
-app
-├── features
-│   ├── auth
-│   ├── alarm
-│   ├── chatbot
-│   ├── dashboard
-│   ├── search
-│   ├── reports
-│   ├── reminder
-│   ├── schedule
-│   ├── profile
-│   ├── settings
-│   └── welcome
-│
-├── data
-│   ├── repository
-│   ├── local
-│   ├── remote
-│   └── model
-│
-├── utils
-└── viewmodel
-```
+- Modern Android Architecture
+- Clean & User-Friendly Interface
+- Offline Data Storage
+- Cloud Authentication
+- AI-Powered Assistance
+- Fast Search Experience
+- Personalized Daily Health Tips
+- Scalable Project Structure
 
 ---
 
-# 📱 Main Screens
+# 📌 Current Status
 
-* Welcome
-* Login
-* Register
-* Dashboard
-* Medication Reminders
-* Alarm Management
-* Search
-* Today's Plan
-* Reports
-* AI Assistant
-* Profile
-* Settings
+**Current Version**
 
----
+`v0.8.0 Beta`
 
-# 🚀 Getting Started
+### Currently Available
 
-### Clone the repository
+- ✅ Authentication
+- ✅ Medication Reminders
+- ✅ Alarm Management
+- ✅ Dashboard
+- ✅ Smart Search
+- ✅ AI Health Assistant
+- ✅ Reports
+- ✅ Daily Planner
+- ✅ Calendar Notes
+- ✅ Daily Health Tips
+- ✅ Theme Support
 
-```bash
-git clone https://github.com/MomenOsama123/SmartHealthReminder.git
-```
-
-### Open the project
-
-Open the project using **Android Studio**.
-
-### Configure Firebase
-
-Add your own:
-
-```
-google-services.json
-```
-
-inside the `app/` module.
-
-### Sync Gradle
-
-Wait until all dependencies are downloaded.
-
-### Run
-
-Run the application on an Android device or Emulator.
-
----
-
-# 📸 Screenshots
-
-> Screenshots will be added after the final UI polishing.
+The application is currently in the **Beta** stage and continues to receive improvements, optimizations, and additional features before the first stable release.
 
 ---
 
 # 🔮 Future Improvements
 
-* Smart Health Analytics
-* PDF Report Export
-* Cloud Backup & Synchronization
-* Wearable Device Integration
-* AI Health Recommendations
-* Multi-language Support
+- Health Progress Analytics
+- PDF Report Export
+- Cloud Synchronization
+- Wearable Device Support
+- Personalized AI Recommendations
+- Multi-language Support
 
 ---
 
-# 👨‍💻 Developed As
+# 🎯 Project Goal
 
-Graduation Project – Faculty of Computers and Data Science
+Trusta aims to simplify medication management and encourage healthier daily routines through smart reminders, intelligent assistance, and an intuitive user experience.
+
+Our goal is to provide users with a trusted healthcare companion that improves medication adherence and supports everyday wellness.
+
+---
+
+# 🎓 About
+
+**Trusta** was developed as a Graduation Project for the **Faculty of Computers and Data Science**.
+
+The project combines modern Android development technologies with healthcare-focused features to deliver an intelligent, practical, and user-centered mobile application.
 
 ---
 
 # 📄 License
 
-This project is intended for educational and graduation project purposes.
+This project was developed for educational and graduation project purposes.
