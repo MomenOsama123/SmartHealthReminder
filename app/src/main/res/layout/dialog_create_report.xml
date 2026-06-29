@@ -5,12 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:layout_marginTop="32dp"
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Report Title"
+        android:text="@string/report_title"
         android:textAppearance="@style/TextBody1"
         android:textColor="@color/text_primary"
         android:layout_marginBottom="8dp"/>
@@ -19,16 +21,17 @@
         android:id="@+id/et_report_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="e.g., Weekly Health Summary"
+        android:hint="@string/e_g_weekly_health_summary"
         android:background="@drawable/bg_input_field"
         android:padding="12dp"
         android:textSize="14sp"
+        android:inputType="text"
         android:textColor="@color/text_primary"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description"
+        android:text="@string/description"
         android:textAppearance="@style/TextBody1"
         android:textColor="@color/text_primary"
         android:layout_marginTop="16dp"
@@ -38,7 +41,7 @@
         android:id="@+id/et_report_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter report details..."
+        android:hint="@string/enter_report_details"
         android:background="@drawable/bg_input_field"
         android:padding="12dp"
         android:textSize="14sp"

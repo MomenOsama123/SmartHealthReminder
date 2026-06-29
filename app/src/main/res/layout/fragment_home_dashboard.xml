@@ -224,6 +224,7 @@
 
             <!-- Feature Banner -->
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cvTodayTip"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_marginTop="24dp"
@@ -232,9 +233,32 @@
                 <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
                     <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/img_breathe_bg" />
                     <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_gradient_bottom" />
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:orientation="vertical" android:padding="20dp">
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Deep Breathe." android:textColor="@color/text_on_primary" android:textSize="18sp" android:textStyle="bold" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Today's air is clean and restorative." android:textColor="#E0E0E0" android:textSize="12sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="24dp"
+                        android:orientation="vertical"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/tvTipTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Today's Tip"
+                            android:textColor="@color/text_on_primary"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvTipContent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/fetching_your_daily_wellness_tip"
+                            android:textColor="#E0E0E0"
+                            android:textSize="16sp" />
                     </LinearLayout>
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>

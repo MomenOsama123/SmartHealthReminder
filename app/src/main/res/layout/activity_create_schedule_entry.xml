@@ -13,7 +13,9 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginTop="32dp"
+        >
 
         <ImageButton
             android:id="@+id/btn_back"
@@ -21,14 +23,14 @@
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
-            android:contentDescription="Back"/>
+            android:contentDescription="@string/back"/>
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginStart="16dp"
-            android:text="Create Schedule Entry"
+            android:text="@string/create_schedule_entry"
             android:textAppearance="@style/TextHeading2"
             android:textColor="@color/text_primary"/>
 
@@ -48,7 +50,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Title"
+                android:hint="@string/title"
                 app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="@color/surface"
                 app:boxCornerRadiusTopStart="12dp"
@@ -68,7 +70,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description"
+                android:hint="@string/description"
                 app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="@color/surface"
                 app:boxCornerRadiusTopStart="12dp"
@@ -89,7 +91,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Date (yyyy-MM-dd)"
+                android:hint="@string/date_yyyy_mm_dd"
                 app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="@color/surface"
                 app:boxCornerRadiusTopStart="12dp"
@@ -111,7 +113,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Time (HH:mm)"
+                android:hint="@string/time_hh_mm"
                 app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="@color/surface"
                 app:boxCornerRadiusTopStart="12dp"
@@ -133,7 +135,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Category"
+                android:hint="@string/category"
                 app:boxBackgroundMode="filled"
                 app:boxBackgroundColor="@color/surface"
                 app:boxCornerRadiusTopStart="12dp"
@@ -154,7 +156,7 @@
                 android:id="@+id/btn_save"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Save Entry"
+                android:text="@string/save_entry"
                 android:textAppearance="@style/TextButton"
                 app:backgroundTint="@color/primary"
                 app:cornerRadius="12dp"/>

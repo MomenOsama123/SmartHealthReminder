@@ -29,7 +29,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/serenepulse"
+                android:text="@string/app_name"
                 android:textStyle="bold"
                 android:textSize="18sp"/>
 
@@ -47,7 +47,7 @@
             android:layout_height="24dp"
             android:src="@drawable/ic_warning"
             app:tint="@color/primary_green"
-            android:contentDescription="AI Disclaimer Info"
+            android:contentDescription="@string/ai_disclaimer_info"
             android:padding="2dp"/>
 
     </LinearLayout>

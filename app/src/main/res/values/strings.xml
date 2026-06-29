@@ -3,9 +3,9 @@
 
     <!-- ================= Dashboard ================= -->
 
-    <string name="app_rname">Good Morning, Elena</string>
+    <string name="app_rname" translatable="false">Good Morning, Elena</string>
 
-    <string name="adherence_percent">72%</string>
+    <string name="adherence_percent" translatable="false">72%</string>
     <string name="adherence_label">ADHERENCE</string>
     <string name="welcome_back">Welcome Back</string>
     <string name="on_track_title">On Track</string>
@@ -209,7 +209,7 @@
     <string name="already_account">Already have an account?</string>
 
 
-    <string name="app_name">Trusta</string>
+    <string name="app_name">Trusta App</string>
     <string name="welcome_message">Welcome to Trusta App</string>
     <string name="subtitle_welcome">Your Smart Health Companion</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -378,5 +378,17 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="medical_disclaimer_title">Medical Disclaimer</string>
     <string name="medical_disclaimer_message">Please consult your doctor for any medical concerns. This AI assistant is for informational purposes only and should not be relied upon for diagnosis or treatment.</string>
     <string name="i_understand">I Understand</string>
-    <string name="Your_Trusted_HA">test</string>
+    <string name="Your_Trusted_HA">Your Trusted Health Assistant</string>
+    <string name="ai_disclaimer_info">AI Disclaimer Info</string>
+    <string name="create_schedule_entry">Create Schedule Entry</string>
+    <string name="title">Title</string>
+    <string name="date_yyyy_mm_dd">Date (yyyy-MM-dd)</string>
+    <string name="description">Description</string>
+    <string name="time_hh_mm">Time (HH:mm)</string>
+    <string name="category">Category</string>
+    <string name="save_entry">Save Entry</string>
+    <string name="report_title">Report Title</string>
+    <string name="e_g_weekly_health_summary">e.g., Weekly Health Summary</string>
+    <string name="enter_report_details">Enter report details...</string>
+    <string name="fetching_your_daily_wellness_tip">Fetching your daily wellness tip...</string>
 </resources>

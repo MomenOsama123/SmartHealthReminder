@@ -55,6 +55,18 @@ class HomeFragment : Fragment() {
         observeReminders()
     }
 
+    override fun onResume() {
+        super.onResume()
+        setupDailyTip()
+    }
+
+    override fun onHiddenChanged(hidden: Boolean) {
+        super.onHiddenChanged(hidden)
+        if (!hidden) {
+            setupDailyTip()
+        }
+    }
+
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
         binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext())
@@ -89,6 +101,40 @@ class HomeFragment : Fragment() {
             }
             startActivity(intent)
         }
+    }
+
+    private fun setupDailyTip() {
+        val tips = listOf(
+            "Drink at least 8 glasses of water today to stay hydrated.",
+            "A 10-minute walk can significantly boost your mood and energy.",
+            "Try to get 7-9 hours of sleep for optimal brain function.",
+            "Taking deep breaths for 2 minutes can reduce stress levels.",
+            "Include more leafy greens in your meals for essential vitamins.",
+            "Consistency is key—keep up with your health reminders!",
+            "Take a short break every hour to stretch your body.",
+            "Practice mindfulness today: focus on the present moment.",
+            "Replace sugary snacks with fruits for a natural energy boost.",
+            "Regular exercise is a celebration of what your body can do.",
+            "Don't be afraid to ask for help; mental health is just as important as physical health.",
+            "Limit screen time an hour before bed for better sleep quality.",
+            "Your value is not defined by your productivity.",
+            "Small progress is still progress. Keep going!",
+            "Start your day with a positive affirmation.",
+            "Laughter is a great stress-reliever—watch something funny today.",
+            "Social connection is vital; reach out to a friend or loved one.",
+            "Listen to your body; if it needs rest, give it rest.",
+            "Organize your workspace to clear your mind and reduce anxiety.",
+            "Nature has a calming effect; spend some time outdoors if possible.",
+            "Limit caffeine intake in the afternoon to avoid sleep disruption.",
+            "Practice gratitude: name three things you're thankful for today.",
+            "Avoid multi-tasking; focus on one thing at a time to reduce stress.",
+            "Healthy eating isn't about restriction; it's about nourishment.",
+            "Stretch for 5 minutes after waking up to improve circulation."
+        )
+
+        // Select a random tip from the list
+        val randomTip = tips.random()
+        binding.tvTipContent.text = randomTip
     }
 
     private fun observeReminders() {
