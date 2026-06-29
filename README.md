@@ -4,76 +4,58 @@
 
 Trusta is a modern Android healthcare application designed to help users manage medications, reminders, alarms, and daily health routines through a simple, intelligent, and user-friendly experience.
 
-Whether you're taking medications daily or simply trying to build healthier habits, Trusta helps you stay organized with smart reminders, AI assistance, daily planning, and personalized wellness features.
+The application combines medication reminders, alarm scheduling, AI-powered assistance, smart search, daily planning, health reports, and wellness tips into one centralized platform to improve medication adherence and encourage healthier habits.
 
 ---
 
 # ✨ Key Features
 
-## 🔐 Secure Authentication
+### 🔐 Secure Authentication
 - Email & Password Sign-In
 - Google Sign-In
 - Password Recovery
 - Secure Firebase Authentication
 
----
-
-## 💊 Medication Reminders
+### 💊 Medication Reminders
 - Create, edit, and delete reminders
 - Recurring reminders
 - Reminder status tracking
 - Today's reminders
-- Reminder management
+- Smart reminder management
 
----
-
-## ⏰ Alarm Management
+### ⏰ Alarm Management
 - Create medication alarms
-- Enable / Disable alarms
+- Enable or disable alarms
 - Smart notifications
 - Alarm scheduling
 
----
-
-## 📊 Smart Dashboard
+### 📊 Smart Dashboard
 - Today's reminders overview
-- Pending reminders
-- Completed reminders
-- Daily Health Tip
-- Quick access to important features
+- Pending & completed statistics
+- Daily health tips
+- Quick access to key features
 
----
-
-## 🔍 Smart Search
+### 🔍 Smart Search
 - Real-time search
 - Search history
 - Search reminders and alarms
 - Fast filtering
 
----
-
-## 🤖 AI Health Assistant
-- Health guidance
+### 🤖 AI Health Assistant
+- AI-powered health guidance
 - Medication assistance
-- Interactive AI conversations
+- Interactive conversations
 
----
-
-## 📅 Daily Planner
-- Daily schedule management
+### 📅 Daily Planner
+- Organize daily schedules
 - Calendar notes
-- Organize daily activities
+- Daily activity management
 
----
+### 📈 Reports
+- Reminder activity tracking
+- Health progress overview
 
-## 📈 Reports
-- Track reminder activity
-- Daily health reports
-- Progress overview
-
----
-
-## 🎨 Personalization
+### 🎨 Personalization
 - Light Theme
 - Dark Theme
 - System Theme
@@ -82,32 +64,40 @@ Whether you're taking medications daily or simply trying to build healthier habi
 
 # 📱 Application Screenshots
 
-> Screenshots will be added in the next update.
+| Welcome | Login |
+|---------|-------|
+| ![Welcome](screenshots/WelcomePage.png) | ![Login](screenshots/LogIn.png) |
+
+| Quick Access | Reports |
+|--------------|---------|
+| ![Quick Access](screenshots/QuickAccess.png) | ![Reports](screenshots/Report.png) |
+
+> More screenshots will be added in future releases.
 
 ---
 
 # 📥 Download
 
-### Latest Version
+## Latest Release
 
-**v0.8.0 Beta**
+**Version:** **v0.8.0 Beta**
 
-Download the latest APK from the GitHub Releases page:
+Download the latest APK from GitHub Releases:
 
-**➡️ https://github.com/MomenOsama123/SmartHealthReminder/releases**
+➡️ **https://github.com/MomenOsama123/SmartHealthReminder/releases**
 
 ---
 
 # 🏗️ Application Architecture
 
-Trusta is built using modern Android development practices to provide a scalable, maintainable, and reliable application.
+Trusta follows modern Android development principles to ensure scalability, maintainability, and performance.
 
 ### Architecture
 - MVVM (Model–View–ViewModel)
 - Repository Pattern
 - Modular Feature-Based Structure
 
-### Data Management
+### Data Layer
 - Room Database
 - Firebase Authentication
 - Firebase Firestore
@@ -130,29 +120,45 @@ Trusta is built using modern Android development practices to provide a scalable
 
 ---
 
+# 🛠️ Technologies Used
+
+- Kotlin
+- Android SDK
+- Firebase Authentication
+- Firebase Firestore
+- Room Database
+- Retrofit
+- Koin
+- Coroutines
+- Flow
+- Material Design 3
+- ViewBinding
+- Navigation Component
+
+---
+
 # 🚀 Application Highlights
 
-- Modern Android Architecture
-- Clean & User-Friendly Interface
-- Offline Data Storage
-- Cloud Authentication
-- AI-Powered Assistance
-- Fast Search Experience
-- Personalized Daily Health Tips
+- Modern MVVM Architecture
+- Clean & Intuitive User Interface
+- Offline & Online Data Management
+- Secure Authentication
+- AI-Powered Health Assistant
+- Smart Search Experience
+- Daily Health Tips
+- Personalized User Experience
 - Scalable Project Structure
 
 ---
 
-# 📌 Current Status
+# 📌 Project Status
 
-**Current Version**
+**Current Version:** `v0.8.0 Beta`
 
-`v0.8.0 Beta`
+### Implemented Features
 
-### Currently Available
-
-- ✅ Authentication
-- ✅ Medication Reminders
+- ✅ User Authentication
+- ✅ Medication Reminder Management
 - ✅ Alarm Management
 - ✅ Dashboard
 - ✅ Smart Search
@@ -163,7 +169,7 @@ Trusta is built using modern Android development practices to provide a scalable
 - ✅ Daily Health Tips
 - ✅ Theme Support
 
-The application is currently in the **Beta** stage and continues to receive improvements, optimizations, and additional features before the first stable release.
+The application is currently in the **Beta** stage and continues to receive improvements, optimization, and additional features before the first stable release.
 
 ---
 
@@ -180,7 +186,7 @@ The application is currently in the **Beta** stage and continues to receive impr
 
 # 🎯 Project Goal
 
-Trusta aims to simplify medication management and encourage healthier daily routines through smart reminders, intelligent assistance, and an intuitive user experience.
+Trusta aims to simplify medication management and encourage healthier daily routines through smart reminders, intelligent assistance, and an intuitive mobile experience.
 
 Our goal is to provide users with a trusted healthcare companion that improves medication adherence and supports everyday wellness.
 
@@ -188,9 +194,9 @@ Our goal is to provide users with a trusted healthcare companion that improves m
 
 # 🎓 About
 
-**Trusta** was developed as a Graduation Project for the **Faculty of Computers and Data Science**.
+**Trusta** was developed as a **Graduation Project** for the **Faculty of Computers and Data Science**.
 
-The project combines modern Android development technologies with healthcare-focused features to deliver an intelligent, practical, and user-centered mobile application.
+The project combines modern Android technologies with healthcare-focused features to deliver an intelligent, practical, and user-centered mobile application.
 
 ---
 
