@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F2E9"
+    android:background="@color/background"
     tools:context=".features.search.SearchFragment">
 
     <!-- Header Section -->
@@ -25,7 +25,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/content_desc_back"
             android:src="@drawable/ic_arrow_back"
-            app:tint="#3D5A4A" />
+            app:tint="@color/search_accent" />
 
         <FrameLayout
             android:layout_width="0dp"
@@ -39,8 +39,8 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_card_white_rounded"
                 android:hint="@string/search_hint"
-                android:textColorHint="#6E7D75"
-                android:textColor="#3D5A4A"
+                android:textColorHint="@color/search_hint"
+                android:textColor="@color/search_accent"
                 android:imeOptions="actionSearch"
                 android:importantForAutofill="no"
                 android:inputType="text"
@@ -55,7 +55,7 @@
                 android:padding="12dp"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
-                app:tint="#3D5A4A" />
+                app:tint="@color/search_accent" />
         </FrameLayout>
     </LinearLayout>
 
@@ -114,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="RECENT SEARCHES"
-                android:textColor="#3D5A4A"
+                android:textColor="@color/search_accent"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:letterSpacing="0.1" />
@@ -125,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:text="Clear All"
-                android:textColor="#C44536"
+                android:textColor="@color/urgent"
                 android:textSize="12sp"
                 android:textStyle="bold" />
 
@@ -142,7 +142,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/suggested_topics"
-            android:textColor="#3D5A4A"
+            android:textColor="@color/search_accent"
             android:textSize="12sp"
             android:textStyle="bold"
             android:letterSpacing="0.1" />
@@ -158,8 +158,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Vitamins"
-                app:chipBackgroundColor="#FFFFFF"
-                app:chipStrokeColor="#E6E1D3"
+                app:chipBackgroundColor="@color/surface"
+                app:chipStrokeColor="@color/chip_stroke_warm"
                 app:chipStrokeWidth="1dp" />
 
             <com.google.android.material.chip.Chip
@@ -167,8 +167,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hydration"
-                app:chipBackgroundColor="#FFFFFF"
-                app:chipStrokeColor="#E6E1D3"
+                app:chipBackgroundColor="@color/surface"
+                app:chipStrokeColor="@color/chip_stroke_warm"
                 app:chipStrokeWidth="1dp" />
 
             <com.google.android.material.chip.Chip
@@ -176,8 +176,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Daily Meds"
-                app:chipBackgroundColor="#FFFFFF"
-                app:chipStrokeColor="#E6E1D3"
+                app:chipBackgroundColor="@color/surface"
+                app:chipStrokeColor="@color/chip_stroke_warm"
                 app:chipStrokeWidth="1dp" />
         </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
@@ -212,7 +212,7 @@
             android:layout_height="120dp"
             android:src="@drawable/ic_heart"
             android:contentDescription="@null"
-            app:tint="#3D5A4A" />
+            app:tint="@color/search_accent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -220,7 +220,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/no_results_found"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="@color/black" />
+            android:textColor="@color/text_primary" />
 
         <TextView
             android:layout_width="250dp"

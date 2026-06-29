@@ -174,7 +174,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="#496455"
+                    app:cardBackgroundColor="@color/card_stat_accent"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="0dp">
 
@@ -199,7 +199,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/sleep_quality"
-                            android:textColor="#A5B8AD"
+                            android:textColor="@color/card_stat_accent_label"
                             android:textSize="12sp" />
 
                         <TextView
@@ -347,7 +347,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Today's air is clean and restorative."
-                            android:textColor="#E0E0E0"
+                            android:textColor="@color/banner_subtitle"
                             android:textSize="12sp" />
                     </LinearLayout>
                 </RelativeLayout>

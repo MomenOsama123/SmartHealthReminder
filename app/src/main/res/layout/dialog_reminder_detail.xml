@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Description"
+        android:text="@string/description"
         android:textAppearance="@style/TextCaption"
         android:textColor="@color/text_tertiary"/>
 
@@ -72,7 +72,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:text="@string/date"
                 android:textAppearance="@style/TextCaption"
                 android:textColor="@color/text_tertiary"/>
 
@@ -96,7 +96,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Time"
+                android:text="@string/time"
                 android:textAppearance="@style/TextCaption"
                 android:textColor="@color/text_tertiary"/>
 
@@ -160,7 +160,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginEnd="4dp"
-            android:text="Mark Done"
+            android:text="@string/mark_done"
             android:textAppearance="@style/TextButton"
             android:textColor="@color/text_on_primary"
             android:background="@drawable/bg_rounded_button_primary"
@@ -177,7 +177,7 @@
             android:layout_height="48dp"
             android:layout_weight="1"
             android:layout_marginStart="4dp"
-            android:text="Missed"
+            android:text="@string/missed"
             android:textAppearance="@style/TextButton"
             android:textColor="@color/text_on_primary"
             android:background="@drawable/bg_rounded_button_primary"
@@ -195,7 +195,7 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:text="Delete"
+        android:text="@string/delete"
         android:textAppearance="@style/TextButton"
         android:textColor="@color/urgent"
         android:background="@drawable/bg_rounded_button_secondary"

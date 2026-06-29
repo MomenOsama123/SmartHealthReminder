@@ -1,25 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="splash_background">#F3EFE3</color>
-    <color name="page">#111814</color>
-    <color name="background_beige">#111814</color>
-    <color name="background">#111814</color>
-    <color name="surface">#1B241F</color>
-    <color name="surface_variant">#243129</color>
-    <color name="text_dark">#F3F7F4</color>
-    <color name="text_primary">#F3F7F4</color>
-    <color name="text_secondary">#B8C4BC</color>
-    <color name="text_tertiary">#8B9A91</color>
-    <color name="hint_gray">#B8C4BC</color>
-    <color name="border">#314139</color>
-    <color name="border_gray">#314139</color>
-    <color name="divider">#314139</color>
-    <color name="primary">#9BB8A4</color>
-    <color name="primary_green">#9BB8A4</color>
-    <color name="primary_dark">#DDEBDF</color>
-    <color name="primary_light">#5D7866</color>
-    <color name="success_light">#263A2C</color>
-    <color name="pending_light">#44351F</color>
-    <color name="urgent_light">#442A28</color>
-    <color name="missed_light">#442A28</color>
+    <!-- Base -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Background -->
+    <color name="splash_background">#1C221E</color>
+    <color name="page">#1C221E</color>
+    <color name="background_beige">#1C221E</color>
+    <color name="background">#1C221E</color>
+
+    <!-- Surface -->
+    <color name="surface">#262E28</color>
+    <color name="surface_variant">#2F3832</color>
+
+    <!-- Main Theme -->
+    <color name="primary_green">#8FB89E</color>
+    <color name="primary">#8FB89E</color>
+    <color name="primary_dark">#A8C4AD</color>
+    <color name="primary_light">#7FAE8E</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#F0F5F2</color>
+    <color name="text_secondary">#B4C4BA</color>
+    <color name="text_tertiary">#A4B8AC</color>
+    <color name="text_on_primary">#1C221E</color>
+
+    <!-- Text -->
+    <color name="text_dark">#F0F5F2</color>
+    <color name="hint_gray">#8B9A91</color>
+
+    <!-- Utility -->
+    <color name="border_gray">#3E4A43</color>
+
+    <!-- Status Colors -->
+    <color name="urgent">#E07A6F</color>
+    <color name="urgent_light">#5A3835</color>
+    <color name="pending">#F0C070</color>
+    <color name="pending_light">#5A4A2E</color>
+    <color name="success">#6BAF6E</color>
+    <color name="success_light">#3A5240</color>
+    <color name="missed">#E07A6F</color>
+    <color name="missed_light">#5A3835</color>
+
+    <!-- Category Colors -->
+    <color name="medicine">#6BAF6E</color>
+    <color name="medicine_light">#3A5240</color>
+    <color name="appointment">#7B9EC0</color>
+    <color name="appointment_light">#2A3540</color>
+    <color name="health">#8FB89E</color>
+    <color name="health_light">#3A5240</color>
+    <color name="personal">#B08FC8</color>
+    <color name="personal_light">#3A2E40</color>
+    <color name="work">#C8A880</color>
+    <color name="work_light">#4A3A2E</color>
+
+    <!-- Divider & Border -->
+    <color name="divider">#3E4A43</color>
+    <color name="border">#3E4A43</color>
+
+    <!-- Overlay -->
+    <color name="overlay">#B3000000</color>
+    <color name="overlay_white">#80000000</color>
+
+    <!-- Additional Colors for Layouts -->
+    <color name="bg_warm">#1C221E</color>
+    <color name="text_main_dark">#F0F5F2</color>
+    <color name="text_accent">#8FB89E</color>
+    <color name="text_muted">#9BAEA3</color>
+    <color name="divider_color">#3E4A43</color>
+    <color name="bg_light_blue">#1A252E</color>
+    <color name="bg_soft_beige">#2E2A1E</color>
+    <color name="error_red">#EF5350</color>
+    <color name="bg_soft_pink">#3A2A2E</color>
+    <color name="bg_soft_green">#263A2C</color>
+    <color name="text_blue_gray">#8BA3B0</color>
+    <color name="text_dark_green">#6BAF6E</color>
+    <color name="gray_text_light">#B0B0B0</color>
+
+    <!-- Card & search accents -->
+    <color name="card_stat_accent">#6B9E82</color>
+    <color name="card_stat_accent_label">#2E3A34</color>
+    <color name="banner_subtitle">#D0E0D8</color>
+    <color name="search_accent">#8FB89E</color>
+    <color name="search_hint">#8B9A91</color>
+    <color name="chip_stroke_warm">#4A5248</color>
+    <color name="card_warm_tan">#3A3530</color>
+    <color name="card_mint">#2A3830</color>
+    <color name="card_soft_cream">#2F2E28</color>
+    <color name="card_soft_sage">#2E342E</color>
+    <color name="card_title_green">#E8F0EC</color>
+    <color name="card_body_green">#A8B8AE</color>
+    <color name="icon_bg_soft">#3A5240</color>
+    <color name="icon_tint_green">#8FB89E</color>
+    <color name="icon_tint_muted">#6B7870</color>
+    <color name="shimmer_bg">#3E4A43</color>
+    <color name="input_stroke">#4A5248</color>
+    <color name="schedule_on_primary_muted">#801C221E</color>
+    <color name="schedule_on_primary_accent">#2E3A34</color>
+    <color name="schedule_overlay_bg">#30FFFFFF</color>
+    <color name="schedule_on_primary_text">#1C221E</color>
 </resources>

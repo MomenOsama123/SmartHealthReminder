@@ -71,7 +71,7 @@
                     android:layout_height="72dp"
                     android:src="@drawable/ic_schedule"
                     android:alpha="0.25"
-                    android:contentDescription="No events"/>
+                    android:contentDescription="@string/no_events"/>
 
                 <TextView
                     android:id="@+id/tv_empty_message"
@@ -105,7 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:layout_marginBottom="10dp"
-            android:text="Add Note"
+            android:text="@string/add_note"
             android:textSize="14sp"
             android:textColor="@color/primary"
             android:backgroundTint="@color/surface"
@@ -129,7 +129,7 @@
                 android:layout_height="52dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="Add Reminder"
+                android:text="@string/add_reminder"
                 android:textSize="13sp"
                 android:backgroundTint="@color/primary"
                 android:textColor="@color/white"
@@ -144,7 +144,7 @@
                 android:layout_height="52dp"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="Add Alarm"
+                android:text="@string/add_alarm"
                 android:textSize="13sp"
                 android:backgroundTint="@color/urgent"
                 android:textColor="@color/white"

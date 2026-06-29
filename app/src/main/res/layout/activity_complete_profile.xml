@@ -69,7 +69,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_input_white"
-                android:backgroundTint="#DDE3E1"/> <!-- لون أخضر باهت جداً -->
+                android:backgroundTint="@color/icon_bg_soft"/>
         </LinearLayout>
 
         <!-- Titles -->

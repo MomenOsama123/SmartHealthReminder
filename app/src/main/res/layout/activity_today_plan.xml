@@ -21,7 +21,7 @@
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_arrow_back"
-            android:contentDescription="Back"/>
+            android:contentDescription="@string/back"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -34,7 +34,7 @@
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Today's Plan"
+                android:text="@string/today_s_plan"
                 android:textAppearance="@style/TextHeading2"
                 android:textColor="@color/text_primary"/>
 
@@ -42,7 +42,7 @@
                 android:id="@+id/tv_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="0 items"
+                android:text="@string/_0_items"
                 android:textAppearance="@style/TextCaption"
                 android:textColor="@color/text_secondary"/>
 
@@ -67,7 +67,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Today's Schedule"
+                android:text="@string/today_s_schedule"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:layout_marginBottom="8dp"/>
@@ -92,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="You don't have any plans scheduled for today."
+                    android:text="@string/you_don_t_have_any_plans_scheduled_for_today"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -112,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="8dp"
-                android:text="Quick Actions"
+                android:text="@string/quick_actions"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"/>
 
@@ -128,7 +128,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:text="Reminder"
+                    android:text="@string/reminder"
                     android:textSize="11sp"
                     android:backgroundTint="@color/primary"
                     android:textColor="@color/white"
@@ -143,7 +143,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="Alarm"
+                    android:text="@string/alarm"
                     android:textSize="11sp"
                     android:backgroundTint="@color/urgent"
                     android:textColor="@color/white"
@@ -166,7 +166,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:text="Note"
+                    android:text="@string/note"
                     android:textSize="11sp"
                     android:backgroundTint="@color/success"
                     android:textColor="@color/white"
@@ -181,7 +181,7 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="Report"
+                    android:text="@string/report"
                     android:textSize="11sp"
                     android:backgroundTint="@color/primary_dark"
                     android:textColor="@color/white"
@@ -196,7 +196,7 @@
                 android:id="@+id/btn_open_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="Open Full Schedule"
+                android:text="@string/open_full_schedule"
                 android:textSize="12sp"
                 android:backgroundTint="@color/surface_variant"
                 android:textColor="@color/text_primary"

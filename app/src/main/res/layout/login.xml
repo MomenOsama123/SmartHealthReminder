@@ -55,7 +55,7 @@
             android:layout_marginTop="10dp"
             android:text="@string/secure_access_to_your_health_records"
             android:textSize="12sp"
-            android:textColor="#6B7B75" />
+            android:textColor="@color/text_secondary" />
 
         <!-- Email Label -->
         <TextView

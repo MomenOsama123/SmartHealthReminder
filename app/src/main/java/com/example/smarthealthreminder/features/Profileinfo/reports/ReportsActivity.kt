@@ -16,6 +16,7 @@ import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.ReportRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import kotlinx.coroutines.launch
 
 class ReportsActivity : AppCompatActivity() {
@@ -64,13 +65,10 @@ class ReportsActivity : AppCompatActivity() {
         }
 
         // تشغيل الشريط السفلي
-        bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                // هنا بتضيف الانتقالات بتاعتك لباقي الصفحات
-                // R.id.nav_home -> startActivity(...)
-            }
-            true
-        }
+        BottomNavHelper.setup(
+            activity = this,
+            bottomNavigation = bottomNavigation
+        )
 
         // 4. مراقبة الداتابيز (تحديث الشاشة تلقائياً)
         lifecycleScope.launch {

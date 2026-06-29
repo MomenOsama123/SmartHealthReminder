@@ -22,7 +22,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Reminders"
+                android:text="@string/reminders"
                 android:textAppearance="@style/TextHeading3"
                 android:textColor="@color/text_primary"/>
 
@@ -63,7 +63,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Today's Reminders"
+                        android:text="@string/today_s_reminders"
                         android:textAppearance="@style/TextBody2"/>
 
                     <LinearLayout
@@ -76,7 +76,7 @@
                             android:id="@+id/tv_today_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="0"
+                            android:text="@string/_0"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"/>
 
@@ -84,7 +84,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="tasks"
+                            android:text="@string/tasks"
                             android:textAppearance="@style/TextBody2"/>
 
                     </LinearLayout>
@@ -122,7 +122,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Missed"
+                        android:text="@string/missed"
                         android:textAppearance="@style/TextBody1"
                         android:textColor="@color/missed"/>
 
@@ -136,7 +136,7 @@
                             android:id="@+id/tv_missed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="00"
+                            android:text="@string/_00"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"
                             android:textColor="@color/missed"/>
@@ -145,7 +145,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="alerts"
+                            android:text="@string/alerts"
                             android:textAppearance="@style/TextBody2"
                             android:textColor="@color/missed"/>
 
@@ -155,7 +155,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="! Needs attention"
+                        android:text="@string/needs_attention"
                         android:textAppearance="@style/TextCaption"
                         android:textColor="@color/missed"/>
 
@@ -185,7 +185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Completed"
+                        android:text="@string/completed"
                         android:textAppearance="@style/TextBody1"
                         android:textColor="@color/success"/>
 
@@ -199,7 +199,7 @@
                             android:id="@+id/tv_completed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="00"
+                            android:text="@string/_00"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"
                             android:textColor="@color/success"/>
@@ -208,7 +208,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="4dp"
-                            android:text="today"
+                            android:text="@string/today"
                             android:textAppearance="@style/TextBody2"
                             android:textColor="@color/success"/>
 
@@ -218,7 +218,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Great progress"
+                        android:text="@string/great_progress"
                         android:textAppearance="@style/TextCaption"
                         android:textColor="@color/success"/>
 
@@ -238,14 +238,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Timeline"
+                    android:text="@string/timeline"
                     android:textAppearance="@style/TextHeading3"/>
 
                 <TextView
                     android:id="@+id/tv_view_calendar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="View Calendar →"
+                    android:text="@string/view_calendar"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/primary"
                     android:background="?attr/selectableItemBackground"
@@ -269,7 +269,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:layout_marginTop="24dp"
-                android:text="+ Add Reminder"
+                android:text="@string/add_reminder"
                 android:textAppearance="@style/TextButton"
                 android:textColor="@color/text_on_primary"
                 android:background="@drawable/bg_rounded_button_primary"

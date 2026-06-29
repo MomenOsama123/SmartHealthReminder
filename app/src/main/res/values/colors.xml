@@ -78,4 +78,27 @@
     <color name="text_dark_green">#2E7D32</color>
     <color name="gray_text_light">#9E9E9E</color>
 
+    <!-- Card & search accents -->
+    <color name="card_stat_accent">#496455</color>
+    <color name="card_stat_accent_label">#A5B8AD</color>
+    <color name="banner_subtitle">#E0E0E0</color>
+    <color name="search_accent">#3D5A4A</color>
+    <color name="search_hint">#6E7D75</color>
+    <color name="chip_stroke_warm">#E6E1D3</color>
+    <color name="card_warm_tan">#EBE0CD</color>
+    <color name="card_mint">#D1EAE0</color>
+    <color name="card_soft_cream">#EFEDE3</color>
+    <color name="card_soft_sage">#E6E9E1</color>
+    <color name="card_title_green">#3E4E3B</color>
+    <color name="card_body_green">#6B705C</color>
+    <color name="icon_bg_soft">#F0F4F1</color>
+    <color name="icon_tint_green">#5A7766</color>
+    <color name="icon_tint_muted">#D0D5D1</color>
+    <color name="shimmer_bg">#E0E0E0</color>
+    <color name="input_stroke">#CCCCCC</color>
+    <color name="schedule_on_primary_muted">#80FFFFFF</color>
+    <color name="schedule_on_primary_accent">#B0D4BF</color>
+    <color name="schedule_overlay_bg">#20FFFFFF</color>
+    <color name="schedule_on_primary_text">#FFFFFF</color>
+
 </resources>

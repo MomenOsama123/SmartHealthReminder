@@ -43,9 +43,9 @@
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:text="Month"
-                        android:textColor="@color/white"
-                        app:strokeColor="#80FFFFFF" />
+                        android:text="@string/month"
+                        android:textColor="@color/schedule_on_primary_text"
+                        app:strokeColor="@color/schedule_on_primary_muted" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_mode_week"
@@ -53,8 +53,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:text="Week"
-                        android:textColor="@color/white"
-                        app:strokeColor="#80FFFFFF" />
+                        android:textColor="@color/schedule_on_primary_text"
+                        app:strokeColor="@color/schedule_on_primary_muted" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -83,7 +83,7 @@
                         android:gravity="center"
                         android:textSize="16sp"
                         android:textStyle="bold"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/schedule_on_primary_text" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_today"
@@ -93,7 +93,7 @@
                         android:minWidth="0dp"
                         android:paddingHorizontal="8dp"
                         android:text="@string/today"
-                        android:textColor="@color/white"
+                        android:textColor="@color/schedule_on_primary_text"
                         android:textSize="12sp" />
 
                     <ImageButton
@@ -121,7 +121,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -131,7 +131,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="M"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -141,7 +141,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -151,7 +151,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="W"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -161,7 +161,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="T"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -171,7 +171,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="F"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -181,7 +181,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="S"
-                        android:textColor="#80FFFFFF"
+                        android:textColor="@color/schedule_on_primary_muted"
                         android:textSize="11sp"
                         android:textStyle="bold" />
 
@@ -199,7 +199,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_rounded_card"
-                    android:backgroundTint="#20FFFFFF"
+                    android:backgroundTint="@color/schedule_overlay_bg"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -210,14 +210,14 @@
                         android:layout_marginEnd="8dp"
                         android:contentDescription="Selected date"
                         android:src="@drawable/ic_calendar"
-                        app:tint="@color/white" />
+                        app:tint="@color/schedule_on_primary_text" />
 
                     <TextView
                         android:id="@+id/tv_selected_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/white"
+                        android:textColor="@color/schedule_on_primary_text"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -226,7 +226,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:textColor="#B0D4BF"
+                        android:textColor="@color/schedule_on_primary_accent"
                         android:textSize="12sp" />
 
                     <com.google.android.material.button.MaterialButton
@@ -237,7 +237,7 @@
                         android:minWidth="0dp"
                         android:paddingHorizontal="8dp"
                         android:text="+ Add"
-                        android:textColor="@color/white"
+                        android:textColor="@color/schedule_on_primary_text"
                         android:textSize="12sp"
                         android:textStyle="bold" />
 

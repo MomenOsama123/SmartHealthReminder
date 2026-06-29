@@ -103,9 +103,6 @@
             android:name=".features.Profileinfo.reports.ReportsActivity"
             android:exported="false" />
         <activity
-            android:name=".features.settings.SettingsActivity"
-            android:exported="false" />
-        <activity
             android:name=".features.plan.TodayPlanActivity"
             android:exported="false" />
         <activity
