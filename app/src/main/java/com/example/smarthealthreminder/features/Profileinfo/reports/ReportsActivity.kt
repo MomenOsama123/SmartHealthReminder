@@ -44,7 +44,10 @@ class ReportsActivity : AppCompatActivity() {
         val tvSymptomsOverview = findViewById<TextView>(R.id.tv_symptoms_overview)
         val tvInsight1 = findViewById<TextView>(R.id.tv_insight1)
         val tvInsight2 = findViewById<TextView>(R.id.tv_insight2)
-        val progressGreen = findViewById<View>(R.id.progress_green)
+        val progressBar = findViewById<com.google.android.material.progressindicator.LinearProgressIndicator>(R.id.adherence_progress_bar)
+        val tvLastUpdated = findViewById<TextView>(R.id.tv_last_updated)
+        val tvStatusTitle = findViewById<TextView>(R.id.tv_status_title)
+        val tvStatusDescription = findViewById<TextView>(R.id.tv_status_description)
 
         // تجهيز الـ RecyclerView (عشان لو حبيت تعرض لستة التقارير القديمة بعدين)
         recyclerReports.layoutManager = LinearLayoutManager(this)
@@ -89,12 +92,31 @@ class ReportsActivity : AppCompatActivity() {
                     tvInsight1?.text = latestReport.aiInsight1
                     tvInsight2?.text = latestReport.aiInsight2
 
-                    // تحديث شريط التقدم الأخضر برمجياً
-                    progressGreen?.let { view ->
-                        val layoutParams = view.layoutParams as LinearLayout.LayoutParams
-                        layoutParams.weight = latestReport.adherencePercentage / 100f
-                        view.layoutParams = layoutParams
+                    // تحديث الحالة بناءً على النسبة
+                    if (latestReport.adherencePercentage >= 80) {
+                        tvStatusTitle?.text = "Your condition is stable"
+                        tvStatusDescription?.text = "Excellent adherence this week. Your health vitals are showing positive trends."
+                        progressBar?.setIndicatorColor(getColor(R.color.primary_green))
+                    } else if (latestReport.adherencePercentage >= 50) {
+                        tvStatusTitle?.text = "Your condition is fair"
+                        tvStatusDescription?.text = "Adherence could be improved. Consistency is key to maintaining stable health."
+                        progressBar?.setIndicatorColor(getColor(R.color.pending))
+                    } else {
+                        tvStatusTitle?.text = "Action required"
+                        tvStatusDescription?.text = "Low adherence detected. Please try to follow your medication schedule more closely."
+                        progressBar?.setIndicatorColor(getColor(R.color.error_red))
                     }
+
+                    // تحديث شريط التقدم برمجياً
+                    progressBar?.setProgress(latestReport.adherencePercentage, true)
+
+                    // تحديث التاريخ
+                    val sdf = java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault())
+                    val lastUpdatedText = "Last updated: ${sdf.format(java.util.Date(latestReport.createdAt))}"
+                    tvLastUpdated?.text = lastUpdatedText
+                } else {
+                    // لو مفيش تقارير، اعمل واحد فوراً
+                    viewModel.generateRealReport()
                 }
             }
         }

@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:text="@string/healthsync"
+                android:text="@string/app_name"
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
                 android:textStyle="bold"
@@ -93,6 +93,7 @@
                 android:layout_marginTop="16dp" />
 
             <TextView
+                android:id="@+id/tv_status_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/your_condition_is_nstable"
@@ -103,6 +104,7 @@
                 android:layout_marginTop="4dp" />
 
             <TextView
+                android:id="@+id/tv_status_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/daily_vitals_show_consistent_patterns_over_the_last_7_days"
@@ -167,34 +169,22 @@
                     tools:ignore="RelativeOverlap" />
             </RelativeLayout>
 
-            <LinearLayout
+            <com.google.android.material.progressindicator.LinearProgressIndicator
+                android:id="@+id/adherence_progress_bar"
                 android:layout_width="match_parent"
-                android:layout_height="12dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/et_shape"
-                android:backgroundTint="@color/bg_soft_beige"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.85"
-                    android:background="@drawable/et_shape"
-                    android:id="@+id/progress_green"
-
-                    android:backgroundTint="@color/primary_green"/>
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.15" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                app:indicatorColor="@color/primary_green"
+                app:trackColor="@color/bg_soft_beige"
+                app:trackThickness="12dp"
+                app:trackCornerRadius="6dp"
+                android:progress="85" />
 
             <TextView
+                android:id="@+id/tv_adherence_message"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/you_took_85_of_your_medications_this_week_you_missed_only_2_evening_doses"
-                android:id="@+id/tv_adherence_message"
-
                 android:textColor="@color/text_dark"
                 android:textSize="14sp"
                 android:layout_marginTop="16dp" />
@@ -365,12 +355,14 @@
             android:layout_marginBottom="12dp"/>
 
         <TextView
+            android:id="@+id/tv_last_updated"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pdf_format_last_updated_today_at_08_45_am"
             android:textColor="@color/text_dark"
             android:textSize="10sp"
             android:layout_gravity="center"
+            android:paddingBottom="16dp"
             android:layout_marginBottom="16dp"
             tools:ignore="SmallSp" />
 

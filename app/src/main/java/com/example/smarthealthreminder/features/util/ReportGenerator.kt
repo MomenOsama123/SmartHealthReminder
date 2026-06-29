@@ -13,6 +13,8 @@ class ReportGenerator(private val reminderDao: ReminderDao) {
 
         // 2. الحسابات
         val percentage = if (total > 0) (completed * 100) / total else 0
+        
+        val today = RecurrenceHelper.getTodayString()
 
         // 3. إرجاع النتيجة (إرجاع التقرير)
         return ReportEntity(
@@ -20,10 +22,14 @@ class ReportGenerator(private val reminderDao: ReminderDao) {
             title = "Weekly Health Summary",
             adherencePercentage = percentage,
             missedDoses = missed,
-            symptomsOverview = "Analysis based on $total recorded medication events.",
-            aiInsight1 = if (percentage >= 80) "Excellent consistency!" else "You can do better next week.",
-            aiInsight2 = "Keep tracking your medication daily.",
-            date = "2026-06-28" // يمكنك جعل التاريخ ديناميكي لاحقاً
+            symptomsOverview = "Analysis based on $total recorded medication events ($completed taken, $missed missed).",
+            aiInsight1 = when {
+                percentage >= 90 -> "Excellent consistency! Keep up the great work."
+                percentage >= 75 -> "Good job, but try to minimize missing doses."
+                else -> "Your adherence is low. Setting extra reminders might help."
+            },
+            aiInsight2 = if (missed > 0) "Most missed doses occur when you're busy. Try to plan ahead." else "You haven't missed any doses lately. Perfect score!",
+            date = today
         )
     }
 }
