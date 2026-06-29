@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -68,12 +67,12 @@ class MainActivity : AppCompatActivity() {
 
             activeFragment = homeFragment
         } else {
-            homeFragment = supportFragmentManager.findFragmentByTag(TAG_HOME) as HomeFragment
-            scheduleFragment = supportFragmentManager.findFragmentByTag(TAG_SCHEDULE) as ScheduleFragment
-            alarmsFragment = supportFragmentManager.findFragmentByTag(TAG_ALARMS) as AlarmsFragment
-            remindersFragment = supportFragmentManager.findFragmentByTag(TAG_REMINDERS) as RemindersFragment
-            chatBotFragment = supportFragmentManager.findFragmentByTag("chatbot") as ChatBotFragment
-            activeFragment = supportFragmentManager.fragments.find { !it.isHidden } ?: homeFragment
+            homeFragment = supportFragmentManager.findFragmentByTag(TAG_HOME) as? HomeFragment ?: HomeFragment()
+            scheduleFragment = supportFragmentManager.findFragmentByTag(TAG_SCHEDULE) as? ScheduleFragment ?: ScheduleFragment()
+            alarmsFragment = supportFragmentManager.findFragmentByTag(TAG_ALARMS) as? AlarmsFragment ?: AlarmsFragment()
+            remindersFragment = supportFragmentManager.findFragmentByTag(TAG_REMINDERS) as? RemindersFragment ?: RemindersFragment()
+            chatBotFragment = supportFragmentManager.findFragmentByTag("chatbot") as? ChatBotFragment ?: ChatBotFragment()
+            activeFragment = supportFragmentManager.fragments.find { it.isAdded && !it.isHidden } ?: homeFragment
         }
 
         bottomNavigation.setOnItemSelectedListener { item ->
@@ -164,10 +163,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun showFragment(fragment: Fragment): Boolean {
         if (activeFragment == fragment) return true
-        supportFragmentManager.beginTransaction()
-            .hide(activeFragment!!)
-            .show(fragment)
-            .commit()
+        
+        val transaction = supportFragmentManager.beginTransaction()
+        
+        // Safety check for activeFragment being null
+        activeFragment?.let {
+            transaction.hide(it)
+        }
+        
+        transaction.show(fragment).commit()
         activeFragment = fragment
         return true
     }

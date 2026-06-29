@@ -156,9 +156,11 @@ class HomeFragment : Fragment() {
         val currentTip = binding.tvTipContent.text.toString()
         var newTip = tips.random()
         
-        // Try to get a different tip than the current one
-        while (newTip == currentTip) {
+        // BUG FIX: Prevent infinite loop if tips list is small or same
+        var attempts = 0
+        while (newTip == currentTip && attempts < 10 && tips.size > 1) {
             newTip = tips.random()
+            attempts++
         }
         
         binding.tvTipContent.text = newTip
