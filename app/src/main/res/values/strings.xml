@@ -391,4 +391,5 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="e_g_weekly_health_summary">e.g., Weekly Health Summary</string>
     <string name="enter_report_details">Enter report details...</string>
     <string name="fetching_your_daily_wellness_tip">Fetching your daily wellness tip...</string>
+    <string name="refresh">Refresh</string>
 </resources>

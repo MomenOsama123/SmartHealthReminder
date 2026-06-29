@@ -1,5 +1,6 @@
 package com.example.smarthealthreminder.features.fragment
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -57,13 +58,30 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        setupDailyTip()
+        updateDailyTipIfNeeded()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
-            setupDailyTip()
+            updateDailyTipIfNeeded()
+        }
+    }
+
+    private fun updateDailyTipIfNeeded() {
+        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        val lastDate = prefs.getString("last_tip_date", "")
+        val today = RecurrenceHelper.getTodayString()
+
+        if (lastDate != today) {
+            refreshDailyTip()
+        } else {
+            val savedTip = prefs.getString("current_tip", "")
+            if (savedTip.isNullOrBlank()) {
+                refreshDailyTip()
+            } else {
+                binding.tvTipContent.text = savedTip
+            }
         }
     }
 
@@ -101,9 +119,12 @@ class HomeFragment : Fragment() {
             }
             startActivity(intent)
         }
+        binding.btnRefreshTip.setOnClickListener {
+            refreshDailyTip()
+        }
     }
 
-    private fun setupDailyTip() {
+    private fun refreshDailyTip() {
         val tips = listOf(
             "Drink at least 8 glasses of water today to stay hydrated.",
             "A 10-minute walk can significantly boost your mood and energy.",
@@ -132,9 +153,23 @@ class HomeFragment : Fragment() {
             "Stretch for 5 minutes after waking up to improve circulation."
         )
 
-        // Select a random tip from the list
-        val randomTip = tips.random()
-        binding.tvTipContent.text = randomTip
+        val currentTip = binding.tvTipContent.text.toString()
+        var newTip = tips.random()
+        
+        // Try to get a different tip than the current one
+        while (newTip == currentTip) {
+            newTip = tips.random()
+        }
+        
+        binding.tvTipContent.text = newTip
+
+        // Persist the tip and today's date
+        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            putString("current_tip", newTip)
+            putString("last_tip_date", RecurrenceHelper.getTodayString())
+            apply()
+        }
     }
 
     private fun observeReminders() {

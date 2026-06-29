@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="today_s_air_is_clean_and_restorative">Today\'s air is clean and restorative.</string>
+    <string name="refresh">Refresh</string>
 </resources>

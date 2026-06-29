@@ -47,7 +47,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="@string/serenepulse"
+                    android:text="@string/app_name"
                     android:textColor="@color/text_dark"
                     android:textSize="18sp"
                     android:textStyle="bold"
@@ -239,17 +239,38 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="24dp"
+                        android:gravity="center_vertical"
                         android:orientation="vertical"
                         android:padding="20dp">
 
-                        <TextView
-                            android:id="@+id/tvTipTitle"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Today's Tip"
-                            android:textColor="@color/text_on_primary"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tvTipTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Today's Health Tip"
+                                android:textColor="@color/text_on_primary"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <ImageButton
+                                android:id="@+id/btnRefreshTip"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:contentDescription="@string/refresh"
+                                android:padding="8dp"
+                                android:scaleType="fitCenter"
+                                android:src="@drawable/refresh"
+                                app:tint="@color/text_on_primary" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/tvTipContent"
