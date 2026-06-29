@@ -326,7 +326,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_warning"
-                    app:tint="#D9534F" />
+                    app:tint="@color/error_red" />
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -32,7 +32,8 @@
                 android:background="@drawable/bg_day_circle"
                 android:padding="6dp"
                 app:tint="@color/text_on_primary"
-                android:contentDescription="Category Icon"/>
+                android:contentDescription="@string/category_icon"
+                />
 
             <TextView
                 android:id="@+id/tv_alarm_category"
@@ -72,7 +73,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        android:contentDescription="Alarm bell"/>
+        android:contentDescription="@string/alarm_bell"
+        />
 
     <!-- Time -->
     <LinearLayout
@@ -184,7 +186,7 @@
             android:id="@+id/btn_stop_alarm"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Stop Alarm"
+            android:text="@string/stop_alarm"
             android:textAppearance="@style/TextButton"
             android:textColor="@color/text_primary"
             android:background="@drawable/bg_rounded_button_white"
@@ -194,15 +196,7 @@
             app:iconTint="@color/primary"
             app:iconGravity="textStart"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="Solve Math Challenge to Dismiss"
-            android:textAppearance="@style/TextCaption"
-            android:textColor="@color/text_on_primary"
-            android:alpha="0.7"/>
+
 
     </LinearLayout>
 

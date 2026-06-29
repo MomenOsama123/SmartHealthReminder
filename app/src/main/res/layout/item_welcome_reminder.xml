@@ -14,10 +14,10 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:background="@drawable/circle_white"
-        android:backgroundTint="#F0F4F1"
+        android:backgroundTint="@color/icon_bg_soft"
         android:padding="8dp"
         android:src="@drawable/ic_pill"
-        app:tint="#5A7766" />
+        app:tint="@color/icon_tint_green" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/vitamins"
-            android:textColor="#1A1A1A"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Due at 9:00 AM"
-            android:textColor="#808080"
+            android:textColor="@color/text_secondary"
             android:textSize="13sp" />
     </LinearLayout>
 
@@ -49,5 +49,5 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:src="@drawable/ic_check_circle"
-        app:tint="#5A7766" />
+        app:tint="@color/icon_tint_green" />
 </LinearLayout>
