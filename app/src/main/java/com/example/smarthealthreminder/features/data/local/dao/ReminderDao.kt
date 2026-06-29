@@ -52,4 +52,12 @@ interface ReminderDao {
 
     @Query("SELECT COUNT(*) FROM reminders WHERE status = 'Missed'")
     fun getMissedCount(): Flow<Int>
+
+    // Get today's reminders
+    @Query("""
+        SELECT * FROM reminders
+        WHERE date = :today
+        ORDER BY time ASC
+        """)
+    fun getTodayReminders(today: String): Flow<List<ReminderEntity>>
 }

@@ -22,6 +22,13 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
     val pendingReminders: StateFlow<List<ReminderEntity>> = repository.getRemindersByStatus("Pending")
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val todayReminders: StateFlow<List<ReminderEntity>> = repository.getAllReminders()
+        .map { reminders ->
+            val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+            reminders.filter { it.date == today }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
     // Counts
     val pendingCount: StateFlow<Int> = repository.getPendingCount()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0)

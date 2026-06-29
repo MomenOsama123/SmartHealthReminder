@@ -82,6 +82,13 @@ class HomeFragment : Fragment() {
             }
             startActivity(intent)
         }
+        binding.cvTodayReminders.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REMINDERS)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
     }
 
     private fun observeReminders() {

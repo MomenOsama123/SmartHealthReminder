@@ -27,6 +27,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:contentDescription="@string/app_related_icon"
             android:src="@drawable/health_cross" />
     </FrameLayout>
 
@@ -35,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:text="Join HealthSync"
+        android:text="@string/get_started"
         android:textSize="28sp"
         android:textStyle="bold"
         android:textColor="@color/text_dark"
@@ -51,7 +52,7 @@
         android:gravity="center"
         android:textSize="18sp"
         android:textColor="@color/text_secondary"
-        android:text="Start your jorney towards a healthier\nmore balanced life today."
+        android:text="@string/why_joinUs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -61,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:backgroundTint="#769382"
-        android:text="Sign Up with Email"
+        android:text="@string/sign_up_with_email"
         android:textSize="16sp"
         app:cornerRadius="12dp"
         android:layout_marginTop="20dp"
@@ -93,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:text="OR CONTINUE WITH"
+            android:text="@string/or_continue_with"
             android:textColor="#8A9A8A"
             android:textSize="14sp" />
 
@@ -113,7 +114,7 @@
         app:icon="@drawable/google_icon"
         app:iconTint="@null"
         app:iconGravity="textStart"
-        android:text="Google"
+        android:text="@string/google"
         android:textStyle="bold"
         android:textColor="@color/text_dark"
         android:textSize="16sp"
@@ -130,9 +131,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Already have an account?"
+        android:text="@string/already_have_an_account"
         android:textColor="@color/text_secondary"
-        android:textSize="16dp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signup_google" />
@@ -142,9 +143,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Log In"
+        android:text="@string/log_in"
         android:textColor="#769382"
-        android:textSize="16dp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -18,7 +18,7 @@
     <string name="med_time">09:00 AM</string>
 
     <string name="mark_taken">Mark as Taken</string>
-    <string name="snooze">Snooze</string>
+    <string name="snooze">Snooze 15m</string>
 
     <string name="total_meds">TOTAL MEDS</string>
     <string name="taken_today">TAKEN TODAY</string>
@@ -369,9 +369,14 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="snoozed_for_minutes">Snoozed for %1$d minutes</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
+    <string name="why_joinUs">Your trusted companion for\nmedication management,reminders\n,and healthy routines.</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="app_related_icon">App Related Icon</string>
+    <string name="get_started">Get Started With Trusta App</string>
 
     <!-- ChatBot Disclaimer -->
     <string name="medical_disclaimer_title">Medical Disclaimer</string>
     <string name="medical_disclaimer_message">Please consult your doctor for any medical concerns. This AI assistant is for informational purposes only and should not be relied upon for diagnosis or treatment.</string>
     <string name="i_understand">I Understand</string>
+    <string name="Your_Trusted_HA">test</string>
 </resources>
