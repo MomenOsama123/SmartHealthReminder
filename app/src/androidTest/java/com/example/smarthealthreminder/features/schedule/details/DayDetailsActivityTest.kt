@@ -46,7 +46,7 @@ class DayDetailsActivityTest {
             putExtra(DayDetailsActivity.EXTRA_DATE, "2024-06-15")
         }
         ActivityScenario.launch<DayDetailsActivity>(intent)
-        onView(withId(R.id.tv_note)).check(matches(isDisplayed()))
+        onView(withId(R.id.tv_empty_message)).check(matches(isDisplayed()))
         onView(withId(R.id.btn_add_note)).check(matches(isDisplayed()))
     }
 

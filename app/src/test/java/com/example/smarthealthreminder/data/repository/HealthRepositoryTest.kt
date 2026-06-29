@@ -1,16 +1,9 @@
 package com.example.smarthealthreminder.data.repository
 
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.local.dao.AlarmDao
-import com.example.smarthealthreminder.data.local.dao.CalendarNoteDao
-import com.example.smarthealthreminder.data.local.dao.ReminderDao
-import com.example.smarthealthreminder.data.local.dao.ReportDao
-import com.example.smarthealthreminder.data.local.dao.ScheduleEntryDao
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
-import com.example.smarthealthreminder.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.local.dao.*
+import com.example.smarthealthreminder.features.data.local.entity.*
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -45,7 +38,16 @@ class HealthRepositoryTest {
     private val scheduleEntry = ScheduleEntryEntity(
         id = "se1", title = "Doctor Visit", date = "2025-06-22", time = "10:00"
     )
-    private val report = ReportEntity(id = "rep1", title = "Weekly Report", date = "2025-06-22")
+    private val report = ReportEntity(
+        id = "rep1",
+        title = "Weekly Report",
+        adherencePercentage = 90,
+        missedDoses = 1,
+        symptomsOverview = "No symptoms",
+        aiInsight1 = "Excellent",
+        aiInsight2 = "Continue",
+        date = "2025-06-22"
+    )
     private val note = CalendarNoteEntity(date = "2025-06-22", note = "Drink water")
 
     @Before

@@ -48,7 +48,14 @@ class HealthViewModelTest {
         time = "10:00", category = "Appointment"
     )
     private val sampleReport = ReportEntity(
-        id = "rep1", title = "Weekly Report", date = "2025-06-22"
+        id = "rep1",
+        title = "Weekly Report",
+        adherencePercentage = 95,
+        missedDoses = 0,
+        symptomsOverview = "Healthy",
+        aiInsight1 = "Keep it up",
+        aiInsight2 = "Stay fit",
+        date = "2025-06-22"
     )
 
     @Before

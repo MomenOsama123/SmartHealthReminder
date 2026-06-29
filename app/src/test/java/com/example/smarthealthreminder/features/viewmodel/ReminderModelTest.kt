@@ -1,6 +1,6 @@
 package com.example.smarthealthreminder.features.viewmodel
 
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.model.Reminder
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

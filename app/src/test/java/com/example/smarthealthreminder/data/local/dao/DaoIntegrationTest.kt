@@ -3,12 +3,9 @@ package com.example.smarthealthreminder.data.local.dao
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.example.smarthealthreminder.data.local.AppDatabase
-import com.example.smarthealthreminder.data.local.entity.AlarmEntity
-import com.example.smarthealthreminder.data.local.entity.CalendarNoteEntity
-import com.example.smarthealthreminder.data.local.entity.ReminderEntity
-import com.example.smarthealthreminder.data.local.entity.ReportEntity
-import com.example.smarthealthreminder.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.local.dao.*
+import com.example.smarthealthreminder.features.data.local.entity.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -106,7 +103,17 @@ class DaoIntegrationTest {
 
     @Test
     fun `insert and retrieve report`() = runBlocking {
-        val report = ReportEntity("1", "Health Report", "Monthly summary", "2024-01-01")
+        val report = ReportEntity(
+            id = "1",
+            title = "Health Report",
+            description = "Monthly summary",
+            adherencePercentage = 85,
+            missedDoses = 2,
+            symptomsOverview = "Stable",
+            aiInsight1 = "Good progress",
+            aiInsight2 = "Stay hydrated",
+            date = "2024-01-01",
+        )
         reportDao.insertReport(report)
         val retrieved = reportDao.getReportsByDate("2024-01-01").first()
         assertEquals(1, retrieved.size)
