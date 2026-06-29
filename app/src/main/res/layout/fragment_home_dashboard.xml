@@ -254,7 +254,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="Today's Health Tip"
+                                android:text="@string/todays_health_tip"
                                 android:textColor="@color/text_on_primary"
                                 android:textSize="24sp"
                                 android:textStyle="bold" />
