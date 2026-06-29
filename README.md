@@ -1,234 +1,245 @@
-# Trusta
+# 🩺 Trusta – Smart Health Reminder & Wellness Assistant
 
-## Smart Health Reminder & Wellness Assistant
+Trusta is an Android healthcare application designed to help users manage medications, reminders, alarms, daily health routines, and wellness through a modern, intelligent, and user-friendly experience.
 
-Trusta is an Android healthcare application designed to help users manage medications, reminders, alarms, daily health routines, reports, and AI-powered assistance through a modern and user-friendly experience.
-
-The application aims to improve medication adherence, reduce missed doses, and provide users with organized health management tools supported by intelligent guidance and tracking features.
+The application combines medication reminders, alarm scheduling, AI-powered assistance, daily planning, and health tracking into one centralized platform to help users stay organized and improve medication adherence.
 
 ---
 
-## Features
+## ✨ Features
 
-### Authentication
-- User Registration
-- Secure Login
-- Google Sign-In
-- Password Recovery
-- Firebase Authentication Integration
+### 🔐 Authentication
 
-### Reminder Management
-- Create, Edit, and Delete Reminders
-- Medication Scheduling
-- Reminder Status Tracking
-- Local Storage using Room Database
+* Email & Password Authentication
+* Google Sign-In
+* Password Recovery
+* Secure Firebase Authentication
 
-### Alarm System
-- Create and Manage Alarms
-- Alarm Scheduling
-- Alarm Ringing Activity
-- Enable / Disable Alarms
-- Background Alarm Handling
+### 💊 Medication Reminders
 
-### Search System
-- Real-Time Search
-- Reminder Search
-- Alarm Search
-- Search History
-- Filtered Search Results
+* Create, Edit and Delete Reminders
+* Recurring Reminders
+* Reminder Status Tracking
+* Today's Reminder Dashboard
+* Reminder Search
 
-### Daily Planning
-- Today Plan Overview
-- Daily Health Routine Management
-- Upcoming Activities Tracking
+### ⏰ Alarm Management
 
-### Reports & Tracking
-- Progress Monitoring
-- Activity Reports
-- Reminder Tracking
-- User Health Progress Overview
+* Schedule Medication Alarms
+* Enable / Disable Alarms
+* Alarm Notifications
+* Alarm History
 
-### AI Assistant
-- AI-Powered Health Guidance
-- Medication Information Assistance
-- Missed Dose Guidance
-- Interactive Health Support Chatbot
+### 📅 Daily Planning
 
-### User Experience
-- Welcome / Onboarding Screens
-- Empty State Handling
-- Material Design UI
-- Light Theme
-- Dark Theme
-- System Theme Support
+* Today's Plan
+* Daily Schedule
+* Calendar Notes
+* Upcoming Activities
+
+### 🔍 Smart Search
+
+* Real-Time Search
+* Search History
+* Reminder & Alarm Filtering
+* Fast Search using Room Database
+
+### 📊 Dashboard
+
+* Today's Reminders
+* Pending Reminders
+* Completed Reminders
+* Daily Health Tips
+* Quick Navigation
+
+### 🤖 AI Health Assistant
+
+* AI-powered Health Guidance
+* Medication Assistance
+* Interactive Chat Experience
+
+### 📈 Reports
+
+* Reminder Reports
+* Activity Tracking
+* Health Progress Overview
+
+### ⚙️ User Settings
+
+* Light Theme
+* Dark Theme
+* System Theme
+* User Profile Management
 
 ---
 
-## Technologies Used
+# 🏗️ Architecture
 
-### Development
-- Kotlin
-- Android Studio
+The project follows the **MVVM (Model–View–ViewModel)** architecture combined with the Repository Pattern for better scalability and maintainability.
+
+```
+UI
+│
+├── Activities
+├── Fragments
+│
+▼
+ViewModels
+│
+▼
+Repository
+│
+├── Room Database
+├── Firebase
+└── Retrofit APIs
+```
+
+---
+
+# 🛠️ Tech Stack
+
+### Language
+
+* Kotlin
 
 ### Architecture
-- MVVM (Model–View–ViewModel)
 
-### Database
-- Room Database
-- Firebase Firestore
+* MVVM Architecture
+* Repository Pattern
 
-### Authentication
-- Firebase Authentication
+### Local Database
+
+* Room Database
+
+### Cloud Services
+
+* Firebase Authentication
+* Firebase Firestore
 
 ### Networking
-- Retrofit
+
+* Retrofit
 
 ### Dependency Injection
-- Koin
 
-### Asynchronous Programming
-- Kotlin Coroutines
+* Koin
 
-### Navigation
-- Android Navigation Component
+### Concurrency
+
+* Kotlin Coroutines
+* Flow
 
 ### UI
-- XML Layouts
-- ViewBinding
-- Material Design Components
-- Android Jetpack Libraries
-- Splash Screen API
+
+* XML Layouts
+* Material Design 3
+* ViewBinding
+* Navigation Component
+* Splash Screen API
 
 ---
 
-## Architecture Overview
+# 📂 Project Structure
 
-The project follows the MVVM architecture pattern combined with a feature-based modular organization to improve maintainability, scalability, and code separation.
-
-```text
-UI Layer
-    ↓
-ViewModel Layer
-    ↓
-Repository Layer
-    ↓
-Room Database / Firebase / APIs
 ```
-
-### Main Components
-
-- Activities & Fragments
-- ViewModels
-- Repositories
-- Room DAOs
-- Firebase Services
-- Retrofit API Services
-- AI Assistant Module
-
----
-
-## Project Structure
-
-```text
 app
-└── src
-    ├── features
-    │   ├── auth
-    │   ├── alarm
-    │   ├── chatbot
-    │   ├── search
-    │   ├── plan
-    │   ├── settings
-    │   ├── welcome
-    │   ├── profileinfo
-    │   ├── reports
-    │   ├── schedule
-    │   └── navigation
-    │
-    ├── data
-    │   ├── dao
-    │   ├── entities
-    │   ├── repository
-    │   └── database
-    │
-    ├── api
-    ├── services
-    ├── receivers
-    ├── utils
-    └── viewmodels
+├── features
+│   ├── auth
+│   ├── alarm
+│   ├── chatbot
+│   ├── dashboard
+│   ├── search
+│   ├── reports
+│   ├── reminder
+│   ├── schedule
+│   ├── profile
+│   ├── settings
+│   └── welcome
+│
+├── data
+│   ├── repository
+│   ├── local
+│   ├── remote
+│   └── model
+│
+├── utils
+└── viewmodel
 ```
 
 ---
 
-## Testing
+# 📱 Main Screens
 
-The project includes testing support for several modules, including:
-
-- Reports Module Testing
-- Today Plan Testing
-- Settings Testing
-- Home Fragment Testing
-- Reminder Features Testing
+* Welcome
+* Login
+* Register
+* Dashboard
+* Medication Reminders
+* Alarm Management
+* Search
+* Today's Plan
+* Reports
+* AI Assistant
+* Profile
+* Settings
 
 ---
 
-## Installation
+# 🚀 Getting Started
 
-### Clone the Repository
+### Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/Trusta.git
+git clone https://github.com/MomenOsama123/SmartHealthReminder.git
 ```
 
-### Open the Project
+### Open the project
 
-Open the project using Android Studio.
+Open the project using **Android Studio**.
 
 ### Configure Firebase
 
-Add your Firebase configuration file:
+Add your own:
 
-```text
+```
 google-services.json
 ```
 
-inside the app module.
+inside the `app/` module.
 
-### Sync Dependencies
+### Sync Gradle
 
-Allow Android Studio to download and sync all required dependencies.
+Wait until all dependencies are downloaded.
 
-### Run the Application
+### Run
 
-Run the project on an Android device or emulator.
-
----
-
-## Screenshots
-
-Screenshots will be added after the final UI version is completed.
+Run the application on an Android device or Emulator.
 
 ---
 
-## Future Improvements
+# 📸 Screenshots
 
-- Advanced Health Analytics
-- PDF Report Export
-- Smart Health Recommendations
-- Enhanced AI Features
-- Improved Cloud Synchronization
-- Expanded Health Monitoring Capabilities
+> Screenshots will be added after the final UI polishing.
 
 ---
 
-## Project Status
+# 🔮 Future Improvements
 
-🚧 Active Development
-
-Trusta is currently being enhanced with additional dashboard, reporting, and user experience improvements as part of the graduation project development process.
+* Smart Health Analytics
+* PDF Report Export
+* Cloud Backup & Synchronization
+* Wearable Device Integration
+* AI Health Recommendations
+* Multi-language Support
 
 ---
 
-## License
+# 👨‍💻 Developed As
 
-This project was developed for educational and graduation project purposes.
+Graduation Project – Faculty of Computers and Data Science
+
+---
+
+# 📄 License
+
+This project is intended for educational and graduation project purposes.
