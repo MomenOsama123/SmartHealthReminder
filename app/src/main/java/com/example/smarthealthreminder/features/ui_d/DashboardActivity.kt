@@ -814,11 +814,6 @@ class DashboardActivity : AppCompatActivity() {
                                 10
                             )
 
-                            scheduleMissedAlarm(
-                                reminder.id,
-                                reminder.title ?: "Reminder",
-                                12
-                            )
 // Update local list immediately so UI reflects snooze right away
                             val snoozeStart = getCurrentTimeString()  // ✅ وقت بداية السنوز
                             reminderEntities = reminderEntities.map { entity ->
@@ -937,41 +932,8 @@ class DashboardActivity : AppCompatActivity() {
 
         return rowLayout
     }
-    private fun scheduleMissedAlarm(
-        id: String,
-        title: String,
-        minutes: Int
-    ) {
 
-        val alarmManager =
-            getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
-        val intent = Intent(this, ReminderReceiver::class.java).apply {
-
-            putExtra(ReminderReceiver.EXTRA_REMINDER_ID, id)
-            putExtra(ReminderReceiver.EXTRA_TITLE, title)
-            putExtra(
-                ReminderReceiver.EXTRA_DESCRIPTION,
-                "You missed your medication."
-            )
-
-            putExtra(ReminderReceiver.EXTRA_TYPE, "missed")
-        }
-
-        val pendingIntent =
-            PendingIntent.getBroadcast(
-                this,
-                id.hashCode() + 9000,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            System.currentTimeMillis() + minutes * 60 * 1000L,
-            pendingIntent
-        )
-    }
 
     private fun Int.dpToPx(): Int {
         return (this * resources.displayMetrics.density).toInt()
