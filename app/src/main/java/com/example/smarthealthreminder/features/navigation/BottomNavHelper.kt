@@ -1,14 +1,14 @@
 package com.example.smarthealthreminder.features.navigation
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
-import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
+import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.ui.DashboardActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 object BottomNavHelper {
@@ -21,12 +21,20 @@ object BottomNavHelper {
         selectedItemId?.let { bottomNavigation.selectedItemId = it }
 
         bottomNavigation.setOnItemSelectedListener { item ->
+
+            // ✅ لو في DashboardActivity ودست على nav_home → متعملش حاجة خالص
+            if (item.itemId == R.id.nav_home && activity is DashboardActivity) {
+                return@setOnItemSelectedListener true
+            }
+
             when (item.itemId) {
 
                 R.id.nav_home -> {
-                    if (activity !is MainActivity) {
-                        openMainDestination(activity, MainActivity.DESTINATION_HOME)
+                    // بس لو مش في DashboardActivity → روح DashboardActivity
+                    val intent = Intent(activity, DashboardActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     }
+                    activity.startActivity(intent)
                     true
                 }
 
@@ -38,11 +46,20 @@ object BottomNavHelper {
                 }
 
                 R.id.nav_create -> {
-                    if (activity is AppCompatActivity) {
-                        QuickActionsBottomSheet.newInstance()
-                            .show(activity.supportFragmentManager, QuickActionsBottomSheet.TAG)
+                    when (activity) {
+                        is DashboardActivity -> {
+                            // في DashboardActivity → افتح AddReminderActivity مباشرة
+                            activity.startActivity(Intent(activity, AddReminderActivity::class.java))
+                            true
+                        }
+                        is AppCompatActivity -> {
+                            // في MainActivity → QuickActionsBottomSheet
+                            QuickActionsBottomSheet.newInstance()
+                                .show(activity.supportFragmentManager, QuickActionsBottomSheet.TAG)
+                            true
+                        }
+                        else -> false
                     }
-                    false
                 }
 
                 R.id.nav_ai -> {
@@ -51,8 +68,8 @@ object BottomNavHelper {
                 }
 
                 R.id.action_settings -> {
-                    if (activity !is MainActivity) {
-                        openMainDestination(activity, MainActivity.DESTINATION_SETTINGS)
+                    if (activity !is SettingsActivity) {
+                        activity.startActivity(Intent(activity, SettingsActivity::class.java))
                     }
                     true
                 }

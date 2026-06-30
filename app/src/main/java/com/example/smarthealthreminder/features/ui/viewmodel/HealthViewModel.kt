@@ -92,6 +92,17 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
     fun deleteReminderById(id: String) = viewModelScope.launch { repository.deleteReminderById(id) }
     fun markReminderDone(id: String) = viewModelScope.launch { repository.markReminderDone(id) }
     fun markReminderMissed(id: String) = viewModelScope.launch { repository.markReminderMissed(id) }
+    fun snoozeReminder(id: String, newTime: String) =
+        viewModelScope.launch {
+            repository.snoozeReminder(id, newTime)
+
+
+        }
+    fun resetReminderStatus(id: String, status: String) {
+        viewModelScope.launch {
+            repository.updateReminderStatus(id, status)
+        }
+    }
 }
 
 class HealthViewModelFactory(private val repository: HealthRepository) : ViewModelProvider.Factory {

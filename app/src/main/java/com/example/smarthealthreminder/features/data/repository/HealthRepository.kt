@@ -37,11 +37,13 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun deleteReminderById(id: String) = database.reminderDao().deleteReminderById(id)
     suspend fun markReminderDone(id: String) = database.reminderDao().updateReminderStatus(id, "Completed")
     suspend fun markReminderMissed(id: String) = database.reminderDao().updateReminderStatus(id, "Missed")
+    suspend fun snoozeReminder(id: String, newTime: String) =
+        database.reminderDao().snoozeReminder(id, newTime)
 
-    fun searchReminders(query: String): Flow<List<ReminderEntity>> = 
+    fun searchReminders(query: String): Flow<List<ReminderEntity>> =
         database.reminderDao().searchReminders("%$query%")
 
-    fun searchAlarms(query: String): Flow<List<AlarmEntity>> = 
+    fun searchAlarms(query: String): Flow<List<AlarmEntity>> =
         database.alarmDao().searchAlarms("%$query%")
 
     // Counts
@@ -77,4 +79,6 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun updateReport(report: ReportEntity) = database.reportDao().updateReport(report)
     suspend fun deleteReport(report: ReportEntity) = database.reportDao().deleteReport(report)
     suspend fun deleteReportById(id: String) = database.reportDao().deleteReportById(id)
+    suspend fun updateReminderStatus(id: String, status: String) =
+        database.reminderDao().updateReminderStatus(id, status)
 }

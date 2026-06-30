@@ -19,6 +19,7 @@ data class ReminderEntity(
     val totalQuantity: Int = 0,
     val dosagePerTime: Int = 1,
     val lowStockThreshold: Int = 3,
+    var snoozedUntil: String? = null,
 
     @ColumnInfo(name = "is_recurring")
     val isRecurring: Boolean = false,
@@ -33,5 +34,12 @@ data class ReminderEntity(
     val earlyNotification: Boolean = false,
 
     @ColumnInfo(name = "early_notification_minutes")
-    val earlyNotificationMinutes: Int = 0
+    val earlyNotificationMinutes: Int = 0,
+
+    @ColumnInfo(name = "last_reset_date")
+    val lastResetDate: String? = null,
+
+    @ColumnInfo(name = "last_completed_date")
+    val lastCompletedDate: String? = null
+
 )

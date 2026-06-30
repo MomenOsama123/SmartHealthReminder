@@ -17,6 +17,7 @@ data class Reminder(
     var vibrationEnabled: Boolean = false,
     var earlyNotification: Boolean = false,
     var earlyNotificationMinutes: Int = 0,
+    var snoozedUntil: String? = null,
     var userId: Int = 0
 ) : Parcelable {
 

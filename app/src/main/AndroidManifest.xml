@@ -39,10 +39,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <activity
-            android:name=".features.ui_d.DashboardActivity"
-            android:exported="false" />
+            android:name=".ui.DashboardActivity"
+            android:exported="true" />
 
         <activity
             android:name=".features.welcome.WelcomeActivity"
