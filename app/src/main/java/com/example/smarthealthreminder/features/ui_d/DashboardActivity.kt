@@ -495,11 +495,12 @@ class DashboardActivity : AppCompatActivity() {
 
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greeting = when (hour) {
-            in 5..11 -> "Good Morning, $userName ☀️"
-            in 12..16 -> "Good Afternoon, $userName 🌤️"
-            in 17..20 -> "Good Evening, $userName 🌅"
-            else -> "Good Night, $userName 🌙"
+            in 5..11 -> "Good Morning\n$userName ☀️"
+            in 12..16 -> "Good Afternoon\n$userName 🌤️"
+            in 17..20 -> "Good Evening\n$userName 🌅"
+            else -> "Good Night\n$userName 🌙"
         }
+
         tvGreeting.text = greeting
     }
 
