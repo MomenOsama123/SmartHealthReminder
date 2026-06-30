@@ -821,7 +821,7 @@ class DashboardActivity : AppCompatActivity() {
                                     entity.copy(
                                         time = newTime,
                                         status = "Snoozed",
-                                        snoozedUntil = snoozeStart  // ✅ صح! وقت بداية السنوز
+
                                     )
                                 } else entity
                             }
