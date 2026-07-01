@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.example.smarthealthreminder.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -18,6 +19,9 @@ import com.example.smarthealthreminder.databinding.FragmentHomeDashboardBinding
 import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.model.Reminder
+import com.example.smarthealthreminder.features.util.ImageUtils
+import com.example.smarthealthreminder.features.data_d.DatabaseHelper
+import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
@@ -25,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment() {
 
@@ -54,10 +59,44 @@ class HomeFragment : Fragment() {
         setupRecyclerView()
         setupClickListeners()
         observeReminders()
+        setupProfileObservation()
+    }
+
+    private fun setupProfileObservation() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.currentUser.collect { user ->
+                    user?.let {
+                        binding.tvWelcomeName.text = getString(R.string.welcome_back_name, it.name)
+                        it.profileImage?.let { base64 ->
+                            val bitmap = ImageUtils.base64ToBitmap(base64)
+                            binding.profileInfo.setImageBitmap(bitmap)
+                        } ?: run {
+                            binding.profileInfo.setImageResource(R.drawable.ic_profile_placeholder)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun refreshUserProfile() {
+        val uid = FirebaseAuth.getInstance().currentUser?.uid
+        if (uid != null) {
+            lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO) {
+                val localUser = DatabaseHelper(requireContext()).getUserByFirebaseId(uid)
+                localUser?.let {
+                    withContext(kotlinx.coroutines.Dispatchers.Main) {
+                        viewModel.updateCurrentUser(it)
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {
         super.onResume()
+        refreshUserProfile()
         updateDailyTipIfNeeded()
     }
 

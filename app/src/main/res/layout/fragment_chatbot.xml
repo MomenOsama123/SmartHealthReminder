@@ -44,12 +44,15 @@
 
         <ImageView
             android:id="@+id/infoIcon"
-            android:layout_width="24dp"
+            android:layout_width="wrap_content"
             android:layout_height="24dp"
+            android:contentDescription="AI Disclaimer Info"
+            android:padding="2dp"
             android:src="@drawable/ic_warning"
             app:tint="@color/primary_green"
-            android:contentDescription="AI Disclaimer Info"
-            android:padding="2dp"/>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:focusable="true"
+            android:clickable="true" />
 
     </LinearLayout>
 

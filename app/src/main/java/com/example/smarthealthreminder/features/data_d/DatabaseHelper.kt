@@ -17,7 +17,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class DatabaseHelper(context: Context) : SQLiteOpenHelper(
-    context, "health_sync.db", null, 7
+    context, "health_sync.db", null, 8
 ) {
 
     override fun onCreate(db: SQLiteDatabase) {
@@ -36,6 +36,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 chronic_diseases TEXT,
                 allergies TEXT,
                 emergency_contact TEXT,
+                profile_image TEXT,
                 is_profile_completed INTEGER DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -148,6 +149,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
             put("chronic_diseases", user.chronicDiseases)
             put("allergies", user.allergies)
             put("emergency_contact", user.emergencyContact)
+            put("profile_image", user.profileImage)
             put("is_profile_completed", if (user.isProfileCompleted) 1 else 0)
         }
         val id = db.insert("users", null, values)
@@ -168,6 +170,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
             put("chronic_diseases", user.chronicDiseases)
             put("allergies", user.allergies)
             put("emergency_contact", user.emergencyContact)
+            put("profile_image", user.profileImage)
             put("is_profile_completed", if (user.isProfileCompleted) 1 else 0)
         }
         val rows = db.update("users", values, "firebase_id = ?", arrayOf(user.firebaseId))
@@ -193,6 +196,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 chronicDiseases = cursor.getString(cursor.getColumnIndexOrThrow("chronic_diseases")) ?: "",
                 allergies = cursor.getString(cursor.getColumnIndexOrThrow("allergies")) ?: "",
                 emergencyContact = cursor.getString(cursor.getColumnIndexOrThrow("emergency_contact")) ?: "",
+                profileImage = cursor.getString(cursor.getColumnIndexOrThrow("profile_image")),
                 isProfileCompleted = cursor.getInt(cursor.getColumnIndexOrThrow("is_profile_completed")) == 1
             )
         }
@@ -219,6 +223,7 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(
                 chronicDiseases = cursor.getString(cursor.getColumnIndexOrThrow("chronic_diseases")) ?: "",
                 allergies = cursor.getString(cursor.getColumnIndexOrThrow("allergies")) ?: "",
                 emergencyContact = cursor.getString(cursor.getColumnIndexOrThrow("emergency_contact")) ?: "",
+                profileImage = cursor.getString(cursor.getColumnIndexOrThrow("profile_image")),
                 isProfileCompleted = cursor.getInt(cursor.getColumnIndexOrThrow("is_profile_completed")) == 1
             )
         }

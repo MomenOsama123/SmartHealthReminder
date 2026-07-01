@@ -1,14 +1,17 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
 import android.app.DatePickerDialog
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +21,14 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.data.repository.HealthRepository
+import com.example.smarthealthreminder.features.util.ImageUtils
+import androidx.activity.viewModels
+import androidx.core.graphics.drawable.toBitmap
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
@@ -28,6 +39,13 @@ class ProfileActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val db by lazy { FirebaseFirestore.getInstance() }
     private val localDb by lazy { DatabaseHelper(this) }
+    private var selectedImageUri: Uri? = null
+
+    private val viewModel: HealthViewModel by viewModels {
+        val db = AppDatabase.getDatabase(this)
+        val repository = HealthRepository(db)
+        HealthViewModelFactory(repository)
+    }
 
     private lateinit var fullNameInput: EditText
     private lateinit var dobInput: EditText
@@ -39,6 +57,20 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var allergiesInput: EditText
     private lateinit var emergencyContactInput: EditText
     private lateinit var userNameDisplay: TextView
+    private lateinit var profileImage: ImageView
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            selectedImageUri = it
+            profileImage.setImageURI(it)
+        }
+    }
+
+    private val captureImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        bitmap?.let {
+            profileImage.setImageBitmap(it)
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,6 +97,7 @@ class ProfileActivity : AppCompatActivity() {
         allergiesInput = findViewById(R.id.allergies_input)
         emergencyContactInput = findViewById(R.id.emergency_contact_input)
         userNameDisplay = findViewById(R.id.tv_user_name)
+        profileImage = findViewById(R.id.profile_image)
 
         // make edit text unwritable
         dobInput.showSoftInputOnFocus = false
@@ -89,6 +122,11 @@ class ProfileActivity : AppCompatActivity() {
                         diseasesInput.setText(it.chronicDiseases)
                         allergiesInput.setText(it.allergies)
                         emergencyContactInput.setText(it.emergencyContact)
+                        
+                        it.profileImage?.let { base64 ->
+                            val bitmap = ImageUtils.base64ToBitmap(base64)
+                            profileImage.setImageBitmap(bitmap)
+                        }
                     }
                 }
             }
@@ -100,6 +138,14 @@ class ProfileActivity : AppCompatActivity() {
     private fun setupListeners() {
         findViewById<ImageView>(R.id.btn_back).setOnClickListener {
             finish()
+        }
+
+        findViewById<com.google.android.material.card.MaterialCardView>(R.id.editProfileCard).setOnClickListener {
+            showImageSourceDialog()
+        }
+
+        profileImage.setOnClickListener {
+            showImageSourceDialog()
         }
 
         dobInput.setOnClickListener {
@@ -117,6 +163,19 @@ class ProfileActivity : AppCompatActivity() {
         findViewById<Button>(R.id.save_btn).setOnClickListener {
             saveUserData()
         }
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Take Photo", "Choose from Gallery")
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
+            .setTitle("Profile Photo")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> captureImageLauncher.launch(null)
+                    1 -> pickImageLauncher.launch("image/*")
+                }
+            }
+            .show()
     }
 
     private fun saveUserData() {
@@ -143,6 +202,13 @@ class ProfileActivity : AppCompatActivity() {
             }
         }
 
+        val profileImageBase64 = try {
+            val bitmap = profileImage.drawable.toBitmap()
+            ImageUtils.bitmapToBase64(bitmap)
+        } catch (e: Exception) {
+            null
+        }
+
         val updatedUser = User(
             firebaseId = uid,
             name = fullNameInput.text.toString().trim(),
@@ -155,6 +221,7 @@ class ProfileActivity : AppCompatActivity() {
             chronicDiseases = diseasesInput.text.toString().trim(),
             allergies = allergiesInput.text.toString().trim(),
             emergencyContact = emergencyContactInput.text.toString().trim(),
+            profileImage = profileImageBase64,
             isProfileCompleted = true
         )
 
@@ -168,6 +235,8 @@ class ProfileActivity : AppCompatActivity() {
                 } else {
                     localDb.insertUser(updatedUser)
                 }
+
+                viewModel.updateCurrentUser(updatedUser)
 
                 Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
                 userNameDisplay.text = updatedUser.name
@@ -192,7 +261,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun showGenderDialog(editText: EditText) {
         val options = arrayOf("Female", "Male", "Non-Binary", "Other")
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Select Gender")
             .setItems(options) { _, which ->
                 editText.setText(options[which])
@@ -202,7 +271,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun showBloodTypeDialog(editText: EditText) {
         val options = arrayOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Select Blood Type")
             .setItems(options) { _, which ->
                 editText.setText(options[which])

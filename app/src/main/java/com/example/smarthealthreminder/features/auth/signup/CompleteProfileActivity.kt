@@ -2,14 +2,21 @@ package com.example.smarthealthreminder.features.auth.signup
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityCompleteProfileBinding
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.util.ImageUtils
+import androidx.core.graphics.drawable.toBitmap
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
@@ -20,6 +27,21 @@ class CompleteProfileActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val db by lazy { FirebaseFirestore.getInstance() }
     private val localDb by lazy { DatabaseHelper(this) }
+    private var selectedImageUri: Uri? = null
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            selectedImageUri = it
+            binding.imgProfile.setImageURI(it)
+        }
+    }
+
+    private val captureImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        bitmap?.let {
+            binding.imgProfile.setImageBitmap(it)
+            // Note: For a real app, you'd save this bitmap to a file and get a URI
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +56,26 @@ class CompleteProfileActivity : AppCompatActivity() {
 
         setupListeners()
         setupAutoScroll()
+        setupImagePicker()
+    }
+
+    private fun setupImagePicker() {
+        binding.imgProfile.setOnClickListener {
+            showImageSourceDialog()
+        }
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Take Photo", "Choose from Gallery")
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
+            .setTitle("Profile Photo")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> captureImageLauncher.launch(null)
+                    1 -> pickImageLauncher.launch("image/*")
+                }
+            }
+            .show()
     }
 
     private fun setupListeners() {
@@ -45,7 +87,7 @@ class CompleteProfileActivity : AppCompatActivity() {
         // 2. Setup Gender selection dialog
         binding.etGender.setOnClickListener {
             val options = arrayOf("Female", "Male", "Non-Binary", "Other")
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Gender")
                 .setItems(options) { _, which -> 
                     binding.etGender.setText(options[which])
@@ -56,7 +98,7 @@ class CompleteProfileActivity : AppCompatActivity() {
         // 3. Setup Blood Type selection dialog
         binding.etBloodType.setOnClickListener {
             val options = arrayOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Blood Type")
                 .setItems(options) { _, which -> 
                     binding.etBloodType.setText(options[which])
@@ -157,6 +199,7 @@ class CompleteProfileActivity : AppCompatActivity() {
             "chronicDiseases" to chronicDiseases,
             "allergies" to allergies,
             "emergencyContact" to emergencyContact,
+            "profileImage" to (try { ImageUtils.bitmapToBase64(binding.imgProfile.drawable.toBitmap()) } catch (e: Exception) { null }),
             "isProfileCompleted" to true
         )
 
@@ -177,6 +220,7 @@ class CompleteProfileActivity : AppCompatActivity() {
                     chronicDiseases = chronicDiseases,
                     allergies = allergies,
                     emergencyContact = emergencyContact,
+                    profileImage = userMap["profileImage"] as String?,
                     isProfileCompleted = true
                 )
                 

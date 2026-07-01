@@ -63,8 +63,7 @@ class SignupActivity : AppCompatActivity() {
         binding.emailInput.addTextChangedListener { binding.emailInput.error = null }
         binding.passwordInput.addTextChangedListener { binding.passwordInput.error = null }
         binding.confirmPasswordInput.addTextChangedListener { binding.confirmPasswordInput.error = null }
-        binding.fullNameInput.addTextChangedListener { binding.fullNameInput.error = null }
-        binding.usernameInput.addTextChangedListener { binding.usernameInput.error = null }
+
     }
 
     private fun setupObservers() {
@@ -109,22 +108,13 @@ class SignupActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
         var isValid = true
 
-        val fullName = binding.fullNameInput.text.toString().trim()
-        val username = binding.usernameInput.text.toString().trim()
+
         val email = binding.emailInput.text.toString().trim()
         val password = binding.passwordInput.text.toString()
         val confirmPassword = binding.confirmPasswordInput.text.toString()
         val isChecked = binding.checkBox.isChecked
 
-        if (fullName.isEmpty()) {
-            binding.fullNameInput.error = "Full Name is required"
-            isValid = false
-        }
 
-        if (username.isEmpty()) {
-            binding.usernameInput.error = "Username is required"
-            isValid = false
-        }
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.emailInput.error = "Enter a valid email address"

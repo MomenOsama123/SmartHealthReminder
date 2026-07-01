@@ -83,9 +83,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun setupListeners() {
-        binding.btnBack.setOnClickListener {
-            requireActivity().onBackPressed()
-        }
+
 
         setupNotificationSwitchListener()
 
