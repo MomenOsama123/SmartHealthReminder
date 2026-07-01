@@ -1,3 +1,9 @@
+![Android](https://img.shields.io/badge/Platform-Android-green)
+![Kotlin](https://img.shields.io/badge/Kotlin-2.0-purple)
+![Firebase](https://img.shields.io/badge/Firebase-Authentication-orange)
+![MVVM](https://img.shields.io/badge/Architecture-MVVM-blue)
+![Version](https://img.shields.io/badge/Version-v0.9.0_Beta-red)
+
 # 🩺 Trusta
 
 > **Your Trusted Health Assistant**
@@ -64,12 +70,12 @@ The application combines medication reminders, alarm scheduling, AI-powered assi
 
 # 📱 Application Screenshots
 
-| Welcome | Login |
-|---------|-------|
-| ![Welcome](screenshots/WelcomePage.png) | ![Login](screenshots/LogIn.png) |
+| Login | Home Page |
+|-------|-----------|
+| ![Login](screenshots/LogIn.png) | ![Home](screenshots/HomePage.png) |
 
 | Quick Access | Reports |
-|--------------|---------|
+|-------------|---------|
 | ![Quick Access](screenshots/QuickAccess.png) | ![Reports](screenshots/Report.png) |
 
 > More screenshots will be added in future releases.
@@ -80,11 +86,11 @@ The application combines medication reminders, alarm scheduling, AI-powered assi
 
 ## Latest Release
 
-**Version:** **v0.8.0 Beta**
+**Version:** **v0.9.0 Beta**
 
-Download the latest APK from GitHub Releases:
+Download the latest APK:
 
-➡️ **https://github.com/MomenOsama123/SmartHealthReminder/releases**
+➡️ **https://github.com/MomenOsama123/SmartHealthReminder/releases/tag/v0.9.0**
 
 ---
 
@@ -129,8 +135,8 @@ Trusta follows modern Android development principles to ensure scalability, main
 - Room Database
 - Retrofit
 - Koin
-- Coroutines
-- Flow
+- Kotlin Coroutines
+- Kotlin Flow
 - Material Design 3
 - ViewBinding
 - Navigation Component
@@ -153,14 +159,14 @@ Trusta follows modern Android development principles to ensure scalability, main
 
 # 📌 Project Status
 
-**Current Version:** `v0.8.0 Beta`
+**Current Version:** `v0.9.0 Beta`
 
 ### Implemented Features
 
 - ✅ User Authentication
 - ✅ Medication Reminder Management
 - ✅ Alarm Management
-- ✅ Dashboard
+- ✅ Smart Dashboard
 - ✅ Smart Search
 - ✅ AI Health Assistant
 - ✅ Reports
@@ -168,8 +174,9 @@ Trusta follows modern Android development principles to ensure scalability, main
 - ✅ Calendar Notes
 - ✅ Daily Health Tips
 - ✅ Theme Support
+- ✅ Settings
 
-The application is currently in the **Beta** stage and continues to receive improvements, optimization, and additional features before the first stable release.
+The application is currently in the **Beta** stage and continues to receive improvements, optimizations, and additional features before the first stable release.
 
 ---
 
