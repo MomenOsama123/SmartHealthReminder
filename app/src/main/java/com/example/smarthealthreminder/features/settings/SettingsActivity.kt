@@ -11,7 +11,7 @@ class SettingsActivity {
         const val KEY_EARLY_REMINDERS = "early_reminders_enabled"
         const val KEY_ALARM_SNOOZE_MINUTES = "alarm_snooze_minutes"
         const val KEY_REMINDER_SNOOZE_MINUTES = "reminder_snooze_minutes"
-        const val DEFAULT_SNOOZE_MINUTES = 15
+        const val DEFAULT_SNOOZE_MINUTES = 10
         const val MIN_SNOOZE_MINUTES = 1
         const val MAX_SNOOZE_MINUTES = 120
         const val KEY_DARK_MODE = "dark_mode_enabled"
