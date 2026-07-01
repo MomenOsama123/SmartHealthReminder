@@ -56,31 +56,45 @@
             android:paddingBottom="24dp">
 
             <RelativeLayout
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp">
 
-                <ImageView
+                <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/profile_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/profile"
+                    android:src="@drawable/ic_profile_placeholder"
+                    android:scaleType="centerCrop"
+                    app:strokeColor="@color/primary_green"
+                    app:strokeWidth="2dp"
+                    app:shapeAppearanceOverlay="@style/CircleImageStyle"
                     tools:ignore="ContentDescription" />
 
-                <ImageButton
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/editProfileCard"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:id="@+id/editProfile"
-                    android:background="@drawable/bg_logo_circle"
-                    android:backgroundTint="@color/primary_green"
-                    android:src="@drawable/ic_edit"
-                    android:padding="6dp"
-                    app:tint="@color/white"
-                    tools:ignore="ContentDescription" />
+                    app:cardBackgroundColor="@color/primary_green"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="@color/white">
+
+                    <ImageView
+                        android:id="@+id/editProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_camera"
+                        android:padding="8dp"
+                        app:tint="@color/white"
+                        tools:ignore="ContentDescription" />
+                </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>
+
 
             <TextView
                 android:id="@+id/tv_user_name"
@@ -122,8 +136,9 @@
                 android:paddingStart="16dp"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
+                app:drawableTint="@color/hint_gray"
                 tools:ignore="RtlSymmetry" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -145,8 +160,13 @@
                 android:paddingStart="16dp"
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
-                tools:ignore="RtlSymmetry" />
+                app:drawableTint="@color/hint_gray"
+                tools:ignore="RtlSymmetry"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -167,12 +187,14 @@
                 android:inputType="text"
                 android:textColor="@color/text_dark"
                 android:paddingStart="16dp"
-                android:focusable="true"
+                android:focusable="false"
                 android:clickable="true"
+                android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
+                app:drawableTint="@color/hint_gray"
                 tools:ignore="RtlSymmetry" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -190,63 +212,90 @@
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/white"
                 android:hint="@string/a"
-                android:inputType="number"
+                android:inputType="text"
                 android:textColor="@color/text_dark"
                 android:paddingStart="16dp"
-                android:focusable="true"
+                android:focusable="false"
                 android:clickable="true"
-                android:drawableStart="@drawable/outline_check_circle"
+                android:cursorVisible="false"
+                android:drawableStart="@drawable/ic_blood_drop"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
+                app:drawableTint="@color/hint_gray"
                 tools:ignore="RtlSymmetry" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/weight_kg"
-                android:textColor="@color/text_dark"
-                android:layout_marginStart="4dp"/>
-            <EditText
-                android:id="@+id/weight_input"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:autofillHints=""
-                android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
-                android:text="@string/_64"
-                android:textColorHint="@color/border_gray"
-                android:inputType="numberDecimal"
-                android:paddingStart="16dp"
-                android:drawableStart="@drawable/outline_check_circle"
-                android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
-                tools:ignore="RtlSymmetry" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/height_cm"
-                android:textColor="@color/text_dark"
-                android:layout_marginStart="4dp"/>
-            <EditText
-                android:id="@+id/height_input"
+            <!-- Weight & Height Row -->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp"
-                android:autofillHints=""
-                android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
-                android:hint="@string/_168"
-                android:textColor="@color/text_dark"
-                android:inputType="number"
-                android:paddingStart="16dp"
-                android:drawableStart="@drawable/outline_check_circle"
-                android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green"
-                tools:ignore="RtlSymmetry" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/weight_kg"
+                        android:textColor="@color/text_dark"
+                        android:layout_marginStart="4dp"/>
+                    <EditText
+                        android:id="@+id/weight_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints=""
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/white"
+                        android:hint="@string/_64"
+                        android:textColorHint="@color/border_gray"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp"
+                        android:drawableStart="@drawable/ic_scale"
+                        android:drawablePadding="12dp"
+                        app:drawableTint="@color/hint_gray"
+                        tools:ignore="RtlSymmetry" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/height_cm"
+                        android:textColor="@color/text_dark"
+                        android:layout_marginStart="4dp"/>
+                    <EditText
+                        android:id="@+id/height_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints=""
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/white"
+                        android:hint="@string/_168"
+                        android:textColor="@color/text_dark"
+                        android:inputType="number"
+                        android:paddingStart="16dp"
+                        android:drawableStart="@drawable/ic_height"
+                        android:drawablePadding="12dp"
+                        app:drawableTint="@color/hint_gray"
+                        tools:ignore="RtlSymmetry" />
+
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -270,9 +319,11 @@
                 android:inputType="textMultiLine"
                 android:gravity="top|start"
                 android:padding="16dp"
-                android:drawableStart="@drawable/outline_check_circle"
+                android:drawableStart="@drawable/ic_medical_bag"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green" />
+                app:drawableTint="@color/hint_gray" />
+
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -296,7 +347,8 @@
                 android:padding="16dp"
                 android:drawableStart="@drawable/ic_warning"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green" />
+                app:drawableTint="@color/hint_gray" />
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -318,16 +370,21 @@
                 android:paddingStart="16dp"
                 android:drawableStart="@drawable/ic_phone"
                 android:drawablePadding="12dp"
-                android:drawableTint="@color/primary_green" />
+                app:drawableTint="@color/hint_gray" />
+
 
             <Button
                 android:id="@+id/save_btn"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:backgroundTint="@color/primary_green"
                 android:text="@string/save_changes"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="30dp"
                 android:backgroundTintMode="src_in"/>
 
         </LinearLayout>

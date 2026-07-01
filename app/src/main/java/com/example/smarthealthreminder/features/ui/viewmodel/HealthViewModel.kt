@@ -6,6 +6,7 @@ import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEn
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.model_d.User
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -102,6 +103,14 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
         viewModelScope.launch {
             repository.updateReminderStatus(id, status)
         }
+    }
+
+    // Profile / User Data
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser
+
+    fun updateCurrentUser(user: User) {
+        _currentUser.value = user
     }
 }
 

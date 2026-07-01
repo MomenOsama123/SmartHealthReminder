@@ -15,6 +15,7 @@ data class User(
     val chronicDiseases: String = "",
     val allergies: String = "",
     val emergencyContact: String = "",
+    val profileImage: String? = null,
     @get:PropertyName("isProfileCompleted")
     @set:PropertyName("isProfileCompleted")
     var isProfileCompleted: Boolean = false

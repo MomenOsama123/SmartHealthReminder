@@ -92,76 +92,88 @@
 
         <!-- Profile Image Avatar -->
         <RelativeLayout
-            android:layout_width="110dp"
-            android:layout_height="110dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_gravity="center"
             android:layout_marginBottom="32dp">
 
-            <!-- ضع صورة افتراضية أو خلفية بيضاء هنا -->
-            <ImageView
+            <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/img_profile"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_app_logo"
+                android:src="@drawable/ic_profile_placeholder"
                 android:padding="2dp"
-                android:background="@drawable/bg_input_white"
+                android:scaleType="centerCrop"
+                app:strokeColor="@color/primary_green"
+                app:strokeWidth="2dp"
+                app:shapeAppearanceOverlay="@style/CircleImageStyle"
                 tools:ignore="ContentDescription" />
 
             <!-- Camera Badge -->
-            <ImageView
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/bg_input_white"
-                android:backgroundTint="@color/primary_green"
-                android:src="@drawable/ic_camera"
-                android:padding="6dp"
-                app:tint="@color/white" />
+                app:cardBackgroundColor="@color/primary_green"
+                app:cardCornerRadius="18dp"
+                app:cardElevation="4dp"
+                app:strokeWidth="2dp"
+                app:strokeColor="@color/white">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_camera"
+                    android:padding="8dp"
+                    app:tint="@color/white" />
+            </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
+
 
         <!-- Form Fields -->
 
         <!-- Full Name -->
-        <EditText
-            android:id="@+id/et_full_name"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:autofillHints=""
-            android:background="@drawable/bg_input"
-            android:backgroundTint="@color/white"
-            android:hint="Full Name"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            android:paddingStart="20dp"
-            android:drawableStart="@drawable/ic_person"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/hint_gray"
-            android:layout_marginBottom="16dp"
-            android:inputType="textPersonName"/>
+            <EditText
+                android:id="@+id/et_full_name"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:autofillHints=""
+                android:background="@drawable/bg_input"
+                android:backgroundTint="@color/white"
+                android:hint="Full Name"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:paddingStart="20dp"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                android:layout_marginBottom="16dp"
+                android:inputType="textPersonName"/>
 
-        <!-- Date of Birth -->
-        <EditText
-            android:autofillHints=""
-            android:backgroundTint="@color/white"
 
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@drawable/bg_input"
-            android:hint="@string/date"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            android:id="@+id/et_dob"
-            android:paddingStart="20dp"
-            android:drawableStart="@drawable/ic_calendar"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/hint_gray"
-            android:layout_marginBottom="16dp"
-            android:focusable="false"
-            android:clickable="true"
-            android:inputType="date"/>
+            <EditText
+                android:autofillHints=""
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/bg_input"
+                android:hint="@string/date"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:id="@+id/et_dob"
+                android:paddingStart="20dp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                android:layout_marginBottom="16dp"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:inputType="date"/>
+
 
         <!-- Gender & Blood Type Row -->
         <LinearLayout
@@ -171,46 +183,56 @@
             android:layout_marginBottom="24dp">
 
             <!-- Gender -->
-            <TextView
-                android:backgroundTint="@color/white"
-
-                android:id="@+id/tv_gender"
+            <EditText
+                android:id="@+id/et_gender"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="55dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/bg_input"
-                android:text="Gender"
-                android:textColor="@color/hint_gray"
-                android:textSize="11sp"
+                android:backgroundTint="@color/white"
+                android:hint="Gender"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_person"
                 android:drawableEnd="@drawable/ic_arrow_down"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray"/>
+                android:drawableTint="@color/primary_green"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:autofillHints="" />
 
             <!-- Blood Type -->
-            <TextView
-                android:backgroundTint="@color/white"
-
-                android:id="@+id/tv_blood_type"
+            <EditText
+                android:id="@+id/et_blood_type"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="55dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/bg_input"
-                android:text="Blood Type"
-                android:textColor="@color/hint_gray"
-                android:textSize="10sp"
+                android:backgroundTint="@color/white"
+                android:hint="Blood Type"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_blood_drop"
                 android:drawableEnd="@drawable/ic_arrow_down"
                 android:drawablePadding="8dp"
-                app:drawableTint="@color/hint_gray"/>
+                android:drawableTint="@color/primary_green"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:autofillHints="" />
         </LinearLayout>
 
         <!-- Weight & Height Container -->
@@ -224,103 +246,105 @@
             android:layout_marginBottom="24dp">
 
             <!-- Weight -->
-            <EditText
-                android:backgroundTint="@color/white"
-                android:id="@+id/et_weight"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="50dp"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/bg_input_white"
-                android:hint="Weight (kg)"
-                android:textColorHint="@color/hint_gray"
-                android:textColor="@color/text_dark"
-                android:textSize="12sp"
-                android:paddingStart="16dp"
-                android:drawableStart="@drawable/ic_scale"
-                android:drawablePadding="10dp"
-                android:drawableTint="@color/hint_gray"
-                android:inputType="numberDecimal"/>
+                <EditText
+                    android:id="@+id/et_weight"
+                    android:backgroundTint="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/bg_input_white"
+                    android:hint="Weight (kg)"
+                    android:textColorHint="@color/hint_gray"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp"
+                    android:paddingStart="16dp"
+                    android:drawableStart="@drawable/ic_scale"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/primary_green"
+                    android:inputType="numberDecimal"/>
+
 
             <!-- Height -->
-            <EditText
-                android:id="@+id/et_height"
-                android:backgroundTint="@color/white"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/bg_input_white"
-                android:hint="Height (cm)"
-                android:textColorHint="@color/hint_gray"
-                android:textColor="@color/text_dark"
-                android:textSize="12sp"
-                android:paddingStart="16dp"
-                android:drawableStart="@drawable/ic_height"
-                android:drawablePadding="10dp"
-                android:drawableTint="@color/hint_gray"
-                android:inputType="number"/>
+                <EditText
+                    android:id="@+id/et_height"
+                    android:backgroundTint="@color/white"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_input_white"
+                    android:hint="Height (cm)"
+                    android:textColorHint="@color/hint_gray"
+                    android:textColor="@color/text_dark"
+                    android:textSize="12sp"
+                    android:paddingStart="16dp"
+                    android:drawableStart="@drawable/ic_height"
+                    android:drawablePadding="10dp"
+                    android:drawableTint="@color/primary_green"
+                    android:inputType="number"/>
+
         </LinearLayout>
 
         <!-- Chronic Diseases -->
-        <EditText
-            android:id="@+id/et_chronic_diseases"
-            android:backgroundTint="@color/white"
+            <EditText
+                android:id="@+id/et_chronic_diseases"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="65dp"
+                android:background="@drawable/bg_input"
+                android:hint="Chronic Diseases (if any)"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:padding="20dp"
+                android:drawableStart="@drawable/ic_medical_bag"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                android:layout_marginBottom="16dp"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"/>
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="65dp"
-            android:background="@drawable/bg_input"
-            android:hint="Chronic Diseases (if any)"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            android:padding="20dp"
-            android:drawableStart="@drawable/ic_medical_bag"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/hint_gray"
-            android:layout_marginBottom="16dp"
-            android:gravity="top|start"
-            android:inputType="textMultiLine"/>
 
         <!-- Allergies -->
-        <EditText
-            android:id="@+id/et_allergies"
-            android:backgroundTint="@color/white"
+            <EditText
+                android:id="@+id/et_allergies"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="65dp"
+                android:background="@drawable/bg_input"
+                android:hint="@string/allergies"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:padding="20dp"
+                android:drawableStart="@drawable/ic_warning"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                android:layout_marginBottom="24dp"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"/>
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="65dp"
-            android:background="@drawable/bg_input"
-            android:hint="@string/allergies"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            android:padding="20dp"
-            android:drawableStart="@drawable/ic_warning"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/hint_gray"
-            android:layout_marginBottom="24dp"
-            android:gravity="top|start"
-            android:inputType="textMultiLine"/>
 
         <!-- Emergency Contact -->
-        <EditText
-            android:id="@+id/et_emergency_contact"
-            android:backgroundTint="@color/white"
+            <EditText
+                android:id="@+id/et_emergency_contact"
+                android:backgroundTint="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:background="@drawable/bg_input"
+                android:hint="@string/emergency_contact_number"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
+                android:paddingStart="20dp"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="12dp"
+                android:drawableTint="@color/primary_green"
+                android:inputType="phone"/>
 
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:background="@drawable/bg_input"
-            android:hint="@string/emergency_contact_number"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp"
-            android:paddingStart="20dp"
-            android:drawableStart="@drawable/ic_phone"
-            android:drawablePadding="12dp"
-            android:drawableTint="@color/hint_gray"
-            android:inputType="phone"/>
 
         <!-- Spacer to push buttons to bottom if screen is large -->
         <Space

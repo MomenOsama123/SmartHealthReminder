@@ -44,50 +44,8 @@
             android:layout_marginBottom="24dp" />
 
         <!-- Full Name -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/full_name_label"
-            android:textColor="@color/text_dark"
-            android:layout_marginTop="12dp" />
-        <EditText
-            android:id="@+id/full_name_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/et_shape"
-            android:backgroundTint="@color/white"
-            android:hint="@string/full_name_hint"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/hint_gray"
-            android:inputType="textPersonName"
-            android:paddingStart="16dp"
-            android:drawableStart="@drawable/outline_account_circle"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/primary_green"/>
 
         <!-- UserName -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/username"
-            android:textColor="@color/text_dark"
-            android:layout_marginTop="12dp" />
-        <EditText
-            android:id="@+id/username_input"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginBottom="12dp"
-            android:background="@drawable/et_shape"
-            android:backgroundTint="@color/white"
-            android:hint="John_Doe.11"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/hint_gray"
-            android:inputType="textPersonName"
-            android:paddingStart="16dp"
-            android:drawableStart="@drawable/outline_account_circle"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/primary_green"/>
 
         <!-- Email -->
         <TextView

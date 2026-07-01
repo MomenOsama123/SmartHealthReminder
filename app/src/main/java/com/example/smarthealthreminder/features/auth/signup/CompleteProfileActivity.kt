@@ -2,14 +2,21 @@ package com.example.smarthealthreminder.features.auth.signup
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityCompleteProfileBinding
 import com.example.smarthealthreminder.features.data_d.DatabaseHelper
 import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.util.ImageUtils
+import androidx.core.graphics.drawable.toBitmap
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
@@ -20,14 +27,55 @@ class CompleteProfileActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val db by lazy { FirebaseFirestore.getInstance() }
     private val localDb by lazy { DatabaseHelper(this) }
+    private var selectedImageUri: Uri? = null
+
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let {
+            selectedImageUri = it
+            binding.imgProfile.setImageURI(it)
+        }
+    }
+
+    private val captureImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        bitmap?.let {
+            binding.imgProfile.setImageBitmap(it)
+            // Note: For a real app, you'd save this bitmap to a file and get a URI
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCompleteProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Make edit text unwritable via keyboard (matches ProfileActivity behavior)
+        binding.etDob.showSoftInputOnFocus = false
+        binding.etGender.showSoftInputOnFocus = false
+        binding.etBloodType.showSoftInputOnFocus = false
+
+
         setupListeners()
         setupAutoScroll()
+        setupImagePicker()
+    }
+
+    private fun setupImagePicker() {
+        binding.imgProfile.setOnClickListener {
+            showImageSourceDialog()
+        }
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Take Photo", "Choose from Gallery")
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
+            .setTitle("Profile Photo")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> captureImageLauncher.launch(null)
+                    1 -> pickImageLauncher.launch("image/*")
+                }
+            }
+            .show()
     }
 
     private fun setupListeners() {
@@ -37,25 +85,23 @@ class CompleteProfileActivity : AppCompatActivity() {
         }
 
         // 2. Setup Gender selection dialog
-        binding.tvGender.setOnClickListener {
+        binding.etGender.setOnClickListener {
             val options = arrayOf("Female", "Male", "Non-Binary", "Other")
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Gender")
                 .setItems(options) { _, which -> 
-                    binding.tvGender.text = options[which]
-                    binding.tvGender.setTextColor(getColor(com.example.smarthealthreminder.R.color.text_dark))
+                    binding.etGender.setText(options[which])
                 }
                 .show()
         }
 
         // 3. Setup Blood Type selection dialog
-        binding.tvBloodType.setOnClickListener {
+        binding.etBloodType.setOnClickListener {
             val options = arrayOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Blood Type")
                 .setItems(options) { _, which -> 
-                    binding.tvBloodType.text = options[which]
-                    binding.tvBloodType.setTextColor(getColor(com.example.smarthealthreminder.R.color.text_dark))
+                    binding.etBloodType.setText(options[which])
                 }
                 .show()
         }
@@ -97,8 +143,8 @@ class CompleteProfileActivity : AppCompatActivity() {
         val uid = auth.currentUser?.uid ?: return
         val fullName = binding.etFullName.text.toString().trim()
         val dob = binding.etDob.text.toString().trim()
-        val gender = binding.tvGender.text.toString().trim()
-        val bloodType = binding.tvBloodType.text.toString().trim()
+        val gender = binding.etGender.text.toString().trim()
+        val bloodType = binding.etBloodType.text.toString().trim()
         val weight = binding.etWeight.text.toString().trim()
         val height = binding.etHeight.text.toString().trim()
         
@@ -107,8 +153,37 @@ class CompleteProfileActivity : AppCompatActivity() {
         val allergies = binding.etAllergies.text.toString().trim()
         val emergencyContact = binding.etEmergencyContact.text.toString().trim()
 
-        if (fullName.isEmpty() || dob == "mm/dd/yyyy" || gender == "Gender" || bloodType == "Blood Type" || weight.isEmpty() || height.isEmpty()) {
+        // Mandatory fields check
+        if (fullName.isEmpty() || dob.isEmpty() || dob == getString(com.example.smarthealthreminder.R.string.date) || 
+            gender.isEmpty() || bloodType.isEmpty()) {
             Toast.makeText(this, "Please fill all mandatory fields", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Validations for weight and height (Matches ProfileActivity)
+        if (weight.isNotEmpty()) {
+            val weightVal = weight.toDoubleOrNull()
+            if (weightVal == null || weightVal !in 10.0..500.0) {
+                binding.etWeight.error = "Please enter a valid weight (10-500 kg)"
+                binding.etWeight.requestFocus()
+                return
+            }
+        } else {
+            Toast.makeText(this, "Please enter your weight", Toast.LENGTH_SHORT).show()
+            binding.etWeight.requestFocus()
+            return
+        }
+
+        if (height.isNotEmpty()) {
+            val heightVal = height.toDoubleOrNull()
+            if (heightVal == null || heightVal !in 50.0..300.0) {
+                binding.etHeight.error = "Please enter a valid height (50-300 cm)"
+                binding.etHeight.requestFocus()
+                return
+            }
+        } else {
+            Toast.makeText(this, "Please enter your height", Toast.LENGTH_SHORT).show()
+            binding.etHeight.requestFocus()
             return
         }
 
@@ -124,6 +199,7 @@ class CompleteProfileActivity : AppCompatActivity() {
             "chronicDiseases" to chronicDiseases,
             "allergies" to allergies,
             "emergencyContact" to emergencyContact,
+            "profileImage" to (try { ImageUtils.bitmapToBase64(binding.imgProfile.drawable.toBitmap()) } catch (e: Exception) { null }),
             "isProfileCompleted" to true
         )
 
@@ -144,6 +220,7 @@ class CompleteProfileActivity : AppCompatActivity() {
                     chronicDiseases = chronicDiseases,
                     allergies = allergies,
                     emergencyContact = emergencyContact,
+                    profileImage = userMap["profileImage"] as String?,
                     isProfileCompleted = true
                 )
                 

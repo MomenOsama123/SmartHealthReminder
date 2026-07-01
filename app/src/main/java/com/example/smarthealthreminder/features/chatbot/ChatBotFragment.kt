@@ -101,7 +101,7 @@ class ChatBotFragment : Fragment() {
 
     private fun setupListeners() {
         binding.infoIcon.setOnClickListener {
-            MaterialAlertDialogBuilder(requireContext())
+            MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
                 .setTitle(getString(R.string.medical_disclaimer_title))
                 .setMessage(getString(R.string.medical_disclaimer_message))
                 .setPositiveButton(getString(R.string.i_understand), null)
