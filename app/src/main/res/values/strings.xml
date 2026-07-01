@@ -367,7 +367,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="settings_snooze_minutes_value">%1$d min</string>
     <string name="settings_snooze_saved">Snooze duration set to %1$d minutes</string>
     <string name="snoozed_for_minutes">Snoozed for %1$d minutes</string>
-    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="why_joinUs">Your trusted companion for\nmedication management,reminders\n,and healthy routines.</string>
     <string name="already_have_an_account">Already have an account?</string>
@@ -422,7 +421,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="dashboard">Dashboard</string>
     <string name="view_dashboard">View Dashboard</string>
     <string name="your_health_overview">Your health overview</string>
-    <string name="mark_done">Mark Done</string>
     <string name="notifications">Notifications</string>
     <string name="action_required">ACTION REQUIRED</string>
     <string name="set_a_new_health_goal">Set a New Health Goal.</string>

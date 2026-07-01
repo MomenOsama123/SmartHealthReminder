@@ -53,13 +53,18 @@ interface ReminderDao {
     @Query("SELECT COUNT(*) FROM reminders WHERE status = 'Missed'")
     fun getMissedCount(): Flow<Int>
     @Query("""
-    UPDATE reminders
-    SET time = :newTime,
-        status = 'Snoozed'
-    WHERE id = :reminderId
+UPDATE reminders 
+SET time = :newTime,
+    status = 'Snoozed',
+    snooze_used = 1
+WHERE id = :reminderId
 """)
     suspend fun snoozeReminder(
         reminderId: String,
         newTime: String
     )
+    @Query("UPDATE reminders SET snooze_used = :value WHERE id = :id")
+    suspend fun updateSnoozeUsed(id: String, value: Boolean)
+    @Query("UPDATE reminders SET time = :time WHERE id = :id")
+    suspend fun updateReminderTime(id: String, time: String)
 }
