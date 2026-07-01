@@ -125,7 +125,14 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        val destination = intent.getStringExtra(EXTRA_START_DESTINATION) ?: return
+
+        // اقفل أي BottomSheet مفتوح
+        (supportFragmentManager.findFragmentByTag(QuickActionsBottomSheet.TAG)
+                as? QuickActionsBottomSheet)?.dismissAllowingStateLoss()
+
+        val destination = intent.getStringExtra(EXTRA_START_DESTINATION)
+            ?: DESTINATION_HOME
+
         navigateToDestination(destination)
     }
 
@@ -139,15 +146,10 @@ class MainActivity : AppCompatActivity() {
                 showFragment(scheduleFragment)
             }
             DESTINATION_ALARMS -> {
-                if (bottomNavigation.selectedItemId != R.id.nav_create) {
-                    bottomNavigation.selectedItemId = R.id.nav_create
-                }
                 showFragment(alarmsFragment)
             }
+
             DESTINATION_REMINDERS -> {
-                if (bottomNavigation.selectedItemId != R.id.nav_create) {
-                    bottomNavigation.selectedItemId = R.id.nav_create
-                }
                 showFragment(remindersFragment)
             }
             "chatbot", "ai" -> {

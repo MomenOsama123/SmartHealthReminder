@@ -16,6 +16,7 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
     private var _binding: BottomSheetQuickActionsBinding? = null
     private val binding get() = _binding!!
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

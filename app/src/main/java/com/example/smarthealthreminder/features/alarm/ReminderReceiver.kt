@@ -10,6 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.os.VibratorManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
@@ -26,12 +27,19 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * SINGLE SOURCE OF TRUTH for all reminder alarm logic.
+ *
+ * Missed logic lives ONLY here — never in Activity/Fragment.
+ * AlarmManager is the single source of time truth.
+ */
 class ReminderReceiver : BroadcastReceiver() {
 
     companion object {
         const val ACTION_SNOOZE = "com.example.smarthealthreminder.ACTION_SNOOZE"
         const val ACTION_MARK_TAKEN = "com.example.smarthealthreminder.ACTION_MARK_TAKEN"
         const val ACTION_DISMISS = "com.example.smarthealthreminder.ACTION_DISMISS"
+        const val ACTION_MISSED = "com.example.smarthealthreminder.ACTION_MISSED"
         const val CHANNEL_ID = "reminder_channel"
         const val CHANNEL_NAME = "Health Reminders"
         const val EXTRA_REMINDER_ID = "reminder_id"
@@ -40,6 +48,14 @@ class ReminderReceiver : BroadcastReceiver() {
         const val EXTRA_DESCRIPTION = "reminder_description"
         const val EXTRA_TYPE = "reminder_type"
         const val EXTRA_VIBRATION = "vibration_enabled"
+
+        // Request code offsets — must be unique and consistent
+        private const val RC_SNOOZE_ALARM = 5000
+        private const val RC_MISSED_ALARM = 9000
+        private const val RC_NOTIFICATION = 0
+        private const val RC_SNOOZE_ACTION = 1000
+        private const val RC_TAKEN_ACTION = 2000
+        private const val RC_DISMISS_ACTION = 3000
     }
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -71,6 +87,9 @@ class ReminderReceiver : BroadcastReceiver() {
                         pendingResult.finish()
                     }
                 }
+            }
+            ACTION_MISSED -> {
+                showMissedNotification(context, intent)
             }
             ACTION_DISMISS -> dismissNotification(context, intent)
             else -> handleAlarmTrigger(context, intent)
@@ -104,46 +123,13 @@ class ReminderReceiver : BroadcastReceiver() {
 
         showNotification(context, reminderId, title, description, type)
 
+        if (type == "reminder") {
+            // Schedule missed check 2 minutes from NOW (original alarm)
+            scheduleMissedNotification(context, reminderId, System.currentTimeMillis() + (2 * 60 * 1000))
+        }
+
         if (vibrationEnabled) {
             vibrate(context)
-        }
-
-        if (type == "reminder") {
-            val isRecurring = intent.getBooleanExtra("is_recurring", false)
-            val recurrenceType = intent.getStringExtra("recurrence_type")
-            if (RecurrenceHelper.isRecurring(recurrenceType) || isRecurring) {
-                val pendingResult = goAsync()
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        rescheduleRecurringReminder(context, reminderId, recurrenceType)
-                    } finally {
-                        pendingResult.finish()
-                    }
-                }
-            }
-        }
-    }
-
-    private suspend fun rescheduleRecurringReminder(
-        context: Context,
-        reminderId: String,
-        recurrenceType: String?
-    ) {
-        try {
-            val db = AppDatabase.getDatabase(context)
-            val reminder = db.reminderDao().getReminderById(reminderId) ?: return
-            if (!reminder.isRecurring && !RecurrenceHelper.isRecurring(recurrenceType)) return
-
-            val nextMillis = RecurrenceHelper.computeNextTriggerMillis(
-                date = reminder.date,
-                time = reminder.time,
-                recurrenceType = reminder.recurrenceType ?: recurrenceType
-            ) ?: return
-
-            ReminderScheduler.scheduleReminder(context, reminder, nextMillis)
-            Log.d("REMINDER_RECEIVER", "Scheduled next occurrence for recurring reminder $reminderId")
-        } catch (e: Exception) {
-            Log.e("REMINDER_RECEIVER", "Failed to reschedule recurring reminder", e)
         }
     }
 
@@ -177,7 +163,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         val contentPendingIntent = PendingIntent.getActivity(
             context,
-            id.hashCode(),
+            id.hashCode() + RC_NOTIFICATION,
             contentIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -186,10 +172,12 @@ class ReminderReceiver : BroadcastReceiver() {
             action = ACTION_SNOOZE
             putExtra(EXTRA_REMINDER_ID, id)
             putExtra(EXTRA_TYPE, type)
+            putExtra(EXTRA_TITLE, title)
+            putExtra(EXTRA_DESCRIPTION, description)
         }
         val snoozePendingIntent = PendingIntent.getBroadcast(
             context,
-            id.hashCode() + 1000,
+            id.hashCode() + RC_SNOOZE_ACTION,
             snoozeIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -201,7 +189,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         val takenPendingIntent = PendingIntent.getBroadcast(
             context,
-            id.hashCode() + 2000,
+            id.hashCode() + RC_TAKEN_ACTION,
             takenIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -212,7 +200,7 @@ class ReminderReceiver : BroadcastReceiver() {
         }
         val dismissPendingIntent = PendingIntent.getBroadcast(
             context,
-            id.hashCode() + 3000,
+            id.hashCode() + RC_DISMISS_ACTION,
             dismissIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -237,9 +225,60 @@ class ReminderReceiver : BroadcastReceiver() {
         notificationManager.notify(id.hashCode(), notification)
     }
 
+    /**
+     * SINGLE SOURCE OF TRUTH for missed notifications.
+     * Only fires when AlarmManager triggers it — never from Activity polling.
+     * Checks DB before showing to prevent false positives.
+     */
+    private fun showMissedNotification(context: Context, intent: Intent) {
+        val id = intent.getStringExtra(EXTRA_REMINDER_ID) ?: run {
+            Log.w("REMINDER_RECEIVER", "showMissedNotification: no reminder ID")
+            return
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val db = AppDatabase.getDatabase(context)
+            val reminder = db.reminderDao().getReminderById(id)
+
+            // GUARD: Only show if status is STILL "Snoozed"
+            // If user marked Taken → status = "Completed" → skip
+            if (reminder == null) {
+                Log.d("REMINDER_RECEIVER", "Missed check: reminder $id not found in DB")
+                return@launch
+            }
+
+            if (reminder.status != "Snoozed") {
+                Log.d("REMINDER_RECEIVER", "Missed check: status is ${reminder.status}, skipping notification")
+                return@launch
+            }
+
+            // Update to Missed
+            db.reminderDao().updateReminderStatus(id, "Missed")
+            DatabaseHelper(context).updateReminderStatus(id, "Missed")
+
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+            val medicineName = reminder.title ?: "Medicine"
+
+            val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notifications)
+                .setContentTitle("❌ Missed: $medicineName")
+                .setContentText("You didn't take $medicineName after snooze reminder.")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .build()
+
+            notificationManager.notify(id.hashCode() + 9999, notification)
+
+            Log.d("REMINDER_RECEIVER", "Missed notification shown for $id")
+        }
+    }
+
     private suspend fun handleSnooze(context: Context, intent: Intent) {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID) ?: return
         val type = intent.getStringExtra(EXTRA_TYPE) ?: "alarm"
+        val originalTitle = intent.getStringExtra(EXTRA_TITLE) ?: "Health Reminder"
+        val originalDescription = intent.getStringExtra(EXTRA_DESCRIPTION) ?: ""
 
         Log.d("REMINDER_RECEIVER", "handleSnooze: id=$id, type=$type")
 
@@ -253,6 +292,7 @@ class ReminderReceiver : BroadcastReceiver() {
         val newMinute = calendar.get(Calendar.MINUTE)
         val newAmPm = if (calendar.get(Calendar.AM_PM) == Calendar.AM) "AM" else "PM"
         val newTime = String.format(Locale.getDefault(), "%02d:%02d", newHour, newMinute)
+        val snoozeTriggerMillis = calendar.timeInMillis
 
         Log.d("REMINDER_RECEIVER", "New snooze time: $newTime $newAmPm (snoozeMinutes=$snoozeMinutes)")
 
@@ -265,11 +305,9 @@ class ReminderReceiver : BroadcastReceiver() {
                 return
             }
 
-            // Update Room alarm status
             try {
                 val db = AppDatabase.getDatabase(context)
                 db.alarmDao().updateLastTriggeredStatus(id, "Snoozed")
-                Log.d("REMINDER_RECEIVER", "Room alarm status updated to Snoozed")
             } catch (e: Exception) {
                 Log.e("REMINDER_RECEIVER", "Failed to update Room alarm status", e)
             }
@@ -279,7 +317,6 @@ class ReminderReceiver : BroadcastReceiver() {
 
             if (updatedAlarm != null) {
                 alarmHelper.scheduleAlarm(updatedAlarm)
-                Log.d("REMINDER_RECEIVER", "Alarm snooze scheduled: $id at $newTime $newAmPm")
             }
         } else {
             // Update SQLite
@@ -292,25 +329,40 @@ class ReminderReceiver : BroadcastReceiver() {
             try {
                 val db = AppDatabase.getDatabase(context)
                 db.reminderDao().updateReminderStatus(id, "Snoozed")
-                Log.d("REMINDER_RECEIVER", "Room reminder status updated to Snoozed")
             } catch (e: Exception) {
                 Log.e("REMINDER_RECEIVER", "Failed to update Room reminder status", e)
             }
 
-            // Update time in SQLite database for the snoozed reminder
+            // Update time in SQLite
             val values = android.content.ContentValues().apply {
                 put("time", newTime)
             }
-            val sqliteDb = dbHelper.writableDatabase
-            sqliteDb.update("reminders", values, "id = ?", arrayOf(id))
-            sqliteDb.close()
+            dbHelper.writableDatabase.use { sqliteDb ->
+                sqliteDb.update("reminders", values, "id = ?", arrayOf(id))
+            }
 
-            scheduleReminderSnooze(context, id, calendar.timeInMillis, snoozeMinutes)
-            Log.d("REMINDER_RECEIVER", "Reminder snoozed: $id at $newTime (snoozeMinutes=$snoozeMinutes)")
+            // CRITICAL: Cancel old missed alarm before scheduling new one
+            // This prevents duplicate missed notifications
+            cancelMissedNotification(context, id)
+
+            // Schedule snooze alarm
+            scheduleReminderSnooze(context, id, snoozeTriggerMillis, originalTitle, originalDescription, snoozeMinutes)
+
+            // Schedule missed check from SNOOZE TIME + 2 minutes
+            scheduleMissedNotification(context, id, snoozeTriggerMillis + (2 * 60 * 1000))
+
+            Log.d("REMINDER_RECEIVER", "Reminder snoozed: $id at $newTime, missed check at ${snoozeTriggerMillis + 2*60*1000}")
         }
     }
 
-    private fun scheduleReminderSnooze(context: Context, reminderId: String, triggerAtMillis: Long, snoozeMinutes: Int) {
+    private fun scheduleReminderSnooze(
+        context: Context,
+        reminderId: String,
+        triggerAtMillis: Long,
+        title: String,
+        description: String,
+        snoozeMinutes: Int
+    ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
             Log.e("REMINDER_RECEIVER", "Cannot schedule exact alarms")
@@ -320,13 +372,13 @@ class ReminderReceiver : BroadcastReceiver() {
         val intent = Intent(context, ReminderReceiver::class.java).apply {
             putExtra(EXTRA_REMINDER_ID, reminderId)
             putExtra(EXTRA_TYPE, "reminder")
-            putExtra(EXTRA_TITLE, "Snoozed Reminder")
-            putExtra(EXTRA_DESCRIPTION, "Your snoozed reminder is ringing!")
+            putExtra(EXTRA_TITLE, title)
+            putExtra(EXTRA_DESCRIPTION, description)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            reminderId.hashCode() + 5000,
+            reminderId.hashCode() + RC_SNOOZE_ALARM,
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
@@ -337,7 +389,44 @@ class ReminderReceiver : BroadcastReceiver() {
             pendingIntent
         )
 
-        Log.d("REMINDER_RECEIVER", "Reminder snooze scheduled at $triggerAtMillis (snoozeMinutes=$snoozeMinutes)")
+        Log.d("REMINDER_RECEIVER", "Snooze alarm scheduled at $triggerAtMillis")
+    }
+
+    /**
+     * Unified missed notification scheduler.
+     * @param triggerAtMillis exact time to fire (AlarmManager is the source of truth)
+     */
+    private fun scheduleMissedNotification(
+        context: Context,
+        reminderId: String,
+        triggerAtMillis: Long
+    ) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            Log.e("REMINDER_RECEIVER", "Cannot schedule exact alarms for missed check")
+            return
+        }
+
+        // CRITICAL: Intent must match cancelMissedNotification EXACTLY
+        val intent = Intent(context, ReminderReceiver::class.java).apply {
+            action = ACTION_MISSED
+            putExtra(EXTRA_REMINDER_ID, reminderId)
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminderId.hashCode() + RC_MISSED_ALARM,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            triggerAtMillis,
+            pendingIntent
+        )
+
+        Log.d("REMINDER_RECEIVER", "Missed alarm scheduled at $triggerAtMillis for $reminderId")
     }
 
     private suspend fun handleMarkTaken(context: Context, intent: Intent) {
@@ -345,6 +434,10 @@ class ReminderReceiver : BroadcastReceiver() {
         val type = intent.getStringExtra(EXTRA_TYPE) ?: "alarm"
 
         Log.d("REMINDER_RECEIVER", "handleMarkTaken: id=$id, type=$type")
+
+        // Cancel missed check BEFORE updating DB
+        // This ensures showMissedNotification will see "Completed" and skip
+        cancelMissedNotification(context, id)
 
         val dbHelper = DatabaseHelper(context)
 
@@ -390,6 +483,32 @@ class ReminderReceiver : BroadcastReceiver() {
         dismissNotification(context, intent)
     }
 
+    /**
+     * Cancels missed alarm. Intent MUST match scheduleMissedNotification exactly.
+     */
+    private fun cancelMissedNotification(
+        context: Context,
+        reminderId: String
+    ) {
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // EXACT same intent as scheduleMissedNotification
+        val intent = Intent(context, ReminderReceiver::class.java).apply {
+            action = ACTION_MISSED
+            putExtra(EXTRA_REMINDER_ID, reminderId)
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            reminderId.hashCode() + RC_MISSED_ALARM,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.cancel(pendingIntent)
+        Log.d("REMINDER_RECEIVER", "Cancelled missed alarm for $reminderId")
+    }
+
     private fun dismissNotification(context: Context, intent: Intent) {
         val id = intent.getStringExtra(EXTRA_REMINDER_ID) ?: return
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -398,14 +517,20 @@ class ReminderReceiver : BroadcastReceiver() {
     }
 
     private fun vibrate(context: Context) {
-        val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(
-                VibrationEffect.createWaveform(longArrayOf(0, 500, 200, 500), -1)
-            )
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context.getSystemService(VibratorManager::class.java)?.defaultVibrator
         } else {
             @Suppress("DEPRECATION")
-            vibrator.vibrate(longArrayOf(0, 500, 200, 500), -1)
+            context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+
+        vibrator?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                it.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 500, 200, 500), -1))
+            } else {
+                @Suppress("DEPRECATION")
+                it.vibrate(longArrayOf(0, 500, 200, 500), -1)
+            }
         }
     }
 }

@@ -18,7 +18,7 @@
     <string name="med_time">09:00 AM</string>
 
     <string name="mark_taken">Mark as Taken</string>
-    <string name="snooze">Snooze 15m</string>
+    <string name="snooze">Snooze 10m</string>
 
     <string name="total_meds">TOTAL MEDS</string>
     <string name="taken_today">TAKEN TODAY</string>

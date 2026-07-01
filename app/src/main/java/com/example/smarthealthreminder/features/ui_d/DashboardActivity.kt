@@ -116,7 +116,6 @@ class DashboardActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
         handler.removeCallbacks(refreshRunnable)
         handler.post(refreshRunnable)
     }
@@ -165,9 +164,6 @@ class DashboardActivity : AppCompatActivity() {
         return getCurrentMinutes() >= item.minutes
     }
 
-    /**
-     * Get current time as "HH:mm" string
-     */
     private fun getCurrentTimeString(): String {
         val cal = Calendar.getInstance()
         return String.format(Locale.getDefault(), "%02d:%02d",
@@ -176,16 +172,10 @@ class DashboardActivity : AppCompatActivity() {
         )
     }
 
-    /**
-     * Get today's date string in yyyy-MM-dd format
-     */
     private fun getTodayString(): String {
         return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
     }
 
-    /**
-     * Get current week number of year (ISO-8601 standard, Monday as first day)
-     */
     private fun getCurrentWeek(): Int {
         val cal = Calendar.getInstance()
         cal.firstDayOfWeek = Calendar.MONDAY
@@ -193,23 +183,11 @@ class DashboardActivity : AppCompatActivity() {
         return cal.get(Calendar.WEEK_OF_YEAR)
     }
 
-    /**
-     * Get current month (1-12)
-     */
     private fun getCurrentMonth(): Int {
         val cal = Calendar.getInstance()
-        return cal.get(Calendar.MONTH) + 1 // MONTH is 0-based
+        return cal.get(Calendar.MONTH) + 1
     }
 
-    /**
-     * Reset recurring reminders to "Pending" when a new period starts:
-     * - DAILY: reset every new day
-     * - WEEKLY: reset every new week (same day of week)
-     * - MONTHLY: reset every new month (same day of month)
-     *
-     * Only resets reminders that are "Missed" — Completed and Snoozed are left as-is.
-     * This ensures recurring reminders don't stay "Missed" forever.
-     */
     private fun resetRecurringReminders() {
         val today = getTodayString()
         val currentWeek = getCurrentWeek()
@@ -224,25 +202,11 @@ class DashboardActivity : AppCompatActivity() {
         var needsResetWeekly = false
         var needsResetMonthly = false
 
-        // Check if we need to reset Daily reminders (new day)
-        if (today != lastResetDate) {
-            needsResetDaily = true
-        }
+        if (today != lastResetDate) needsResetDaily = true
+        if (currentWeek != lastResetWeek) needsResetWeekly = true
+        if (currentMonth != lastResetMonth) needsResetMonthly = true
 
-        // Check if we need to reset Weekly reminders (new week)
-        if (currentWeek != lastResetWeek) {
-            needsResetWeekly = true
-        }
-
-        // Check if we need to reset Monthly reminders (new month)
-        if (currentMonth != lastResetMonth) {
-            needsResetMonthly = true
-        }
-
-        if (!needsResetDaily && !needsResetWeekly && !needsResetMonthly) {
-            // Nothing to reset
-            return
-        }
+        if (!needsResetDaily && !needsResetWeekly && !needsResetMonthly) return
 
         var anyReset = false
 
@@ -257,9 +221,6 @@ class DashboardActivity : AppCompatActivity() {
             }
 
             if (shouldReset && shouldShowToday(reminder)) {
-                // Only reset "Missed" reminders back to "Pending"
-                // Completed reminders stay Completed (user took it)
-                // Snoozed reminders stay Snoozed (user intentionally snoozed)
                 if (reminder.status == "Missed") {
                     viewModel.resetReminderStatus(reminder.id, "Pending")
                     anyReset = true
@@ -267,7 +228,6 @@ class DashboardActivity : AppCompatActivity() {
             }
         }
 
-        // Update last reset timestamps
         if (anyReset || needsResetDaily || needsResetWeekly || needsResetMonthly) {
             prefs.edit().apply {
                 if (needsResetDaily) putString(KEY_LAST_RESET_DATE, today)
@@ -278,45 +238,21 @@ class DashboardActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * A Snoozed reminder becomes Missed ONLY if:
-     * - Status is "Snoozed"
-     * - Current time is at least 2 minutes past the SNOOZED time (snoozedUntil)
-     * - The reminder should actually show today (respects recurrence rules)
-     *
-     * Pending reminders NEVER become Missed automatically.
-     */
     private fun isReminderMissed(reminder: ReminderEntity): Boolean {
-
         if (reminder.status != "Snoozed") return false
-
         val reminderTime = reminder.time ?: return false
-
         val reminderMinutes = timeToMinutes(reminderTime)
         val nowMinutes = getCurrentMinutes()
-
         return nowMinutes >= reminderMinutes + 2
     }
-    /**
-     * Auto-mark Snoozed reminders as Missed if their snoozedUntil time + 2 min has passed.
-     * Updates local list immediately so UI reflects change right away.
-     * Only applies to reminders that should show today.
-     */
+
     private fun autoMarkMissed() {
         var anyChanged = false
         val updatedList = reminderEntities.map { reminder ->
             if (isReminderMissed(reminder)) {
-
                 anyChanged = true
-
                 viewModel.markReminderMissed(reminder.id)
-
-                // إرسال Notification
-                sendMissedNotification(
-                    reminder.id,
-                    reminder.title ?: "Reminder"
-                )
-
+                sendMissedNotification(reminder.id, reminder.title ?: "Reminder")
                 reminder.copy(status = "Missed")
             } else {
                 reminder
@@ -324,19 +260,13 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         if (anyChanged) {
-            // Update local list immediately so UI shows Missed right away
             reminderEntities = updatedList
-            // Refresh UI with updated data
             loadStats()
             loadNextDose()
             loadUpcomingList()
         }
     }
 
-    /**
-     * Schedule AlarmManager notification for snoozed reminder.
-     * Triggers after specified minutes even if app is closed.
-     */
     private fun scheduleSnooze(id: String, title: String, minutes: Int) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
@@ -361,6 +291,24 @@ class DashboardActivity : AppCompatActivity() {
         )
     }
 
+    private fun cancelMissedNotification(id: String) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val intent = Intent(this, ReminderReceiver::class.java).apply {
+            action = ReminderReceiver.ACTION_MISSED
+        }
+
+        val pendingIntent = PendingIntent.getBroadcast(
+            this,
+            id.hashCode() + 9000,
+            intent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
+        alarmManager.cancel(pendingIntent)
+        Log.d("DASHBOARD", "Cancelled missed notification for $id")
+    }
+
     private fun setupClickListeners() {
         fabAddMed.setOnClickListener {
             startActivity(Intent(this, AddReminderActivity::class.java))
@@ -371,6 +319,7 @@ class DashboardActivity : AppCompatActivity() {
                 if (isItemDue(item)) {
                     val reminder = reminderEntities.find { it.id == item.id }
                     reminder?.let {
+                        cancelMissedNotification(it.id)
                         viewModel.markReminderDone(it.id)
                         Toast.makeText(this, "Marked as done", Toast.LENGTH_SHORT).show()
                     }
@@ -387,30 +336,18 @@ class DashboardActivity : AppCompatActivity() {
                 if (isItemDue(item)) {
                     val reminder = reminderEntities.find { it.id == item.id }
                     reminder?.let {
-                        // FIX: Calculate new time from CURRENT time, not original reminder time
                         val newTime = addMinutesToTime(getCurrentTimeString(), 10)
 
-                        // Update DB first: change time + status + snoozedUntil
+                        cancelMissedNotification(it.id)
                         viewModel.snoozeReminder(it.id, newTime)
+                        scheduleSnooze(it.id, it.title ?: "Reminder", 10)
 
-                        // Schedule AlarmManager notification (10 minutes from now)
-                        scheduleSnooze(
-                            it.id,
-                            it.title ?: "Reminder",
-                            10
-                        )
-
-                        // Update local list immediately so UI reflects snooze right away
                         reminderEntities = reminderEntities.map { entity ->
                             if (entity.id == reminder.id) {
-                                entity.copy(
-                                    time = newTime,
-                                    status = "Snoozed",
-                                )
+                                entity.copy(time = newTime, status = "Snoozed")
                             } else entity
                         }
 
-                        // Refresh UI immediately with local update
                         loadStats()
                         loadNextDose()
                         loadUpcomingList()
@@ -436,21 +373,16 @@ class DashboardActivity : AppCompatActivity() {
             minute -= 60
             hour += 1
         }
-        if (hour >= 24) {
-            hour -= 24
-        }
+        if (hour >= 24) hour -= 24
 
         return String.format(Locale.getDefault(), "%02d:%02d", hour, minute)
     }
 
     private fun setupBottomNavigation() {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        BottomNavHelper.setup(this, bottomNav, R.id.nav_home)
-    }
-    private fun sendMissedNotification(
-        id: String,
-        title: String
-    ) {
+        BottomNavHelper.setup(this, bottomNav, R.id.nav_create)    }
+
+    private fun sendMissedNotification(id: String, title: String) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as android.app.NotificationManager
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -482,10 +414,7 @@ class DashboardActivity : AppCompatActivity() {
         if (sharedPref.getString("USER_NAME", null) == null) {
             val userName = auth.currentUser?.displayName
                 ?: auth.currentUser?.email?.substringBefore("@")?.replaceFirstChar {
-                    if (it.isLowerCase())
-                        it.titlecase(Locale.getDefault())
-                    else
-                        it.toString()
+                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                 }
                 ?: "User"
             sharedPref.edit().putString("USER_NAME", userName).apply()
@@ -504,53 +433,36 @@ class DashboardActivity : AppCompatActivity() {
         tvGreeting.text = greeting
     }
 
-    /**
-     * Determines if a reminder should be shown today based on its recurrence rules.
-     * For non-recurring: only show on the exact date.
-     * For recurring: show based on Daily/Weekly/Monthly pattern.
-     */
     private fun shouldShowToday(reminder: ReminderEntity): Boolean {
         val today = Calendar.getInstance()
 
-        // Non-recurring: only show on the exact date
         if (!reminder.isRecurring) {
             val todayString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(today.time)
             return reminder.date == todayString
         }
 
-        // Recurring reminders
         return when (reminder.recurrenceType) {
-            RecurrenceHelper.DAILY -> {
-                // Daily reminders show every day
-                true
-            }
+            RecurrenceHelper.DAILY -> true
 
             RecurrenceHelper.WEEKLY -> {
-                // Weekly reminders show on the same day of the week as the original date
                 val reminderDateString = reminder.date ?: return false
                 val reminderDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     .parse(reminderDateString) ?: return false
-
                 val reminderCal = Calendar.getInstance()
                 reminderCal.time = reminderDate
-
                 reminderCal.get(Calendar.DAY_OF_WEEK) == today.get(Calendar.DAY_OF_WEEK)
             }
 
             RecurrenceHelper.MONTHLY -> {
-                // Monthly reminders show on the same day of the month as the original date
                 val reminderDateString = reminder.date ?: return false
                 val reminderDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                     .parse(reminderDateString) ?: return false
-
                 val reminderCal = Calendar.getInstance()
                 reminderCal.time = reminderDate
-
                 reminderCal.get(Calendar.DAY_OF_MONTH) == today.get(Calendar.DAY_OF_MONTH)
             }
 
             else -> {
-                // Fallback: show only on exact date
                 val todayString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(today.time)
                 reminder.date == todayString
             }
@@ -558,12 +470,7 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun loadStats() {
-        val today = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(Date())
-
-        // Only count reminders that should show today
-        val todayReminders = reminderEntities.filter {
-            shouldShowToday(it)
-        }
+        val todayReminders = reminderEntities.filter { shouldShowToday(it) }
 
         val total = todayReminders.size
         val done = todayReminders.count { it.status == "Completed" }
@@ -577,10 +484,7 @@ class DashboardActivity : AppCompatActivity() {
         val percentage = if (total > 0) (done * 100 / total) else 0
         tvAdherencePercent.text = "$percentage%"
 
-        Log.d(
-            "DASH_STATS",
-            "today=$today, total=$total, done=$done, missed=$missed, pending=$pending"
-        )
+        Log.d("DASH_STATS", "total=$total, done=$done, missed=$missed, pending=$pending")
     }
 
     private fun loadNextDose() {
@@ -590,13 +494,10 @@ class DashboardActivity : AppCompatActivity() {
         reminderEntities
             .filter { it.status == "Pending" || it.status == "Snoozed" }
             .forEach { reminder ->
-                // Only consider reminders that should show today
                 if (!shouldShowToday(reminder)) return@forEach
 
                 val reminderMinutes = timeToMinutes(reminder.time)
                 if (reminderMinutes == 0 && reminder.time.isNullOrEmpty()) return@forEach
-
-                val status = reminder.status ?: "Pending"
 
                 allItems.add(ScheduleItem(
                     id = reminder.id,
@@ -606,34 +507,23 @@ class DashboardActivity : AppCompatActivity() {
                     minutes = reminderMinutes,
                     type = "reminder",
                     category = reminder.category,
-                    status = status
+                    status = reminder.status ?: "Pending"
                 ))
             }
 
         val nextItem = when {
             allItems.isEmpty() -> null
-
             else -> {
-
-                // 1. Snoozed لكن وقته جه دلوقتي أو فات
                 val validSnoozed = allItems.filter {
-                    it.status.equals("Snoozed", true) &&
-                            currentMinutes >= it.minutes
+                    it.status.equals("Snoozed", true) && currentMinutes >= it.minutes
                 }
-
-                // 2. Pending (أقرب وقت جاي في المستقبل)
                 val pendingItems = allItems.filter {
-                    it.status.equals("Pending", true) &&
-                            currentMinutes < it.minutes
+                    it.status.equals("Pending", true) && currentMinutes < it.minutes
                 }
 
                 when {
-                    validSnoozed.isNotEmpty() ->
-                        validSnoozed.minByOrNull { it.minutes }
-
-                    pendingItems.isNotEmpty() ->
-                        pendingItems.minByOrNull { it.minutes }
-
+                    validSnoozed.isNotEmpty() -> validSnoozed.minByOrNull { it.minutes }
+                    pendingItems.isNotEmpty() -> pendingItems.minByOrNull { it.minutes }
                     else -> null
                 }
             }
@@ -642,15 +532,8 @@ class DashboardActivity : AppCompatActivity() {
         currentNextItem = nextItem
 
         if (nextItem != null) {
-            val displayName = when {
-                nextItem.status.equals("Snoozed", true) -> "⏰ ${nextItem.name}"
-                else -> nextItem.name
-            }
-
-            val displayDosage = when {
-                nextItem.status.equals("Snoozed", true) -> "${nextItem.dosage} • Snoozed"
-                else -> nextItem.dosage
-            }
+            val displayName = if (nextItem.status.equals("Snoozed", true)) "⏰ ${nextItem.name}" else nextItem.name
+            val displayDosage = if (nextItem.status.equals("Snoozed", true)) "${nextItem.dosage} • Snoozed" else nextItem.dosage
 
             tvNextMedName.text = "$displayName - $displayDosage"
             tvNextMedTime.text = nextItem.time
@@ -687,13 +570,11 @@ class DashboardActivity : AppCompatActivity() {
         val allItems = mutableListOf<ScheduleItem>()
 
         reminderEntities.forEach { reminder ->
-            // Only show reminders that apply today
             if (!shouldShowToday(reminder)) return@forEach
 
             val reminderMinutes = timeToMinutes(reminder.time)
             if (reminderMinutes == 0 && reminder.time.isNullOrEmpty()) return@forEach
 
-            // Status mapping — DB status has priority
             val status = when (reminder.status) {
                 "Completed" -> "Taken"
                 "Snoozed" -> "Snoozed"
@@ -725,12 +606,7 @@ class DashboardActivity : AppCompatActivity() {
                 val itemView = buildUpcomingItemView(item)
                 containerUpcomingItems.addView(itemView)
 
-                // Only Pending and Snoozed are clickable
-                val isClickable = when (item.status) {
-                    "Pending", "Snoozed" -> true
-                    else -> false
-                }
-
+                val isClickable = item.status == "Pending" || item.status == "Snoozed"
                 itemView.isClickable = isClickable
                 itemView.isFocusable = isClickable
 
@@ -759,7 +635,6 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun showReminderActions(reminder: ReminderEntity, item: ScheduleItem) {
-
         val options = if (item.status.equals("Snoozed", true)) {
             arrayOf("Mark as Done", "Cancel")
         } else {
@@ -769,31 +644,27 @@ class DashboardActivity : AppCompatActivity() {
         AlertDialog.Builder(this)
             .setTitle(reminder.title ?: "Reminder")
             .setItems(options) { _, which ->
-
                 if (item.status.equals("Snoozed", true)) {
-
                     when (which) {
                         0 -> {
                             if (!isItemDue(item)) {
                                 Toast.makeText(this, "Not yet time!", Toast.LENGTH_SHORT).show()
                                 return@setItems
                             }
+                            cancelMissedNotification(reminder.id)
                             viewModel.markReminderDone(reminder.id)
                             Toast.makeText(this, "Marked as done", Toast.LENGTH_SHORT).show()
                         }
-                        1 -> {
-                            // Cancel
-                        }
+                        1 -> { /* Cancel */ }
                     }
-
                 } else {
-
                     when (which) {
                         0 -> {
                             if (!isItemDue(item)) {
                                 Toast.makeText(this, "Not yet time!", Toast.LENGTH_SHORT).show()
                                 return@setItems
                             }
+                            cancelMissedNotification(reminder.id)
                             viewModel.markReminderDone(reminder.id)
                             Toast.makeText(this, "Marked as done", Toast.LENGTH_SHORT).show()
                         }
@@ -802,41 +673,25 @@ class DashboardActivity : AppCompatActivity() {
                                 Toast.makeText(this, "Not yet time!", Toast.LENGTH_SHORT).show()
                                 return@setItems
                             }
-                            // FIX: Calculate new time from CURRENT time, not original reminder time
                             val newTime = addMinutesToTime(getCurrentTimeString(), 10)
 
-                            // Update DB first: change time + status + snoozedUntil
+                            cancelMissedNotification(reminder.id)
                             viewModel.snoozeReminder(reminder.id, newTime)
+                            scheduleSnooze(reminder.id, reminder.title ?: "Reminder", 10)
 
-                            // Schedule AlarmManager notification for snoozed time (10 minutes from now)
-                            scheduleSnooze(
-                                reminder.id,
-                                reminder.title ?: "Reminder",
-                                10
-                            )
-
-// Update local list immediately so UI reflects snooze right away
-                            val snoozeStart = getCurrentTimeString()  // ✅ وقت بداية السنوز
                             reminderEntities = reminderEntities.map { entity ->
                                 if (entity.id == reminder.id) {
-                                    entity.copy(
-                                        time = newTime,
-                                        status = "Snoozed",
-
-                                    )
+                                    entity.copy(time = newTime, status = "Snoozed")
                                 } else entity
                             }
 
-                            // Refresh UI immediately with local update
                             loadStats()
                             loadNextDose()
                             loadUpcomingList()
 
                             Toast.makeText(this, "Snoozed for 10 minutes", Toast.LENGTH_SHORT).show()
                         }
-                        2 -> {
-                            // Cancel
-                        }
+                        2 -> { /* Cancel */ }
                     }
                 }
             }
@@ -933,8 +788,6 @@ class DashboardActivity : AppCompatActivity() {
 
         return rowLayout
     }
-
-
 
     private fun Int.dpToPx(): Int {
         return (this * resources.displayMetrics.density).toInt()
