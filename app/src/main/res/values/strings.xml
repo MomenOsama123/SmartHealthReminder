@@ -476,4 +476,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="view_calendar">View Calendar →</string>
     <string name="month">Month</string>
     <string name="welcome_back_name">Welcome back, %1$s</string>
+    <string name="mark_done">Mark Done</string>
+    <string name="cancel">Cancel</string>
 </resources>
