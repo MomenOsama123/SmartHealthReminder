@@ -65,6 +65,11 @@ class ProfileActivity : AppCompatActivity() {
         allergiesInput = findViewById(R.id.allergies_input)
         emergencyContactInput = findViewById(R.id.emergency_contact_input)
         userNameDisplay = findViewById(R.id.tv_user_name)
+
+        // make edit text unwritable
+        dobInput.showSoftInputOnFocus = false
+        genderInput.showSoftInputOnFocus = false
+        bloodTypeInput.showSoftInputOnFocus = false
     }
 
     private fun loadUserData() {
@@ -116,7 +121,28 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun saveUserData() {
         val uid = auth.currentUser?.uid ?: return
-        
+
+        val weightStr = weightInput.text.toString().trim()
+        val heightStr = heightInput.text.toString().trim()
+
+        if (weightStr.isNotEmpty()) {
+            val weight = weightStr.toDoubleOrNull()
+            if (weight == null || weight !in 10.0..500.0) {
+                weightInput.error = "Please enter a valid weight (10-500 kg)"
+                weightInput.requestFocus()
+                return
+            }
+        }
+
+        if (heightStr.isNotEmpty()) {
+            val height = heightStr.toDoubleOrNull()
+            if (height == null || height !in 50.0..300.0) {
+                heightInput.error = "Please enter a valid height (50-300 cm)"
+                heightInput.requestFocus()
+                return
+            }
+        }
+
         val updatedUser = User(
             firebaseId = uid,
             name = fullNameInput.text.toString().trim(),
@@ -124,8 +150,8 @@ class ProfileActivity : AppCompatActivity() {
             dob = dobInput.text.toString().trim(),
             gender = genderInput.text.toString().trim(),
             bloodType = bloodTypeInput.text.toString().trim(),
-            weight = weightInput.text.toString().trim(),
-            height = heightInput.text.toString().trim(),
+            weight = weightStr,
+            height = heightStr,
             chronicDiseases = diseasesInput.text.toString().trim(),
             allergies = allergiesInput.text.toString().trim(),
             emergencyContact = emergencyContactInput.text.toString().trim(),

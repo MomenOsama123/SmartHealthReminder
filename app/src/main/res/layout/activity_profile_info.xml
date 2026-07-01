@@ -146,7 +146,11 @@
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="12dp"
                 android:drawableTint="@color/primary_green"
-                tools:ignore="RtlSymmetry" />
+                tools:ignore="RtlSymmetry"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -167,8 +171,9 @@
                 android:inputType="text"
                 android:textColor="@color/text_dark"
                 android:paddingStart="16dp"
-                android:focusable="true"
+                android:focusable="false"
                 android:clickable="true"
+                android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="12dp"
                 android:drawableTint="@color/primary_green"
@@ -193,8 +198,9 @@
                 android:inputType="number"
                 android:textColor="@color/text_dark"
                 android:paddingStart="16dp"
-                android:focusable="true"
+                android:focusable="false"
                 android:clickable="true"
+                android:cursorVisible="false"
                 android:drawableStart="@drawable/outline_check_circle"
                 android:drawablePadding="12dp"
                 android:drawableTint="@color/primary_green"

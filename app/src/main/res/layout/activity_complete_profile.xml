@@ -145,7 +145,6 @@
         <EditText
             android:autofillHints=""
             android:backgroundTint="@color/white"
-
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:background="@drawable/bg_input"
@@ -161,6 +160,7 @@
             android:layout_marginBottom="16dp"
             android:focusable="false"
             android:clickable="true"
+            android:cursorVisible="false"
             android:inputType="date"/>
 
         <!-- Gender & Blood Type Row -->
@@ -171,46 +171,56 @@
             android:layout_marginBottom="24dp">
 
             <!-- Gender -->
-            <TextView
-                android:backgroundTint="@color/white"
-
-                android:id="@+id/tv_gender"
+            <EditText
+                android:id="@+id/et_gender"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="55dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/bg_input"
-                android:text="Gender"
-                android:textColor="@color/hint_gray"
-                android:textSize="11sp"
+                android:backgroundTint="@color/white"
+                android:hint="Gender"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_person"
                 android:drawableEnd="@drawable/ic_arrow_down"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray"/>
+                app:drawableTint="@color/hint_gray"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:autofillHints="" />
 
             <!-- Blood Type -->
-            <TextView
-                android:backgroundTint="@color/white"
-
-                android:id="@+id/tv_blood_type"
+            <EditText
+                android:id="@+id/et_blood_type"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="55dp"
                 android:layout_marginStart="8dp"
                 android:background="@drawable/bg_input"
-                android:text="Blood Type"
-                android:textColor="@color/hint_gray"
-                android:textSize="10sp"
+                android:backgroundTint="@color/white"
+                android:hint="Blood Type"
+                android:textColorHint="@color/hint_gray"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp"
                 android:gravity="center_vertical"
                 android:paddingStart="20dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_blood_drop"
                 android:drawableEnd="@drawable/ic_arrow_down"
                 android:drawablePadding="8dp"
-                app:drawableTint="@color/hint_gray"/>
+                app:drawableTint="@color/hint_gray"
+                android:focusable="false"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:autofillHints="" />
         </LinearLayout>
 
         <!-- Weight & Height Container -->
