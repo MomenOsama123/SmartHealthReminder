@@ -16,7 +16,7 @@
         android:paddingTop="24dp"
         android:paddingBottom="16dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="40dp">
 
         <ImageView
             android:id="@+id/btn_back"
@@ -68,11 +68,12 @@
                     android:src="@drawable/profile"
                     tools:ignore="ContentDescription" />
 
-                <ImageView
+                <ImageButton
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
+                    android:id="@+id/editProfile"
                     android:background="@drawable/bg_logo_circle"
                     android:backgroundTint="@color/primary_green"
                     android:src="@drawable/ic_edit"

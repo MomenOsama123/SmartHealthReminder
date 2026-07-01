@@ -10,27 +10,28 @@
     <!-- Header Section -->
     <LinearLayout
         android:id="@+id/layout_header"
-        android:layout_marginTop="32dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/content_desc_back"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/search_accent" />
+            app:tint="@color/text_primary" />
 
         <FrameLayout
             android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="8dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="12dp"
             android:layout_weight="1">
 
             <EditText
@@ -39,13 +40,14 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/bg_card_white_rounded"
                 android:hint="@string/search_hint"
-                android:textColorHint="@color/search_hint"
-                android:textColor="@color/search_accent"
                 android:imeOptions="actionSearch"
                 android:importantForAutofill="no"
                 android:inputType="text"
                 android:paddingStart="16dp"
-                android:paddingEnd="44dp" />
+                android:paddingEnd="44dp"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_tertiary"
+                android:textSize="15sp" />
 
             <ImageView
                 android:id="@+id/iv_clear_search"
@@ -55,69 +57,181 @@
                 android:padding="12dp"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
-                app:tint="@color/search_accent" />
+                app:tint="@color/text_secondary" />
         </FrameLayout>
     </LinearLayout>
 
-    <!-- Filters -->
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/cg_filters"
+    <!-- Filter Section Container -->
+    <LinearLayout
+        android:id="@+id/container_filters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="16dp"
-        app:singleSelection="true"
-        app:selectionRequired="true"
+        android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/layout_header">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_filter_all"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+        <!-- Type Filters -->
+        <TextView
+            android:id="@+id/tv_filter_type_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="All"
-            android:checked="true" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
+            android:alpha="0.6"
+            android:letterSpacing="0.1"
+            android:text="I AM LOOKING FOR"
+            android:textColor="@color/text_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_filter_reminders"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cg_filters"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="16dp"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_all"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="All" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_reminders"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reminders" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_filter_alarms"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Alarms" />
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <!-- Category Filters -->
+        <TextView
+            android:id="@+id/tv_filter_cat_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Reminders" />
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:alpha="0.6"
+            android:letterSpacing="0.1"
+            android:text="SELECT CATEGORY"
+            android:textColor="@color/text_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/chip_filter_alarms"
-            style="@style/Widget.MaterialComponents.Chip.Choice"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:id="@+id/hsv_categories"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Alarms" />
+            android:layout_marginTop="8dp"
+            android:paddingHorizontal="16dp"
+            android:scrollbars="none">
 
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_categories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:chipSpacingHorizontal="8dp"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cat_medicine"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Medicine"
+                    app:chipBackgroundColor="@color/surface" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cat_appointment"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Appointment"
+                    app:chipBackgroundColor="@color/surface" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cat_task"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Task"
+                    app:chipBackgroundColor="@color/surface" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_cat_custom"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Custom"
+                    app:chipBackgroundColor="@color/surface" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progress_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/primary"
+        app:layout_constraintTop_toBottomOf="@id/container_filters" />
+
+    <!-- Results Area -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:clipToPadding="false"
+        android:paddingHorizontal="8dp"
+        android:paddingBottom="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_filters"
+        tools:listitem="@layout/item_search_reminder" />
 
     <!-- Suggestions (Visible when search is empty) -->
     <LinearLayout
         android:id="@+id/layout_suggestions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:orientation="vertical"
-        android:padding="24dp"
-        app:layout_constraintTop_toBottomOf="@id/cg_filters">
+        android:paddingHorizontal="24dp"
+        android:paddingTop="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/container_filters">
 
         <!-- Recent Searches Section -->
         <RelativeLayout
             android:id="@+id/layout_recent_searches"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="32dp"
             android:visibility="gone">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="RECENT SEARCHES"
-                android:textColor="@color/search_accent"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:letterSpacing="0.1" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:letterSpacing="0.1"
+            android:text="RECENT SEARCHES"
+            android:textColor="@color/text_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/btn_clear_history"
@@ -133,102 +247,22 @@
                 android:id="@+id/cg_recent_searches"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="16dp"
                 app:chipSpacing="8dp" />
 
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/suggested_topics"
-            android:textColor="@color/search_accent"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.1" />
-
-        <com.google.android.material.chip.ChipGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            app:chipSpacing="8dp">
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.MaterialComponents.Chip.Action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Vitamins"
-                app:chipBackgroundColor="@color/surface"
-                app:chipStrokeColor="@color/chip_stroke_warm"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.MaterialComponents.Chip.Action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hydration"
-                app:chipBackgroundColor="@color/surface"
-                app:chipStrokeColor="@color/chip_stroke_warm"
-                app:chipStrokeWidth="1dp" />
-
-            <com.google.android.material.chip.Chip
-                style="@style/Widget.MaterialComponents.Chip.Action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daily Meds"
-                app:chipBackgroundColor="@color/surface"
-                app:chipStrokeColor="@color/chip_stroke_warm"
-                app:chipStrokeWidth="1dp" />
-        </com.google.android.material.chip.ChipGroup>
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_results"
+    <!-- No Results Container -->
+    <FrameLayout
+        android:id="@+id/container_no_results"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
-        android:clipToPadding="false"
-        android:padding="8dp"
+        android:layout_marginTop="16dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cg_filters"
-        tools:listitem="@layout/item_search_reminder" />
+        app:layout_constraintTop_toBottomOf="@id/container_filters" />
 
-    <!-- No Results Layout -->
-    <LinearLayout
-        android:id="@+id/layout_no_results"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cg_filters">
-
-        <ImageView
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:src="@drawable/ic_heart"
-            android:contentDescription="@null"
-            app:tint="@color/search_accent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/no_results_found"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:textColor="@color/text_primary" />
-
-        <TextView
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/noResParagraph"
-            android:textColor="@color/text_secondary" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

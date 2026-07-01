@@ -25,6 +25,12 @@ sealed class SearchResult {
             is Alarm -> entity.time ?: ""
         }
 
+    val date: String
+        get() = when (this) {
+            is Reminder -> entity.date ?: ""
+            is Alarm -> ""
+        }
+
     val category: String
         get() = when (this) {
             is Reminder -> entity.category ?: ""

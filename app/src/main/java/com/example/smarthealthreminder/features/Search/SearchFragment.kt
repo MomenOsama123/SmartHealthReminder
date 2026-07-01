@@ -40,9 +40,12 @@ class SearchFragment : Fragment() {
     private lateinit var btnBack: ImageButton
     private lateinit var ivClearSearch: ImageView
     private lateinit var rvSearchResults: RecyclerView
-    private lateinit var layoutNoResults: View
+    private lateinit var containerNoResults: View
+    private lateinit var progressSearch: com.google.android.material.progressindicator.LinearProgressIndicator
     private lateinit var layoutSuggestions: View
     private lateinit var cgFilters: com.google.android.material.chip.ChipGroup
+    private lateinit var cgCategories: com.google.android.material.chip.ChipGroup
+    private lateinit var containerFilters: View
     private lateinit var layoutRecentSearches: View
     private lateinit var cgRecentSearches: com.google.android.material.chip.ChipGroup
     private lateinit var btnClearHistory: TextView
@@ -82,9 +85,12 @@ class SearchFragment : Fragment() {
         btnBack = view.findViewById(R.id.btn_back)
         ivClearSearch = view.findViewById(R.id.iv_clear_search)
         rvSearchResults = view.findViewById(R.id.rv_search_results)
-        layoutNoResults = view.findViewById(R.id.layout_no_results)
+        containerNoResults = view.findViewById(R.id.container_no_results)
+        progressSearch = view.findViewById(R.id.progress_search)
         layoutSuggestions = view.findViewById(R.id.layout_suggestions)
         cgFilters = view.findViewById(R.id.cg_filters)
+        cgCategories = view.findViewById(R.id.cg_categories)
+        containerFilters = view.findViewById(R.id.container_filters)
         layoutRecentSearches = view.findViewById(R.id.layout_recent_searches)
         cgRecentSearches = view.findViewById(R.id.cg_recent_searches)
         btnClearHistory = view.findViewById(R.id.btn_clear_history)
@@ -117,6 +123,7 @@ class SearchFragment : Fragment() {
                     etSearch.setText(query)
                     etSearch.setSelection(query.length)
                     viewModel.saveSearch(query)
+                    hideKeyboard()
                 }
             }
             cgRecentSearches.addView(chip)
@@ -131,6 +138,17 @@ class SearchFragment : Fragment() {
                 else -> SearchViewModel.SearchFilter.ALL
             }
             viewModel.onFilterChanged(filter)
+        }
+
+        cgCategories.setOnCheckedStateChangeListener { _, checkedIds ->
+            val category = when (checkedIds.firstOrNull()) {
+                R.id.chip_cat_medicine -> "Medicine"
+                R.id.chip_cat_appointment -> "Appointment"
+                R.id.chip_cat_task -> "Task"
+                R.id.chip_cat_custom -> "Custom"
+                else -> null
+            }
+            viewModel.onCategoryChanged(category)
         }
     }
 
@@ -218,9 +236,19 @@ class SearchFragment : Fragment() {
     private fun observeSearchResults() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.searchResults.collectLatest { results ->
-                    searchAdapter.submitList(results)
-                    updateUiState(results.isEmpty())
+                launch {
+                    viewModel.searchResults.collectLatest { results ->
+                        // Always update highlighting query before submitting new list
+                        searchAdapter.updateQuery(etSearch.text.toString().trim())
+                        searchAdapter.submitList(results)
+                        updateUiState(results.isEmpty())
+                    }
+                }
+                
+                launch {
+                    viewModel.isLoading.collect { isLoading ->
+                        progressSearch.isVisible = isLoading
+                    }
                 }
             }
         }
@@ -229,16 +257,57 @@ class SearchFragment : Fragment() {
     private fun updateUiState(isResultsEmpty: Boolean) {
         val query = etSearch.text.toString().trim()
         val isQueryEmpty = query.isEmpty()
+        val activeFilter = viewModel.activeFilter.value
+        val selectedCategory = viewModel.selectedCategory.value
 
-        layoutSuggestions.isVisible = isQueryEmpty
-        cgFilters.isVisible = !isQueryEmpty
+        // Suggestions are shown ONLY when search is empty AND no category is selected AND "All" filter is selected
+        val showSuggestions = isQueryEmpty && activeFilter == SearchViewModel.SearchFilter.ALL && selectedCategory == null
         
-        if (isQueryEmpty) {
-            rvSearchResults.isVisible = false
-            layoutNoResults.isVisible = false
-        } else {
-            rvSearchResults.isVisible = !isResultsEmpty
-            layoutNoResults.isVisible = isResultsEmpty
+        layoutSuggestions.isVisible = showSuggestions
+        containerFilters.isVisible = true
+        
+        when {
+            showSuggestions -> {
+                rvSearchResults.isVisible = false
+                containerNoResults.isVisible = false
+                hideNoResultsFragment()
+            }
+            isResultsEmpty -> {
+                rvSearchResults.isVisible = false
+                containerNoResults.isVisible = true
+                showNoResultsFragment()
+            }
+            else -> {
+                rvSearchResults.isVisible = true
+                containerNoResults.isVisible = false
+                hideNoResultsFragment()
+            }
+        }
+    }
+
+    private fun showNoResultsFragment() {
+        val fragment = childFragmentManager.findFragmentByTag("no_results")
+        if (fragment == null) {
+            val noResultFragment = NoResultFragment.newInstance().apply {
+                setOnClearFiltersClickListener {
+                    // Reset everything
+                    etSearch.text.clear()
+                    cgFilters.check(R.id.chip_filter_all)
+                    cgCategories.clearCheck()
+                }
+            }
+            childFragmentManager.beginTransaction()
+                .replace(R.id.container_no_results, noResultFragment, "no_results")
+                .commit()
+        }
+    }
+
+    private fun hideNoResultsFragment() {
+        val fragment = childFragmentManager.findFragmentByTag("no_results")
+        if (fragment != null) {
+            childFragmentManager.beginTransaction()
+                .remove(fragment)
+                .commit()
         }
     }
 

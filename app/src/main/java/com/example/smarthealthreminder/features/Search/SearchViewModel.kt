@@ -22,34 +22,51 @@ class SearchViewModel(
     private val _activeFilter = MutableStateFlow(SearchFilter.ALL)
     val activeFilter: StateFlow<SearchFilter> = _activeFilter.asStateFlow()
 
+    private val _selectedCategory = MutableStateFlow<String?>(null)
+    val selectedCategory: StateFlow<String?> = _selectedCategory.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     private val _searchHistory = MutableStateFlow(historyManager.getHistory())
     val searchHistory: StateFlow<List<String>> = _searchHistory.asStateFlow()
 
-    val searchResults: StateFlow<List<SearchResult>> = combine(_searchQuery, _activeFilter) { query, filter ->
-        query to filter
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val searchResults: StateFlow<List<SearchResult>> = combine(_searchQuery, _activeFilter, _selectedCategory) { query, filter, category ->
+        _isLoading.value = true
+        Triple(query, filter, category)
     }
         .debounce(300L.milliseconds)
-        .flatMapLatest { (query, filter) ->
-            if (query.isBlank()) {
-                flowOf(emptyList<SearchResult>())
+        .flatMapLatest { (query, filter, category) ->
+            if (query.isBlank() && filter == SearchFilter.ALL && category == null) {
+                _isLoading.value = false
+                flowOf(emptyList())
             } else {
-                val reminderFlow = if (filter == SearchFilter.ALL || filter == SearchFilter.REMINDERS) {
-                    repository.searchReminders(query.trim())
-                        .map { list -> list.map { SearchResult.Reminder(it) } }
-                } else {
-                    flowOf(emptyList<SearchResult>())
-                }
+                val effectiveQuery = if (query.isBlank() && category != null) category else query.trim()
                 
-                val alarmFlow = if (filter == SearchFilter.ALL || filter == SearchFilter.ALARMS) {
-                    repository.searchAlarms(query.trim())
-                        .map { list -> list.map { SearchResult.Alarm(it) } }
+                val reminderFlow = if (filter == SearchFilter.ALL || filter == SearchFilter.REMINDERS) {
+                    repository.searchReminders(effectiveQuery)
+                        .map { list -> 
+                            list.map { SearchResult.Reminder(it) }
+                                .filter { item -> category == null || item.entity.category?.equals(category, ignoreCase = true) == true }
+                        }
                 } else {
-                    flowOf(emptyList<SearchResult>())
+                    flowOf(emptyList())
+                }
+
+                val alarmFlow = if (filter == SearchFilter.ALL || filter == SearchFilter.ALARMS) {
+                    repository.searchAlarms(effectiveQuery)
+                        .map { list -> 
+                            list.map { SearchResult.Alarm(it) }
+                                .filter { item -> category == null || item.entity.category?.equals(category, ignoreCase = true) == true }
+                        }
+                } else {
+                    flowOf(emptyList())
                 }
 
                 combine(reminderFlow, alarmFlow) { reminders, alarms ->
-                    reminders + alarms
-                }
+                    (reminders + alarms).sortedBy { it.title.lowercase() }
+                }.onEach { _isLoading.value = false }
             }
         }
         .stateIn(
@@ -58,12 +75,17 @@ class SearchViewModel(
             initialValue = emptyList()
         )
 
+
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
     }
 
     fun onFilterChanged(filter: SearchFilter) {
         _activeFilter.value = filter
+    }
+
+    fun onCategoryChanged(category: String?) {
+        _selectedCategory.value = category
     }
 
     fun saveSearch(query: String) {
