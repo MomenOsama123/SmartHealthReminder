@@ -478,4 +478,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="welcome_back_name">Welcome back, %1$s</string>
     <string name="mark_done">Mark Done</string>
     <string name="cancel">Cancel</string>
+    <string name="category_for_rem_detail">Category:</string>
+    <string name="back_for_add_rem">Back</string>
+    <string name="save_alarm_protocol">Save Alarm Protocol</string>
 </resources>
