@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="52dp"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    tools:background="@color/primary"
+    tools:context=".features.schedule.ScheduleFragment">
 
     <TextView
         android:id="@+id/tv_day_number"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="14sp"/>
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        tools:text="15"
+        tools:background="@drawable/circle_white"
+        tools:textColor="@color/primary"/>
 
     <View
         android:id="@+id/view_dot"
@@ -20,7 +26,8 @@
         android:layout_height="5dp"
         android:layout_marginTop="2dp"
         android:background="@drawable/bg_rounded_pill"
-        android:backgroundTint="#FFFFFF"
-        android:visibility="invisible"/>
+        android:backgroundTint="@color/white"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
 
 </LinearLayout>

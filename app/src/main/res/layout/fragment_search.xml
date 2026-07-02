@@ -21,8 +21,8 @@
 
         <ImageButton
             android:id="@+id/btn_back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/content_desc_back"
             android:src="@drawable/ic_arrow_back"
@@ -57,6 +57,7 @@
                 android:padding="12dp"
                 android:src="@drawable/ic_close"
                 android:visibility="gone"
+                android:contentDescription="@string/clear_search"
                 app:tint="@color/text_secondary" />
         </FrameLayout>
     </LinearLayout>
@@ -78,7 +79,7 @@
             android:layout_marginTop="16dp"
             android:alpha="0.6"
             android:letterSpacing="0.1"
-            android:text="I AM LOOKING FOR"
+            android:text="@string/i_am_looking_for"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -94,25 +95,25 @@
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_filter_all"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="All" />
+                android:text="@string/all" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_filter_reminders"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reminders" />
+                android:text="@string/reminders" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chip_filter_alarms"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+                style="@style/Widget.Material3.Chip.Filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alarms" />
+                android:text="@string/alarms" />
 
         </com.google.android.material.chip.ChipGroup>
 
@@ -125,7 +126,7 @@
             android:layout_marginTop="20dp"
             android:alpha="0.6"
             android:letterSpacing="0.1"
-            android:text="SELECT CATEGORY"
+            android:text="@string/select_category"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -147,35 +148,31 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_cat_medicine"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Medicine"
-                    app:chipBackgroundColor="@color/surface" />
+                    android:text="@string/medicine" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_cat_appointment"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Appointment"
-                    app:chipBackgroundColor="@color/surface" />
+                    android:text="@string/appointment" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_cat_task"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Task"
-                    app:chipBackgroundColor="@color/surface" />
+                    android:text="@string/task" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_cat_custom"
-                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    style="@style/Widget.Material3.Chip.Filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Custom"
-                    app:chipBackgroundColor="@color/surface" />
+                    android:text="@string/custom" />
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
@@ -201,7 +198,7 @@
         android:paddingBottom="16dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_filters"
+        app:layout_constraintTop_toBottomOf="@id/progress_search"
         tools:listitem="@layout/item_search_reminder" />
 
     <!-- Suggestions (Visible when search is empty) -->
@@ -213,7 +210,7 @@
         android:paddingHorizontal="24dp"
         android:paddingTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_filters">
+        app:layout_constraintTop_toBottomOf="@id/progress_search">
 
         <!-- Recent Searches Section -->
         <RelativeLayout
@@ -228,7 +225,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.6"
             android:letterSpacing="0.1"
-            android:text="RECENT SEARCHES"
+            android:text="@string/recent_searches"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -238,7 +235,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="Clear All"
+                android:text="@string/clear_all"
                 android:textColor="@color/urgent"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -262,7 +259,7 @@
         android:layout_marginTop="16dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/container_filters" />
+        app:layout_constraintTop_toBottomOf="@id/progress_search" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

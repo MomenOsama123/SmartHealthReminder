@@ -24,8 +24,7 @@
         <item name="android:layout_marginTop">12dp</item>
         <item name="android:background">@drawable/bg_card_white_rounded</item>
         <item name="android:orientation">vertical</item>
-        <item name="android:paddingHorizontal">14dp</item>
-        <item name="android:paddingVertical">4dp</item>
+
     </style>
 
     <style name="SettingsRow">
@@ -34,14 +33,13 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">72dp</item>
         <item name="android:orientation">horizontal</item>
-        <item name="android:paddingVertical">10dp</item>
     </style>
 
     <style name="SettingsIcon">
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
         <item name="android:layout_marginEnd">14dp</item>
-        <item name="tint">@color/primary</item>
+        <item name="android:tint">@color/primary_dark</item>
     </style>
 
     <style name="SettingsTextGroup">
