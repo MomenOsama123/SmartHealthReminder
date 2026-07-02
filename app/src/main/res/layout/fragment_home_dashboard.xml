@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".features.fragment.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -40,18 +41,22 @@
                         android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_heart"
+                        android:contentDescription="@null"
                         app:tint="@color/text_dark" />
                 </FrameLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
                     android:text="@string/app_name"
                     android:textColor="@color/text_dark"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/searchIcon"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@id/logo_container"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -62,6 +67,7 @@
                     android:layout_marginEnd="12dp"
                     android:padding="8dp"
                     android:src="@drawable/ic_search"
+                    android:contentDescription="@string/content_desc_search"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/profileInfo"
                     app:layout_constraintTop_toTopOf="parent"
@@ -73,6 +79,7 @@
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_profile_placeholder"
+                    android:contentDescription="@string/profile"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -88,7 +95,7 @@
                 android:paddingVertical="6dp"
                 android:text="@string/rk_your_health_sanctuary"
                 android:textColor="@color/text_secondary"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -139,6 +146,7 @@
                             android:layout_height="20dp"
                             android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_calendar"
+                            android:contentDescription="@string/view_calendar"
                             android:foreground="?attr/selectableItemBackground"
                             android:clickable="true"
                             android:focusable="true"
@@ -150,7 +158,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:nestedScrollingEnabled="false"
-                        tools:listitem="@layout/item_reminder" />
+                        tools:listitem="@layout/item_welcome_reminder" />
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -181,10 +189,11 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chart_line"
+                            android:contentDescription="@null"
                             app:tint="@color/text_on_primary" />
                         <Space android:layout_width="wrap_content" android:layout_height="0dp" android:layout_weight="1" />
                         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/sleep_quality" android:textColor="@color/card_stat_accent_label" android:textSize="12sp" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="88%" android:textColor="@color/text_on_primary" android:textSize="24sp" android:textStyle="bold" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="88%" android:textColor="@color/text_on_primary" android:textSize="24sp" android:textStyle="bold" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -203,8 +212,8 @@
                         app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:gravity="center_vertical" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/daily_steps" android:textColor="@color/text_secondary" android:textSize="10sp" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="6,432" android:textColor="@color/text_dark" android:textSize="16sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/daily_steps" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="6,432" android:textColor="@color/text_dark" android:textSize="16sp" android:textStyle="bold" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                     <com.google.android.material.card.MaterialCardView
@@ -215,8 +224,8 @@
                         app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:gravity="center_vertical" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fatigue" android:textColor="@color/text_secondary" android:textSize="10sp" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Low" android:textColor="@color/text_dark" android:textSize="16sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fatigue" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="Low" android:textColor="@color/text_dark" android:textSize="16sp" android:textStyle="bold" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
@@ -231,7 +240,7 @@
                 app:cardCornerRadius="24dp"
                 app:cardElevation="0dp">
                 <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
-                    <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/img_breathe_bg" />
+                    <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:scaleType="centerCrop" android:src="@drawable/img_breathe_bg" android:contentDescription="@null" />
                     <View android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/bg_gradient_bottom" />
 
                     <LinearLayout

@@ -1,9 +1,25 @@
 package com.example.smarthealthreminder.features.settings
 
 import android.content.Context
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.smarthealthreminder.databinding.ActivitySettingsBinding
 
-class SettingsActivity {
+class SettingsActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySettingsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySettingsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+    }
+
     companion object {
         const val PREFS_NAME = "smart_health_settings"
         const val KEY_NOTIFICATIONS = "notifications_enabled"

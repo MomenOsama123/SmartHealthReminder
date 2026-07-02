@@ -24,8 +24,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.FragmentSettingsBinding
-import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
-import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity
 import com.google.firebase.auth.FirebaseAuth
 
@@ -131,14 +129,6 @@ class SettingsFragment : Fragment() {
                 prefKey = SettingsActivity.KEY_REMINDER_SNOOZE_MINUTES,
                 valueView = binding.tvReminderSnoozeValue
             )
-        }
-
-        binding.rowProfile.setOnClickListener {
-            startActivity(Intent(requireContext(), ProfileActivity::class.java))
-        }
-
-        binding.rowReports.setOnClickListener {
-            startActivity(Intent(requireContext(), ReportsActivity::class.java))
         }
 
         binding.btnLogout.setOnClickListener {

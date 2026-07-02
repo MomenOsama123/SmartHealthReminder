@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Control reminders, alarms, appearance, and account shortcuts."
+            android:text="@string/control_reminders_alarms_appearance_and_account_shortcuts"
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="Reminders and alarms"
+            android:text="@string/reminders_and_alarms"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -249,64 +249,6 @@
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown" />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider" />
-
-            <LinearLayout
-                android:id="@+id/row_profile"
-                style="@style/SettingsRow"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView
-                    style="@style/SettingsIcon"
-                    android:src="@drawable/ic_person" />
-                <LinearLayout
-                    style="@style/SettingsTextGroup">
-                    <TextView
-                        style="@style/SettingsTitle"
-                        android:text="Profile information" />
-                    <TextView
-                        style="@style/SettingsSubtitle"
-                        android:text="Update personal health details." />
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/text_tertiary" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/divider" />
-
-            <LinearLayout
-                android:id="@+id/row_reports"
-                style="@style/SettingsRow"
-                android:clickable="true"
-                android:focusable="true">
-                <ImageView
-                    style="@style/SettingsIcon"
-                    android:src="@drawable/ic_chart" />
-                <LinearLayout
-                    style="@style/SettingsTextGroup">
-                    <TextView
-                        style="@style/SettingsTitle"
-                        android:text="Health reports" />
-                    <TextView
-                        style="@style/SettingsSubtitle"
-                        android:text="Review weekly progress and insights." />
-                </LinearLayout>
-                <ImageView
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/text_tertiary" />
-            </LinearLayout>
         </LinearLayout>
 
         <Button
@@ -314,10 +256,10 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginTop="28dp"
-            android:background="@drawable/bg_rounded_card_red"
+            android:background="@color/missed"
             android:text="Log out"
             android:textAllCaps="false"
-            android:textColor="@color/missed"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
 

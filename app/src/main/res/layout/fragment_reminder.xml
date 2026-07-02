@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@color/background"
+    tools:context=".features.reminder.ReminderFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -42,7 +44,7 @@
             android:padding="16dp">
 
             <!-- Today's Reminders Header -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_today"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -50,7 +52,6 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/surface"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -76,9 +77,9 @@
                             android:id="@+id/tv_today_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_0"
                             android:textAppearance="@style/TextHeading1"
-                            android:textSize="36sp"/>
+                            android:textSize="36sp"
+                            tools:text="5"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -98,10 +99,10 @@
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Missed Card -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_missed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -109,7 +110,6 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/missed_light"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -136,10 +136,10 @@
                             android:id="@+id/tv_missed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_00"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"
-                            android:textColor="@color/missed"/>
+                            android:textColor="@color/missed"
+                            tools:text="02"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -161,10 +161,10 @@
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Completed Card -->
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_completed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -172,7 +172,6 @@
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp"
                 app:cardBackgroundColor="@color/success_light"
-                android:foreground="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -199,10 +198,10 @@
                             android:id="@+id/tv_completed_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/_00"
                             android:textAppearance="@style/TextHeading1"
                             android:textSize="36sp"
-                            android:textColor="@color/success"/>
+                            android:textColor="@color/success"
+                            tools:text="12"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -224,7 +223,7 @@
 
                 </LinearLayout>
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Timeline Header -->
             <LinearLayout
@@ -261,7 +260,8 @@
                 android:id="@+id/recycler_timeline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false"
+                tools:listitem="@layout/item_timeline"/>
 
             <!-- Add Reminder Button -->
             <com.google.android.material.button.MaterialButton
@@ -272,7 +272,6 @@
                 android:text="@string/add_reminder"
                 android:textAppearance="@style/TextButton"
                 android:textColor="@color/text_on_primary"
-                android:background="@drawable/bg_rounded_button_primary"
                 app:backgroundTint="@color/primary"
                 app:cornerRadius="12dp"/>
 

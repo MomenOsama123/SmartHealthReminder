@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="12dp"
@@ -33,13 +34,13 @@
                     style="@style/Widget.App.Chip"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=""
                     android:textColor="@color/medicine"
                     app:chipBackgroundColor="@color/medicine_light"
                     app:chipIcon="@drawable/ic_medicine"
                     app:chipIconTint="@color/medicine"
                     app:chipIconSize="14dp"
-                    android:textSize="11sp"/>
+                    android:textSize="11sp"
+                    tools:text="Medicine"/>
 
             </LinearLayout>
 
@@ -48,28 +49,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text=""
                 android:textAppearance="@style/TextHeading3"
-                android:textSize="28sp"/>
+                android:textSize="28sp"
+                tools:text="08:00"/>
 
             <TextView
                 android:id="@+id/tv_am_pm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
-                android:textAppearance="@style/TextCaption"/>
+                android:textAppearance="@style/TextCaption"
+                tools:text="AM"/>
 
             <TextView
                 android:id="@+id/tv_repeat_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text=""
-                android:textAppearance="@style/TextCaption"/>
+                android:textAppearance="@style/TextCaption"
+                tools:text="Daily"/>
 
         </LinearLayout>
 
-        <androidx.appcompat.widget.SwitchCompat
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/switch_alarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,4 +78,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

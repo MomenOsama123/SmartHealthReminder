@@ -86,7 +86,7 @@
             android:id="@+id/typingIndicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/serenepulse_is_thinking"
+            android:text="@string/Trusta_is_thinking"
             android:textSize="12sp"
             android:textColor="@color/text_secondary"
             android:paddingStart="12dp"
