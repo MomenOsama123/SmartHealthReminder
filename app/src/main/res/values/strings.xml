@@ -322,7 +322,10 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="medications">Medications</string>
     <string name="sleep_track">Sleep Track</string>
     <string name="forgot_password_icon_desc">forgot password icon</string>
+    <string name="save_alarm_protocol">Save Alarm </string>
+    <string name="back_for_add_rem">Back</string>
     <string name="set_alarm">Set Alarm</string>
+    <string name="category_for_rem_detail">Category</string>
     <string name="alarm_name">Alarm Name</string>
     <string name="alarm_hint">e.g., Morning Medication</string>
     <string name="time">Time</string>
