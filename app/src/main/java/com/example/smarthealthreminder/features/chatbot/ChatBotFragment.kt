@@ -1,5 +1,9 @@
 package com.example.smarthealthreminder.features.chatbot
 
+import android.net.ConnectivityManager
+import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -35,6 +39,17 @@ class ChatBotFragment : Fragment() {
     private val messages = mutableListOf<Message>()
     private lateinit var api: ApiService
 
+    private var connectivityManager: ConnectivityManager? = null
+    private val networkCallback = object : ConnectivityManager.NetworkCallback() {
+        override fun onAvailable(network: Network) {
+            activity?.runOnUiThread { updateConnectivityUI(true) }
+        }
+
+        override fun onLost(network: Network) {
+            activity?.runOnUiThread { updateConnectivityUI(false) }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,13 +62,15 @@ class ChatBotFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Initialize all lateinit properties first
         api = RetrofitClient.api
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-
-        setupRecyclerView()
+        
+        setupRecyclerView() // This initializes 'adapter'
         setupInput()
         setupListeners()
+        setupNetworkMonitoring()
         
         if (auth.currentUser != null) {
             loadMessages()
@@ -109,6 +126,10 @@ class ChatBotFragment : Fragment() {
         }
 
         binding.sendButton.setOnClickListener {
+            if (!isNetworkAvailable()) {
+                updateConnectivityUI(false)
+                return@setOnClickListener
+            }
             val userMessageText = binding.messageEditText.text.toString().trim()
             if (userMessageText.isEmpty()) return@setOnClickListener
 
@@ -122,13 +143,49 @@ class ChatBotFragment : Fragment() {
         }
     }
 
+    private fun setupNetworkMonitoring() {
+        val cm = context?.getSystemService(ConnectivityManager::class.java)
+        connectivityManager = cm
+        
+        cm?.let {
+            val networkRequest = NetworkRequest.Builder()
+                .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                .build()
+            it.registerNetworkCallback(networkRequest, networkCallback)
+        }
+        
+        // Initial check
+        updateConnectivityUI(isNetworkAvailable())
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val cm = connectivityManager ?: return false
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    }
+
+    private fun updateConnectivityUI(isOnline: Boolean) {
+        if (_binding == null) return
+        
+        binding.offlineBanner.visibility = if (isOnline) View.GONE else View.VISIBLE
+        updateSendButtonState(binding.messageEditText.text.toString())
+    }
+
     private fun updateSendButtonState(text: String) {
+        if (_binding == null) return
+
         val isNotEmpty = text.trim().isNotEmpty()
-        binding.sendButton.isEnabled = isNotEmpty
-        if (isNotEmpty) {
-            binding.sendButton.background.setTintList(null)
-        } else {
-            binding.sendButton.background.setTint(ContextCompat.getColor(requireContext(), R.color.text_tertiary))
+        val isOnline = isNetworkAvailable()
+        
+        binding.sendButton.isEnabled = isNotEmpty && isOnline
+        
+        context?.let { ctx ->
+            if (isNotEmpty && isOnline) {
+                binding.sendButton.background?.setTintList(null)
+            } else {
+                binding.sendButton.background?.setTint(ContextCompat.getColor(ctx, R.color.text_tertiary))
+            }
         }
     }
 
@@ -226,6 +283,7 @@ class ChatBotFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        connectivityManager?.unregisterNetworkCallback(networkCallback)
         _binding = null
     }
 }

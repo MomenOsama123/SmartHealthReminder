@@ -379,6 +379,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="i_understand">I Understand</string>
     <string name="Your_Trusted_HA">Your Trusted Health Assistant</string>
     <string name="ai_disclaimer_info">AI Disclaimer Info</string>
+    <string name="offline_message">No internet connection. Please check your network to send messages.</string>
     <string name="create_schedule_entry">Create Schedule Entry</string>
     <string name="title">Title</string>
     <string name="date_yyyy_mm_dd">Date (yyyy-MM-dd)</string>
