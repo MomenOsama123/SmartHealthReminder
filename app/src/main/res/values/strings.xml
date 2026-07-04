@@ -157,8 +157,6 @@
 
     <string name="skip_for_now">Skip for now</string>
 
-    <string name="serenepulse">SerenePulse</string>
-
     <string name="clinical_care_active">CLINICAL CARE ACTIVE</string>
 
     <string name="report_session_today">REPORT SESSION: TODAY</string>
@@ -317,7 +315,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="chatbot">ChatBot</string>
     <string name="back_arrow_into_the_main_page">Back arrow into the main page</string>
     <string name="describe_your_symptoms">Describe your symptoms...</string>
-    <string name="serenepulse_is_thinking">SerenePulse is thinking...</string>
+    <string name="Trusta_is_thinking">Trusta AI Assistant is thinking...</string>
     <string name="send">Send</string>
 
 

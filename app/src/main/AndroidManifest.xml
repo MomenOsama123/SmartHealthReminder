@@ -93,6 +93,10 @@
             android:turnScreenOn="true" />
 
         <activity
+            android:name=".features.settings.SettingsActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".features.search.SearchActivity"
             android:exported="false" />
         <activity
