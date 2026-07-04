@@ -274,7 +274,7 @@
                 android:autofillHints="Alarm"
                 android:background="@drawable/bg_input_field"
                 android:hint="@string/enter_alarm_label"
-                android:inputType="TODO"
+                android:inputType="text"
                 android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextBody1"
                 android:layout_marginBottom="24dp"/>

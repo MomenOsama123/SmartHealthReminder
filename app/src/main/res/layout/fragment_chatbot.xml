@@ -37,7 +37,7 @@
             <TextView
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
-                android:text="@string/clinical_care_active"
+                android:text="@string/Your_Trusted_HA"
                 android:textSize="12sp"
                 android:textColor="@color/text_secondary"/>
         </LinearLayout>

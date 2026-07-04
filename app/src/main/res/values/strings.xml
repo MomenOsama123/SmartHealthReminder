@@ -183,11 +183,9 @@
 
     <string name="vitamins">Vitamins</string>
 
-    //facebook
     <string name="facebook_app_id">924597597084563</string>
     <string name="fb_login_protocol_scheme">fb924597597084563</string>
     <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
-    ///////////
     <string name="login_text">Login</string>
 
     <string name="create_account_title">Create Account</string>
@@ -383,7 +381,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="i_understand">I Understand</string>
     <string name="Your_Trusted_HA">Your Trusted Health Assistant</string>
     <string name="ai_disclaimer_info">AI Disclaimer Info</string>
-    <string name="offline_message">No internet connection. Please check your network to send messages.</string>
     <string name="create_schedule_entry">Create Schedule Entry</string>
     <string name="title">Title</string>
     <string name="date_yyyy_mm_dd">Date (yyyy-MM-dd)</string>
@@ -490,4 +487,86 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="steps_count_sample">6,432</string>
     <string name="deep_breathe_title">Deep Breathe.</string>
     <string name="cancel">Cancel</string>
+
+    <string name="serenepulse_is_thinking">SerenePulse AI Assistant is thinking...</string>
+
+    <string name="step_2_of_2">Step 2 of 2</string>
+
+    <string name="_50">50%</string>
+
+    <string name="complete_your_profile">Complete Your Profile</string>
+
+    <string name="help_us_personalize_your_health_experience">
+    Help us personalize your health experience
+</string>
+
+    <string name="chronic_diseases_if_any">Chronic Diseases (if any)</string>
+
+    <string name="complete_profile">Complete Profile</string>
+
+    <string name="_5">5</string>
+
+    <string name="_3">3</string>
+
+    <string name="_2">2</string>
+
+    <string name="no_upcoming_medications">No upcoming medications</string>
+    <string name="phone_number">Phone number</string>
+    <string name="content_desc_edit_profile">Edit Profile Picture</string>
+    <string name="saved_reports">Saved Reports</string>
+    <string name="control_reminders">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="remainders_and_alarms">Reminders and alarms</string>
+    <string name="alarm_vibration">Alarm vibration</string>
+    <string name="vibration_desc">Vibrate while alarms and reminders alert you.</string>
+    <string name="early_reminders_title">Early reminders</string>
+    <string name="early_reminders_subtitle">Default to a 5-minute reminder before events.</string>
+    <string name="exact_alarm_title">Exact alarm permission</string>
+    <string name="exact_alarm_subtitle">Required for alarms to ring exactly on time.</string>
+    <string name="app_header">App</string>
+    <string name="appearance_title">Appearance</string>
+    <string name="appearance_subtitle">Choose light, dark, or match your device.</string>
+    <string name="profile_info_title">Profile information</string>
+    <string name="profile_info_subtitle">Update personal health details.</string>
+    <string name="health_reports_subtitle">Review weekly progress and insights.</string>
+    <string name="logout_button">Log out</string>
+    <!-- ================= Dashboard ================= -->
+
+    <string name="week">Week</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="recent_searches">RECENT SEARCHES</string>
+    <string name="clear_all">Clear All</string>
+    <string name="clear_search">Clear search</string>
+    <string name="i_am_looking_for">I AM LOOKING FOR</string>
+    <string name="all">All</string>
+    <string name="select_category">SELECT CATEGORY</string>
+
+    <!-- Settings -->
+    <string name="settings_description">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="reminders_and_alarms">Reminders and alarms</string>
+    <string name="notifications_desc">Allow reminders and alarm alerts to appear.</string>
+    <string name="alarm_vibration_desc">Vibrate while alarms and reminders alert you.</string>
+    <string name="early_reminders">Early reminders</string>
+    <string name="early_reminders_desc">Default to a 5-minute reminder before events.</string>
+    <string name="exact_alarm_permission">Exact alarm permission</string>
+    <string name="exact_alarm_permission_desc">Required for alarms to ring exactly on time.</string>
+    <string name="app_settings_label">App</string>
+    <string name="appearance">Appearance</string>
+    <string name="appearance_desc">Choose light, dark, or match your device.</string>
+    <string name="profile_info">Profile information</string>
+    <string name="profile_info_desc">Update personal health details.</string>
+    <string name="health_reports_desc">Review weekly progress and insights.</string>
+    <string name="logout">Log out</string>
+    <string name="log_out">Log out</string>
+    <string name="add">+ Add</string>
+    <string name="selected_date">Selected date</string>
+    <string name="no_events_for_this_day">No events for this day</string>
+    <string name="control_reminders_alarms_appearance_and_account_shortcuts">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="s">S</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+    <string name="f">F</string>
+    <string name="offline_message">No internet connection. Please check your network to send messages.</string>
+
 </resources>
