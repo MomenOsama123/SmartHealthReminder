@@ -11,6 +11,10 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="CircleImageView">
+        <item name="cornerSize">50%</item>
+    </style>
+
     <style name="Theme.SmartHealthReminder.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash_background</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>

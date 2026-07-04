@@ -22,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="20dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
         android:paddingTop="28dp"
         android:paddingBottom="28dp">
 
@@ -57,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/control_reminders_alarms_appearance_and_account_shortcuts"
+            android:text="@string/control_reminders"
             android:textColor="@color/text_secondary"
             android:textSize="14sp" />
 
@@ -65,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="@string/reminders_and_alarms"
+            android:text="@string/remainders_and_alarms"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -84,15 +85,16 @@
                 style="@style/SettingsRow">
                 <ImageView
                     style="@style/SettingsIcon"
-                    android:src="@drawable/ic_vibration" />
+                    android:src="@drawable/ic_vibration"
+                    android:contentDescription="@string/settings"/>
                 <LinearLayout
                     style="@style/SettingsTextGroup">
                     <TextView
                         style="@style/SettingsTitle"
-                        android:text="Alarm vibration" />
+                        android:text="@string/alarm_vibration" />
                     <TextView
                         style="@style/SettingsSubtitle"
-                        android:text="Vibrate while alarms and reminders alert you." />
+                        android:text="@string/vibration_desc" />
                 </LinearLayout>
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_vibration"
@@ -109,15 +111,16 @@
                 style="@style/SettingsRow">
                 <ImageView
                     style="@style/SettingsIcon"
-                    android:src="@drawable/ic_clock" />
+                    android:src="@drawable/ic_clock"
+                   tools:ignore="contentDescription" />
                 <LinearLayout
                     style="@style/SettingsTextGroup">
                     <TextView
                         style="@style/SettingsTitle"
-                        android:text="Early reminders" />
+                        android:text="@string/early_reminders_title" />
                     <TextView
                         style="@style/SettingsSubtitle"
-                        android:text="Default to a 5-minute reminder before events." />
+                        android:text="@string/early_reminders_subtitle" />
                 </LinearLayout>
                 <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_early_reminders"
@@ -137,7 +140,8 @@
                 android:focusable="true">
                 <ImageView
                     style="@style/SettingsIcon"
-                    android:src="@drawable/ic_snooze" />
+                    android:src="@drawable/ic_snooze"
+                    tools:ignore="contentDescription"/>
                 <LinearLayout
                     style="@style/SettingsTextGroup">
                     <TextView
@@ -168,7 +172,8 @@
                 android:focusable="true">
                 <ImageView
                     style="@style/SettingsIcon"
-                    android:src="@drawable/ic_snooze" />
+                    android:src="@drawable/ic_snooze"
+                    tools:ignore="contentDescription"/>
                 <LinearLayout
                     style="@style/SettingsTextGroup">
                     <TextView
@@ -199,21 +204,23 @@
                 android:focusable="true">
                 <ImageView
                     style="@style/SettingsIcon"
-                    android:src="@drawable/ic_bell" />
+                    android:src="@drawable/ic_bell"
+                    tools:ignore="contentDescription"/>
                 <LinearLayout
                     style="@style/SettingsTextGroup">
                     <TextView
                         style="@style/SettingsTitle"
-                        android:text="Exact alarm permission" />
+                        android:text="@string/exact_alarm_title" />
                     <TextView
                         style="@style/SettingsSubtitle"
-                        android:text="Required for alarms to ring exactly on time." />
+                        android:text="@string/exact_alarm_subtitle" />
                 </LinearLayout>
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/text_tertiary" />
+                    app:tint="@color/text_tertiary"
+                    tools:ignore="contentDescription"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -221,7 +228,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="App"
+            android:text="@string/app_header"
             android:textColor="@color/text_dark"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -233,21 +240,84 @@
                 style="@style/SettingsRow">
                 <ImageView
                     style="@style/SettingsIcon"
-                    android:src="@drawable/ic_dark_mode" />
+                    android:src="@drawable/ic_dark_mode"
+                    tools:ignore="contentDescription"/>
                 <LinearLayout
                     style="@style/SettingsTextGroup">
                     <TextView
                         style="@style/SettingsTitle"
-                        android:text="Appearance" />
+                        android:text="@string/appearance_title" />
                     <TextView
                         style="@style/SettingsSubtitle"
-                        android:text="Choose light, dark, or match your device." />
+                        android:text="@string/appearance_subtitle" />
                 </LinearLayout>
                 <Spinner
                     android:id="@+id/spinner_theme_mode"
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
                     android:spinnerMode="dropdown" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
+            <LinearLayout
+                android:id="@+id/row_profile"
+                style="@style/SettingsRow"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    style="@style/SettingsIcon"
+                    android:src="@drawable/ic_person"
+                    tools:ignore="contentDescription"/>
+                <LinearLayout
+                    style="@style/SettingsTextGroup">
+                    <TextView
+                        style="@style/SettingsTitle"
+                        android:text="@string/profile_info_title" />
+                    <TextView
+                        style="@style/SettingsSubtitle"
+                        android:text="@string/profile_info_subtitle" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_arrow_right"
+                    app:tint="@color/text_tertiary"
+                    tools:ignore="contentDescription"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider" />
+
+            <LinearLayout
+                android:id="@+id/row_reports"
+                style="@style/SettingsRow"
+                android:clickable="true"
+                android:focusable="true">
+                <ImageView
+                    style="@style/SettingsIcon"
+                    android:src="@drawable/ic_chart"
+                    tools:ignore="contentDescription"/>
+                <LinearLayout
+                    style="@style/SettingsTextGroup">
+                    <TextView
+                        style="@style/SettingsTitle"
+                        android:text="@string/health_reports" />
+                    <TextView
+                        style="@style/SettingsSubtitle"
+                        android:text="@string/health_reports_subtitle" />
+                </LinearLayout>
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:src="@drawable/ic_arrow_right"
+                    app:tint="@color/text_tertiary"
+                    tools:ignore="contentDescription"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -256,8 +326,8 @@
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:layout_marginTop="28dp"
-            android:background="@color/missed"
-            android:text="Log out"
+            android:background="@drawable/bg_rounded_card_red"
+            android:text="@string/logout_button"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="16sp"

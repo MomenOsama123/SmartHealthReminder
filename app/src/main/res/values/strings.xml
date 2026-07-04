@@ -70,6 +70,7 @@
     <string name="gluten_free_remedies">Gluten-free remedies</string>
 
     <string name="none_reported_mild_hypertension_managed_by_diet">None reported. Mild hypertension managed by diet.</string>
+    <string name="none_reported">None reported.</string>
     <string name="chronic_diseases">Chronic Diseases</string>
 
     <string name="weight_kg">Weight (kg)</string>
@@ -208,6 +209,7 @@
 
 
     <string name="app_name">Trusta App</string>
+    <string name="Trusta">Trusta</string>
     <string name="welcome_message">Welcome to Trusta App</string>
     <string name="subtitle_welcome">Your Smart Health Companion</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -475,37 +477,28 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="month">Month</string>
     <string name="welcome_back_name">Welcome back, %1$s</string>
     <string name="mark_done">Mark Done</string>
+    <string name="content_desc_logo">App Logo</string>
+    <string name="content_desc_profile">Profile Image</string>
+    <string name="sleep_percentage_88">88%</string>
+    <string name="steps_count_sample">6,432</string>
+    <string name="deep_breathe_title">Deep Breathe.</string>
     <string name="cancel">Cancel</string>
-    <string name="week">Week</string>
-    <string name="previous">Previous</string>
-    <string name="next">Next</string>
-    <string name="recent_searches">RECENT SEARCHES</string>
-    <string name="clear_all">Clear All</string>
-    <string name="clear_search">Clear search</string>
-    <string name="i_am_looking_for">I AM LOOKING FOR</string>
-    <string name="all">All</string>
-    <string name="select_category">SELECT CATEGORY</string>
-
-    <!-- Settings -->
-    <string name="settings_description">Control reminders, alarms, appearance, and account shortcuts.</string>
-    <string name="reminders_and_alarms">Reminders and alarms</string>
-    <string name="notifications_desc">Allow reminders and alarm alerts to appear.</string>
+    <string name="phone_number">Phone number</string>
+    <string name="content_desc_edit_profile">Edit Profile Picture</string>
+    <string name="saved_reports">Saved Reports</string>
+    <string name="control_reminders">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="remainders_and_alarms">Reminders and alarms</string>
     <string name="alarm_vibration">Alarm vibration</string>
-    <string name="alarm_vibration_desc">Vibrate while alarms and reminders alert you.</string>
-    <string name="early_reminders">Early reminders</string>
-    <string name="early_reminders_desc">Default to a 5-minute reminder before events.</string>
-    <string name="exact_alarm_permission">Exact alarm permission</string>
-    <string name="exact_alarm_permission_desc">Required for alarms to ring exactly on time.</string>
-    <string name="app_settings_label">App</string>
-    <string name="appearance">Appearance</string>
-    <string name="appearance_desc">Choose light, dark, or match your device.</string>
-    <string name="profile_info">Profile information</string>
-    <string name="profile_info_desc">Update personal health details.</string>
-    <string name="health_reports_desc">Review weekly progress and insights.</string>
-    <string name="logout">Log out</string>
-    <string name="log_out">Log out</string>
-    <string name="add">+ Add</string>
-    <string name="selected_date">Selected date</string>
-    <string name="no_events_for_this_day">No events for this day</string>
-    <string name="control_reminders_alarms_appearance_and_account_shortcuts">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="vibration_desc">Vibrate while alarms and reminders alert you.</string>
+    <string name="early_reminders_title">Early reminders</string>
+    <string name="early_reminders_subtitle">Default to a 5-minute reminder before events.</string>
+    <string name="exact_alarm_title">Exact alarm permission</string>
+    <string name="exact_alarm_subtitle">Required for alarms to ring exactly on time.</string>
+    <string name="app_header">App</string>
+    <string name="appearance_title">Appearance</string>
+    <string name="appearance_subtitle">Choose light, dark, or match your device.</string>
+    <string name="profile_info_title">Profile information</string>
+    <string name="profile_info_subtitle">Update personal health details.</string>
+    <string name="health_reports_subtitle">Review weekly progress and insights.</string>
+    <string name="logout_button">Log out</string>
 </resources>

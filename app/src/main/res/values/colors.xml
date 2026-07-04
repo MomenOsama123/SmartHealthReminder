@@ -18,7 +18,7 @@
     <!-- Text Colors -->
     <color name="text_primary">#1A1A1A</color>
     <color name="text_secondary">#666666</color>
-    <color name="text_tertiary">#999999</color>
+    <color name="text_tertiary">#757575</color>
     <color name="text_on_primary">#FFFFFF</color>
 
     <!-- Text -->
@@ -80,7 +80,7 @@
 
     <!-- Card & search accents -->
     <color name="card_stat_accent">#496455</color>
-    <color name="card_stat_accent_label">#A5B8AD</color>
+    <color name="card_stat_accent_label">#C5D5CB</color>
     <color name="banner_subtitle">#E0E0E0</color>
     <color name="search_accent">#3D5A4A</color>
     <color name="search_hint">#6E7D75</color>

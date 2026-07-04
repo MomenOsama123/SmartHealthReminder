@@ -17,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingHorizontal="24dp"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
             android:paddingTop="32dp"
             android:paddingBottom="112dp">
 
@@ -40,6 +41,7 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
+                        android:contentDescription="@string/content_desc_logo"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_heart"
                         app:tint="@color/text_dark" />
@@ -66,6 +68,7 @@
                     android:layout_marginEnd="12dp"
                     android:padding="8dp"
                     android:src="@drawable/ic_search"
+                    android:contentDescription="@string/search"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/profileInfo"
                     app:layout_constraintTop_toTopOf="parent"
@@ -78,6 +81,7 @@
                     android:layout_height="40dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_profile_placeholder"
+                    android:contentDescription="@string/content_desc_profile"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -90,11 +94,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
                 android:background="@drawable/bg_rounded_pill"
-                android:paddingHorizontal="12dp"
-                android:paddingVertical="6dp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp"
                 android:text="@string/rk_your_health_sanctuary"
                 android:textColor="@color/text_secondary"
-                android:textSize="10sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -138,16 +144,21 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_toStartOf="@id/iv_calendar_icon"
+                            android:layout_marginEnd="8dp"
                             android:text="@string/today_s_reminders"
                             android:textColor="@color/text_dark"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <ImageView
+                            android:id="@+id/iv_calendar_icon"
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_alignParentEnd="true"
                             android:src="@drawable/ic_calendar"
+                            android:contentDescription="@null"
                             app:tint="@color/text_tertiary" />
                     </RelativeLayout>
 
@@ -160,23 +171,25 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Stats Grid -->
-            <LinearLayout
+            <!-- Stats Grid - Refactored to ConstraintLayout to avoid nested weights -->
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:baselineAligned="false"
-                android:orientation="horizontal">
+                android:layout_height="200dp"
+                android:layout_marginTop="24dp">
 
                 <!-- Sleep Quality Card -->
                 <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_sleep"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_marginEnd="8dp"
-                    android:layout_weight="1"
                     app:cardBackgroundColor="@color/card_stat_accent"
                     app:cardCornerRadius="24dp"
-                    app:cardElevation="0dp">
+                    app:cardElevation="0dp"
+                    app:layout_constraintEnd_toStartOf="@+id/card_steps"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -188,6 +201,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_chart_line"
+                            android:contentDescription="@null"
                             app:tint="@color/text_on_primary" />
 
                         <Space
@@ -205,7 +219,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="88%"
+                            android:text="@string/sleep_percentage_88"
                             android:textColor="@color/text_on_primary"
                             android:textSize="28sp"
                             android:textStyle="bold" />
@@ -220,87 +234,89 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
-                <!-- Right Column -->
-                <LinearLayout
+                <!-- Steps Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_steps"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_marginStart="8dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="8dp"
+                    app:cardBackgroundColor="@color/surface_variant"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toTopOf="@+id/card_fatigue"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintStart_toEndOf="@id/card_sleep"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                    <!-- Steps Card -->
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="@color/surface_variant"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp">
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:padding="20dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/daily_steps"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/daily_steps"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/steps_count_sample"
+                            android:textColor="@color/text_dark"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="6,432"
-                                android:textColor="@color/text_dark"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
+                <!-- Fatigue Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/card_fatigue"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    app:cardBackgroundColor="@color/surface_variant"
+                    app:cardCornerRadius="24dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/card_sleep"
+                    app:layout_constraintTop_toBottomOf="@id/card_steps">
 
-                    <!-- Fatigue Card -->
-                    <com.google.android.material.card.MaterialCardView
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="1"
-                        app:cardBackgroundColor="@color/surface_variant"
-                        app:cardCornerRadius="24dp"
-                        app:cardElevation="0dp">
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="20dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:padding="20dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/fatigue"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/fatigue"
-                                android:textColor="@color/text_secondary"
-                                android:textSize="10sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="Low"
-                                android:textColor="@color/text_dark"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
-                        </LinearLayout>
-                    </com.google.android.material.card.MaterialCardView>
-                </LinearLayout>
-            </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/low"
+                            android:textColor="@color/text_dark"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <!-- Feature Banner -->
@@ -319,7 +335,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/img_breathe_bg" />
+                        android:src="@drawable/img_breathe_bg"
+                        android:contentDescription="@null" />
 
                     <!-- Gradient Overlay for text readability -->
                     <View
@@ -337,7 +354,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Deep Breathe."
+                            android:text="@string/deep_breathe_title"
                             android:textColor="@color/text_on_primary"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -346,7 +363,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
-                            android:text="Today's air is clean and restorative."
+                            android:text="@string/today_s_air_is_clean_and_restorative"
                             android:textColor="@color/banner_subtitle"
                             android:textSize="12sp" />
                     </LinearLayout>

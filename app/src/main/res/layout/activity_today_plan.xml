@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/background">
+    android:background="@color/background"
+    android:orientation="vertical">
 
     <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:orientation="horizontal"
         android:padding="16dp">
 
         <ImageButton
@@ -21,14 +21,14 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_arrow_back"
-            android:contentDescription="@string/back"/>
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_arrow_back" />
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="16dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <TextView
@@ -37,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/today_s_plan"
                 android:textAppearance="@style/TextHeading2"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary" />
 
             <TextView
                 android:id="@+id/tv_count"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/_0_items"
                 android:textAppearance="@style/TextCaption"
-                android:textColor="@color/text_secondary"/>
+                android:textColor="@color/text_secondary" />
 
         </LinearLayout>
 
@@ -68,25 +68,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:text="@string/today_s_schedule"
                 android:textAppearance="@style/TextBody1"
-                android:textColor="@color/text_primary"
-                android:layout_marginBottom="8dp"/>
+                android:textColor="@color/text_primary" />
 
             <!-- Empty State -->
             <LinearLayout
                 android:id="@+id/layout_empty"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:orientation="vertical"
                 android:gravity="center"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:alpha="0.3"
                     android:src="@drawable/ic_schedule"
-                    android:alpha="0.3"/>
+                    tools:ignore="contentDescription" />
 
                 <TextView
                     android:id="@+id/tv_empty_message"
@@ -95,7 +96,7 @@
                     android:layout_marginTop="16dp"
                     android:text="@string/you_don_t_have_any_plans_scheduled_for_today"
                     android:textAppearance="@style/TextBody2"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary" />
 
             </LinearLayout>
 
@@ -105,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
             <!-- Section 2: Quick Actions -->
             <TextView
@@ -115,81 +116,81 @@
                 android:layout_marginBottom="8dp"
                 android:text="@string/quick_actions"
                 android:textAppearance="@style/TextBody1"
-                android:textColor="@color/text_primary"/>
+                android:textColor="@color/text_primary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_reminder"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:text="@string/reminder"
-                    android:textSize="11sp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/primary"
+                    android:text="@string/reminder"
                     android:textColor="@color/white"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_pill"
-                    app:iconTint="@color/white"
-                    app:iconGravity="textStart"/>
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_alarm"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="@string/alarm"
-                    android:textSize="11sp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/urgent"
+                    android:text="@string/alarm"
                     android:textColor="@color/white"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_bell"
-                    app:iconTint="@color/white"
-                    app:iconGravity="textStart"/>
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="8dp">
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_add_note"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:layout_marginEnd="4dp"
-                    android:text="@string/note"
-                    android:textSize="11sp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/success"
+                    android:text="@string/note"
                     android:textColor="@color/white"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_edit"
-                    app:iconTint="@color/white"
-                    app:iconGravity="textStart"/>
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_create_report"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_weight="1"
                     android:layout_marginStart="4dp"
-                    android:text="@string/report"
-                    android:textSize="11sp"
+                    android:layout_weight="1"
                     android:backgroundTint="@color/primary_dark"
+                    android:text="@string/report"
                     android:textColor="@color/white"
+                    android:textSize="11sp"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_chart"
-                    app:iconTint="@color/white"
-                    app:iconGravity="textStart"/>
+                    app:iconGravity="textStart"
+                    app:iconTint="@color/white" />
 
             </LinearLayout>
 
@@ -197,14 +198,14 @@
                 android:id="@+id/btn_open_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="@string/open_full_schedule"
-                android:textSize="12sp"
                 android:backgroundTint="@color/surface_variant"
+                android:text="@string/open_full_schedule"
                 android:textColor="@color/text_primary"
+                android:textSize="12sp"
                 app:cornerRadius="12dp"
                 app:icon="@drawable/ic_schedule"
-                app:iconTint="@color/text_primary"
-                app:iconGravity="textStart"/>
+                app:iconGravity="textStart"
+                app:iconTint="@color/text_primary" />
 
         </LinearLayout>
 
