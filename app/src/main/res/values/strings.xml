@@ -501,4 +501,37 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="profile_info_subtitle">Update personal health details.</string>
     <string name="health_reports_subtitle">Review weekly progress and insights.</string>
     <string name="logout_button">Log out</string>
+    <!-- ================= Dashboard ================= -->
+
+    <string name="week">Week</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="recent_searches">RECENT SEARCHES</string>
+    <string name="clear_all">Clear All</string>
+    <string name="clear_search">Clear search</string>
+    <string name="i_am_looking_for">I AM LOOKING FOR</string>
+    <string name="all">All</string>
+    <string name="select_category">SELECT CATEGORY</string>
+
+    <!-- Settings -->
+    <string name="settings_description">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="reminders_and_alarms">Reminders and alarms</string>
+    <string name="notifications_desc">Allow reminders and alarm alerts to appear.</string>
+    <string name="alarm_vibration_desc">Vibrate while alarms and reminders alert you.</string>
+    <string name="early_reminders">Early reminders</string>
+    <string name="early_reminders_desc">Default to a 5-minute reminder before events.</string>
+    <string name="exact_alarm_permission">Exact alarm permission</string>
+    <string name="exact_alarm_permission_desc">Required for alarms to ring exactly on time.</string>
+    <string name="app_settings_label">App</string>
+    <string name="appearance">Appearance</string>
+    <string name="appearance_desc">Choose light, dark, or match your device.</string>
+    <string name="profile_info">Profile information</string>
+    <string name="profile_info_desc">Update personal health details.</string>
+    <string name="health_reports_desc">Review weekly progress and insights.</string>
+    <string name="logout">Log out</string>
+    <string name="log_out">Log out</string>
+    <string name="add">+ Add</string>
+    <string name="selected_date">Selected date</string>
+    <string name="no_events_for_this_day">No events for this day</string>
+    <string name="control_reminders_alarms_appearance_and_account_shortcuts">Control reminders, alarms, appearance, and account shortcuts.</string>
 </resources>
