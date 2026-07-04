@@ -83,7 +83,7 @@
     <color name="card_stat_accent_label">#C5D5CB</color>
     <color name="banner_subtitle">#E0E0E0</color>
     <color name="search_accent">#3D5A4A</color>
-    <color name="search_hint">#6E7D75</color>
+    <color name="search_hint">#5F6C65</color>
     <color name="chip_stroke_warm">#E6E1D3</color>
     <color name="card_warm_tan">#EBE0CD</color>
     <color name="card_mint">#D1EAE0</color>
@@ -100,5 +100,9 @@
     <color name="schedule_on_primary_accent">#B0D4BF</color>
     <color name="schedule_overlay_bg">#20FFFFFF</color>
     <color name="schedule_on_primary_text">#FFFFFF</color>
+    <color name="button_primary_contrast">#5A7364</color>
+    <color name="primary_green_accessible">#5A7364</color>
+    <color name="primary_accessible">#5A7364</color>
+
 
 </resources>
