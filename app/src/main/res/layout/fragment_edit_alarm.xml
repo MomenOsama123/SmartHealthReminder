@@ -20,8 +20,8 @@
 
             <ImageButton
                 android:id="@+id/btn_back"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_back"
                 android:contentDescription="@string/back"/>
@@ -187,7 +187,7 @@
                     android:layout_height="40dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/s"
+                    android:text="@string/sunday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -198,7 +198,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/m"
+                    android:text="@string/monday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -209,7 +209,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/t"
+                    android:text="@string/tuesday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -220,7 +220,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/w"
+                    android:text="@string/wednesday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -231,7 +231,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/t"
+                    android:text="@string/thursday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -242,7 +242,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/f"
+                    android:text="@string/friday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -253,7 +253,7 @@
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_day_circle_unselected"
                     android:gravity="center"
-                    android:text="@string/s"
+                    android:text="@string/saturday"
                     android:textAppearance="@style/TextBody2"
                     android:textColor="@color/text_secondary"/>
 
@@ -272,8 +272,10 @@
                 android:id="@+id/et_alarm_label"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
+                android:autofillHints="Alarm"
                 android:background="@drawable/bg_input_field"
                 android:hint="@string/enter_alarm_label"
+                android:inputType="text"
                 android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextBody1"
                 android:layout_marginBottom="24dp"

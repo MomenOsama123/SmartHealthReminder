@@ -33,7 +33,7 @@ class SettingsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val prefs by lazy {
-        requireContext().getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
+        requireContext().getSharedPreferences(SettingsPrefs.PREFS_NAME, Context.MODE_PRIVATE)
     }
 
     override fun onCreateView(
@@ -54,26 +54,26 @@ class SettingsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.switchNotifications.setOnCheckedChangeListener(null)
-        binding.switchNotifications.isChecked = prefs.getBoolean(SettingsActivity.KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
+        binding.switchNotifications.isChecked = prefs.getBoolean(SettingsPrefs.KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
         setupNotificationSwitchListener()
     }
 
     private fun loadValues() {
-        binding.switchNotifications.isChecked = prefs.getBoolean(SettingsActivity.KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
-        binding.switchVibration.isChecked = prefs.getBoolean(SettingsActivity.KEY_VIBRATION, true)
-        binding.switchEarlyReminders.isChecked = prefs.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
+        binding.switchNotifications.isChecked = prefs.getBoolean(SettingsPrefs.KEY_NOTIFICATIONS, true) && areNotificationsAllowed()
+        binding.switchVibration.isChecked = prefs.getBoolean(SettingsPrefs.KEY_VIBRATION, true)
+        binding.switchEarlyReminders.isChecked = prefs.getBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, true)
         binding.spinnerThemeMode.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
             listOf("Light", "Dark", "Same as device")
         )
-        binding.spinnerThemeMode.setSelection(themeModeToPosition(prefs.getString(SettingsActivity.KEY_THEME_MODE, SettingsActivity.THEME_LIGHT)))
+        binding.spinnerThemeMode.setSelection(themeModeToPosition(prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT)))
         updateSnoozeValueLabels()
     }
 
     private fun updateSnoozeValueLabels() {
-        binding.tvAlarmSnoozeValue.text = formatSnoozeMinutes(SettingsActivity.getAlarmSnoozeMinutes(requireContext()))
-        binding.tvReminderSnoozeValue.text = formatSnoozeMinutes(SettingsActivity.getReminderSnoozeMinutes(requireContext()))
+        binding.tvAlarmSnoozeValue.text = formatSnoozeMinutes(SettingsPrefs.getAlarmSnoozeMinutes(requireContext()))
+        binding.tvReminderSnoozeValue.text = formatSnoozeMinutes(SettingsPrefs.getReminderSnoozeMinutes(requireContext()))
     }
 
     private fun formatSnoozeMinutes(minutes: Int): String {
@@ -86,23 +86,23 @@ class SettingsFragment : Fragment() {
         setupNotificationSwitchListener()
 
         binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsActivity.KEY_VIBRATION, isChecked).apply()
+            prefs.edit().putBoolean(SettingsPrefs.KEY_VIBRATION, isChecked).apply()
         }
 
         binding.switchEarlyReminders.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsActivity.KEY_EARLY_REMINDERS, isChecked).apply()
+            prefs.edit().putBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, isChecked).apply()
         }
 
         binding.spinnerThemeMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val themeMode = positionToThemeMode(position)
-                if (prefs.getString(SettingsActivity.KEY_THEME_MODE, SettingsActivity.THEME_LIGHT) == themeMode) return
+                if (prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT) == themeMode) return
 
                 prefs.edit()
-                    .putString(SettingsActivity.KEY_THEME_MODE, themeMode)
-                    .putBoolean(SettingsActivity.KEY_DARK_MODE, themeMode == SettingsActivity.THEME_DARK)
+                    .putString(SettingsPrefs.KEY_THEME_MODE, themeMode)
+                    .putBoolean(SettingsPrefs.KEY_DARK_MODE, themeMode == SettingsPrefs.THEME_DARK)
                     .apply()
-                AppCompatDelegate.setDefaultNightMode(SettingsActivity.getSavedNightMode(requireContext()))
+                AppCompatDelegate.setDefaultNightMode(SettingsPrefs.getSavedNightMode(requireContext()))
                 requireActivity().recreate()
             }
 
@@ -116,8 +116,8 @@ class SettingsFragment : Fragment() {
         binding.rowAlarmSnooze.setOnClickListener {
             showSnoozeDurationDialog(
                 title = getString(R.string.settings_alarm_snooze_title),
-                currentMinutes = SettingsActivity.getAlarmSnoozeMinutes(requireContext()),
-                prefKey = SettingsActivity.KEY_ALARM_SNOOZE_MINUTES,
+                currentMinutes = SettingsPrefs.getAlarmSnoozeMinutes(requireContext()),
+                prefKey = SettingsPrefs.KEY_ALARM_SNOOZE_MINUTES,
                 valueView = binding.tvAlarmSnoozeValue
             )
         }
@@ -125,8 +125,8 @@ class SettingsFragment : Fragment() {
         binding.rowReminderSnooze.setOnClickListener {
             showSnoozeDurationDialog(
                 title = getString(R.string.settings_reminder_snooze_title),
-                currentMinutes = SettingsActivity.getReminderSnoozeMinutes(requireContext()),
-                prefKey = SettingsActivity.KEY_REMINDER_SNOOZE_MINUTES,
+                currentMinutes = SettingsPrefs.getReminderSnoozeMinutes(requireContext()),
+                prefKey = SettingsPrefs.KEY_REMINDER_SNOOZE_MINUTES,
                 valueView = binding.tvReminderSnoozeValue
             )
         }
@@ -138,7 +138,7 @@ class SettingsFragment : Fragment() {
 
     private fun setupNotificationSwitchListener() {
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsActivity.KEY_NOTIFICATIONS, isChecked).apply()
+            prefs.edit().putBoolean(SettingsPrefs.KEY_NOTIFICATIONS, isChecked).apply()
             if (isChecked) {
                 requestNotificationPermissionIfNeeded()
             } else {
@@ -154,7 +154,7 @@ class SettingsFragment : Fragment() {
             ActivityCompat.requestPermissions(
                 requireActivity(),
                 arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                SettingsActivity.REQUEST_NOTIFICATIONS
+                SettingsPrefs.REQUEST_NOTIFICATIONS
             )
         }
     }
@@ -201,8 +201,8 @@ class SettingsFragment : Fragment() {
         valueView: TextView
     ) {
         val picker = NumberPicker(requireContext()).apply {
-            minValue = SettingsActivity.MIN_SNOOZE_MINUTES
-            maxValue = SettingsActivity.MAX_SNOOZE_MINUTES
+            minValue = SettingsPrefs.MIN_SNOOZE_MINUTES
+            maxValue = SettingsPrefs.MAX_SNOOZE_MINUTES
             value = currentMinutes
             wrapSelectorWheel = false
         }
@@ -212,7 +212,7 @@ class SettingsFragment : Fragment() {
             .setView(picker)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.save) { _, _ ->
-                val minutes = picker.value.coerceIn(SettingsActivity.MIN_SNOOZE_MINUTES, SettingsActivity.MAX_SNOOZE_MINUTES)
+                val minutes = picker.value.coerceIn(SettingsPrefs.MIN_SNOOZE_MINUTES, SettingsPrefs.MAX_SNOOZE_MINUTES)
                 prefs.edit().putInt(prefKey, minutes).apply()
                 valueView.text = formatSnoozeMinutes(minutes)
                 Toast.makeText(
@@ -241,17 +241,17 @@ class SettingsFragment : Fragment() {
 
     private fun themeModeToPosition(themeMode: String?): Int {
         return when (themeMode) {
-            SettingsActivity.THEME_DARK -> 1
-            SettingsActivity.THEME_SYSTEM -> 2
+            SettingsPrefs.THEME_DARK -> 1
+            SettingsPrefs.THEME_SYSTEM -> 2
             else -> 0
         }
     }
 
     private fun positionToThemeMode(position: Int): String {
         return when (position) {
-            1 -> SettingsActivity.THEME_DARK
-            2 -> SettingsActivity.THEME_SYSTEM
-            else -> SettingsActivity.THEME_LIGHT
+            1 -> SettingsPrefs.THEME_DARK
+            2 -> SettingsPrefs.THEME_SYSTEM
+            else -> SettingsPrefs.THEME_LIGHT
         }
     }
 

@@ -13,6 +13,12 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+
 
     <!-- Fix: Package Visibility for Android 11+ (API 30+) -->
     <queries>
@@ -39,9 +45,9 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity
-            android:name=".ui.DashboardActivity"
-            android:exported="true" />
+        <activity android:name=".ui_dashboard.DashboardActivity"
+            android:exported="true"
+            />
 
         <activity
             android:name=".features.welcome.WelcomeActivity"
@@ -92,9 +98,7 @@
             android:showWhenLocked="true"
             android:turnScreenOn="true" />
 
-        <activity
-            android:name=".features.settings.SettingsActivity"
-            android:exported="false" />
+
 
         <activity
             android:name=".features.search.SearchActivity"

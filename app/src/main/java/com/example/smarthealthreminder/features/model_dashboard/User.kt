@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.model_d
+package com.example.smarthealthreminder.features.model_dashboard
 
 import com.google.firebase.firestore.PropertyName
 
@@ -16,6 +16,9 @@ data class User(
     val allergies: String = "",
     val emergencyContact: String = "",
     val profileImage: String? = null,
+    val dailyStepGoal: Int = 10000,
+    val dailyWaterGoal: Int = 2000,
+    val sleepGoalHours: Double = 8.0,
     @get:PropertyName("isProfileCompleted")
     @set:PropertyName("isProfileCompleted")
     var isProfileCompleted: Boolean = false

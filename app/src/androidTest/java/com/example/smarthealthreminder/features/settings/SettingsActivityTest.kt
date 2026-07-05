@@ -14,17 +14,17 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 @LargeTest
-class SettingsActivityTest {
+class SettingsPrefsTest {
 
     @Test
-    fun settingsActivity_launchesSuccessfully() {
-        ActivityScenario.launch(SettingsActivity::class.java)
+    fun SettingsPrefs_launchesSuccessfully() {
+        ActivityScenario.launch(SettingsPrefs::class.java)
         onView(withId(R.id.switch_notifications)).check(matches(isDisplayed()))
     }
 
     @Test
     fun backButton_finishesActivity() {
-        ActivityScenario.launch(SettingsActivity::class.java).use { scenario ->
+        ActivityScenario.launch(SettingsPrefs::class.java).use { scenario ->
             onView(withId(R.id.btn_back)).perform(click())
             scenario.onActivity { assert(it.isFinishing || it.isDestroyed) }
         }
@@ -32,13 +32,13 @@ class SettingsActivityTest {
 
     @Test
     fun themeSpinner_isVisible() {
-        ActivityScenario.launch(SettingsActivity::class.java)
+        ActivityScenario.launch(SettingsPrefs::class.java)
         onView(withId(R.id.spinner_theme_mode)).check(matches(isDisplayed()))
     }
 
     @Test
     fun bottomNavigation_isVisible() {
-        ActivityScenario.launch(SettingsActivity::class.java)
+        ActivityScenario.launch(SettingsPrefs::class.java)
         onView(withId(R.id.bottom_navigation)).check(matches(isDisplayed()))
     }
 }

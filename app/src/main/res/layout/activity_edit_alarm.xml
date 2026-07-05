@@ -20,8 +20,8 @@
 
             <ImageButton
                 android:id="@+id/btn_back"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_back"
                 android:contentDescription="@string/back"/>
@@ -64,6 +64,8 @@
                 android:hint="@string/alarm_hint"
                 android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextBody1"
+                android:inputType="text"
+                android:autofillHints="@null"
                 android:layout_marginBottom="24dp"/>
 
             <!-- Time Picker -->
@@ -101,7 +103,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sun_initial"
+                    android:text="@string/sunday"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -109,7 +111,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/mon_initial"
+                    android:text="@string/monday"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -117,7 +119,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/tue_initial"
+                    android:text="@string/tuesday"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -125,7 +127,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/wed_initial"
+                    android:text="@string/wednesday"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -133,7 +135,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/thu_initial"
+                    android:text="@string/thursday"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -141,7 +143,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fri_initial"
+                    android:text="@string/friday"
                     android:checkable="true"/>
 
                 <com.google.android.material.chip.Chip
@@ -149,7 +151,7 @@
                     style="@style/Widget.App.Chip.Selectable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/sat_initial"
+                    android:text="@string/saturday"
                     android:checkable="true"/>
 
             </com.google.android.material.chip.ChipGroup>

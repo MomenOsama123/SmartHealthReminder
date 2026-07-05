@@ -5,10 +5,33 @@ import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
 import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.entity.StepEntity
 import kotlinx.coroutines.flow.Flow
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 
 class HealthRepository(private val database: AppDatabase) {
+
+    // Step Operations
+    fun getStepByDate(date: String): Flow<StepEntity?> = database.stepDao().getStepByDate(date)
+    fun getLastSevenDaysSteps(): Flow<List<StepEntity>> = database.stepDao().getLastSevenDaysSteps()
+    suspend fun insertOrUpdateStep(step: StepEntity) = database.stepDao().insertOrUpdateStep(step)
+    suspend fun updateTodayProgress(date: String, steps: Int, calories: Int, distance: Double, activeMin: Int) =
+        database.stepDao().updateTodayProgress(date, steps, calories, distance, activeMin)
+
+    suspend fun updateSleepQuality(date: String, quality: Int) =
+        database.stepDao().updateSleepQuality(date, quality)
+
+    suspend fun updateFatigueLevel(date: String, level: String) =
+        database.stepDao().updateFatigueLevel(date, level)
+
+    suspend fun updateWaterIntake(date: String, ml: Int) =
+        database.stepDao().updateWaterIntake(date, ml)
+
+    suspend fun updateHeartRate(date: String, bpm: Int) =
+        database.stepDao().updateHeartRate(date, bpm)
+
+    suspend fun updateTargetSteps(date: String, target: Int) =
+        database.stepDao().updateTargetSteps(date, target)
 
     // Alarm Operations
     fun getAllAlarms(): Flow<List<AlarmEntity>> = database.alarmDao().getAllAlarms()
@@ -21,8 +44,8 @@ class HealthRepository(private val database: AppDatabase) {
         database.alarmDao().updateAlarmStatus(id, isActive)
     suspend fun markAlarmCompleted(id: String) =
         database.alarmDao().updateLastTriggeredStatus(id, "Completed")
-    suspend fun markAlarmSnoozed(id: String) =
-        database.alarmDao().updateLastTriggeredStatus(id, "Snoozed")
+    suspend fun markAlarmSnoozed(id: String, snoozeMinutes: Int) =
+        database.alarmDao().updateSnoozeStatus(id, "Snoozed", snoozeMinutes)
     suspend fun resetAlarmToPending(id: String) =
         database.alarmDao().updateLastTriggeredStatus(id, "Pending")
 

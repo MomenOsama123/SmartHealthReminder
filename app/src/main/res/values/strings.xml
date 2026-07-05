@@ -3,6 +3,10 @@
 
     <!-- ================= Dashboard ================= -->
 
+    <string name="content_desc_profile_avatar">User profile picture</string>
+    <string name="content_desc_medication_icon">Medication icon</string>
+    <string name="content_desc_add_medication">Add medication</string>
+
     <string name="app_rname" translatable="false">Good Morning, Elena</string>
 
     <string name="adherence_percent" translatable="false">72%</string>
@@ -70,6 +74,7 @@
     <string name="gluten_free_remedies">Gluten-free remedies</string>
 
     <string name="none_reported_mild_hypertension_managed_by_diet">None reported. Mild hypertension managed by diet.</string>
+    <string name="none_reported">None reported.</string>
     <string name="chronic_diseases">Chronic Diseases</string>
 
     <string name="weight_kg">Weight (kg)</string>
@@ -178,11 +183,9 @@
 
     <string name="vitamins">Vitamins</string>
 
-    //facebook
     <string name="facebook_app_id">924597597084563</string>
     <string name="fb_login_protocol_scheme">fb924597597084563</string>
     <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
-    ///////////
     <string name="login_text">Login</string>
 
     <string name="create_account_title">Create Account</string>
@@ -208,6 +211,7 @@
 
 
     <string name="app_name">Trusta App</string>
+    <string name="Trusta">Trusta</string>
     <string name="welcome_message">Welcome to Trusta App</string>
     <string name="subtitle_welcome">Your Smart Health Companion</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -368,6 +372,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="settings_snooze_minutes_value">%1$d min</string>
     <string name="settings_snooze_saved">Snooze duration set to %1$d minutes</string>
     <string name="snoozed_for_minutes">Snoozed for %1$d minutes</string>
+    <string name="snooze_button_label">Snooze %1$d m</string>
     <string name="save">Save</string>
     <string name="why_joinUs">Your trusted companion for\nmedication management,reminders\n,and healthy routines.</string>
     <string name="already_have_an_account">Already have an account?</string>
@@ -454,11 +459,13 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="no_alarms_set_yet_ntap_to_add_your_first_alarm">No alarms set yet\nTap + to add your first alarm</string>
     <string name="edit_alarm">Edit Alarm</string>
     <string name="for_time1">:</string>
-    <string name="s">S</string>
-    <string name="m">M</string>
-    <string name="t">T</string>
-    <string name="w">W</string>
-    <string name="f">F</string>
+    <string name="sunday">Sunday</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
     <string name="alarm_label">ALARM LABEL</string>
     <string name="enter_alarm_label">Enter alarm label</string>
     <string name="sound">SOUND</string>
@@ -478,7 +485,56 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="month">Month</string>
     <string name="welcome_back_name">Welcome back, %1$s</string>
     <string name="mark_done">Mark Done</string>
+    <string name="content_desc_logo">App Logo</string>
+    <string name="content_desc_profile">Profile Image</string>
+    <string name="sleep_percentage_88">88%</string>
+    <string name="steps_count_sample">6,432</string>
+    <string name="deep_breathe_title">Deep Breathe.</string>
     <string name="cancel">Cancel</string>
+
+    <string name="serenepulse_is_thinking">SerenePulse AI Assistant is thinking...</string>
+
+    <string name="step_2_of_2">Step 2 of 2</string>
+
+    <string name="_50">50%</string>
+
+    <string name="complete_your_profile">Complete Your Profile</string>
+
+    <string name="help_us_personalize_your_health_experience">
+    Help us personalize your health experience
+</string>
+
+    <string name="chronic_diseases_if_any">Chronic Diseases (if any)</string>
+
+    <string name="complete_profile">Complete Profile</string>
+
+    <string name="_5">5</string>
+
+    <string name="_3">3</string>
+
+    <string name="_2">2</string>
+
+    <string name="no_upcoming_medications">No upcoming medications</string>
+    <string name="phone_number">Phone number</string>
+    <string name="content_desc_edit_profile">Edit Profile Picture</string>
+    <string name="saved_reports">Saved Reports</string>
+    <string name="control_reminders">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="remainders_and_alarms">Reminders and alarms</string>
+    <string name="alarm_vibration">Alarm vibration</string>
+    <string name="vibration_desc">Vibrate while alarms and reminders alert you.</string>
+    <string name="early_reminders_title">Early reminders</string>
+    <string name="early_reminders_subtitle">Default to a 5-minute reminder before events.</string>
+    <string name="exact_alarm_title">Exact alarm permission</string>
+    <string name="exact_alarm_subtitle">Required for alarms to ring exactly on time.</string>
+    <string name="app_header">App</string>
+    <string name="appearance_title">Appearance</string>
+    <string name="appearance_subtitle">Choose light, dark, or match your device.</string>
+    <string name="profile_info_title">Profile information</string>
+    <string name="profile_info_subtitle">Update personal health details.</string>
+    <string name="health_reports_subtitle">Review weekly progress and insights.</string>
+    <string name="logout_button">Log out</string>
+    <!-- ================= Dashboard ================= -->
+
     <string name="week">Week</string>
     <string name="previous">Previous</string>
     <string name="next">Next</string>
@@ -493,7 +549,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="settings_description">Control reminders, alarms, appearance, and account shortcuts.</string>
     <string name="reminders_and_alarms">Reminders and alarms</string>
     <string name="notifications_desc">Allow reminders and alarm alerts to appear.</string>
-    <string name="alarm_vibration">Alarm vibration</string>
     <string name="alarm_vibration_desc">Vibrate while alarms and reminders alert you.</string>
     <string name="early_reminders">Early reminders</string>
     <string name="early_reminders_desc">Default to a 5-minute reminder before events.</string>
@@ -511,4 +566,84 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="selected_date">Selected date</string>
     <string name="no_events_for_this_day">No events for this day</string>
     <string name="control_reminders_alarms_appearance_and_account_shortcuts">Control reminders, alarms, appearance, and account shortcuts.</string>
+    <string name="s">S</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+    <string name="f">F</string>
+    <string name="offline_message">No internet connection. Please check your network to send messages.</string>
+
+    <string name="bot_message">Bot message</string>
+    <string name="user_message">User message</string>
+    <string name="dot_separator"> • </string>
+    <string name="content_desc_notifications">Notifications</string>
+    <string name="notifications_subtitle">Allow reminders and alarm alerts to appear.</string>
+    <string name="content_desc_actions">Actions</string>
+    <string name="due_at_time">Due at 9:00 AM</string>
+    <string name="show_password">Show password</string>
+    <string name="marked_done">Marked as done</string>
+    <string name="no_medication">No medication to mark</string>
+    <string name="no_medication_to_snooze">No medication to snooze</string>
+    <string name="snoozed">Snoozed for 10 minutes</string>
+    <string name="not_yet_time">Not yet time! Wait until %1$s</string>
+    <string name="not_yet_time_short">Not yet time!</string>
+
+    <!-- Greetings -->
+    <string name="greeting_morning">Good Morning
+%1$s ☀️</string>
+    <string name="greeting_afternoon">Good Afternoon
+%1$s 🌤️</string>
+    <string name="greeting_evening">Good Evening
+%1$s 🌅</string>
+    <string name="greeting_night">Good Night
+%1$s 🌙</string>
+
+    <!-- UI Texts -->
+    <string name="no_more_meds">No more medications</string>
+    <string name="no_more_meds_today">No more medications for today 🎉</string>
+
+    <!-- Dialog Options -->
+
+    <string name="snooze_10_min">Snooze 10 min</string>
+
+
+    <!-- Format Strings (to avoid setText concatenation warnings) -->
+    <string name="percentage_format">%1$d%%</string>
+    <string name="med_name_dosage_format">%1$s - %2$s</string>
+
+    <!-- Status Prefixes for Upcoming List -->
+    <string name="taken_prefix">✅ %1$s</string>
+    <string name="snoozed_prefix">⏰ %1$s</string>
+    <string name="missed_prefix">❌ %1$s</string>
+
+    <!-- Dosage Suffixes -->
+    <string name="taken_dosage_suffix">%1$s • Taken</string>
+    <string name="snoozed_dosage_suffix">%1$s • Snoozed</string>
+    <string name="missed_dosage_suffix">%1$s • Missed</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="today_s_progress">TODAY\'S PROGRESS</string>
+    <string name="zerosSample">0000</string>
+    <string name="_10_000_steps">/ 10,000 steps</string>
+    <string name="calories_related_icon">Calories Related Icon</string>
+    <string name="_6_2">6.2</string>
+    <string name="kilometers">KILOMETERS</string>
+    <string name="distance_related_icon">Distance Related Icon</string>
+    <string name="_412">412</string>
+    <string name="kcal_burned">KCAL BURNED</string>
+    <string name="time_related_icon">Time Related Icon</string>
+    <string name="_48">48</string>
+    <string name="active_min">ACTIVE MIN</string>
+    <string name="start_activity">START ACTIVITY</string>
+    <string name="reset_progress">RESET PROGRESS</string>
+    <string name="weekly_pulse">Weekly Pulse</string>
+    <string name="average_7_850_steps">Average: 7,850 steps</string>
+    <string name="last_7_days">LAST 7 DAYS</string>
+    <string name="quot_keep_it_up_quot">\"Keep it up!\"</string>
+    <string name="start_evening">START EVENING</string>
+    <string name="you_re_only_1_568_steps_away_from_your_daily_goal_a_short_15_minute_walk_this_evening_will_close_the_ring">You\'re only 1,568 steps away from your daily goal. A short 15-minute walk this evening will close the ring.</string>
+    <string name="steps_tracker">Steps Tracker</string>
+    <string name="motivation_desc_format">You\'re only %1$s steps away from your daily goal. A short %2$d-minute walk this evening will close the ring.</string>
+    <string name="dosage_progress_format">%1$d of %2$d</string>
+    <string name="dosage_remaining_format">%1$d remaining</string>
+    <string name="daily_steps_tracker">Daily Steps Tracker</string>
 </resources>

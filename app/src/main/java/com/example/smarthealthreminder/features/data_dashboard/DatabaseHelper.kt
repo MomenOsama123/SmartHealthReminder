@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.data_d
+package com.example.smarthealthreminder.features.data_dashboard
 
 import android.content.ContentValues
 import android.content.Context
@@ -6,13 +6,13 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.smarthealthreminder.features.model.Alarm
 import com.example.smarthealthreminder.features.model.Reminder
-import com.example.smarthealthreminder.features.model_d.User
-import com.example.smarthealthreminder.features.model_d.Medication
-import com.example.smarthealthreminder.features.model_d.DailyDose
-import com.example.smarthealthreminder.features.model_d.DoseStatus
-import com.example.smarthealthreminder.features.model_d.HealthMetric
-import com.example.smarthealthreminder.features.model_d.MetricType
-import com.example.smarthealthreminder.features.model_d.MedicationStats
+import com.example.smarthealthreminder.features.model_dashboard.User
+import com.example.smarthealthreminder.features.model_dashboard.Medication
+import com.example.smarthealthreminder.features.model_dashboard.DailyDose
+import com.example.smarthealthreminder.features.model_dashboard.DoseStatus
+import com.example.smarthealthreminder.features.model_dashboard.HealthMetric
+import com.example.smarthealthreminder.features.model_dashboard.MetricType
+import com.example.smarthealthreminder.features.model_dashboard.MedicationStats
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -21,12 +21,12 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.alarm.ReminderScheduler
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import android.widget.LinearLayout
-import com.example.smarthealthreminder.features.data_d.DatabaseHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.navigation.BottomNavHelper
-import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.settings.SettingsPrefs
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
@@ -170,9 +170,9 @@ class AddReminderActivity : AppCompatActivity() {
         rowRecurrence = findViewById(R.id.row_recurrence)
         tvRecurrenceValue = findViewById(R.id.tv_recurrence_value)
 
-        val settings = getSharedPreferences(SettingsActivity.PREFS_NAME, MODE_PRIVATE)
-        switchEarlyNotification.isChecked = settings.getBoolean(SettingsActivity.KEY_EARLY_REMINDERS, true)
-        switchVibration.isChecked = settings.getBoolean(SettingsActivity.KEY_VIBRATION, true)
+        val settings = getSharedPreferences(SettingsPrefs.PREFS_NAME, MODE_PRIVATE)
+        switchEarlyNotification.isChecked = settings.getBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, true)
+        switchVibration.isChecked = settings.getBoolean(SettingsPrefs.KEY_VIBRATION, true)
 
         if (!isEditMode) {
             val calendar = Calendar.getInstance()

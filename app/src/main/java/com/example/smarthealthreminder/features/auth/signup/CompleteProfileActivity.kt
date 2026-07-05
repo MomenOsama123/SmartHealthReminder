@@ -1,8 +1,11 @@
 package com.example.smarthealthreminder.features.auth.signup
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.EditText
@@ -10,10 +13,11 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.ActivityCompleteProfileBinding
-import com.example.smarthealthreminder.features.data_d.DatabaseHelper
-import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
+import com.example.smarthealthreminder.features.model_dashboard.User
 import com.example.smarthealthreminder.features.util.ImageUtils
 import androidx.core.graphics.drawable.toBitmap
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -43,6 +47,17 @@ class CompleteProfileActivity : AppCompatActivity() {
         }
     }
 
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.all { it.value }
+        if (allGranted) {
+            showImageSourceDialog()
+        } else {
+            Toast.makeText(this, "Permissions are required to change profile image", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCompleteProfileBinding.inflate(layoutInflater)
@@ -66,16 +81,43 @@ class CompleteProfileActivity : AppCompatActivity() {
     }
 
     private fun showImageSourceDialog() {
-        val options = arrayOf("Take Photo", "Choose from Gallery")
-        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
-            .setTitle("Profile Photo")
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> captureImageLauncher.launch(null)
-                    1 -> pickImageLauncher.launch("image/*")
-                }
-            }
-            .show()
+        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        val view = layoutInflater.inflate(R.layout.dialog_image_source, null)
+
+        view.findViewById<android.view.View>(R.id.btn_camera).setOnClickListener {
+            checkCameraPermissionAndLaunch()
+            bottomSheetDialog.dismiss()
+        }
+
+        view.findViewById<android.view.View>(R.id.btn_gallery).setOnClickListener {
+            checkGalleryPermissionAndLaunch()
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(view)
+        bottomSheetDialog.show()
+    }
+
+    private fun checkCameraPermissionAndLaunch() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            captureImageLauncher.launch(null)
+        } else {
+            requestPermissionLauncher.launch(arrayOf(Manifest.permission.CAMERA))
+        }
+    }
+
+    private fun checkGalleryPermissionAndLaunch() {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+            pickImageLauncher.launch("image/*")
+        } else {
+            requestPermissionLauncher.launch(arrayOf(permission))
+        }
     }
 
     private fun setupListeners() {

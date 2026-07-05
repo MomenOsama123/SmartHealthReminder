@@ -15,13 +15,13 @@ import android.os.Vibrator
 import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.AlarmRingingActivity
-import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.settings.SettingsPrefs
 
 class AlarmService : Service() {
 
     private var mediaPlayer: MediaPlayer? = null
     private var vibrator: Vibrator? = null
-    private var isRunning = false  // ← عشان نمنع تشغيل الصوت أكتر من مرة
+    private var isRunning = false
 
     companion object {
         const val CHANNEL_ID = "alarm_channel"
@@ -172,9 +172,9 @@ class AlarmService : Service() {
 
     private fun startVibration() {
         val vibrationEnabled = getSharedPreferences(
-            SettingsActivity.PREFS_NAME,
+            SettingsPrefs.PREFS_NAME,
             Context.MODE_PRIVATE
-        ).getBoolean(SettingsActivity.KEY_VIBRATION, true)
+        ).getBoolean(SettingsPrefs.KEY_VIBRATION, true)
 
         if (!vibrationEnabled) return
 
