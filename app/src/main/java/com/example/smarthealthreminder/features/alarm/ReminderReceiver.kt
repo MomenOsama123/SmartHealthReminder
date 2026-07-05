@@ -16,8 +16,9 @@ import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
+import com.example.smarthealthreminder.features.alarm.ReminderScheduler
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
-import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.settings.SettingsPrefs
 import com.example.smarthealthreminder.features.activity.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -85,8 +86,8 @@ class ReminderReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d("REMINDER_RECEIVER", "onReceive action=${intent.action}, extras=${intent.extras?.keySet()?.toList()}")
 
-        val settings = context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
-        if (!settings.getBoolean(SettingsActivity.KEY_NOTIFICATIONS, true)) {
+        val settings = context.getSharedPreferences(SettingsPrefs.PREFS_NAME, Context.MODE_PRIVATE)
+        if (!settings.getBoolean(SettingsPrefs.KEY_NOTIFICATIONS, true)) {
             Log.d("REMINDER_RECEIVER", "Notifications disabled in settings")
             return
         }
@@ -157,8 +158,8 @@ class ReminderReceiver : BroadcastReceiver() {
             ?: if (intent.hasExtra("alarm_id")) "alarm" else "reminder"
 
         val vibrationEnabled = intent.getBooleanExtra(EXTRA_VIBRATION, false) &&
-                context.getSharedPreferences(SettingsActivity.PREFS_NAME, Context.MODE_PRIVATE)
-                    .getBoolean(SettingsActivity.KEY_VIBRATION, true)
+                context.getSharedPreferences(SettingsPrefs.PREFS_NAME, Context.MODE_PRIVATE)
+                    .getBoolean(SettingsPrefs.KEY_VIBRATION, true)
 
         val snoozeUsed = intent.getBooleanExtra(EXTRA_SNOOZE_USED, false)
 
@@ -302,7 +303,7 @@ class ReminderReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            val snoozeMinutes = SettingsActivity.getReminderSnoozeMinutes(context)
+            val snoozeMinutes = SettingsPrefs.getReminderSnoozeMinutes(context)
 
             builder
                 .addAction(R.drawable.ic_check, "Taken", takenPendingIntent)
@@ -456,7 +457,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
         dismissNotification(context, intent)
 
-        val snoozeMinutes = SettingsActivity.getReminderSnoozeMinutes(context)
+        val snoozeMinutes = SettingsPrefs.getReminderSnoozeMinutes(context)
         val calendar = Calendar.getInstance().apply {
             add(Calendar.MINUTE, snoozeMinutes)
         }

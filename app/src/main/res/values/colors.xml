@@ -17,7 +17,7 @@
 
     <!-- Text Colors -->
     <color name="text_primary">#1A1A1A</color>
-    <color name="text_secondary">#616161</color>
+    <color name="text_secondary">#666666</color>
     <color name="text_tertiary">#757575</color>
     <color name="text_on_primary">#FFFFFF</color>
 
