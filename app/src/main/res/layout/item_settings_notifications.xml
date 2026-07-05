@@ -4,16 +4,18 @@
 
     <ImageView
         style="@style/SettingsIcon"
-        android:src="@drawable/ic_notifications" />
+        android:src="@drawable/ic_notifications"
+        android:contentDescription="@string/content_desc_notifications"/>
 
     <LinearLayout
         style="@style/SettingsTextGroup">
         <TextView
             style="@style/SettingsTitle"
-            android:text="Notifications" />
+            android:text="@string/notifications"/>
         <TextView
             style="@style/SettingsSubtitle"
-            android:text="Allow reminders and alarm alerts to appear." />
+            android:text="@string/notifications_subtitle"
+            />
     </LinearLayout>
 
     <androidx.appcompat.widget.SwitchCompat

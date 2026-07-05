@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.example.smarthealthreminder.databinding.BottomSheetQuickActionsBinding
 import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
-import com.example.smarthealthreminder.ui.DashboardActivity
+import com.example.smarthealthreminder.ui_dashboard.DashboardActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class QuickActionsBottomSheet : BottomSheetDialogFragment() {

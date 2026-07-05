@@ -20,7 +20,7 @@ import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActiv
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.util.ImageUtils
-import com.example.smarthealthreminder.features.data_d.DatabaseHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.activity.MainActivity

@@ -6,7 +6,7 @@ import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEn
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
-import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.model_dashboard.User
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

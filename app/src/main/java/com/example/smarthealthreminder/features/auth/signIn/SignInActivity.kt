@@ -12,8 +12,8 @@ import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
-import com.example.smarthealthreminder.features.data_d.DatabaseHelper
-import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
+import com.example.smarthealthreminder.features.model_dashboard.User
 
 class SignInActivity : AppCompatActivity() {
 

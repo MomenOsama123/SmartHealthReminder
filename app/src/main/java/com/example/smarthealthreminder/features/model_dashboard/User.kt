@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.model_d
+package com.example.smarthealthreminder.features.model_dashboard
 
 import com.google.firebase.firestore.PropertyName
 

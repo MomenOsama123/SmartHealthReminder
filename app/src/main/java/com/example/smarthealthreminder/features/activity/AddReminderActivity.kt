@@ -21,13 +21,12 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.alarm.ReminderScheduler
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import android.widget.LinearLayout
-import com.example.smarthealthreminder.features.data_d.DatabaseHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
-import com.example.smarthealthreminder.features.activity.MainActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.util.*
