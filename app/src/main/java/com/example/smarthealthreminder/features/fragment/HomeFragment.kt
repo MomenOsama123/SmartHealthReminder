@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -30,6 +31,7 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 class HomeFragment : Fragment() {
 
@@ -60,6 +62,21 @@ class HomeFragment : Fragment() {
         setupClickListeners()
         observeReminders()
         setupProfileObservation()
+        observeHealthStats()
+    }
+
+    private fun observeHealthStats() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.todaySteps.collect { steps ->
+                    steps?.let {
+                        binding.tvDailySteps.text = String.format(Locale.getDefault(), "%,d", it.steps)
+                    } ?: run {
+                        binding.tvDailySteps.text = "0"
+                    }
+                }
+            }
+        }
     }
 
     private fun setupProfileObservation() {
@@ -158,9 +175,24 @@ class HomeFragment : Fragment() {
             }
             startActivity(intent)
         }
+        binding.cvRemindingDoses.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REMINDERS)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
         binding.btnRefreshTip.setOnClickListener {
             refreshDailyTip()
         }
+        binding.cvDailySteps.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_INSIGHTS)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
+
     }
 
     private fun refreshDailyTip() {
@@ -218,16 +250,29 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allReminders.collect { entities ->
                     val today = RecurrenceHelper.getTodayString()
-                    val todayReminders = entities
+                    
+                    val totalTodayReminders = entities.filter { entity ->
+                        RecurrenceHelper.isDueOnDate(
+                            reminderDate = entity.date,
+                            recurrenceType = entity.recurrenceType,
+                            isRecurring = entity.isRecurring,
+                            targetDate = today
+                        )
+                    }
+
+                    val completedToday = totalTodayReminders.count { it.status.equals("Completed", ignoreCase = true) }
+                    val totalCount = totalTodayReminders.size
+                    
+                    if (totalCount > 0) {
+                        binding.reminding.text = getString(R.string.dosage_progress_format, completedToday, totalCount)
+                    } else {
+                        binding.reminding.text = "No doses today"
+                    }
+
+                    val todayReminders = totalTodayReminders
                         .filter { entity ->
-                            val isActive = entity.status.equals("Pending", ignoreCase = true) ||
+                            entity.status.equals("Pending", ignoreCase = true) ||
                                     entity.status.equals("Snoozed", ignoreCase = true)
-                            isActive && RecurrenceHelper.isDueOnDate(
-                                reminderDate = entity.date,
-                                recurrenceType = entity.recurrenceType,
-                                isRecurring = entity.isRecurring,
-                                targetDate = today
-                            )
                         }
                         .sortedBy { it.time ?: "99:99" }
 

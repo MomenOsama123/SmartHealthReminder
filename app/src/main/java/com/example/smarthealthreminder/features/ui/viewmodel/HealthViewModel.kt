@@ -6,12 +6,103 @@ import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEn
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.entity.StepEntity
 import com.example.smarthealthreminder.features.model_dashboard.User
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
+
+    // Steps
+    private val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    
+    val todaySteps: StateFlow<StepEntity?> = repository.getStepByDate(todayDate)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    
+    val lastSevenDaysSteps: StateFlow<List<StepEntity>> = repository.getLastSevenDaysSteps()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    /**
+     * Updates today's steps and automatically calculates calories and distance.
+     * Formula used:
+     * - Calories: steps * 0.04 (approx. walking burn)
+     * - Distance: steps * 0.0008 (approx. km per step)
+     */
+    fun updateSteps(steps: Int, activeMin: Int) = viewModelScope.launch {
+        val calories = (steps * 0.04).toInt()
+        val distance = steps * 0.0008
+        val target = currentUser.value?.dailyStepGoal ?: 10000
+
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(todayDate, steps, target, calories, distance, activeMin))
+        } else {
+            repository.updateTodayProgress(todayDate, steps, calories, distance, activeMin)
+        }
+    }
+    
+    fun resetSteps() = viewModelScope.launch {
+        val target = currentUser.value?.dailyStepGoal ?: 10000
+        repository.insertOrUpdateStep(StepEntity(todayDate, 0, target, 0, 0.0, 0))
+    }
+
+    fun updateSleepQuality(quality: Int) = viewModelScope.launch {
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(date = todayDate, sleepQuality = quality))
+        } else {
+            repository.updateSleepQuality(todayDate, quality)
+        }
+    }
+
+    fun updateFatigueLevel(level: String) = viewModelScope.launch {
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(date = todayDate, fatigueLevel = level))
+        } else {
+            repository.updateFatigueLevel(todayDate, level)
+        }
+    }
+
+    fun updateWaterIntake(ml: Int) = viewModelScope.launch {
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(date = todayDate, waterIntakeMl = ml))
+        } else {
+            repository.updateWaterIntake(todayDate, ml)
+        }
+    }
+
+    fun updateHeartRate(bpm: Int) = viewModelScope.launch {
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(date = todayDate, heartRateBpm = bpm))
+        } else {
+            repository.updateHeartRate(todayDate, bpm)
+        }
+    }
+
+    fun updateDailyGoal(target: Int) = viewModelScope.launch {
+        // Update current day's target in steps table
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(date = todayDate, targetSteps = target))
+        } else {
+            repository.updateTargetSteps(todayDate, target)
+        }
+
+        // Update user profile goal
+        currentUser.value?.let { user ->
+            val updatedUser = user.copy(dailyStepGoal = target)
+            updateCurrentUser(updatedUser)
+            // Note: Ideally this should also be saved to Firestore/Local database here
+            // but we'll stick to the current VM state for now as per project pattern.
+        }
+    }
 
     // Alarms
     val allAlarms: StateFlow<List<AlarmEntity>> = repository.getAllAlarms()

@@ -16,8 +16,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-
     <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+
 
     <!-- Fix: Package Visibility for Android 11+ (API 30+) -->
     <queries>
