@@ -1,4 +1,5 @@
 package com.example.smarthealthreminder.features.model_dashboard
+
 data class DailyAdherence(
     val date: String,
     val totalDoses: Int,

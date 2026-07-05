@@ -241,7 +241,8 @@ class DashboardActivity : AppCompatActivity() {
                             action = ReminderReceiver.ACTION_SNOOZE
                             putExtra(ReminderReceiver.EXTRA_REMINDER_ID, reminder.id)
                             putExtra(ReminderReceiver.EXTRA_TYPE, "reminder")
-                            putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title.orEmpty())
+                            // FIX: reminder.title is a non-null String, .orEmpty() was redundant
+                            putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title)
                             putExtra(ReminderReceiver.EXTRA_DESCRIPTION, reminder.description.orEmpty())
                         }
                         sendBroadcast(intent)
@@ -275,7 +276,8 @@ class DashboardActivity : AppCompatActivity() {
             sharedPref.edit { putString("USER_NAME", userName) }
         }
 
-        val userName = sharedPref.getString("USER_NAME", "User") ?: "User"
+        // FIX: getString(key, "User") already can't return null here, the trailing "?: "User"" was redundant
+        val userName = sharedPref.getString("USER_NAME", "User")
 
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greetingRes = when (hour) {
@@ -362,7 +364,7 @@ class DashboardActivity : AppCompatActivity() {
                     minutes = reminderMinutes,
                     type = "reminder",
                     category = reminder.category,
-                    status = reminder.status ?: "Pending"
+                    status = reminder.status
                 ))
             }
 
@@ -452,7 +454,8 @@ class DashboardActivity : AppCompatActivity() {
 
             allItems.add(ScheduleItem(
                 id = reminder.id,
-                name = reminder.title.orEmpty(),
+                // FIX: reminder.title is a non-null String, .orEmpty() was redundant
+                name = reminder.title,
                 dosage = reminder.description.orEmpty(),
                 time = reminder.time.orEmpty(),
                 minutes = reminderMinutes,
@@ -554,7 +557,8 @@ class DashboardActivity : AppCompatActivity() {
                                 action = ReminderReceiver.ACTION_SNOOZE
                                 putExtra(ReminderReceiver.EXTRA_REMINDER_ID, reminder.id)
                                 putExtra(ReminderReceiver.EXTRA_TYPE, "reminder")
-                                putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title.orEmpty())
+                                // FIX: reminder.title is a non-null String, .orEmpty() was redundant
+                                putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title)
                                 putExtra(ReminderReceiver.EXTRA_DESCRIPTION, reminder.description.orEmpty())
                             }
                             sendBroadcast(intent)

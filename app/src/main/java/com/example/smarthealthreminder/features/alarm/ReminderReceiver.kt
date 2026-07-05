@@ -16,7 +16,6 @@ import androidx.core.app.NotificationCompat
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
-import com.example.smarthealthreminder.features.alarm.ReminderScheduler
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import com.example.smarthealthreminder.features.settings.SettingsActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
@@ -194,8 +193,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     context,
                     reminderId,
                     title,
-                    System.currentTimeMillis() + WARNING_DELAY_MILLIS,
-                    NORMAL_WARNING_TO_MISSED_MINUTES
+                    System.currentTimeMillis() + WARNING_DELAY_MILLIS
                 )
                 scheduleMissedConversion(context, reminderId, System.currentTimeMillis() + MISSED_DELAY_MILLIS)
             }
@@ -433,7 +431,7 @@ class ReminderReceiver : BroadcastReceiver() {
             sendRefreshBroadcast(context)
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val medicineName = reminder.title ?: "Medicine"
+            val medicineName = reminder.title
 
             val notification = NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
@@ -476,7 +474,6 @@ class ReminderReceiver : BroadcastReceiver() {
             } catch (e: Exception) {
                 Log.e("REMINDER_RECEIVER", "Failed to update Room alarm status", e)
             }
-            val alarmHelper = AlarmHelper(context)
         } else {
             val db = AppDatabase.getDatabase(context)
 
@@ -488,8 +485,8 @@ class ReminderReceiver : BroadcastReceiver() {
             cancelWarningNotification(context, id)
             cancelMissedConversion(context, id)
 
-            // Schedule snooze alarm with snoozeUsed=true
-            scheduleReminderSnooze(context, id, snoozeTriggerMillis, originalTitle, originalDescription, snoozeMinutes, true)
+            // Schedule snooze alarm (snoozeUsed is always true for this call path)
+            scheduleReminderSnooze(context, id, snoozeTriggerMillis, originalTitle, originalDescription)
 
             Log.d("REMINDER_RECEIVER", "Reminder snoozed: $id at $newTime")
         }
@@ -500,9 +497,7 @@ class ReminderReceiver : BroadcastReceiver() {
         reminderId: String,
         triggerAtMillis: Long,
         title: String,
-        description: String,
-        snoozeMinutes: Int,
-        snoozeUsed: Boolean = false
+        description: String
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
@@ -515,7 +510,7 @@ class ReminderReceiver : BroadcastReceiver() {
             putExtra(EXTRA_TYPE, "reminder")
             putExtra(EXTRA_TITLE, title)
             putExtra(EXTRA_DESCRIPTION, description)
-            putExtra(EXTRA_SNOOZE_USED, snoozeUsed)
+            putExtra(EXTRA_SNOOZE_USED, true)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -531,15 +526,14 @@ class ReminderReceiver : BroadcastReceiver() {
             pendingIntent
         )
 
-        Log.d("REMINDER_RECEIVER", "Snooze alarm scheduled at $triggerAtMillis (snoozeUsed=$snoozeUsed)")
+        Log.d("REMINDER_RECEIVER", "Snooze alarm scheduled at $triggerAtMillis")
     }
 
     private fun scheduleWarningNotification(
         context: Context,
         reminderId: String,
         medicineName: String,
-        triggerAtMillis: Long,
-        missedMinutes: Int
+        triggerAtMillis: Long
     ) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
@@ -551,7 +545,7 @@ class ReminderReceiver : BroadcastReceiver() {
             action = ACTION_WARNING
             putExtra(EXTRA_REMINDER_ID, reminderId)
             putExtra(EXTRA_TITLE, medicineName)
-            putExtra(EXTRA_MISSED_MINUTES, missedMinutes)
+            putExtra(EXTRA_MISSED_MINUTES, NORMAL_WARNING_TO_MISSED_MINUTES)
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
@@ -567,7 +561,7 @@ class ReminderReceiver : BroadcastReceiver() {
             pendingIntent
         )
 
-        Log.d("REMINDER_RECEIVER", "Warning alarm scheduled at $triggerAtMillis for $reminderId (missedMinutes=$missedMinutes)")
+        Log.d("REMINDER_RECEIVER", "Warning alarm scheduled at $triggerAtMillis for $reminderId")
     }
 
     private fun scheduleMissedConversion(

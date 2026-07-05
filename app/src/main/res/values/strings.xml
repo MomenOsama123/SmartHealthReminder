@@ -568,8 +568,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="w">W</string>
     <string name="f">F</string>
     <string name="offline_message">No internet connection. Please check your network to send messages.</string>
-    <?xml version="1.0" encoding="utf-8"?>
-
 
         <string name="bot_message">Bot message</string>
         <string name="user_message">User message</string>
