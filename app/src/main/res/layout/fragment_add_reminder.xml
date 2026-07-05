@@ -186,7 +186,11 @@
                     android:paddingHorizontal="16dp"
                     android:textAppearance="@style/TextBody1"
                     android:drawableEnd="@drawable/ic_calendar"
-                    android:drawableTint="@color/text_tertiary"/>
+                    android:drawableTint="@color/text_tertiary"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:cursorVisible="false"
+                    android:inputType="none"/>
 
                 <EditText
                     android:id="@+id/et_time"
@@ -199,7 +203,11 @@
                     android:paddingHorizontal="16dp"
                     android:textAppearance="@style/TextBody1"
                     android:drawableEnd="@drawable/ic_clock"
-                    android:drawableTint="@color/text_tertiary"/>
+                    android:drawableTint="@color/text_tertiary"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:cursorVisible="false"
+                    android:inputType="none"/>
 
             </LinearLayout>
 
