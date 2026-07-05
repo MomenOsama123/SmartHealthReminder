@@ -117,13 +117,32 @@
                                 android:textSize="48sp"
                                 android:textStyle="bold" />
 
-                            <TextView
-                                android:id="@+id/tvTargetSteps"
+                            <LinearLayout
+                                android:id="@+id/layoutTargetSteps"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/_10_000_steps"
-                                android:textColor="@color/text_muted"
-                                android:textSize="14sp" />
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:foreground="?attr/selectableItemBackground">
+
+                                <TextView
+                                    android:id="@+id/tvTargetSteps"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/_10_000_steps"
+                                    android:textColor="@color/text_muted"
+                                    android:textSize="14sp" />
+
+                                <ImageView
+                                    android:layout_width="14dp"
+                                    android:layout_height="14dp"
+                                    android:layout_marginStart="4dp"
+                                    android:src="@drawable/ic_edit"
+                                    app:tint="@color/text_muted"
+                                    android:contentDescription="@string/edit" />
+                            </LinearLayout>
                         </LinearLayout>
                     </FrameLayout>
                 </LinearLayout>

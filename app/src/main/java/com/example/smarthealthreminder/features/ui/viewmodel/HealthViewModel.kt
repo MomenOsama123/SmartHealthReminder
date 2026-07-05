@@ -86,6 +86,24 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
         }
     }
 
+    fun updateDailyGoal(target: Int) = viewModelScope.launch {
+        // Update current day's target in steps table
+        val current = todaySteps.value
+        if (current == null) {
+            repository.insertOrUpdateStep(StepEntity(date = todayDate, targetSteps = target))
+        } else {
+            repository.updateTargetSteps(todayDate, target)
+        }
+
+        // Update user profile goal
+        currentUser.value?.let { user ->
+            val updatedUser = user.copy(dailyStepGoal = target)
+            updateCurrentUser(updatedUser)
+            // Note: Ideally this should also be saved to Firestore/Local database here
+            // but we'll stick to the current VM state for now as per project pattern.
+        }
+    }
+
     // Alarms
     val allAlarms: StateFlow<List<AlarmEntity>> = repository.getAllAlarms()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

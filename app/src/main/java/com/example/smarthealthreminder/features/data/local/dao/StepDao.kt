@@ -29,4 +29,6 @@ interface StepDao {
 
     @Query("UPDATE steps_table SET heartRateBpm = :bpm WHERE date = :date")
     suspend fun updateHeartRate(date: String, bpm: Int)
+    @Query("UPDATE steps_table SET targetSteps = :target WHERE date = :date")
+    suspend fun updateTargetSteps(date: String, target: Int)
 }

@@ -173,6 +173,10 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     private fun setupClickListeners() {
+        binding.layoutTargetSteps.setOnClickListener {
+            showTargetSelectionDialog()
+        }
+
         binding.btnStartActivity.setOnClickListener {
             if (stepDetectorSensor == null) {
                 Toast.makeText(context, "Sensor not found", Toast.LENGTH_SHORT).show()
@@ -303,6 +307,20 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
             )
             barProgress.alpha = 0.4f
         }
+    }
+
+    private fun showTargetSelectionDialog() {
+        val targets = arrayOf("5,000", "8,000", "10,000", "12,000", "15,000", "20,000")
+        val values = intArrayOf(5000, 8000, 10000, 12000, 15000, 20000)
+
+        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Select Daily Step Goal")
+            .setItems(targets) { _, which ->
+                viewModel.updateDailyGoal(values[which])
+                Toast.makeText(context, "Goal updated to ${targets[which]} steps", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     override fun onDestroyView() {

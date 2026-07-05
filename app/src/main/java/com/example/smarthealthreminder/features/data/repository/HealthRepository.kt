@@ -30,6 +30,9 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun updateHeartRate(date: String, bpm: Int) =
         database.stepDao().updateHeartRate(date, bpm)
 
+    suspend fun updateTargetSteps(date: String, target: Int) =
+        database.stepDao().updateTargetSteps(date, target)
+
     // Alarm Operations
     fun getAllAlarms(): Flow<List<AlarmEntity>> = database.alarmDao().getAllAlarms()
     suspend fun getAlarmById(id: String) = database.alarmDao().getAlarmById(id)
