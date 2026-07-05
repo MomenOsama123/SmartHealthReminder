@@ -8,7 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity
-import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.model_dashboard.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 

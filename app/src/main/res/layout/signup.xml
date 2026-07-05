@@ -19,7 +19,7 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-
+            android:contentDescription="@null"
             android:src="@drawable/bg_logo_circle" />
 
         <!-- Title -->
@@ -65,15 +65,21 @@
             android:textColorHint="@color/hint_gray"
             android:textColor="@color/hint_gray"
             android:inputType="textEmailAddress"
-            android:paddingStart="16dp"/>
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:autofillHints="emailAddress" />
 
         <!-- Password -->
+        <!-- Password -->
         <TextView
+            android:id="@+id/tvPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/password_label"
             android:textColor="@color/text_dark"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:labelFor="@id/password_input" />
+
         <EditText
             android:id="@+id/password_input"
             android:layout_width="match_parent"
@@ -91,15 +97,19 @@
             android:drawableEnd="@drawable/ic_visibility"
             android:drawablePadding="10dp"
             android:drawableTint="@color/primary_green"
-            android:gravity="start|center_vertical"/>
+            android:gravity="start|center_vertical"
+            android:autofillHints="password" />
 
         <!-- Confirm Password -->
         <TextView
+            android:id="@+id/tvConfirmPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/confirm_password_label"
             android:textColor="@color/text_dark"
-            android:layout_marginTop="12dp" />
+            android:layout_marginTop="12dp"
+            android:labelFor="@id/confirm_password_input" />
+
         <EditText
             android:id="@+id/confirm_password_input"
             android:layout_width="match_parent"
@@ -114,9 +124,10 @@
             android:textSize="16sp"
             android:inputType="textPassword"
             android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:drawableStart="@drawable/outline_check_circle"
             android:drawablePadding="10dp"
-            android:drawableTint="@color/primary_green"/>
+            android:drawableTint="@color/primary_green" />
 
         <!-- Terms -->
         <CheckBox
@@ -124,13 +135,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/terms_text"
+            android:maxWidth="320dp"
             android:textColor="@color/text_dark" />
 
         <!-- Sign Up Button -->
         <Button
             android:id="@+id/signup_btn"
-            android:layout_width="match_parent"
+            android:layout_width="320dp"
             android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/primary_green"
             android:text="@string/signup_button"

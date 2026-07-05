@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.model_d
+package com.example.smarthealthreminder.features.model_dashboard
 enum class MetricType {
     STEPS, SLEEP, HEART_RATE
 }

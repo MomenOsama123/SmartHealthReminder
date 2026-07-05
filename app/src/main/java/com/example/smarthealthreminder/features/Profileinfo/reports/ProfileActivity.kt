@@ -21,9 +21,9 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.data_d.DatabaseHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsPrefs
-import com.example.smarthealthreminder.features.model_d.User
+import com.example.smarthealthreminder.features.model_dashboard.User
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.data.local.AppDatabase

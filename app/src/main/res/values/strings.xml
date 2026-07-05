@@ -570,4 +570,53 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="f">F</string>
     <string name="offline_message">No internet connection. Please check your network to send messages.</string>
 
+        <string name="bot_message">Bot message</string>
+        <string name="user_message">User message</string>
+        <string name="dot_separator"> • </string>
+        <string name="content_desc_notifications">Notifications</string>
+        <string name="notifications_subtitle">Allow reminders and alarm alerts to appear.</string>
+        <string name="content_desc_actions">Actions</string>
+        <string name="due_at_time">Due at 9:00 AM</string>
+        <string name="show_password">Show password</string>
+        <string name="marked_done">Marked as done</string>
+        <string name="no_medication">No medication to mark</string>
+        <string name="no_medication_to_snooze">No medication to snooze</string>
+        <string name="snoozed">Snoozed for 10 minutes</string>
+        <string name="not_yet_time">Not yet time! Wait until %1$s</string>
+        <string name="not_yet_time_short">Not yet time!</string>
+
+        <!-- Greetings -->
+        <string name="greeting_morning">Good Morning
+%1$s ☀️</string>
+        <string name="greeting_afternoon">Good Afternoon
+%1$s 🌤️</string>
+        <string name="greeting_evening">Good Evening
+%1$s 🌅</string>
+        <string name="greeting_night">Good Night
+%1$s 🌙</string>
+
+        <!-- UI Texts -->
+        <string name="no_more_meds">No more medications</string>
+        <string name="no_more_meds_today">No more medications for today 🎉</string>
+
+        <!-- Dialog Options -->
+
+        <string name="snooze_10_min">Snooze 10 min</string>
+
+
+        <!-- Format Strings (to avoid setText concatenation warnings) -->
+        <string name="percentage_format">%1$d%%</string>
+        <string name="med_name_dosage_format">%1$s - %2$s</string>
+
+        <!-- Status Prefixes for Upcoming List -->
+        <string name="taken_prefix">✅ %1$s</string>
+        <string name="snoozed_prefix">⏰ %1$s</string>
+        <string name="missed_prefix">❌ %1$s</string>
+
+        <!-- Dosage Suffixes -->
+        <string name="taken_dosage_suffix">%1$s • Taken</string>
+        <string name="snoozed_dosage_suffix">%1$s • Snoozed</string>
+        <string name="missed_dosage_suffix">%1$s • Missed</string>
+
+
 </resources>
