@@ -9,15 +9,17 @@ import com.example.smarthealthreminder.features.data.local.dao.CalendarNoteDao
 import com.example.smarthealthreminder.features.data.local.dao.ReminderDao
 import com.example.smarthealthreminder.features.data.local.dao.ReportDao
 import com.example.smarthealthreminder.features.data.local.dao.ScheduleEntryDao
+import com.example.smarthealthreminder.features.data.local.dao.StepDao
 import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
 import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
+import com.example.smarthealthreminder.features.data.local.entity.StepEntity
 
 @Database(
-    entities = [AlarmEntity::class, ReminderEntity::class, CalendarNoteEntity::class, ScheduleEntryEntity::class, ReportEntity::class],
-    version = 6,
+    entities = [AlarmEntity::class, ReminderEntity::class, CalendarNoteEntity::class, ScheduleEntryEntity::class, ReportEntity::class, StepEntity::class],
+    version = 9,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -26,6 +28,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun calendarNoteDao(): CalendarNoteDao
     abstract fun scheduleEntryDao(): ScheduleEntryDao
     abstract fun reportDao(): ReportDao
+    abstract fun stepDao(): StepDao
 
     companion object {
         @Volatile

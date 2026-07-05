@@ -204,28 +204,51 @@
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvDailySteps"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         android:layout_marginBottom="8dp"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:cardBackgroundColor="@color/surface_variant"
                         app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:gravity="center_vertical" android:orientation="vertical">
                             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/daily_steps" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="6,432" android:textColor="@color/text_dark" android:textSize="16sp" android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/tvDailySteps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_dark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:text="@string/zerosSample" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
+
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cvRemindingDoses"
                         android:layout_width="match_parent"
                         android:layout_height="0dp"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
                         app:cardBackgroundColor="@color/surface_variant"
                         app:cardCornerRadius="20dp"
                         app:cardElevation="0dp">
                         <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:padding="16dp" android:gravity="center_vertical" android:orientation="vertical">
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/fatigue" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
-                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" tools:text="Low" android:textColor="@color/text_dark" android:textSize="16sp" android:textStyle="bold" />
+                            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Reminding Doses" android:textColor="@color/text_secondary" android:textSize="12sp" android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/reminding"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/text_dark"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="Doses Left: " />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>

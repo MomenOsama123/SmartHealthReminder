@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="12dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/bg_bar_track">
+
+        <View
+            android:id="@+id/barProgress"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_bar_track"
+            android:backgroundTint="@color/primary" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tvDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="M"
+        android:textColor="@color/text_muted"
+        android:textSize="11sp" />
+</LinearLayout>
