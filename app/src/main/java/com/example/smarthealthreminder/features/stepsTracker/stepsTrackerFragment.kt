@@ -155,7 +155,9 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
 
         val remaining = targetStepsDisplay - currentStepsDisplay
         if (remaining > 0) {
-            binding.tvMotivationDesc.text = "Keep going! Only ${String.format("%,d", remaining)} steps away from your daily goal."
+            val formattedRemaining = String.format("%,d", remaining)
+            val minutes = (remaining / 100).coerceAtLeast(1)
+            binding.tvMotivationDesc.text = getString(R.string.motivation_desc_format, formattedRemaining, minutes)
         }
     }
     
@@ -173,6 +175,10 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
     private fun setupClickListeners() {
+        binding.backArrow.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
         binding.layoutTargetSteps.setOnClickListener {
             showTargetSelectionDialog()
         }
@@ -243,8 +249,10 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                     val userName = user?.name ?: "there"
                     
                     if (remaining > 0) {
-                        binding.tvMotivationTitle.text = "\"Keep it up!\""
-                        binding.tvMotivationDesc.text = "Hey $userName, you're only ${String.format("%,d", remaining)} steps away from your daily goal. Walk to close the ring!"
+                        binding.tvMotivationTitle.text = getString(R.string.quot_keep_it_up_quot)
+                        val formattedRemaining = String.format("%,d", remaining)
+                        val minutes = (remaining / 100).coerceAtLeast(1)
+                        binding.tvMotivationDesc.text = getString(R.string.motivation_desc_format, formattedRemaining, minutes)
                     } else {
                         binding.tvMotivationTitle.text = "\"Goal Achieved!\""
                         binding.tvMotivationDesc.text = "Excellent work $userName! You've reached your daily step goal. Keep maintaining this healthy habit."
@@ -262,8 +270,8 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
 
     private fun updateWeeklyChart(stepsList: List<com.example.smarthealthreminder.features.data.local.entity.StepEntity>) {
         val days = listOf(
-            binding.root.findViewById<View>(R.id.barMon),
-            binding.root.findViewById<View>(R.id.barTue),
+            binding.root.findViewById(R.id.barMon),
+            binding.root.findViewById(R.id.barTue),
             binding.root.findViewById<View>(R.id.barWed),
             binding.root.findViewById<View>(R.id.barThu),
             binding.root.findViewById<View>(R.id.barFri),

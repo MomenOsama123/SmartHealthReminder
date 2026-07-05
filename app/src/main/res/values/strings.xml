@@ -637,6 +637,9 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="quot_keep_it_up_quot">\"Keep it up!\"</string>
     <string name="start_evening">START EVENING</string>
     <string name="you_re_only_1_568_steps_away_from_your_daily_goal_a_short_15_minute_walk_this_evening_will_close_the_ring">You\'re only 1,568 steps away from your daily goal. A short 15-minute walk this evening will close the ring.</string>
+    <string name="steps_tracker">Steps Tracker</string>
+    <string name="motivation_desc_format">You\'re only %1$s steps away from your daily goal. A short %2$d-minute walk this evening will close the ring.</string>
     <string name="dosage_progress_format">%1$d of %2$d</string>
     <string name="dosage_remaining_format">%1$d remaining</string>
+    <string name="daily_steps_tracker">Daily Steps Tracker</string>
 </resources>
