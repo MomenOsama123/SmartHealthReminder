@@ -21,8 +21,8 @@ class HealthRepository(private val database: AppDatabase) {
         database.alarmDao().updateAlarmStatus(id, isActive)
     suspend fun markAlarmCompleted(id: String) =
         database.alarmDao().updateLastTriggeredStatus(id, "Completed")
-    suspend fun markAlarmSnoozed(id: String) =
-        database.alarmDao().updateLastTriggeredStatus(id, "Snoozed")
+    suspend fun markAlarmSnoozed(id: String, snoozeMinutes: Int) =
+        database.alarmDao().updateSnoozeStatus(id, "Snoozed", snoozeMinutes)
     suspend fun resetAlarmToPending(id: String) =
         database.alarmDao().updateLastTriggeredStatus(id, "Pending")
 

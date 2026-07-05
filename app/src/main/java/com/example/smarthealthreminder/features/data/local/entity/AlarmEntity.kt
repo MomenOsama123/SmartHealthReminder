@@ -36,5 +36,8 @@ data class AlarmEntity(
 
     /** Tracks the last time this alarm fired: "Pending", "Completed", or "Snoozed" */
     @ColumnInfo(name = "last_triggered_status", defaultValue = "Pending")
-    val lastTriggeredStatus: String = "Pending"
+    val lastTriggeredStatus: String = "Pending",
+
+    @ColumnInfo(name = "last_snooze_minutes")
+    var lastSnoozeMinutes: Int = 0,
 )

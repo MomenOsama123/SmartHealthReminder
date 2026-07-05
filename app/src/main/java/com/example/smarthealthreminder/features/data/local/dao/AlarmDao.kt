@@ -39,4 +39,7 @@ interface AlarmDao {
 
     @Query("SELECT * FROM alarms WHERE label LIKE :query OR category LIKE :query ORDER BY time ASC")
     fun searchAlarms(query: String): Flow<List<AlarmEntity>>
+
+    @Query("UPDATE alarms SET last_triggered_status = :status, last_snooze_minutes = :snoozeMinutes WHERE id = :id")
+    suspend fun updateSnoozeStatus(id: String, status: String, snoozeMinutes: Int)
 }

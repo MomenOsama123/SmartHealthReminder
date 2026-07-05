@@ -13,7 +13,7 @@ import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.alarm.AlarmService
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
-import com.example.smarthealthreminder.features.settings.SettingsActivity
+import com.example.smarthealthreminder.features.settings.SettingsPrefs
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import java.text.SimpleDateFormat
@@ -80,8 +80,15 @@ class AlarmRingingActivity : AppCompatActivity() {
             if (patientName.isNotEmpty()) "Patient: $patientName" else ""
         findViewById<TextView>(R.id.tv_room_info)?.text = roomInfo
 
+        // ✅ Read the snooze duration ONCE, right when the screen opens
+        val snoozeMinutes = SettingsPrefs.getAlarmSnoozeMinutes(this)
+
+        // ✅ Set the button label immediately on create — not after clicking
+        findViewById<Button>(R.id.btn_snooze)?.text =
+            getString(R.string.snooze_button_label, snoozeMinutes)
+
         findViewById<Button>(R.id.btn_snooze)?.setOnClickListener {
-            val snoozeMinutes = SettingsActivity.getAlarmSnoozeMinutes(this)
+            // ✅ Reuse the same snoozeMinutes value read in onCreate — no re-read here
             val snoozed = alarmId?.let { id ->
                 val parts = alarmTime.trim().split(" ")
                 val timePart = parts.getOrNull(0) ?: alarmTime
@@ -99,7 +106,7 @@ class AlarmRingingActivity : AppCompatActivity() {
 
             if (snoozed) {
                 isStopped = true
-                alarmId?.let { viewModel.markAlarmSnoozed(it) }
+                alarmId?.let { viewModel.markAlarmSnoozed(it, snoozeMinutes) }
                 stopAlarmService()
                 Toast.makeText(
                     this,

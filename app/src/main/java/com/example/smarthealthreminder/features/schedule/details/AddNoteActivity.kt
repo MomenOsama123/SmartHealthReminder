@@ -14,6 +14,7 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFact
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
+import android.widget.EditText
 
 class AddNoteActivity : AppCompatActivity() {
 

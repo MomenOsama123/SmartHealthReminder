@@ -369,6 +369,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="settings_snooze_minutes_value">%1$d min</string>
     <string name="settings_snooze_saved">Snooze duration set to %1$d minutes</string>
     <string name="snoozed_for_minutes">Snoozed for %1$d minutes</string>
+    <string name="snooze_button_label">Snooze %1$d m</string>
     <string name="save">Save</string>
     <string name="why_joinUs">Your trusted companion for\nmedication management,reminders\n,and healthy routines.</string>
     <string name="already_have_an_account">Already have an account?</string>
