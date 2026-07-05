@@ -88,7 +88,8 @@
                             android:layout_height="match_parent"
                             android:indeterminate="false"
                             android:max="10000"
-                            android:progress="8432"
+                            android:progress="0"
+                            tools:progress="8432"
                             android:progressDrawable="@drawable/circular_progress_bar" />
 
                         <LinearLayout
@@ -112,7 +113,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="serif"
-                                android:text="@string/zerosSample"
+                                android:text="0"
+                                tools:text="8,432"
                                 android:textColor="@color/text_dark"
                                 android:textSize="48sp"
                                 android:textStyle="bold" />
@@ -184,7 +186,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/_6_2"
+                            android:text="0.0"
+                            tools:text="6.2"
                             android:textColor="@color/text_dark"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -228,7 +231,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/_412"
+                            android:text="0"
+                            tools:text="412"
                             android:textColor="@color/text_dark"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -272,7 +276,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="@string/_48"
+                            android:text="0"
+                            tools:text="48"
                             android:textColor="@color/text_dark"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -353,7 +358,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="@string/average_7_850_steps"
+                        android:text="Average: 0 steps"
+                        tools:text="Average: 7,850 steps"
                         android:textColor="@color/text_muted"
                         android:textSize="13sp"
                         app:layout_constraintStart_toStartOf="parent"
@@ -470,7 +476,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
                         android:lineSpacingExtra="4dp"
-                        android:text="@string/motivation_desc_format"
+                        android:text=""
                         tools:text="You're only 1,568 steps away from your daily goal. A short 15-minute walk this evening will close the ring."
                         android:textColor="#D0DDD5"
                         android:textSize="14sp"

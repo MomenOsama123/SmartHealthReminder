@@ -28,7 +28,6 @@ import com.example.smarthealthreminder.features.util.ImageUtils
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
-import java.util.*
 
 class StepsTrackerFragment : Fragment(), SensorEventListener {
 
@@ -136,14 +135,13 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
             // Step detector triggers for every single step (value is 1.0)
             if (event.values[0] == 1.0f) {
                 updateStepCount(1)
-                updateLiveUI()
+                // updateLiveUI() is no longer called here to avoid double increments
             }
         }
     }
     
-    private fun updateLiveUI() {
-        // Immediate UI update for "Real-Time" feel
-        currentStepsDisplay += 1
+    private fun updateLiveUI(totalSteps: Int) {
+        currentStepsDisplay = totalSteps
         binding.tvCurrentSteps.text = String.format("%,d", currentStepsDisplay)
         binding.progressBarSteps.progress = currentStepsDisplay
         
@@ -163,13 +161,15 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
     
     private fun updateStepCount(delta: Int) {
         sessionSteps += delta
-        val current = viewModel.todaySteps.value
-        val newSteps = (current?.steps ?: 0) + delta
+        val currentSteps = viewModel.todaySteps.value?.steps ?: currentStepsDisplay
+        val newSteps = currentSteps + delta
         
         // Update Active minutes: 1 minute for every 100 steps
-        val newMin = (current?.activeMinutes ?: 0) + (if (sessionSteps % 100 == 0) 1 else 0)
+        val currentMin = viewModel.todaySteps.value?.activeMinutes ?: 0
+        val newMin = currentMin + (if (sessionSteps % 100 == 0) 1 else 0)
         
         viewModel.updateSteps(newSteps, newMin)
+        updateLiveUI(newSteps)
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
@@ -228,24 +228,24 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                     }
                 }
 
-                stepData?.let {
-                    targetStepsDisplay = it.targetSteps
+                if (stepData != null) {
+                    targetStepsDisplay = stepData.targetSteps
                     
                     // Only update the main counter from DB if we are NOT currently tracking live
                     // This prevents the "jumping" effect caused by DB latency
                     if (!isTracking) {
-                        currentStepsDisplay = it.steps
-                        binding.tvCurrentSteps.text = String.format("%,d", it.steps)
-                        binding.progressBarSteps.progress = it.steps
-                        binding.tvDistanceValue.text = String.format("%.1f", it.distanceKm)
-                        binding.tvCaloriesValue.text = it.calories.toString()
+                        currentStepsDisplay = stepData.steps
+                        binding.tvCurrentSteps.text = String.format("%,d", stepData.steps)
+                        binding.progressBarSteps.progress = stepData.steps
+                        binding.tvDistanceValue.text = String.format("%.1f", stepData.distanceKm)
+                        binding.tvCaloriesValue.text = stepData.calories.toString()
                     }
                     
-                    binding.tvTargetSteps.text = "/ ${String.format("%,d", it.targetSteps)} steps"
-                    binding.progressBarSteps.max = it.targetSteps
-                    binding.tvActiveMinValue.text = it.activeMinutes.toString()
+                    binding.tvTargetSteps.text = "/ ${String.format("%,d", stepData.targetSteps)} steps"
+                    binding.progressBarSteps.max = stepData.targetSteps
+                    binding.tvActiveMinValue.text = stepData.activeMinutes.toString()
                     
-                    val remaining = it.targetSteps - currentStepsDisplay
+                    val remaining = stepData.targetSteps - currentStepsDisplay
                     val userName = user?.name ?: "there"
                     
                     if (remaining > 0) {
@@ -257,6 +257,21 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                         binding.tvMotivationTitle.text = "\"Goal Achieved!\""
                         binding.tvMotivationDesc.text = "Excellent work $userName! You've reached your daily step goal. Keep maintaining this healthy habit."
                     }
+                } else {
+                    // Default state when no data exists for today
+                    if (!isTracking) {
+                        currentStepsDisplay = 0
+                        binding.tvCurrentSteps.text = "0"
+                        binding.progressBarSteps.progress = 0
+                        binding.tvDistanceValue.text = "0.0"
+                        binding.tvCaloriesValue.text = "0"
+                    }
+                    binding.tvTargetSteps.text = "/ 10,000 steps"
+                    binding.progressBarSteps.max = 10000
+                    binding.tvActiveMinValue.text = "0"
+                    
+                    binding.tvMotivationTitle.text = "\"Get Started!\""
+                    binding.tvMotivationDesc.text = "Start your day with a walk. Reach 10,000 steps to maintain your health goal."
                 }
             }
         }
@@ -270,8 +285,8 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
 
     private fun updateWeeklyChart(stepsList: List<com.example.smarthealthreminder.features.data.local.entity.StepEntity>) {
         val days = listOf(
-            binding.root.findViewById(R.id.barMon),
-            binding.root.findViewById(R.id.barTue),
+            binding.root.findViewById<View>(R.id.barMon),
+            binding.root.findViewById<View>(R.id.barTue),
             binding.root.findViewById<View>(R.id.barWed),
             binding.root.findViewById<View>(R.id.barThu),
             binding.root.findViewById<View>(R.id.barFri),
@@ -281,6 +296,11 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
         
         val dayLabels = listOf("M", "T", "W", "T", "F", "S", "S")
         
+        // Clear/Set default bars first
+        days.forEachIndexed { index, view ->
+            setupBar(view, dayLabels[index], 10, false)
+        }
+
         stepsList.take(7).reversed().forEachIndexed { index, stepEntity ->
             if (index < days.size) {
                 val height = (stepEntity.steps.toFloat() / stepEntity.targetSteps.toFloat() * 100).toInt().coerceIn(10, 120)
@@ -291,6 +311,8 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
         if (stepsList.isNotEmpty()) {
             val avg = stepsList.map { it.steps }.average().toInt()
             binding.tvWeeklyAverage.text = "Average: ${String.format("%,d", avg)} steps"
+        } else {
+            binding.tvWeeklyAverage.text = "No weekly data yet"
         }
     }
 
