@@ -648,4 +648,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="daily_steps_tracker">Daily Steps Tracker</string>
     <string name="_0_0">0.0</string>
     <string name="average_0_steps">Average: 0 steps</string>
+    <string name="adherence">ADHERENCE</string>
+    <string name="_72">72%</string>
+    <string name="reminding_doses">Reminding Doses</string>
 </resources>
