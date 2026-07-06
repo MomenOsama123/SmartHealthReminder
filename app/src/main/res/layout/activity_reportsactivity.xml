@@ -30,27 +30,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp">
 
-                <ImageView
-                    android:id="@+id/btn_back"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_centerVertical="true"
-                    android:src="@drawable/ic_arrow_back"
-                    app:tint="?attr/colorOnSurface"
-                    tools:ignore="ContentDescription" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="16dp"
-                    android:layout_toEndOf="@id/btn_back"
                     android:text="@string/health_reports"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    />
 
                 <TextView
+                    android:id="@+id/textView6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

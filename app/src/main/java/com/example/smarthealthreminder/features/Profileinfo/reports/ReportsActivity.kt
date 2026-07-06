@@ -42,7 +42,6 @@ class ReportsActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, factory)[ReportViewModel::class.java]
 
         // 2. تعريف العناصر (Views)
-        val btnBack = findViewById<ImageView>(R.id.btn_back)
         val fabCreateReport = findViewById<FloatingActionButton>(R.id.fab_create_report)
         val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val recyclerReports = findViewById<RecyclerView>(R.id.recycler_reports)
@@ -60,9 +59,6 @@ class ReportsActivity : AppCompatActivity() {
 
         // تجهيز الـ RecyclerView (عشان لو حبيت تعرض لستة التقارير القديمة بعدين)
         recyclerReports.layoutManager = LinearLayoutManager(this)
-
-        // 3. تشغيل الأزرار الأساسية
-        btnBack.setOnClickListener { finish() }
 
         // لما نضغط على زرار (+) هنخليه يعمل تقرير تجريبي ويحفظه في الداتابيز
         fabCreateReport.setOnClickListener {
