@@ -120,8 +120,8 @@ class AlarmsFragment : Fragment() {
         })
 
         // Add Alarm Button
-        val btnAdd = view.findViewById<View>(R.id.btn_add)
-        btnAdd?.setOnClickListener {
+        val fabAdd = view.findViewById<View>(R.id.fab_add_alarm)
+        fabAdd?.setOnClickListener {
             val intent = Intent(requireContext(), EditAlarmActivity::class.java)
             startActivity(intent)
         }

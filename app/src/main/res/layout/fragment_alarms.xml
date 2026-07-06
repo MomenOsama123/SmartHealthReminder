@@ -43,16 +43,6 @@
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/btn_add"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="end"
-                android:background="@drawable/bg_rounded_button_primary"
-                android:src="@drawable/ic_add"
-                app:tint="@color/text_on_primary"
-                android:contentDescription="@string/add_alarm"/>
-
         </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -90,5 +80,16 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_add_alarm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        app:tint="@color/text_on_primary"
+        app:backgroundTint="@color/primary"
+        android:contentDescription="@string/add_alarm"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
