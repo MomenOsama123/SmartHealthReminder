@@ -89,13 +89,30 @@ class ViewReminderFragment : Fragment() {
                 val reminder = viewModel.repository.getReminderById(id)
                 reminder?.let {
                     tvTitle.text = it.title
-                    tvDescription.text = it.description ?: "No description provided."
+                    tvDescription.text = it.description ?: getString(R.string.no_description_provided)
                     tvTime.text = it.time
-                    tvRecurrenceSummary.text = it.recurrenceType ?: "One-time"
-                    tvRecurrenceType.text = it.recurrenceType ?: "Once"
-                    tvPriorityValue.text = it.priority ?: "Normal"
-                    tvEarlyNotificationValue.text = if (it.earlyNotification) "${it.earlyNotificationMinutes} minutes before" else "None"
-                    tvVibrationValue.text = if (it.vibrationEnabled) "Enabled" else "Disabled"
+                    tvRecurrenceSummary.text = it.recurrenceType ?: getString(R.string.none)
+                    tvRecurrenceType.text = it.recurrenceType ?: getString(R.string.none)
+                    
+                    // Localize Priority
+                    tvPriorityValue.text = when(it.priority?.lowercase()) {
+                        "high" -> getString(R.string.high)
+                        "medium" -> getString(R.string.medium)
+                        "low" -> getString(R.string.low)
+                        else -> getString(R.string.none)
+                    }
+
+                    tvEarlyNotificationValue.text = if (it.earlyNotification) {
+                        getString(R.string.settings_snooze_minutes_value, it.earlyNotificationMinutes)
+                    } else {
+                        getString(R.string.none)
+                    }
+                    
+                    tvVibrationValue.text = if (it.vibrationEnabled) {
+                        getString(R.string.enabled)
+                    } else {
+                        getString(R.string.none)
+                    }
                     
                     // Set category icon
                     when (it.category?.lowercase()) {

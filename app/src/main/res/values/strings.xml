@@ -695,4 +695,5 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="edit_reminder">Edit Reminder</string>
     <string name="enabled">Enabled</string>
     <string name="close">Close</string>
+    <string name="no_description_provided">No description provided.</string>
 </resources>
