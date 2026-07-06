@@ -38,7 +38,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var tvTotalMeds: TextView
     private lateinit var tvTakenToday: TextView
     private lateinit var tvMissedToday: TextView
-
+    private lateinit var tvUserName: TextView
     private lateinit var tvNextMedName: TextView
     private lateinit var tvNextMedTime: TextView
     private lateinit var btnMarkTaken: TextView
@@ -103,6 +103,8 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun initViews() {
         tvGreeting = findViewById(R.id.tvGreeting)
+        tvUserName = findViewById(R.id.tvUserName)
+
         tvAdherencePercent = findViewById(R.id.tvAdherencePercent)
         tvTotalMeds = findViewById(R.id.tvTotalMeds)
         tvTakenToday = findViewById(R.id.tvTakenToday)
@@ -287,7 +289,8 @@ class DashboardActivity : AppCompatActivity() {
             else -> R.string.greeting_night
         }
 
-        tvGreeting.text = getString(greetingRes, userName)
+        tvGreeting.text = getString(greetingRes)
+        tvUserName.text = userName
     }
 
     private fun shouldShowToday(reminder: ReminderEntity): Boolean {

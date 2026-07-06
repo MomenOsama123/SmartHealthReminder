@@ -52,9 +52,7 @@ object BottomNavHelper {
                 }
 
                 R.id.action_settings -> {
-                    if (activity !is SettingsPrefs) {
-                        activity.startActivity(Intent(activity, SettingsPrefs::class.java))
-                    }
+                    openMainDestination(activity, MainActivity.DESTINATION_SETTINGS)
                     true
                 }
 
