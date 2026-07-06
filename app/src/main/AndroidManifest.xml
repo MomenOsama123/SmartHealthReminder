@@ -84,6 +84,9 @@
             android:name=".features.activity.AddReminderActivity"
             android:exported="false" />
         <activity
+            android:name=".features.activity.ViewReminderActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.activity.EditAlarmActivity"
             android:exported="false" />
         <activity
