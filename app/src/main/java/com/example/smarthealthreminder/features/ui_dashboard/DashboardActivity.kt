@@ -52,6 +52,13 @@ class DashboardActivity : AppCompatActivity() {
 
     private var reminderEntities: List<ReminderEntity> = emptyList()
     private var currentNextItem: ScheduleItem? = null
+    private val refreshRunnable = object : Runnable {
+        override fun run() {
+            loadNextDose()
+            loadUpcomingList()
+            window.decorView.postDelayed(this, 30000)
+        }
+    }
 
     private companion object {
         private const val PREFS_NAME = "DashboardPrefs"
@@ -377,7 +384,6 @@ class DashboardActivity : AppCompatActivity() {
 
         val nextItem = when {
 
-            // أول أولوية: Reminder رجع من Snooze
             allItems.any {
                 it.status == "Snoozed" && currentMinutes >= it.minutes
             } -> {
@@ -388,7 +394,6 @@ class DashboardActivity : AppCompatActivity() {
                     .minByOrNull { it.minutes }
             }
 
-            // ثاني أولوية: Pending فات معاده ولسه متاخدش
             allItems.any {
                 it.status == "Pending" && currentMinutes >= it.minutes
             } -> {
@@ -399,7 +404,6 @@ class DashboardActivity : AppCompatActivity() {
                     .minByOrNull { it.minutes }
             }
 
-            // ثالث أولوية: أقرب Pending جاي
             else -> {
                 allItems
                     .filter {
@@ -737,6 +741,15 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun Int.dpToPx(): Int {
         return (this * resources.displayMetrics.density).toInt()
+    }
+    override fun onResume() {
+        super.onResume()
+        window.decorView.post(refreshRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        window.decorView.removeCallbacks(refreshRunnable)
     }
 
     data class ScheduleItem(
