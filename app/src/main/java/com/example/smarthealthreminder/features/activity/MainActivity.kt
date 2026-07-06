@@ -21,7 +21,7 @@ import com.example.smarthealthreminder.features.settings.SettingsFragment
 import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
 //  NEW: Imported ReportsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.smarthealthreminder.features.fragment.ReportsFragment
+import com.example.smarthealthreminder.features.reports.ReportsFragment
 
 class MainActivity : AppCompatActivity() {
 
