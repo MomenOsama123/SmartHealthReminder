@@ -3,6 +3,7 @@ package com.example.smarthealthreminder.features.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,7 @@ class WelcomeReminderAdapter : RecyclerView.Adapter<WelcomeReminderAdapter.ViewH
 
     private val reminders = mutableListOf<Reminder>()
     private var onReminderClickListener: ((Reminder) -> Unit)? = null
+    private var onStatusClickListener: ((Reminder) -> Unit)? = null
 
     fun setReminders(newReminders: List<Reminder>) {
         reminders.clear()
@@ -22,6 +24,10 @@ class WelcomeReminderAdapter : RecyclerView.Adapter<WelcomeReminderAdapter.ViewH
 
     fun setOnReminderClickListener(listener: (Reminder) -> Unit) {
         onReminderClickListener = listener
+    }
+
+    fun setOnStatusClickListener(listener: (Reminder) -> Unit) {
+        onStatusClickListener = listener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -40,7 +46,7 @@ class WelcomeReminderAdapter : RecyclerView.Adapter<WelcomeReminderAdapter.ViewH
         private val ivIcon: ImageView = itemView.findViewById(R.id.iv_reminder_icon)
         private val tvTitle: TextView = itemView.findViewById(R.id.tv_reminder_title)
         private val tvTime: TextView = itemView.findViewById(R.id.tv_reminder_time)
-        private val ivStatus: ImageView = itemView.findViewById(R.id.iv_status_icon)
+        private val ivStatus: ImageButton = itemView.findViewById(R.id.iv_status_icon)
 
         fun bind(reminder: Reminder) {
             tvTitle.text = reminder.title
@@ -63,12 +69,19 @@ class WelcomeReminderAdapter : RecyclerView.Adapter<WelcomeReminderAdapter.ViewH
             }
 
             // Set status icon
-            if (reminder.status == "Completed") {
+            val isTaken = reminder.status == "Completed"
+            if (isTaken) {
                 ivStatus.setImageResource(R.drawable.ic_check_circle)
                 ivStatus.imageTintList = itemView.context.getColorStateList(R.color.success)
+                ivStatus.contentDescription = itemView.context.getString(R.string.completed)
             } else {
                 ivStatus.setImageResource(R.drawable.ic_circle_outline)
                 ivStatus.imageTintList = itemView.context.getColorStateList(R.color.divider)
+                ivStatus.contentDescription = itemView.context.getString(R.string.mark_as_done)
+            }
+
+            ivStatus.setOnClickListener {
+                onStatusClickListener?.invoke(reminder)
             }
 
             itemView.setOnClickListener {

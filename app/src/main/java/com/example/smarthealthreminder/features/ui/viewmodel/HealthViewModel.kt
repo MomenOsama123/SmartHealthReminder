@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
+class HealthViewModel(val repository: HealthRepository) : ViewModel() {
 
     // Steps
     private val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -100,7 +100,7 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
             val updatedUser = user.copy(dailyStepGoal = target)
             updateCurrentUser(updatedUser)
             // Note: Ideally this should also be saved to Firestore/Local database here
-            // but we'll stick to the current VM state for now as per project pattern.
+            // ,but we'll stick to the current VM state for now as per project pattern.
         }
     }
 

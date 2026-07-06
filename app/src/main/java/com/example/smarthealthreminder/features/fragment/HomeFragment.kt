@@ -157,11 +157,26 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
-        binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext()).apply {
+            reverseLayout = true
+            stackFromEnd = true
+        }
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
-            Toast.makeText(context, "Clicked: ${reminder.title}", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireContext(), com.example.smarthealthreminder.features.activity.ViewReminderActivity::class.java).apply {
+                putExtra(com.example.smarthealthreminder.features.activity.ViewReminderActivity.EXTRA_REMINDER_ID, reminder.id)
+            }
+            startActivity(intent)
+        }
+
+        reminderAdapter.setOnStatusClickListener { reminder ->
+            if (reminder.status != "Completed") {
+                reminder.id?.let {
+                    viewModel.markReminderDone(it)
+                    Toast.makeText(requireContext(), "Reminder marked as done!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -287,10 +302,6 @@ class HomeFragment : Fragment() {
                     }
 
                     val todayReminders = totalTodayReminders
-                        .filter { entity ->
-                            entity.status.equals("Pending", ignoreCase = true) ||
-                                    entity.status.equals("Snoozed", ignoreCase = true)
-                        }
                         .sortedBy { it.time ?: "99:99" }
 
                     val reminders = todayReminders.map { entity ->

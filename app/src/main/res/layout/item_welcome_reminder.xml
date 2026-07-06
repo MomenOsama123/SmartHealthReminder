@@ -45,11 +45,14 @@
             android:textSize="13sp" />
     </LinearLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/iv_status_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/ic_check_circle"
-        app:tint="@color/icon_tint_green"
-        android:contentDescription="@null"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/mark_as_done"
+        android:padding="8dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_circle_outline"
+        app:tint="@color/divider" />
 </LinearLayout>

@@ -106,5 +106,6 @@
     <!-- الألوان في وضع الـ Light Mode  -->
     <color name="dynamic_screen_bg">@color/background_beige</color>
     <color name="dynamic_card_bg">#FFFFFF</color>
+    <color name="progress_track">#E1E6E2</color>
 
 </resources>

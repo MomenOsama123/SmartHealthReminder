@@ -103,4 +103,5 @@
 
     <color name="dynamic_screen_bg">#121212</color>
     <color name="dynamic_card_bg">#1E1E1E</color>
+    <color name="progress_track">#2F3832</color>
 </resources>
