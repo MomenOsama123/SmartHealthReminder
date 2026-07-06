@@ -341,6 +341,11 @@ class DashboardActivity : AppCompatActivity() {
         val percentage = if (total > 0) (done * 100 / total) else 0
         tvAdherencePercent.text = getString(R.string.percentage_format, percentage)
 
+        val prefs = getSharedPreferences("health_prefs", MODE_PRIVATE)
+        prefs.edit {
+            putInt("adherence_percent", percentage)
+        }
+
         Log.d("DASH_STATS", "total=$total, done=$done, missed=$missed, pending=$pending")
     }
 
