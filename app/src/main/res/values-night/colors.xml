@@ -100,4 +100,7 @@
     <color name="schedule_on_primary_accent">#2E3A34</color>
     <color name="schedule_overlay_bg">#30FFFFFF</color>
     <color name="schedule_on_primary_text">#1C221E</color>
+
+    <color name="dynamic_screen_bg">#121212</color>
+    <color name="dynamic_card_bg">#1E1E1E</color>
 </resources>

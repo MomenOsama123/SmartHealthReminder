@@ -4,9 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_beige"
-    tools:context=".features.Profileinfo.reports.ProfileActivity"
-    >
+    android:background="@color/dynamic_screen_bg"
+    tools:context=".features.Profileinfo.reports.ProfileActivity">
+    <!-- Changed root background to dynamic_screen_bg -->
 
     <RelativeLayout
         android:id="@+id/top_bar"
@@ -26,7 +26,7 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_back"
             android:contentDescription="@string/content_desc_back"
-            app:tint="@color/text_dark" />
+            app:tint="?attr/colorOnSurface" /> <!-- Dynamic icon color -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -35,12 +35,11 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="14dp"
             android:text="@string/app_name"
-            android:textColor="@color/text_dark"
+            android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" /> <!-- Dynamic text color -->
 
     </RelativeLayout>
-
 
 
     <ScrollView
@@ -83,7 +82,7 @@
                     app:cardCornerRadius="18dp"
                     app:cardElevation="4dp"
                     app:strokeWidth="2dp"
-                    app:strokeColor="@color/white">
+                    app:strokeColor="?attr/colorSurface"> <!-- Dynamic stroke color around camera icon -->
 
                     <ImageView
                         android:id="@+id/editProfile"
@@ -104,24 +103,25 @@
                 android:text="@string/yehia_abdo"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_gravity="center"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp" /> <!-- Dynamic text color -->
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/personal_health_information"
                 android:textSize="14sp"
-                android:textColor="@color/hint_gray"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_gravity="center"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="24dp" /> <!-- Dynamic subtitle color -->
 
+            <!-- Full Name -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/full_name"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp"/>
             <EditText
                 android:id="@+id/full_name_input"
@@ -131,21 +131,23 @@
                 android:layout_marginBottom="16dp"
                 android:autofillHints="name"
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/eleanor_vance"
                 android:inputType="textPersonName"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray" />
+                app:drawableTint="?attr/colorOnSurfaceVariant" /> <!-- Dynamic Input, Hint, and Icon Colors -->
 
-
+            <!-- Date of Birth -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/date_of_birth"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp"/>
             <EditText
                 android:id="@+id/dob_input"
@@ -155,25 +157,26 @@
                 android:layout_marginBottom="16dp"
                 android:autofillHints="birthDate"
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/may_14_1968"
                 android:inputType="datetime"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray"
-                android:focusable="false"
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                android:focusable="true"
                 android:clickable="true"
-                android:cursorVisible="false"
-                />
+                android:cursorVisible="false" />
 
-
+            <!-- Gender -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/gender"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp"/>
             <EditText
                 android:id="@+id/gender_input"
@@ -183,25 +186,26 @@
                 android:layout_marginBottom="16dp"
                 android:autofillHints="gender"
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/female"
                 android:inputType="text"
-                android:textColor="@color/text_dark"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:focusable="false"
+                android:focusable="true"
                 android:clickable="true"
                 android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray" />
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
 
-
+            <!-- Blood Type -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/blood_type"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp"/>
             <EditText
                 android:id="@+id/blood_type_input"
@@ -211,19 +215,19 @@
                 android:layout_marginBottom="16dp"
                 android:autofillHints=""
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/a"
                 android:inputType="text"
-                android:textColor="@color/text_dark"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
-                android:focusable="false"
+                android:focusable="true"
                 android:clickable="true"
                 android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_blood_drop"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray" />
-
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
 
             <!-- Weight & Height Row -->
             <LinearLayout
@@ -243,7 +247,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/weight_kg"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:layout_marginStart="4dp"/>
                     <EditText
                         android:id="@+id/weight_input"
@@ -253,15 +257,16 @@
                         android:layout_marginBottom="16dp"
                         android:autofillHints=""
                         android:background="@drawable/et_shape"
-                        android:backgroundTint="@color/white"
+                        android:backgroundTint="@color/dynamic_card_bg"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:hint="@string/_64"
-                        android:textColorHint="@color/border_gray"
                         android:inputType="numberDecimal"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:drawableStart="@drawable/ic_scale"
                         android:drawablePadding="12dp"
-                        app:drawableTint="@color/hint_gray" />
+                        app:drawableTint="?attr/colorOnSurfaceVariant" />
 
                 </LinearLayout>
 
@@ -276,7 +281,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/height_cm"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:layout_marginStart="4dp"/>
                     <EditText
                         android:id="@+id/height_input"
@@ -286,24 +291,26 @@
                         android:layout_marginBottom="16dp"
                         android:autofillHints=""
                         android:background="@drawable/et_shape"
-                        android:backgroundTint="@color/white"
+                        android:backgroundTint="@color/dynamic_card_bg"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:hint="@string/_168"
-                        android:textColor="@color/text_dark"
                         android:inputType="number"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:drawableStart="@drawable/ic_height"
                         android:drawablePadding="12dp"
-                        app:drawableTint="@color/hint_gray" />
+                        app:drawableTint="?attr/colorOnSurfaceVariant" />
 
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- Chronic Diseases -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/chronic_diseases"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp" />
             <EditText
                 android:id="@+id/diseases_input"
@@ -314,23 +321,23 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/none_reported"
-                android:textColor="@color/text_dark"
                 android:inputType="textMultiLine"
                 android:gravity="top|start"
                 android:padding="16dp"
                 android:drawableStart="@drawable/ic_medical_bag"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray" />
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
 
-
-
+            <!-- Allergies -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/allergies"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp" />
             <EditText
                 android:id="@+id/allergies_input"
@@ -341,9 +348,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/none_reported"
-                android:textColor="@color/text_dark"
                 android:inputType="textMultiLine"
                 android:gravity="top|start"
                 android:paddingStart="16dp"
@@ -352,14 +360,14 @@
                 android:paddingBottom="16dp"
                 android:drawableStart="@drawable/ic_warning"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray" />
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
 
-
+            <!-- Emergency Contact Number -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/emergency_contact_number"
-                android:textColor="@color/text_dark"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginStart="4dp" />
             <EditText
                 android:id="@+id/emergency_contact_input"
@@ -368,19 +376,19 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/et_shape"
-                android:backgroundTint="@color/white"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/phone_number"
-                android:textColor="@color/text_dark"
                 android:inputType="phone"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_phone"
                 android:drawablePadding="12dp"
-                app:drawableTint="@color/hint_gray"
-                android:autofillHints="phoneNumber"
-                />
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                android:autofillHints="phoneNumber" />
 
-
+            <!-- Save Button (Kept Primary Green) -->
             <Button
                 android:id="@+id/save_btn"
                 android:layout_width="match_parent"
@@ -397,5 +405,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </RelativeLayout>

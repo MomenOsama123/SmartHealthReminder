@@ -103,6 +103,8 @@
     <color name="button_primary_contrast">#5A7364</color>
     <color name="primary_green_accessible">#5A7364</color>
     <color name="primary_accessible">#5A7364</color>
-
+    <!-- الألوان في وضع الـ Light Mode  -->
+    <color name="dynamic_screen_bg">@color/background_beige</color>
+    <color name="dynamic_card_bg">#FFFFFF</color>
 
 </resources>
