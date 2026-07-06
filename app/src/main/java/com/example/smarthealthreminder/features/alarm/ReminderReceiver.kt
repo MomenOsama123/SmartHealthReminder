@@ -170,21 +170,19 @@ class ReminderReceiver : BroadcastReceiver() {
 
         if (type == "reminder") {
             if (snoozeUsed) {
-                // ✅ FIXED: await the status reset to Pending BEFORE scheduling the
-                // (immediate) warning alarm, so there is no race where the warning
-                // fires and reads a stale (non-Pending) status and gets skipped.
+
                 val db = AppDatabase.getDatabase(context)
+
                 db.reminderDao().updateReminderStatus(reminderId, "Pending")
                 sendRefreshBroadcast(context)
+
                 Log.d("REMINDER_RECEIVER", "Snooze notification: status reset to Pending for $reminderId")
 
-                // ✅ Show the Warning notification RIGHT NOW, together with the "snooze is over"
-                // notification (no separate scheduled alarm, no buttons on it).
                 showImmediateSnoozeWarningNotification(context, reminderId, title)
 
-                // Missed conversion still scheduled for 2 minutes from now.
                 val missedTime = System.currentTimeMillis() + WARNING_DELAY_MILLIS
                 scheduleMissedConversion(context, reminderId, missedTime)
+
 
                 Log.d("REMINDER_RECEIVER", "Snooze missed-conversion scheduled at $missedTime (2 min, warning shown immediately)")
             } else {
@@ -395,7 +393,7 @@ class ReminderReceiver : BroadcastReceiver() {
                 reminder.description ?: "",
                 "reminder",
                 snoozeUsed = false,
-                warningShown = true
+                warningShown = false
             )
             Log.d("REMINDER_RECEIVER", "Main notification updated for $id — Snooze removed")
         }
@@ -429,6 +427,13 @@ class ReminderReceiver : BroadcastReceiver() {
 
             // ✅ NOW convert to Missed
             db.reminderDao().updateReminderStatus(id, "Missed")
+            db.reminderDao().updateSnoozeUsed(id, false)
+
+            val updated = db.reminderDao().getReminderById(id)
+            Log.d(
+                "MISSED_TEST",
+                "status=${updated?.status}, snooze=${updated?.snoozeUsed}"
+            )
             sendRefreshBroadcast(context)
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -478,8 +483,16 @@ class ReminderReceiver : BroadcastReceiver() {
         } else {
             val db = AppDatabase.getDatabase(context)
 
-            db.reminderDao().updateReminderStatus(id, "Snoozed")
-            db.reminderDao().updateReminderTime(id, newTime)
+            val reminder = db.reminderDao().getReminderById(id) ?: return
+
+// لو استخدم Snooze قبل كده امنعيه
+            if (reminder.snoozeUsed) {
+                Log.d("REMINDER_RECEIVER", "Snooze already used")
+                return
+            }
+
+// أول مرة فقط
+            db.reminderDao().snoozeReminder(id, newTime)
             sendRefreshBroadcast(context)
 
             // Cancel old warning and missed alarms before scheduling new ones
@@ -629,9 +642,12 @@ class ReminderReceiver : BroadcastReceiver() {
                         Log.d("REMINDER_RECEIVER", "Recurring reminder marked taken, next alarm scheduled")
                     } else {
                         db.reminderDao().updateReminderStatus(id, "Completed")
+                        db.reminderDao().updateSnoozeUsed(id, false)
                     }
                 } else {
                     db.reminderDao().updateReminderStatus(id, "Completed")
+                    db.reminderDao().updateSnoozeUsed(id, false)
+
                     Log.d("REMINDER_RECEIVER", "Room reminder status updated to Completed")
                 }
             }

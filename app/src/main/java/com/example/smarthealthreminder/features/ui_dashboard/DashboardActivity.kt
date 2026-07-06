@@ -372,16 +372,28 @@ class DashboardActivity : AppCompatActivity() {
                     minutes = reminderMinutes,
                     type = "reminder",
                     category = reminder.category,
-                    status = reminder.status
-                ))
+                    status = reminder.status              ))
             }
 
         val nextItem = when {
             allItems.isEmpty() -> null
             else -> {
-                val validSnoozed = allItems.filter {
-                    it.status.equals("Snoozed", true) && currentMinutes >= it.minutes
-                }
+                val validSnoozed = reminderEntities
+                    .filter {
+                        it.snoozeUsed && currentMinutes >= timeToMinutes(it.time)
+                    }
+                    .map {
+                        ScheduleItem(
+                            id = it.id,
+                            name = it.title,
+                            dosage = it.description.orEmpty(),
+                            time = it.time.orEmpty(),
+                            minutes = timeToMinutes(it.time),
+                            type = "reminder",
+                            category = it.category,
+                            status = "Snoozed"
+                        )
+                    }
                 val pendingItems = allItems.filter {
                     it.status.equals("Pending", true) && currentMinutes < it.minutes
                 }
@@ -455,10 +467,14 @@ class DashboardActivity : AppCompatActivity() {
 
             val status = when (reminder.status) {
                 "Completed" -> "Taken"
-                "Snoozed" -> "Snoozed"
                 "Missed" -> "Missed"
+                "Snoozed" -> "Snoozed"
                 else -> "Pending"
             }
+            Log.d(
+                "SNOOZE_TEST",
+                "id=${reminder.id}, status=${reminder.status}, snoozeUsed=${reminder.snoozeUsed}"
+            )
 
             allItems.add(ScheduleItem(
                 id = reminder.id,
@@ -520,60 +536,106 @@ class DashboardActivity : AppCompatActivity() {
      * Snoozed: Mark as Done + Cancel
      */
     private fun showReminderActions(reminder: ReminderEntity, item: ScheduleItem) {
-        val options = when {
-            item.status.equals("Snoozed", true) ->
-                arrayOf(getString(R.string.mark_as_done), getString(R.string.cancel))
 
-            isWarningStage(item) ->
-                arrayOf(getString(R.string.mark_as_done), getString(R.string.cancel))
-
-            else ->
-                arrayOf(getString(R.string.mark_as_done), getString(R.string.snooze_10_min), getString(R.string.cancel))
+        val snoozeDisabled =
+            item.status.equals("Snoozed", true) || reminder.snoozeUsed
+        val options = if (snoozeDisabled) {
+            arrayOf(
+                getString(R.string.mark_as_done),
+                getString(R.string.cancel)
+            )
+        } else {
+            arrayOf(
+                getString(R.string.mark_as_done),
+                getString(R.string.snooze_10_min),
+                getString(R.string.cancel)
+            )
         }
 
         AlertDialog.Builder(this)
             .setTitle(reminder.title)
             .setItems(options) { _, which ->
-                if (item.status.equals("Snoozed", true) || isWarningStage(item)) {
+
+                if (snoozeDisabled){
                     when (which) {
                         0 -> {
                             if (!isItemDue(item)) {
-                                Toast.makeText(this, getString(R.string.not_yet_time_short), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.not_yet_time_short),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@setItems
                             }
+
                             viewModel.markReminderDone(reminder.id)
-                            Toast.makeText(this, getString(R.string.marked_done), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.marked_done),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        1 -> { /* Cancel */ }
+
+                        1 -> {
+                            // Cancel
+                        }
                     }
+
                 } else {
+
                     when (which) {
+
                         0 -> {
                             if (!isItemDue(item)) {
-                                Toast.makeText(this, getString(R.string.not_yet_time_short), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.not_yet_time_short),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@setItems
                             }
+
                             viewModel.markReminderDone(reminder.id)
-                            Toast.makeText(this, getString(R.string.marked_done), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.marked_done),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+
                         1 -> {
                             if (!isItemDue(item)) {
-                                Toast.makeText(this, getString(R.string.not_yet_time_short), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.not_yet_time_short),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@setItems
                             }
+
                             val intent = Intent(this, ReminderReceiver::class.java).apply {
                                 action = ReminderReceiver.ACTION_SNOOZE
                                 putExtra(ReminderReceiver.EXTRA_REMINDER_ID, reminder.id)
                                 putExtra(ReminderReceiver.EXTRA_TYPE, "reminder")
-                                // FIX: reminder.title is a non-null String, .orEmpty() was redundant
                                 putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title)
-                                putExtra(ReminderReceiver.EXTRA_DESCRIPTION, reminder.description.orEmpty())
+                                putExtra(
+                                    ReminderReceiver.EXTRA_DESCRIPTION,
+                                    reminder.description.orEmpty()
+                                )
                             }
+
                             sendBroadcast(intent)
 
-                            Toast.makeText(this, getString(R.string.snoozed), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.snoozed),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        2 -> { /* Cancel */ }
+
+                        2 -> {
+                            // Cancel
+                        }
                     }
                 }
             }
