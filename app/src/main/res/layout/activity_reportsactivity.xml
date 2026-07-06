@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dynamic_screen_bg"
-    tools:context=".features.Profileinfo.reports.ReportsActivity">
+    tools:context=".features.reports.ReportsActivity">
 
     <ScrollView
         android:id="@+id/reportsScroll"

@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.Profileinfo.reports
+package com.example.smarthealthreminder.features.reports
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

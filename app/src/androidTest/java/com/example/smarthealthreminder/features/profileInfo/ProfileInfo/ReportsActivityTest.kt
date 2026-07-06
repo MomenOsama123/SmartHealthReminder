@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.Profileinfo.reports
+package com.example.smarthealthreminder.features.profileInfo.ProfileInfo
 
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
@@ -9,6 +9,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.reports.ReportsActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 

@@ -607,6 +607,34 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="snooze_10_min">Snooze 10 min</string>
 
 
+    <!-- Reports Activity -->
+    <string name="report_adherence_summary">You took %1$d%% of your medications this week. You missed only %2$d doses.</string>
+    <string name="status_stable_title">Your condition is stable</string>
+    <string name="status_stable_description">Excellent adherence this week. Your health vitals are showing positive trends.</string>
+    <string name="status_fair_title">Your condition is fair</string>
+    <string name="status_fair_description">Adherence could be improved. Consistency is key to maintaining stable health.</string>
+    <string name="status_action_title">Action required</string>
+    <string name="status_action_description">Low adherence detected. Please try to follow your medication schedule more closely.</string>
+    <string name="last_updated_label">Last updated: %1$s</string>
+
+    <!-- Steps Tracker -->
+    <string name="stop_activity">STOP ACTIVITY</string>
+    <string name="start_activity_btn">START ACTIVITY</string>
+    <string name="live_tracking_active">Live tracking active! Walk to see steps.</string>
+    <string name="activity_tracking_stopped">Activity tracking stopped</string>
+    <string name="sensor_not_found">Sensor not found</string>
+    <string name="no_sensor_found">No step sensor found on this device</string>
+    <string name="permission_denied_steps">Permission denied. Step counting won\'t work.</string>
+    <string name="goal_updated">Goal updated to %1$s steps</string>
+    <string name="weekly_average_format">Average: %1$s steps</string>
+    <string name="no_weekly_data">No weekly data yet</string>
+    <string name="goal_achieved">Goal Achieved!</string>
+    <string name="get_started_title">Get Started!</string>
+    <string name="target_steps_format">/ %1$s steps</string>
+    <string name="motivation_desc_get_started">Start your day with a walk. Reach 10,000 steps to maintain your health goal.</string>
+    <string name="motivation_desc_achieved">Excellent work %1$s! You\'ve reached your daily step goal. Keep maintaining this healthy habit.</string>
+    <string name="select_daily_goal">Select Daily Step Goal</string>
+
     <!-- Format Strings (to avoid setText concatenation warnings) -->
     <string name="percentage_format">%1$d%%</string>
     <string name="med_name_dosage_format">%1$s - %2$s</string>

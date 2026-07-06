@@ -18,7 +18,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.databinding.FragmentHomeDashboardBinding
-import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.util.ImageUtils
@@ -27,13 +26,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
-import com.example.smarthealthreminder.ui_dashboard.DashboardActivity
+import com.example.smarthealthreminder.features.ui_dashboard.DashboardActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smarthealthreminder.features.profileInfo.ProfileActivity
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
+import java.util.*
 
 class HomeFragment : Fragment() {
 

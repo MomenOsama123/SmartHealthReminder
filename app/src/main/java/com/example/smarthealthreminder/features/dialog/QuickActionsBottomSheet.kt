@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.smarthealthreminder.databinding.BottomSheetQuickActionsBinding
-import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
+import com.example.smarthealthreminder.features.reports.ReportsActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
-import com.example.smarthealthreminder.ui_dashboard.DashboardActivity
+import com.example.smarthealthreminder.features.ui_dashboard.DashboardActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class QuickActionsBottomSheet : BottomSheetDialogFragment() {

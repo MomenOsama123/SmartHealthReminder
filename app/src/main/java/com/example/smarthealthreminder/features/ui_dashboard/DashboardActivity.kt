@@ -1,10 +1,11 @@
-package com.example.smarthealthreminder.ui_dashboard
+package com.example.smarthealthreminder.features.ui_dashboard
 
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
@@ -27,6 +28,7 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -82,7 +84,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        val auth = FirebaseAuth.getInstance()
 
         firebaseId = auth.currentUser?.uid ?: sharedPref.getString("FIREBASE_ID", "") ?: ""
 
@@ -284,7 +286,7 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun loadUserGreeting() {
         val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        val auth = FirebaseAuth.getInstance()
 
         if (sharedPref.getString("USER_NAME", null) == null) {
             val userName = auth.currentUser?.displayName
@@ -672,7 +674,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun buildUpcomingItemView(item: ScheduleItem): LinearLayout {
         val rowLayout = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = android.view.Gravity.CENTER_VERTICAL
+            gravity = Gravity.CENTER_VERTICAL
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

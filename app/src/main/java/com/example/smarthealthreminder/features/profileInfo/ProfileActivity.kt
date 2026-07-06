@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.Profileinfo.reports
+package com.example.smarthealthreminder.features.profileInfo
 
 import android.Manifest
 import android.app.DatePickerDialog
@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -30,11 +31,12 @@ import com.example.smarthealthreminder.features.settings.SettingsPrefs
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.util.ImageUtils
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
-
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -141,7 +143,7 @@ class ProfileActivity : AppCompatActivity() {
                         diseasesInput.setText(it.chronicDiseases)
                         allergiesInput.setText(it.allergies)
                         emergencyContactInput.setText(it.emergencyContact)
-                        
+
                         it.profileImage?.let { base64 ->
                             val bitmap = ImageUtils.base64ToBitmap(base64)
                             profileImage.setImageBitmap(bitmap)
@@ -159,7 +161,7 @@ class ProfileActivity : AppCompatActivity() {
             finish()
         }
 
-        findViewById<com.google.android.material.card.MaterialCardView>(R.id.editProfileCard).setOnClickListener {
+        findViewById<MaterialCardView>(R.id.editProfileCard).setOnClickListener {
             showImageSourceDialog()
         }
 
@@ -185,19 +187,19 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun showImageSourceDialog() {
-        val bottomSheetDialog = com.google.android.material.bottomsheet.BottomSheetDialog(this)
+        val bottomSheetDialog = BottomSheetDialog(this)
         val view = layoutInflater.inflate(R.layout.dialog_image_source, null)
-        
-        view.findViewById<android.view.View>(R.id.btn_camera).setOnClickListener {
+
+        view.findViewById<View>(R.id.btn_camera).setOnClickListener {
             checkCameraPermissionAndLaunch()
             bottomSheetDialog.dismiss()
         }
-        
-        view.findViewById<android.view.View>(R.id.btn_gallery).setOnClickListener {
+
+        view.findViewById<View>(R.id.btn_gallery).setOnClickListener {
             checkGalleryPermissionAndLaunch()
             bottomSheetDialog.dismiss()
         }
-        
+
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.show()
     }

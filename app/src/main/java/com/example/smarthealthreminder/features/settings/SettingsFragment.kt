@@ -5,7 +5,6 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -28,6 +27,8 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.FragmentSettingsBinding
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity
 import com.google.firebase.auth.FirebaseAuth
+import androidx.core.content.edit
+import androidx.core.net.toUri
 
 class SettingsFragment : Fragment() {
 
@@ -96,11 +97,11 @@ class SettingsFragment : Fragment() {
         setupNotificationSwitchListener()
 
         binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsPrefs.KEY_VIBRATION, isChecked).apply()
+            prefs.edit { putBoolean(SettingsPrefs.KEY_VIBRATION, isChecked) }
         }
 
         binding.switchEarlyReminders.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, isChecked).apply()
+            prefs.edit { putBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, isChecked) }
         }
 
         binding.spinnerThemeMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -108,10 +109,13 @@ class SettingsFragment : Fragment() {
                 val themeMode = positionToThemeMode(position)
                 if (prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT) == themeMode) return
 
-                prefs.edit()
-                    .putString(SettingsPrefs.KEY_THEME_MODE, themeMode)
-                    .putBoolean(SettingsPrefs.KEY_DARK_MODE, themeMode == SettingsPrefs.THEME_DARK)
-                    .apply()
+                prefs.edit {
+                    putString(SettingsPrefs.KEY_THEME_MODE, themeMode)
+                        .putBoolean(
+                            SettingsPrefs.KEY_DARK_MODE,
+                            themeMode == SettingsPrefs.THEME_DARK
+                        )
+                }
                 AppCompatDelegate.setDefaultNightMode(SettingsPrefs.getSavedNightMode(requireContext()))
                 requireActivity().recreate()
             }
@@ -148,7 +152,7 @@ class SettingsFragment : Fragment() {
 
     private fun setupNotificationSwitchListener() {
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsPrefs.KEY_NOTIFICATIONS, isChecked).apply()
+            prefs.edit { putBoolean(SettingsPrefs.KEY_NOTIFICATIONS, isChecked) }
             if (isChecked) {
                 requestNotificationPermissionIfNeeded()
             } else {
@@ -184,7 +188,7 @@ class SettingsFragment : Fragment() {
             })
         } else {
             startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:${requireContext().packageName}")
+                data = "package:${requireContext().packageName}".toUri()
             })
         }
     }
@@ -194,7 +198,7 @@ class SettingsFragment : Fragment() {
             val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {
                 startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = Uri.parse("package:${requireContext().packageName}")
+                    data = "package:${requireContext().packageName}".toUri()
                 })
             } else {
                 Toast.makeText(requireContext(), "Exact alarm permission is already allowed", Toast.LENGTH_SHORT).show()
@@ -223,7 +227,7 @@ class SettingsFragment : Fragment() {
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.save) { _, _ ->
                 val minutes = picker.value.coerceIn(SettingsPrefs.MIN_SNOOZE_MINUTES, SettingsPrefs.MAX_SNOOZE_MINUTES)
-                prefs.edit().putInt(prefKey, minutes).apply()
+                prefs.edit { putInt(prefKey, minutes) }
                 valueView.text = formatSnoozeMinutes(minutes)
                 Toast.makeText(
                     requireContext(),

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -15,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.reports.ReportsActivity
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
@@ -92,7 +92,7 @@ class TodayPlanActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialButton>(R.id.btn_create_report).setOnClickListener {
-            startActivity(Intent(this, com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity::class.java))
+            startActivity(Intent(this, ReportsActivity::class.java))
         }
 
         findViewById<MaterialButton>(R.id.btn_open_schedule).setOnClickListener {

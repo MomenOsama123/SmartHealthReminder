@@ -31,6 +31,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
+import java.util.Locale
+
 class StepsTrackerFragment : Fragment(), SensorEventListener {
 
     private var _binding: FragmentStepsTrackerBinding? = null
@@ -57,7 +59,7 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
         if (isGranted) {
             setupStepSensor()
         } else {
-            Toast.makeText(context, "Permission denied. Step counting won't work.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.permission_denied_steps), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -110,7 +112,7 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
             // Fallback to TYPE_STEP_COUNTER if detector is not available
             stepDetectorSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
             if (stepDetectorSensor == null) {
-                Toast.makeText(context, "No step sensor found on this device", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, getString(R.string.no_sensor_found), Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -152,18 +154,18 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
     
     private fun updateLiveUI(totalSteps: Int) {
         currentStepsDisplay = totalSteps
-        binding.tvCurrentSteps.text = String.format("%,d", currentStepsDisplay)
+        binding.tvCurrentSteps.text = String.format(Locale.getDefault(), "%,d", currentStepsDisplay)
         binding.progressBarSteps.progress = currentStepsDisplay
         
         // Update distance and calories locally too for instant feedback
         val dist = currentStepsDisplay * 0.0008
         val kcal = (currentStepsDisplay * 0.04).toInt()
-        binding.tvDistanceValue.text = String.format("%.1f", dist)
+        binding.tvDistanceValue.text = String.format(Locale.getDefault(), "%.1f", dist)
         binding.tvCaloriesValue.text = kcal.toString()
 
         val remaining = targetStepsDisplay - currentStepsDisplay
         if (remaining > 0) {
-            val formattedRemaining = String.format("%,d", remaining)
+            val formattedRemaining = String.format(Locale.getDefault(), "%,d", remaining)
             val minutes = (remaining / 100).coerceAtLeast(1)
             binding.tvMotivationDesc.text = getString(R.string.motivation_desc_format, formattedRemaining, minutes)
         }
@@ -195,7 +197,7 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
 
         binding.btnStartActivity.setOnClickListener {
             if (stepDetectorSensor == null) {
-                Toast.makeText(context, "Sensor not found", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.sensor_not_found), Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
@@ -203,15 +205,15 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                 isTracking = true
                 sessionSteps = 0
                 registerStepListener()
-                binding.btnStartActivity.text = "STOP ACTIVITY"
+                binding.btnStartActivity.text = getString(R.string.stop_activity)
                 binding.btnStartActivity.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.urgent))
-                Toast.makeText(context, "Live tracking active! Walk to see steps.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.live_tracking_active), Toast.LENGTH_SHORT).show()
             } else {
                 isTracking = false
                 sensorManager?.unregisterListener(this)
-                binding.btnStartActivity.text = "START ACTIVITY"
+                binding.btnStartActivity.text = getString(R.string.start_activity_btn)
                 binding.btnStartActivity.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.card_stat_accent))
-                Toast.makeText(context, "Activity tracking stopped", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.activity_tracking_stopped), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -245,13 +247,13 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                     // This prevents the "jumping" effect caused by DB latency
                     if (!isTracking) {
                         currentStepsDisplay = stepData.steps
-                        binding.tvCurrentSteps.text = String.format("%,d", stepData.steps)
+                        binding.tvCurrentSteps.text = String.format(Locale.getDefault(), "%,d", stepData.steps)
                         binding.progressBarSteps.progress = stepData.steps
-                        binding.tvDistanceValue.text = String.format("%.1f", stepData.distanceKm)
+                        binding.tvDistanceValue.text = String.format(Locale.getDefault(), "%.1f", stepData.distanceKm)
                         binding.tvCaloriesValue.text = stepData.calories.toString()
                     }
                     
-                    binding.tvTargetSteps.text = "/ ${String.format("%,d", stepData.targetSteps)} steps"
+                    binding.tvTargetSteps.text = getString(R.string.target_steps_format, String.format(Locale.getDefault(), "%,d", stepData.targetSteps))
                     binding.progressBarSteps.max = stepData.targetSteps
                     binding.tvActiveMinValue.text = stepData.activeMinutes.toString()
                     
@@ -260,12 +262,12 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                     
                     if (remaining > 0) {
                         binding.tvMotivationTitle.text = getString(R.string.quot_keep_it_up_quot)
-                        val formattedRemaining = String.format("%,d", remaining)
+                        val formattedRemaining = String.format(Locale.getDefault(), "%,d", remaining)
                         val minutes = (remaining / 100).coerceAtLeast(1)
                         binding.tvMotivationDesc.text = getString(R.string.motivation_desc_format, formattedRemaining, minutes)
                     } else {
-                        binding.tvMotivationTitle.text = "\"Goal Achieved!\""
-                        binding.tvMotivationDesc.text = "Excellent work $userName! You've reached your daily step goal. Keep maintaining this healthy habit."
+                        binding.tvMotivationTitle.text = getString(R.string.goal_achieved)
+                        binding.tvMotivationDesc.text = getString(R.string.motivation_desc_achieved, userName)
                     }
                 } else {
                     // Default state when no data exists for today
@@ -276,12 +278,12 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
                         binding.tvDistanceValue.text = "0.0"
                         binding.tvCaloriesValue.text = "0"
                     }
-                    binding.tvTargetSteps.text = "/ 10,000 steps"
+                    binding.tvTargetSteps.text = getString(R.string.target_steps_format, "10,000")
                     binding.progressBarSteps.max = 10000
                     binding.tvActiveMinValue.text = "0"
                     
-                    binding.tvMotivationTitle.text = "\"Get Started!\""
-                    binding.tvMotivationDesc.text = "Start your day with a walk. Reach 10,000 steps to maintain your health goal."
+                    binding.tvMotivationTitle.text = getString(R.string.get_started_title)
+                    binding.tvMotivationDesc.text = getString(R.string.motivation_desc_get_started)
                 }
             }
         }
@@ -294,14 +296,14 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
     }
 
     private fun updateWeeklyChart(stepsList: List<com.example.smarthealthreminder.features.data.local.entity.StepEntity>) {
-        val days = listOf(
-            binding.root.findViewById<View>(R.id.barMon),
-            binding.root.findViewById<View>(R.id.barTue),
-            binding.root.findViewById<View>(R.id.barWed),
-            binding.root.findViewById<View>(R.id.barThu),
-            binding.root.findViewById<View>(R.id.barFri),
-            binding.root.findViewById<View>(R.id.barSat),
-            binding.root.findViewById<View>(R.id.barSun)
+        val days = listOf<View>(
+            binding.root.findViewById(R.id.barMon),
+            binding.root.findViewById(R.id.barTue),
+            binding.root.findViewById(R.id.barWed),
+            binding.root.findViewById(R.id.barThu),
+            binding.root.findViewById(R.id.barFri),
+            binding.root.findViewById(R.id.barSat),
+            binding.root.findViewById(R.id.barSun)
         )
         
         val dayLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
@@ -320,9 +322,9 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
         
         if (stepsList.isNotEmpty()) {
             val avg = stepsList.map { it.steps }.average().toInt()
-            binding.tvWeeklyAverage.text = "Average: ${String.format("%,d", avg)} steps"
+            binding.tvWeeklyAverage.text = getString(R.string.weekly_average_format, String.format(Locale.getDefault(), "%,d", avg))
         } else {
-            binding.tvWeeklyAverage.text = "No weekly data yet"
+            binding.tvWeeklyAverage.text = getString(R.string.no_weekly_data)
         }
     }
 
@@ -354,21 +356,17 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
         val values = intArrayOf(5000, 8000, 10000, 12000, 15000, 20000)
 
         androidx.appcompat.app.AlertDialog.Builder(requireContext())
-            .setTitle("Select Daily Step Goal")
+            .setTitle(getString(R.string.select_daily_goal))
             .setItems(targets) { _, which ->
                 viewModel.updateDailyGoal(values[which])
-                Toast.makeText(context, "Goal updated to ${targets[which]} steps", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, getString(R.string.goal_updated, targets[which]), Toast.LENGTH_SHORT).show()
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton(R.string.cancel, null)
             .show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    companion object {
-        fun newInstance() = StepsTrackerFragment()
     }
 }

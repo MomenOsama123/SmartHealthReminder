@@ -45,7 +45,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".ui_dashboard.DashboardActivity"
+        <activity android:name=".features.ui_dashboard.DashboardActivity"
             android:exported="true"
             />
 
@@ -104,10 +104,10 @@
             android:name=".features.search.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".features.Profileinfo.reports.ProfileActivity"
+            android:name=".features.profileInfo.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".features.Profileinfo.reports.ReportsActivity"
+            android:name=".features.reports.ReportsActivity"
             android:exported="false" />
         <activity
             android:name=".features.plan.TodayPlanActivity"

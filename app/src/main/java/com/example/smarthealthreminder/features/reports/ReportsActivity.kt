@@ -1,7 +1,6 @@
-package com.example.smarthealthreminder.features.Profileinfo.reports
+package com.example.smarthealthreminder.features.reports
 
 import android.os.Bundle
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -18,7 +17,11 @@ import com.example.smarthealthreminder.features.data.repository.ReportRepository
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.example.smarthealthreminder.features.navigation.BottomNavHelper
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class ReportsActivity : AppCompatActivity() {
 
@@ -52,7 +55,7 @@ class ReportsActivity : AppCompatActivity() {
         val tvSymptomsOverview = findViewById<TextView>(R.id.tv_symptoms_overview)
         val tvInsight1 = findViewById<TextView>(R.id.tv_insight1)
         val tvInsight2 = findViewById<TextView>(R.id.tv_insight2)
-        val progressBar = findViewById<com.google.android.material.progressindicator.LinearProgressIndicator>(R.id.adherence_progress_bar)
+        val progressBar = findViewById<LinearProgressIndicator>(R.id.adherence_progress_bar)
         val tvLastUpdated = findViewById<TextView>(R.id.tv_last_updated)
         val tvStatusTitle = findViewById<TextView>(R.id.tv_status_title)
         val tvStatusDescription = findViewById<TextView>(R.id.tv_status_description)
@@ -84,10 +87,14 @@ class ReportsActivity : AppCompatActivity() {
                     val latestReport = reportsList.first()
 
                     // تحديث الأرقام والنصوص في الشاشة برمجياً
-                    tvPercentage.text = "${latestReport.adherencePercentage}%"
+                    tvPercentage.text = getString(R.string.percentage_format, latestReport.adherencePercentage)
 
                     // تحديث الرسالة
-                    tvAdherenceMessage?.text = "You took ${latestReport.adherencePercentage}% of your medications this week. You missed only ${latestReport.missedDoses} doses."
+                    tvAdherenceMessage?.text = getString(
+                        R.string.report_adherence_summary,
+                        latestReport.adherencePercentage,
+                        latestReport.missedDoses
+                    )
 
                     // تحديث الأعراض والنصائح
                     tvSymptomsOverview?.text = latestReport.symptomsOverview
@@ -96,16 +103,16 @@ class ReportsActivity : AppCompatActivity() {
 
                     // تحديث الحالة بناءً على النسبة
                     if (latestReport.adherencePercentage >= 80) {
-                        tvStatusTitle?.text = "Your condition is stable"
-                        tvStatusDescription?.text = "Excellent adherence this week. Your health vitals are showing positive trends."
+                        tvStatusTitle?.text = getString(R.string.status_stable_title)
+                        tvStatusDescription?.text = getString(R.string.status_stable_description)
                         progressBar?.setIndicatorColor(getColor(R.color.primary_green))
                     } else if (latestReport.adherencePercentage >= 50) {
-                        tvStatusTitle?.text = "Your condition is fair"
-                        tvStatusDescription?.text = "Adherence could be improved. Consistency is key to maintaining stable health."
+                        tvStatusTitle?.text = getString(R.string.status_fair_title)
+                        tvStatusDescription?.text = getString(R.string.status_fair_description)
                         progressBar?.setIndicatorColor(getColor(R.color.pending))
                     } else {
-                        tvStatusTitle?.text = "Action required"
-                        tvStatusDescription?.text = "Low adherence detected. Please try to follow your medication schedule more closely."
+                        tvStatusTitle?.text = getString(R.string.status_action_title)
+                        tvStatusDescription?.text = getString(R.string.status_action_description)
                         progressBar?.setIndicatorColor(getColor(R.color.error_red))
                     }
 
@@ -113,9 +120,9 @@ class ReportsActivity : AppCompatActivity() {
                     progressBar?.setProgress(latestReport.adherencePercentage, true)
 
                     // تحديث التاريخ
-                    val sdf = java.text.SimpleDateFormat("MMM dd, yyyy HH:mm", java.util.Locale.getDefault())
-                    val lastUpdatedText = "Last updated: ${sdf.format(java.util.Date(latestReport.createdAt))}"
-                    tvLastUpdated?.text = lastUpdatedText
+                    val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
+                    val formattedDate = sdf.format(Date(latestReport.createdAt))
+                    tvLastUpdated?.text = getString(R.string.last_updated_label, formattedDate)
                 } else {
                     // لو مفيش تقارير، اعمل واحد فوراً
                     viewModel.generateRealReport()
