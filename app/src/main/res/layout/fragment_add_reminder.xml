@@ -191,7 +191,10 @@
                     android:textAppearance="@style/TextBody1"
                     android:drawableEnd="@drawable/ic_calendar"
                     android:drawableTint="@color/text_tertiary"
-                    tools:ignore="Autofill,TextFields" />
+                    tools:ignore="Autofill,TextFields"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:cursorVisible="false"/>
 
                 <EditText
                     android:id="@+id/et_time"
@@ -205,7 +208,10 @@
                     android:textAppearance="@style/TextBody1"
                     android:drawableEnd="@drawable/ic_clock"
                     android:drawableTint="@color/text_tertiary"
-                    tools:ignore="Autofill,TextFields" />
+                    tools:ignore="Autofill,TextFields"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:cursorVisible="false"/>
 
             </LinearLayout>
 

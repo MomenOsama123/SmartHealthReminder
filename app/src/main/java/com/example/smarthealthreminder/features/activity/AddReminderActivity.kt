@@ -201,6 +201,8 @@ class AddReminderActivity : AppCompatActivity() {
             )
             etTime.setText(selectedTime)
         }
+        etDate.showSoftInputOnFocus = false
+        etTime.showSoftInputOnFocus = false
     }
 
     private fun setupListeners() {

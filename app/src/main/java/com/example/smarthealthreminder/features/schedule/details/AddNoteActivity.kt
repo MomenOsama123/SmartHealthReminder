@@ -1,6 +1,7 @@
 package com.example.smarthealthreminder.features.schedule.details
 
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -15,7 +16,6 @@ import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 
 class AddNoteActivity : AppCompatActivity() {
@@ -27,7 +27,7 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: HealthViewModel
-    private lateinit var etNote: TextInputEditText
+    private lateinit var etNote: EditText
     private lateinit var tvDate: TextView
     private var date: String = ""
 
