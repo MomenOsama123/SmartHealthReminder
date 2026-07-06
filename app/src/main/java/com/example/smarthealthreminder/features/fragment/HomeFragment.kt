@@ -33,6 +33,9 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFact
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import kotlin.compareTo
+import kotlin.div
+import kotlin.times
 
 class HomeFragment : Fragment() {
 
@@ -58,12 +61,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerView()
         setupClickListeners()
         observeReminders()
         setupProfileObservation()
+        setupProfileObservation()
         observeHealthStats()
+        observeAdherenceFromPrefs()
     }
 
     private fun observeHealthStats() {
@@ -122,6 +126,7 @@ class HomeFragment : Fragment() {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             updateDailyTipIfNeeded()
+            observeAdherenceFromPrefs()
         }
     }
 
@@ -307,4 +312,15 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-}
+
+    private fun observeAdherenceFromPrefs() {
+        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        val percent = prefs.getInt("adherence_percent", 0)
+
+        binding.tvHomeAdherencePercent.text = "$percent%"
+    }
+            }
+
+
+
+

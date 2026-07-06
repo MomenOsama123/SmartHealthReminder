@@ -38,7 +38,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var tvTotalMeds: TextView
     private lateinit var tvTakenToday: TextView
     private lateinit var tvMissedToday: TextView
-    private lateinit var tvUserName: TextView
+
     private lateinit var tvNextMedName: TextView
     private lateinit var tvNextMedTime: TextView
     private lateinit var btnMarkTaken: TextView
@@ -102,7 +102,6 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-        tvUserName = findViewById(R.id.tvUserName)
         tvGreeting = findViewById(R.id.tvGreeting)
         tvAdherencePercent = findViewById(R.id.tvAdherencePercent)
         tvTotalMeds = findViewById(R.id.tvTotalMeds)
@@ -288,8 +287,8 @@ class DashboardActivity : AppCompatActivity() {
             else -> R.string.greeting_night
         }
 
-        tvGreeting.text = getString(greetingRes)
-        tvUserName.text = userName    }
+        tvGreeting.text = getString(greetingRes, userName)
+    }
 
     private fun shouldShowToday(reminder: ReminderEntity): Boolean {
         val today = Calendar.getInstance()
@@ -341,6 +340,11 @@ class DashboardActivity : AppCompatActivity() {
 
         val percentage = if (total > 0) (done * 100 / total) else 0
         tvAdherencePercent.text = getString(R.string.percentage_format, percentage)
+
+        val prefs = getSharedPreferences("health_prefs", MODE_PRIVATE)
+        prefs.edit {
+            putInt("adherence_percent", percentage)
+        }
 
         Log.d("DASH_STATS", "total=$total, done=$done, missed=$missed, pending=$pending")
     }
