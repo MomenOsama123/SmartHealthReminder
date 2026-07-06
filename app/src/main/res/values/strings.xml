@@ -679,4 +679,20 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="adherence">ADHERENCE</string>
     <string name="_72">72%</string>
     <string name="reminding_doses">Reminding Doses</string>
+    <string name="reminder_related_icon">Reminder Related Icon</string>
+    <string name="morning_medication">Morning Medication</string>
+    <string name="schedule">SCHEDULE</string>
+    <string name="active_reminder">ACTIVE REMINDER</string>
+    <string name="_8_00_am">8:00 AM</string>
+    <string name="daily_routine">Daily Routine</string>
+    <string name="frequency">FREQUENCY</string>
+    <string name="every_day">Every Day</string>
+    <string name="details">DETAILS</string>
+    <string name="SampleDescription">Take one tablet of Vitamin D with breakfast. Keep hydrated throughout the morning to support optimal absorption and cellular energy.</string>
+    <string name="preferences">PREFERENCES</string>
+    <string name="priority">Priority</string>
+    <string name="_5_minutes_before">5 minutes before</string>
+    <string name="edit_reminder">Edit Reminder</string>
+    <string name="enabled">Enabled</string>
+    <string name="close">Close</string>
 </resources>
