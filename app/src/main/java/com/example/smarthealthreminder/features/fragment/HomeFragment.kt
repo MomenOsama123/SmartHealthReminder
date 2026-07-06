@@ -120,6 +120,8 @@ class HomeFragment : Fragment() {
         super.onResume()
         refreshUserProfile()
         updateDailyTipIfNeeded()
+        observeAdherenceFromPrefs()
+
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
