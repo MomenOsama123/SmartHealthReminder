@@ -19,10 +19,15 @@ import com.example.smarthealthreminder.features.fragment.ScheduleFragment
 import com.example.smarthealthreminder.features.settings.SettingsFragment
 import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.smarthealthreminder.features.fragment.MedicationPlansFragment
+
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
+
+        const val DESTINATION_MEDICATION_PLANS = "medication_plans"
+
         const val EXTRA_START_DESTINATION = "extra_start_destination"
         const val DESTINATION_HOME = "home"
         const val DESTINATION_SCHEDULE = "schedule"
@@ -37,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         private const val TAG_REMINDERS = "reminders"
         private const val TAG_SETTINGS = "settings"
         private const val TAG_INSIGHTS = "insights"
+        private const val TAG_MEDICATION_PLANS = "medication_plans"
     }
 
     private lateinit var homeFragment: HomeFragment
@@ -49,6 +55,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var bottomNavigation: BottomNavigationView
     private var activeFragment: Fragment? = null
     private var isProgrammaticSelection = false
+
+    private lateinit var medicationPlansFragment: MedicationPlansFragment
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             chatBotFragment = ChatBotFragment()
             settingsFragment = SettingsFragment()
             stepsTrackerFragment = StepsTrackerFragment()
+            medicationPlansFragment = MedicationPlansFragment()
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, scheduleFragment, TAG_SCHEDULE).hide(scheduleFragment)
@@ -74,6 +85,9 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, settingsFragment, TAG_SETTINGS).hide(settingsFragment)
                 .add(R.id.fragment_container, stepsTrackerFragment, TAG_INSIGHTS).hide(stepsTrackerFragment)
                 .add(R.id.fragment_container, homeFragment, TAG_HOME)
+
+                .add(R.id.fragment_container, medicationPlansFragment, TAG_MEDICATION_PLANS).hide(medicationPlansFragment)
+
                 .commit()
 
             activeFragment = homeFragment
@@ -86,6 +100,8 @@ class MainActivity : AppCompatActivity() {
             settingsFragment = supportFragmentManager.findFragmentByTag(TAG_SETTINGS) as? SettingsFragment ?: SettingsFragment()
             stepsTrackerFragment = supportFragmentManager.findFragmentByTag(TAG_INSIGHTS) as? StepsTrackerFragment ?: StepsTrackerFragment()
             activeFragment = supportFragmentManager.fragments.find { it.isAdded && !it.isHidden } ?: homeFragment
+            medicationPlansFragment = supportFragmentManager.findFragmentByTag(TAG_MEDICATION_PLANS) as? MedicationPlansFragment ?: MedicationPlansFragment()
+
         }
 
         bottomNavigation.setOnItemSelectedListener { item ->
@@ -104,10 +120,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Handle Back button to return to Home fragment before exiting
         onBackPressedDispatcher.addCallback(this, object : androidx.activity.OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (activeFragment != homeFragment) {
+                if (supportFragmentManager.backStackEntryCount > 0) {
+                    supportFragmentManager.popBackStack()
+                } else if (activeFragment != homeFragment) {
                     bottomNavigation.selectedItemId = R.id.nav_home
                 } else {
                     isEnabled = false
@@ -159,6 +176,9 @@ class MainActivity : AppCompatActivity() {
             DESTINATION_REMINDERS -> {
                 showFragment(remindersFragment)
             }
+            DESTINATION_MEDICATION_PLANS -> {
+                showFragment(medicationPlansFragment)
+            }
             "chatbot", "ai" -> {
                 if (bottomNavigation.selectedItemId != R.id.nav_ai) {
                     bottomNavigation.selectedItemId = R.id.nav_ai
@@ -182,6 +202,13 @@ class MainActivity : AppCompatActivity() {
             }
         }
         isProgrammaticSelection = false
+    }
+
+    fun openAddMedicationPlanFragment() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, com.example.smarthealthreminder.features.fragment.AddMedicationPlanFragment(), "add_medication_plan")
+            .addToBackStack("add_medication_plan")
+            .commit()
     }
 
     private fun showFragment(fragment: Fragment): Boolean {

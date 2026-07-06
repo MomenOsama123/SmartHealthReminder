@@ -33,12 +33,15 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFact
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
-import kotlin.compareTo
-import kotlin.div
-import kotlin.times
+
+import com.example.smarthealthreminder.features.adapter.MedicationPlanAdapter
+import com.example.smarthealthreminder.features.dialog.ReminderDetailDialogHelper
+import com.example.smarthealthreminder.features.dialog.MedicationPlanDetailDialogHelper
+import com.example.smarthealthreminder.features.alarm.ReminderScheduler
 
 class HomeFragment : Fragment() {
 
+    private lateinit var medicationPlanAdapter: MedicationPlanAdapter
     private var _binding: FragmentHomeDashboardBinding? = null
     private val binding get() = _binding!!
 
@@ -61,10 +64,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupMedicationPlansSection()
         setupRecyclerView()
         setupClickListeners()
         observeReminders()
-        setupProfileObservation()
         setupProfileObservation()
         observeHealthStats()
         observeAdherenceFromPrefs()
@@ -121,7 +125,6 @@ class HomeFragment : Fragment() {
         refreshUserProfile()
         updateDailyTipIfNeeded()
         observeAdherenceFromPrefs()
-
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -155,7 +158,19 @@ class HomeFragment : Fragment() {
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
-            Toast.makeText(context, "Clicked: ${reminder.title}", Toast.LENGTH_SHORT).show()
+            val id = reminder.id ?: return@setOnReminderClickListener
+            ReminderDetailDialogHelper.show(
+                context = requireContext(),
+                title = reminder.title ?: "Reminder",
+                description = reminder.description,
+                date = reminder.date,
+                time = reminder.time,
+                category = reminder.category,
+                status = reminder.status,
+                onMarkDone = { viewModel.markReminderDone(id) },
+                onMarkMissed = { viewModel.markReminderMissed(id) },
+                onDelete = { viewModel.deleteReminderById(id) }
+            )
         }
     }
 
@@ -203,7 +218,6 @@ class HomeFragment : Fragment() {
         binding.cvDashboard.setOnClickListener {
             startActivity(Intent(requireContext(), DashboardActivity::class.java))
         }
-
     }
 
     private fun refreshDailyTip() {
@@ -237,14 +251,14 @@ class HomeFragment : Fragment() {
 
         val currentTip = binding.tvTipContent.text.toString()
         var newTip = tips.random()
-        
+
         // BUG FIX: Prevent infinite loop if tips list is small or same
         var attempts = 0
         while (newTip == currentTip && attempts < 10 && tips.size > 1) {
             newTip = tips.random()
             attempts++
         }
-        
+
         binding.tvTipContent.text = newTip
 
         // Persist the tip and today's date
@@ -261,7 +275,7 @@ class HomeFragment : Fragment() {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allReminders.collect { entities ->
                     val today = RecurrenceHelper.getTodayString()
-                    
+
                     val totalTodayReminders = entities.filter { entity ->
                         RecurrenceHelper.isDueOnDate(
                             reminderDate = entity.date,
@@ -273,7 +287,7 @@ class HomeFragment : Fragment() {
 
                     val completedToday = totalTodayReminders.count { it.status.equals("Completed", ignoreCase = true) }
                     val totalCount = totalTodayReminders.size
-                    
+
                     if (totalCount > 0) {
                         binding.reminding.text = getString(R.string.dosage_progress_format, completedToday, totalCount)
                     } else {
@@ -310,9 +324,44 @@ class HomeFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun setupMedicationPlansSection() {
+        medicationPlanAdapter = MedicationPlanAdapter()
+        binding.rvMedicationPlans.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvMedicationPlans.adapter = medicationPlanAdapter
+        medicationPlanAdapter.setOnPlanClickListener { plan ->
+            MedicationPlanDetailDialogHelper.show(
+                context = requireContext(),
+                plan = plan,
+                onStopPlan = { stopMedicationPlan(plan) }
+            )
+        }
+
+        binding.btnAddMedicationPlanHome.setOnClickListener {
+            val intent = Intent(requireContext(), MainActivity::class.java).apply {
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_MEDICATION_PLANS)
+                flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            }
+            startActivity(intent)
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allMedicationPlans.collect { plans ->
+                    val today = RecurrenceHelper.getTodayString()
+                    val activePlans = plans.filter { it.isActive && it.endDate >= today }
+
+                    if (activePlans.isEmpty()) {
+                        binding.rvMedicationPlans.visibility = View.GONE
+                        binding.tvNoMedicationPlans.visibility = View.VISIBLE
+                    } else {
+                        binding.rvMedicationPlans.visibility = View.VISIBLE
+                        binding.tvNoMedicationPlans.visibility = View.GONE
+                        medicationPlanAdapter.submitList(activePlans)
+                    }
+                }
+            }
+        }
     }
 
     private fun observeAdherenceFromPrefs() {
@@ -321,8 +370,22 @@ class HomeFragment : Fragment() {
 
         binding.tvHomeAdherencePercent.text = "$percent%"
     }
+
+    private fun stopMedicationPlan(plan: com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity) {
+        val repository = HealthRepository(AppDatabase.getDatabase(requireContext()))
+        lifecycleScope.launch {
+            val reminders = repository.getRemindersByPlanId(plan.id)
+            reminders.forEach { reminder ->
+                ReminderScheduler.cancelReminderAlarms(requireContext(), reminder.id)
+                repository.updateReminderStatus(reminder.id, "Completed")
             }
+            repository.deactivateMedicationPlan(plan.id)
+            Toast.makeText(requireContext(), "\"${plan.medicineName}\" plan stopped", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-
-
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

@@ -71,7 +71,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_reminder"
+                android:text="@string/reminders"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:gravity="center"/>
@@ -114,7 +114,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_alarm"
+                android:text="@string/alarms"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:gravity="center"/>
@@ -165,7 +165,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/add_report"
+                android:text="@string/reports"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:gravity="center"/>
@@ -208,7 +208,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/view_dashboard"
+                android:text="@string/dashboard"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:gravity="center"/>
@@ -223,6 +223,64 @@
                 android:layout_marginTop="2dp"/>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        android:layout_marginTop="12dp">
+
+        <!-- Medication Plan card -->
+        <LinearLayout
+            android:id="@+id/action_add_medication_plan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="16dp"
+            android:background="@drawable/bg_quick_action_card"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:background="@drawable/circle_tool_bg"
+                android:padding="10dp"
+                android:src="@drawable/ic_medicine"
+                android:layout_marginBottom="10dp"
+                app:tint="@color/success"
+                android:contentDescription="@string/add_medication_plan"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medication_plan"
+                android:textAppearance="@style/TextBody1"
+                android:textColor="@color/text_primary"
+                android:gravity="center"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/set_a_recurring_medicine_plan"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center"
+                android:layout_marginTop="2dp"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginStart="6dp"/>
 
     </LinearLayout>
 

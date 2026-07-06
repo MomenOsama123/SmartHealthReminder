@@ -25,6 +25,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Locale
+import com.example.smarthealthreminder.features.data.local.entity.DoseLogEntity
+import java.util.UUID
 
 /**
  * SINGLE SOURCE OF TRUTH for all reminder alarm logic.
@@ -429,6 +431,16 @@ class ReminderReceiver : BroadcastReceiver() {
 
             // ✅ NOW convert to Missed
             db.reminderDao().updateReminderStatus(id, "Missed")
+            db.doseLogDao().insertLog(
+                DoseLogEntity(
+                    id = UUID.randomUUID().toString(),
+                    planId = reminder.planId ?: "",
+                    reminderId = reminder.id,
+                    scheduledDate = RecurrenceHelper.getTodayString(),
+                    scheduledTime = reminder.time ?: "",
+                    status = "Missed"
+                )
+            )
             sendRefreshBroadcast(context)
 
             val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -616,6 +628,20 @@ class ReminderReceiver : BroadcastReceiver() {
             "reminder" -> {
                 val reminder = db.reminderDao().getReminderById(id)
 
+                if (reminder != null) {
+                    // ✅ سجّل الجرعة دي في الـ Log عشان الإحصائيات
+                    db.doseLogDao().insertLog(
+                        DoseLogEntity(
+                            id = UUID.randomUUID().toString(),
+                            planId = reminder.planId ?: "",
+                            reminderId = reminder.id,
+                            scheduledDate = RecurrenceHelper.getTodayString(),
+                            scheduledTime = reminder.time ?: "",
+                            status = "Taken"
+                        )
+                    )
+                }
+
                 if (reminder != null && reminder.isRecurring && RecurrenceHelper.isRecurring(reminder.recurrenceType)) {
                     val nextMillis = RecurrenceHelper.computeNextTriggerMillis(
                         date = reminder.date,
@@ -623,12 +649,16 @@ class ReminderReceiver : BroadcastReceiver() {
                         recurrenceType = reminder.recurrenceType
                     )
 
-                    if (nextMillis != null) {
+                    val reachedEnd = reminder.endDate != null && nextMillis != null &&
+                            RecurrenceHelper.formatDate(nextMillis) > reminder.endDate!!
+
+                    if (nextMillis != null && !reachedEnd) {
                         db.reminderDao().updateReminderStatus(id, "Pending")
                         ReminderScheduler.scheduleReminder(context, reminder, nextMillis)
                         Log.d("REMINDER_RECEIVER", "Recurring reminder marked taken, next alarm scheduled")
                     } else {
                         db.reminderDao().updateReminderStatus(id, "Completed")
+                        Log.d("REMINDER_RECEIVER", "Reminder plan finished (reached end date)")
                     }
                 } else {
                     db.reminderDao().updateReminderStatus(id, "Completed")

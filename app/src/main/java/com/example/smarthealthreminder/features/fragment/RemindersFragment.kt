@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class RemindersFragment : Fragment() {
 
     private var recyclerTimeline: RecyclerView? = null
@@ -86,6 +87,8 @@ class RemindersFragment : Fragment() {
         btnAddReminder?.setOnClickListener {
             startActivity(Intent(requireContext(), AddReminderActivity::class.java))
         }
+
+
 
         // Collect all reminders for timeline
         viewLifecycleOwner.lifecycleScope.launch {

@@ -15,7 +15,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity
+
 class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
+
+
+    // Medication Plans
+    val allMedicationPlans: StateFlow<List<MedicationPlanEntity>> = repository.getAllMedicationPlans()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     // Steps
     private val todayDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
