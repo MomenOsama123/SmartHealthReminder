@@ -376,36 +376,39 @@ class DashboardActivity : AppCompatActivity() {
             }
 
         val nextItem = when {
-            allItems.isEmpty() -> null
-            else -> {
-                val validSnoozed = reminderEntities
-                    .filter {
-                        it.snoozeUsed && currentMinutes >= timeToMinutes(it.time)
-                    }
-                    .map {
-                        ScheduleItem(
-                            id = it.id,
-                            name = it.title,
-                            dosage = it.description.orEmpty(),
-                            time = it.time.orEmpty(),
-                            minutes = timeToMinutes(it.time),
-                            type = "reminder",
-                            category = it.category,
-                            status = "Snoozed"
-                        )
-                    }
-                val pendingItems = allItems.filter {
-                    it.status.equals("Pending", true) && currentMinutes < it.minutes
-                }
 
-                when {
-                    validSnoozed.isNotEmpty() -> validSnoozed.minByOrNull { it.minutes }
-                    pendingItems.isNotEmpty() -> pendingItems.minByOrNull { it.minutes }
-                    else -> null
-                }
+            // أول أولوية: Reminder رجع من Snooze
+            allItems.any {
+                it.status == "Snoozed" && currentMinutes >= it.minutes
+            } -> {
+                allItems
+                    .filter {
+                        it.status == "Snoozed" && currentMinutes >= it.minutes
+                    }
+                    .minByOrNull { it.minutes }
+            }
+
+            // ثاني أولوية: Pending فات معاده ولسه متاخدش
+            allItems.any {
+                it.status == "Pending" && currentMinutes >= it.minutes
+            } -> {
+                allItems
+                    .filter {
+                        it.status == "Pending" && currentMinutes >= it.minutes
+                    }
+                    .minByOrNull { it.minutes }
+            }
+
+            // ثالث أولوية: أقرب Pending جاي
+            else -> {
+                allItems
+                    .filter {
+                        it.status == "Pending" &&
+                                it.minutes > currentMinutes
+                    }
+                    .minByOrNull { it.minutes }
             }
         }
-
         currentNextItem = nextItem
 
         if (nextItem != null) {
@@ -423,22 +426,21 @@ class DashboardActivity : AppCompatActivity() {
             tvNextMedName.text = getString(R.string.med_name_dosage_format, displayName, displayDosage)
             tvNextMedTime.text = nextItem.time
 
-            when {
-                nextItem.status.equals("Snoozed", true) -> {
-                    btnMarkTaken.visibility = View.VISIBLE
-                    btnMarkTaken.isEnabled = true
-                    btnMarkTaken.alpha = 1f
-                    btnSnooze.visibility = View.GONE
-                }
-                else -> {
-                    val isDue = isItemDue(nextItem)
-                    btnMarkTaken.isEnabled = isDue
-                    btnMarkTaken.alpha = if (isDue) 1.0f else 0.5f
-                    btnSnooze.visibility = View.VISIBLE
-                    btnSnooze.isEnabled = isDue
-                    btnSnooze.alpha = if (isDue) 1.0f else 0.5f
-                }
-            }
+            val reminder = reminderEntities.find { it.id == nextItem.id }
+            val snoozeUsed = reminder?.snoozeUsed == true
+
+            val isDue = isItemDue(nextItem)
+
+            btnMarkTaken.visibility = View.VISIBLE
+            btnMarkTaken.isEnabled = isDue
+            btnMarkTaken.alpha = if (isDue) 1f else 0.5f
+
+            btnSnooze.visibility =
+                if (snoozeUsed) View.GONE else View.VISIBLE
+
+            btnSnooze.isEnabled = isDue && !snoozeUsed
+            btnSnooze.alpha =
+                if (isDue && !snoozeUsed) 1f else 0.5f
         } else {
             tvNextMedName.setText(R.string.no_more_meds)
             tvNextMedTime.text = ""
