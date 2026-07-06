@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
+import com.example.smarthealthreminder.ui_dashboard.DashboardActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
@@ -191,6 +192,9 @@ class HomeFragment : Fragment() {
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
             startActivity(intent)
+        }
+        binding.cvDashboard.setOnClickListener {
+            startActivity(Intent(requireContext(), DashboardActivity::class.java))
         }
 
     }
