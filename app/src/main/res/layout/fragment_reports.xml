@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dynamic_screen_bg"
-    tools:context=".features.reports.ReportsActivity">
+    tools:context=".features.Profileinfo.reports.ReportsFragment">
 
     <ScrollView
         android:id="@+id/reportsScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:paddingHorizontal="16dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,13 +23,12 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="24dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="100dp"> <!-- ضفنا مسافة تحت عشان الكلام ميتغطاش بالناف بار الأساسي -->
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp">
-
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -40,8 +39,7 @@
                     android:text="@string/health_reports"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/textView6"
@@ -348,7 +346,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="@string/ai_insights"
+                        android:text="@string/insights"
                         android:textColor="@color/text_blue_gray"
                         android:textSize="18sp"
                         android:textStyle="bold" />
@@ -450,7 +448,6 @@
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
-
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -458,28 +455,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="80dp"
+        android:layout_marginBottom="90dp"
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white"
         tools:ignore="contentDescription" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorSurface"
-        android:elevation="10dp"
-        app:itemActiveIndicatorStyle="@style/App.ActiveIndicator"
-        app:itemIconSize="24dp"
-        app:itemIconTint="@color/bottom_nav_color"
-        app:itemRippleColor="@color/success_light"
-        app:itemTextColor="@color/bottom_nav_color"
-        app:labelVisibilityMode="labeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.reports.ReportsActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 

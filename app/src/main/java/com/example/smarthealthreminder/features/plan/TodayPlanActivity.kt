@@ -14,7 +14,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.features.reports.ReportsActivity
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
@@ -22,6 +21,7 @@ import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.adapter.ScheduleAdapter
 import com.example.smarthealthreminder.features.model.ScheduleItem
+import com.example.smarthealthreminder.features.reports.ReportsFragment
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.google.android.material.button.MaterialButton
@@ -92,7 +92,7 @@ class TodayPlanActivity : AppCompatActivity() {
         }
 
         findViewById<MaterialButton>(R.id.btn_create_report).setOnClickListener {
-            startActivity(Intent(this, ReportsActivity::class.java))
+            startActivity(Intent(this, ReportsFragment::class.java))
         }
 
         findViewById<MaterialButton>(R.id.btn_open_schedule).setOnClickListener {

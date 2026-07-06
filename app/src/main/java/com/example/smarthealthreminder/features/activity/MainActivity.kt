@@ -19,7 +19,9 @@ import com.example.smarthealthreminder.features.fragment.RemindersFragment
 import com.example.smarthealthreminder.features.fragment.ScheduleFragment
 import com.example.smarthealthreminder.features.settings.SettingsFragment
 import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
+//  NEW: Imported ReportsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.smarthealthreminder.features.fragment.ReportsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,6 +33,10 @@ class MainActivity : AppCompatActivity() {
         const val DESTINATION_REMINDERS = "reminders"
         const val DESTINATION_SETTINGS = "settings"
         const val DESTINATION_INSIGHTS = "insights"
+
+        // 🌟 1. NEW: Added a constant for the reports destination
+        const val DESTINATION_REPORTS = "reports"
+
         private const val REQUEST_POST_NOTIFICATIONS = 2001
         private const val TAG_HOME = "home"
         private const val TAG_SCHEDULE = "schedule"
@@ -38,6 +44,9 @@ class MainActivity : AppCompatActivity() {
         private const val TAG_REMINDERS = "reminders"
         private const val TAG_SETTINGS = "settings"
         private const val TAG_INSIGHTS = "insights"
+
+        // 2. NEW: Added a tag for the reports fragment
+        private const val TAG_REPORTS = "reports"
     }
 
     private lateinit var homeFragment: HomeFragment
@@ -47,6 +56,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chatBotFragment: ChatBotFragment
     private lateinit var settingsFragment: SettingsFragment
     private lateinit var stepsTrackerFragment: StepsTrackerFragment
+
+    //  3. NEW: Declared the ReportsFragment variable
+    private lateinit var reportsFragment: ReportsFragment
+
     private lateinit var bottomNavigation: BottomNavigationView
     private var activeFragment: Fragment? = null
     private var isProgrammaticSelection = false
@@ -68,6 +81,9 @@ class MainActivity : AppCompatActivity() {
             settingsFragment = SettingsFragment()
             stepsTrackerFragment = StepsTrackerFragment()
 
+            //  4. NEW: Initialized the reports fragment
+            reportsFragment = ReportsFragment()
+
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, scheduleFragment, TAG_SCHEDULE).hide(scheduleFragment)
                 .add(R.id.fragment_container, alarmsFragment, TAG_ALARMS).hide(alarmsFragment)
@@ -75,6 +91,8 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, chatBotFragment, "chatbot").hide(chatBotFragment)
                 .add(R.id.fragment_container, settingsFragment, TAG_SETTINGS).hide(settingsFragment)
                 .add(R.id.fragment_container, stepsTrackerFragment, TAG_INSIGHTS).hide(stepsTrackerFragment)
+                //  5. NEW: Added it to the container and hid it so it doesn't show on startup
+                .add(R.id.fragment_container, reportsFragment, TAG_REPORTS).hide(reportsFragment)
                 .add(R.id.fragment_container, homeFragment, TAG_HOME)
                 .commit()
 
@@ -87,6 +105,10 @@ class MainActivity : AppCompatActivity() {
             chatBotFragment = supportFragmentManager.findFragmentByTag("chatbot") as? ChatBotFragment ?: ChatBotFragment()
             settingsFragment = supportFragmentManager.findFragmentByTag(TAG_SETTINGS) as? SettingsFragment ?: SettingsFragment()
             stepsTrackerFragment = supportFragmentManager.findFragmentByTag(TAG_INSIGHTS) as? StepsTrackerFragment ?: StepsTrackerFragment()
+
+            // 6. NEW: Restored the fragment on configuration change (e.g., screen rotation)
+            reportsFragment = supportFragmentManager.findFragmentByTag(TAG_REPORTS) as? ReportsFragment ?: ReportsFragment()
+
             activeFragment = supportFragmentManager.fragments.find { it.isAdded && !it.isHidden } ?: homeFragment
         }
 
@@ -122,9 +144,9 @@ class MainActivity : AppCompatActivity() {
         androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomNavigation) { v, insets ->
             val imeVisible = insets.isVisible(androidx.core.view.WindowInsetsCompat.Type.ime())
             val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
-            
+
             v.visibility = if (imeVisible) android.view.View.GONE else android.view.View.VISIBLE
-            
+
             // Adjust margin to stay above navigation bar
             val params = v.layoutParams as android.view.ViewGroup.MarginLayoutParams
             params.bottomMargin = systemBars.bottom + (16 * resources.displayMetrics.density).toInt()
@@ -165,9 +187,12 @@ class MainActivity : AppCompatActivity() {
             DESTINATION_ALARMS -> {
                 showFragment(alarmsFragment)
             }
-
             DESTINATION_REMINDERS -> {
                 showFragment(remindersFragment)
+            }
+            // 🌟 7. NEW: Navigate to the reports fragment when requested by the intent
+            DESTINATION_REPORTS -> {
+                showFragment(reportsFragment)
             }
             "chatbot", "ai" -> {
                 if (bottomNavigation.selectedItemId != R.id.nav_ai) {
@@ -196,14 +221,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun showFragment(fragment: Fragment): Boolean {
         if (activeFragment == fragment) return true
-        
+
         val transaction = supportFragmentManager.beginTransaction()
-        
+
         // Safety check for activeFragment being null
         activeFragment?.let {
             transaction.hide(it)
         }
-        
+
         transaction.show(fragment).commit()
         activeFragment = fragment
         return true
