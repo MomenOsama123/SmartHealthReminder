@@ -7,8 +7,11 @@ import android.os.Bundle
 import android.os.Build
 import android.provider.Settings
 import android.widget.*
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.alarm.AlarmHelper
@@ -51,8 +54,15 @@ class EditAlarmActivity : AppCompatActivity() {
     private lateinit var alarmHelper: AlarmHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_alarm)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.edit_alarm_root)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val db = AppDatabase.getDatabase(this)
         repository = HealthRepository(db)

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
     private var isProgrammaticSelection = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         requestNotificationPermissionIfNeeded()
@@ -116,10 +118,18 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        // Handle Keyboard visibility to hide/show Bottom Navigation
-        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
+        // Handle Keyboard visibility and System Bars
+        androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener(bottomNavigation) { v, insets ->
             val imeVisible = insets.isVisible(androidx.core.view.WindowInsetsCompat.Type.ime())
-            bottomNavigation.visibility = if (imeVisible) android.view.View.GONE else android.view.View.VISIBLE
+            val systemBars = insets.getInsets(androidx.core.view.WindowInsetsCompat.Type.systemBars())
+            
+            v.visibility = if (imeVisible) android.view.View.GONE else android.view.View.VISIBLE
+            
+            // Adjust margin to stay above navigation bar
+            val params = v.layoutParams as android.view.ViewGroup.MarginLayoutParams
+            params.bottomMargin = systemBars.bottom + (16 * resources.displayMetrics.density).toInt()
+            v.layoutParams = params
+
             insets
         }
 

@@ -121,7 +121,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <receiver
-            android:name=".alarm.AlarmReceiver"
+            android:name=".features.alarm.AlarmReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

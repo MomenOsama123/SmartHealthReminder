@@ -1,12 +1,13 @@
 package com.example.smarthealthreminder.features.Profileinfo.reports
 
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,8 +25,15 @@ class ReportsActivity : AppCompatActivity() {
     private lateinit var viewModel: ReportViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_reportsactivity)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.reportsActivity)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
         // 1. تجهيز قاعدة البيانات والـ ViewModel
         val database = AppDatabase.getDatabase(this)
         val repository = ReportRepository(database.reportDao())

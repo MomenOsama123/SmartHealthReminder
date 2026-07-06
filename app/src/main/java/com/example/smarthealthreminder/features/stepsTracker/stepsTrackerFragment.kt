@@ -15,6 +15,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -70,6 +72,14 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Handle window insets for edge-to-edge support
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
+
         setupClickListeners()
         observeData()
         checkPermissionsAndSetup()
@@ -294,7 +304,7 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
             binding.root.findViewById<View>(R.id.barSun)
         )
         
-        val dayLabels = listOf("M", "T", "W", "T", "F", "S", "S")
+        val dayLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
         
         // Clear/Set default bars first
         days.forEachIndexed { index, view ->

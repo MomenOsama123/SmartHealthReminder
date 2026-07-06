@@ -20,7 +20,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
             android:contentDescription="@null"
-            android:src="@drawable/bg_logo_circle" />
+            android:src="@drawable/ic_app_logo" />
 
         <!-- Title -->
         <TextView

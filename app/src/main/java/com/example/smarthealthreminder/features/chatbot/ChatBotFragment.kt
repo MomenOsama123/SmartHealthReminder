@@ -88,18 +88,22 @@ class ChatBotFragment : Fragment() {
     private fun setupInput() {
         updateSendButtonState("")
         
-        // Handle keyboard insets to keep EditText above the keyboard
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+        // Handle window insets for edge-to-edge support and keyboard
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
-            val bottomInset = imeInsets.bottom
             
-            // Adjust inputLayout bottom margin to account for keyboard
+            // Padding for the header to stay below the status bar
+            v.setPadding(0, systemBars.top, 0, 0)
+            
+            // Adjust inputLayout bottom margin to account for keyboard OR navigation bar
+            val bottomInset = if (imeInsets.bottom > 0) imeInsets.bottom else systemBars.bottom
             val params = binding.inputLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.bottomMargin = bottomInset
             binding.inputLayout.layoutParams = params
             
             // Scroll to bottom if keyboard opened to keep latest message visible
-            if (bottomInset > 0 && messages.isNotEmpty()) {
+            if (imeInsets.bottom > 0 && messages.isNotEmpty()) {
                 binding.chatRecyclerView.post {
                     binding.chatRecyclerView.scrollToPosition(messages.size - 1)
                 }
