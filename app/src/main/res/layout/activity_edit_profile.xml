@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dynamic_screen_bg"
-    tools:context=".features.profileInfo.ProfileActivity">
+    tools:context=".features.profileInfo.EditProfileActivity">
 
     <RelativeLayout
         android:id="@+id/top_bar"
@@ -33,7 +33,7 @@
             android:layout_toEndOf="@id/btn_back"
             android:layout_centerVertical="true"
             android:layout_marginStart="14dp"
-            android:text="@string/app_name"
+            android:text="@string/complete_your_profile"
             android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="100dp"> <!-- Added padding for FAB -->
+            android:paddingBottom="24dp">
 
             <RelativeLayout
                 android:layout_width="120dp"
@@ -70,6 +70,28 @@
                     app:strokeColor="@color/primary_green"
                     app:strokeWidth="2dp"
                     app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/editProfileCard"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    app:cardBackgroundColor="@color/primary_green"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="?attr/colorSurface">
+
+                    <ImageView
+                        android:id="@+id/editProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_camera"
+                        android:padding="8dp"
+                        android:contentDescription="@string/content_desc_edit_profile"
+                        app:tint="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
             </RelativeLayout>
 
 
@@ -106,13 +128,13 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints="name"
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/dynamic_card_bg"
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/eleanor_vance"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="textPersonName"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_person"
@@ -132,18 +154,21 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints="birthDate"
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/dynamic_card_bg"
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/may_14_1968"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="datetime"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_calendar"
                 android:drawablePadding="12dp"
-                app:drawableTint="?attr/colorOnSurfaceVariant" />
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                android:focusable="true"
+                android:clickable="true"
+                android:cursorVisible="false" />
 
             <!-- Gender -->
             <TextView
@@ -158,15 +183,18 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints="gender"
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/dynamic_card_bg"
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/female"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="text"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="12dp"
                 app:drawableTint="?attr/colorOnSurfaceVariant" />
@@ -184,15 +212,18 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
+                android:autofillHints=""
                 android:background="@drawable/et_shape"
                 android:backgroundTint="@color/dynamic_card_bg"
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/a"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="text"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:cursorVisible="false"
                 android:drawableStart="@drawable/ic_blood_drop"
                 android:drawablePadding="12dp"
                 app:drawableTint="?attr/colorOnSurfaceVariant" />
@@ -223,13 +254,13 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp"
+                        android:autofillHints=""
                         android:background="@drawable/et_shape"
                         android:backgroundTint="@color/dynamic_card_bg"
                         android:textColor="?attr/colorOnSurface"
                         android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:hint="@string/_64"
-                        android:focusable="false"
-                        android:clickable="false"
+                        android:inputType="numberDecimal"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:drawableStart="@drawable/ic_scale"
@@ -257,13 +288,13 @@
                         android:layout_height="50dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="16dp"
+                        android:autofillHints=""
                         android:background="@drawable/et_shape"
                         android:backgroundTint="@color/dynamic_card_bg"
                         android:textColor="?attr/colorOnSurface"
                         android:textColorHint="?attr/colorOnSurfaceVariant"
                         android:hint="@string/_168"
-                        android:focusable="false"
-                        android:clickable="false"
+                        android:inputType="number"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:drawableStart="@drawable/ic_height"
@@ -284,6 +315,7 @@
                 android:id="@+id/diseases_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints=""
                 android:minHeight="80dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
@@ -292,8 +324,7 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/none_reported"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="textMultiLine"
                 android:gravity="top|start"
                 android:padding="16dp"
                 android:drawableStart="@drawable/ic_medical_bag"
@@ -311,6 +342,7 @@
                 android:id="@+id/allergies_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:autofillHints="none"
                 android:minHeight="80dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="16dp"
@@ -319,10 +351,12 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/none_reported"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="textMultiLine"
                 android:gravity="top|start"
-                android:padding="16dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
                 android:drawableStart="@drawable/ic_warning"
                 android:drawablePadding="12dp"
                 app:drawableTint="?attr/colorOnSurfaceVariant" />
@@ -345,27 +379,29 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textColorHint="?attr/colorOnSurfaceVariant"
                 android:hint="@string/phone_number"
-                android:focusable="false"
-                android:clickable="false"
+                android:inputType="phone"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:drawableStart="@drawable/ic_phone"
                 android:drawablePadding="12dp"
-                app:drawableTint="?attr/colorOnSurfaceVariant" />
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                android:autofillHints="phoneNumber" />
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/primary_green"
+                android:text="@string/save_changes"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="30dp"
+                android:backgroundTintMode="src_in"/>
 
         </LinearLayout>
     </ScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_edit_profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="24dp"
-        android:src="@drawable/ic_edit"
-        app:tint="@color/white"
-        app:backgroundTint="@color/primary_green"
-        android:contentDescription="@string/content_desc_edit_profile" />
-
 </RelativeLayout>

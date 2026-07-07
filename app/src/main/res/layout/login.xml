@@ -7,21 +7,20 @@
     android:layout_height="match_parent"
     android:background="@color/bg_warm"
     android:fillViewport="true"
-    android:paddingHorizontal="16dp"
-
     tools:context=".features.auth.signIn.SignInActivity">
 
-
-
-    <LinearLayout
-        android:id="@+id/login"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp"
-        android:paddingTop="48dp"
-        android:paddingBottom="32dp">
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="40dp"
+            android:paddingTop="48dp"
+            android:paddingBottom="32dp">
 
         <!-- App Logo -->
         <ImageView
@@ -269,5 +268,15 @@
                 android:paddingVertical="14dp"/>
         </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:indeterminateTint="@color/text_accent" />
+
+    </FrameLayout>
 </ScrollView>

@@ -27,6 +27,7 @@ import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.util.ImageUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
@@ -355,7 +356,7 @@ class StepsTrackerFragment : Fragment(), SensorEventListener {
         val targets = arrayOf("5,000", "8,000", "10,000", "12,000", "15,000", "20,000")
         val values = intArrayOf(5000, 8000, 10000, 12000, 15000, 20000)
 
-        androidx.appcompat.app.AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
             .setTitle(getString(R.string.select_daily_goal))
             .setItems(targets) { _, which ->
                 viewModel.updateDailyGoal(values[which])

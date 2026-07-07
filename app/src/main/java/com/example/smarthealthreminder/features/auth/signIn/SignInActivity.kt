@@ -59,8 +59,10 @@ class SignInActivity : AppCompatActivity() {
                 val email = binding.etEmail.text.toString().trim()
                 val password = binding.etPassword.text.toString().trim()
 
+                setLoading(true)
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
+                        setLoading(false)
                         if (task.isSuccessful) {
                             val firebaseUser = auth.currentUser
                             val firebaseId = firebaseUser?.uid ?: ""
@@ -139,6 +141,7 @@ class SignInActivity : AppCompatActivity() {
                 Log.d(TAG, "Google login success, firebaseId: '$firebaseId'")
 
                 if (firebaseId.isEmpty()) {
+                    setLoading(false)
                     Toast.makeText(this, "Error: No user ID", Toast.LENGTH_LONG).show()
                     return@GoogleAuthHelper
                 }
@@ -168,6 +171,7 @@ class SignInActivity : AppCompatActivity() {
                 // ✅ روح Dashboard من غير flags
                 checkProfileCompletion(firebaseId)
             } else {
+                setLoading(false)
                 Log.e(TAG, "Google login failed: $errorMessage")
                 Toast.makeText(
                     this,
@@ -179,6 +183,7 @@ class SignInActivity : AppCompatActivity() {
 
         // Google button
         binding.btnGoogle.setOnClickListener {
+            setLoading(true)
             googleAuthHelper.startLogin()
         }
     }
@@ -214,9 +219,11 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun checkProfileCompletion(uid: String) {
+        setLoading(true)
         val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
         db.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
+                setLoading(false)
                 // Robust check: try multiple field names and object mapping
                 val firestoreCompleted = document.getBoolean("isProfileCompleted") ?: 
                                        document.getBoolean("profileCompleted") ?: 
@@ -243,6 +250,7 @@ class SignInActivity : AppCompatActivity() {
                 finish()
             }
             .addOnFailureListener {
+                setLoading(false)
                 // Fallback to local on network error
                 val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .getBoolean("isProfileCompleted", false)
@@ -255,5 +263,11 @@ class SignInActivity : AppCompatActivity() {
                 startActivity(intent)
                 finish()
             }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
+        binding.btnLogin.isEnabled = !isLoading
+        binding.btnGoogle.isEnabled = !isLoading
     }
 }

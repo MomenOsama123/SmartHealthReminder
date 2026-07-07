@@ -13,6 +13,7 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.model.TimelineItem
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class TimelineAdapter : ListAdapter<TimelineItem, TimelineAdapter.ViewHolder>(DiffCallback()) {
 
@@ -146,7 +147,7 @@ class TimelineAdapter : ListAdapter<TimelineItem, TimelineAdapter.ViewHolder>(Di
                 }
             }
 
-            val dialog = AlertDialog.Builder(context)
+            val dialog = MaterialAlertDialogBuilder(context, R.style.AppAlertDialogTheme)
                 .setView(dialogView)
                 .create()
 
@@ -180,7 +181,7 @@ class TimelineAdapter : ListAdapter<TimelineItem, TimelineAdapter.ViewHolder>(Di
             }
 
             btnDelete.setOnClickListener {
-                AlertDialog.Builder(context)
+                MaterialAlertDialogBuilder(context, R.style.AppAlertDialogTheme)
                     .setTitle("Delete Reminder")
                     .setMessage("Are you sure you want to delete \"${item.title ?: "this reminder"}\"?")
                     .setPositiveButton("Delete") { _, _ ->

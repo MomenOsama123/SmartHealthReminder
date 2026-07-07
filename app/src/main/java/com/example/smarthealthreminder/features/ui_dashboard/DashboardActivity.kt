@@ -1,7 +1,7 @@
 package com.example.smarthealthreminder.features.ui_dashboard
 
-import android.app.AlertDialog
 import android.content.Intent
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +27,8 @@ import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
+import com.example.smarthealthreminder.features.util.ImageUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
@@ -44,6 +46,7 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var tvTakenToday: TextView
     private lateinit var tvMissedToday: TextView
     private lateinit var tvUserName: TextView
+    private lateinit var ivUserProfile: ImageView
     private lateinit var tvNextMedName: TextView
     private lateinit var tvNextMedTime: TextView
     private lateinit var btnMarkTaken: TextView
@@ -123,6 +126,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun initViews() {
         tvGreeting = findViewById(R.id.tvGreeting)
         tvUserName = findViewById(R.id.tvUserName)
+        ivUserProfile = findViewById(R.id.ivUserProfile)
 
         tvAdherencePercent = findViewById(R.id.tvAdherencePercent)
         tvTotalMeds = findViewById(R.id.tvTotalMeds)
@@ -285,20 +289,25 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     private fun loadUserGreeting() {
-        val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
         val auth = FirebaseAuth.getInstance()
+        val uid = auth.currentUser?.uid ?: return
 
-        if (sharedPref.getString("USER_NAME", null) == null) {
-            val userName = auth.currentUser?.displayName
-                ?: auth.currentUser?.email?.substringBefore("@")?.replaceFirstChar {
-                    if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+        val localDb = DatabaseHelper(this)
+        val user = localDb.getUserByFirebaseId(uid)
+
+        if (user != null) {
+            tvUserName.text = user.name
+            user.profileImage?.let { base64 ->
+                val bitmap = ImageUtils.base64ToBitmap(base64)
+                if (bitmap != null) {
+                    ivUserProfile.setImageBitmap(bitmap)
                 }
-                ?: "User"
-            sharedPref.edit { putString("USER_NAME", userName) }
+            }
+        } else {
+            val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+            val userName = sharedPref.getString("USER_NAME", "User")
+            tvUserName.text = userName
         }
-
-        // FIX: getString(key, "User") already can't return null here, the trailing "?: "User"" was redundant
-        val userName = sharedPref.getString("USER_NAME", "User")
 
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greetingRes = when (hour) {
@@ -309,7 +318,6 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         tvGreeting.text = getString(greetingRes)
-        tvUserName.text = userName
     }
 
     private fun shouldShowToday(reminder: ReminderEntity): Boolean {
@@ -570,7 +578,7 @@ class DashboardActivity : AppCompatActivity() {
             )
         }
 
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle(reminder.title)
             .setItems(options) { _, which ->
 
@@ -756,6 +764,7 @@ class DashboardActivity : AppCompatActivity() {
     }
     override fun onResume() {
         super.onResume()
+        loadUserGreeting()
         window.decorView.post(refreshRunnable)
     }
 
