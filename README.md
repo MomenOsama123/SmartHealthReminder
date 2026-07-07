@@ -1,16 +1,17 @@
 ![Android](https://img.shields.io/badge/Platform-Android-green)
 ![Kotlin](https://img.shields.io/badge/Kotlin-2.0-purple)
-![Firebase](https://img.shields.io/badge/Firebase-Authentication-orange)
+![Firebase](https://img.shields.io/badge/Firebase-Firestore_&_Authentication-orange)
 ![MVVM](https://img.shields.io/badge/Architecture-MVVM-blue)
-![Version](https://img.shields.io/badge/Release-v0.9.3-blue)
+![Version](https://img.shields.io/badge/Release-v0.9.4-success)
+![Status](https://img.shields.io/badge/Status-Beta-yellow)
 
 # 🩺 Trusta
 
-> **Your Trusted Health Assistant**
+> **Your Trusted Smart Health Assistant**
 
-Trusta is a modern Android healthcare application designed to help users manage medications, reminders, alarms, daily health activities, and wellness routines through a simple, intelligent, and user-friendly experience.
+Trusta is a modern Android healthcare application that helps users manage medications, reminders, alarms, daily activities, and healthy routines through a clean, intelligent, and user-friendly experience.
 
-The application combines medication reminders, smart alarms, AI-powered assistance, reports, activity tracking, daily planning, and health insights into one centralized platform to encourage healthier habits and improve medication adherence.
+The application combines medication reminders, AI-powered assistance, reports, activity tracking, smart search, multilingual support, and personalized themes into one centralized healthcare platform.
 
 ---
 
@@ -40,14 +41,14 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 - Medication Alarms
 - Enable / Disable Alarms
-- Scheduled Notifications
-- Smart Reminder Alerts
+- Smart Notifications
+- Scheduled Reminder Alerts
 
 ---
 
 ## 📊 Smart Dashboard
 
-- Today's Overview
+- Daily Health Overview
 - Pending & Completed Statistics
 - Quick Access Cards
 - Daily Health Tips
@@ -58,7 +59,8 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 - Instant Search
 - Search History
-- Reminder & Alarm Search
+- Reminder Search
+- Alarm Search
 - Fast Filtering
 
 ---
@@ -67,7 +69,7 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 - AI-powered Health Guidance
 - Medication Assistance
-- Interactive Chat Experience
+- Interactive Conversations
 
 ---
 
@@ -75,7 +77,7 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 - Daily Schedule Management
 - Calendar Notes
-- Daily Tasks
+- Daily Activities
 
 ---
 
@@ -91,15 +93,15 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 - Daily Step Counting
 - Walking Progress
-- Activity Monitoring
 - Daily Goal Tracking
+- Activity Monitoring
 
 ---
 
 ## 🌍 Multi-language Support
 
-- English
-- Arabic *(Currently expanding across the application)*
+- 🇺🇸 English
+- 🇪🇬 Arabic *(Currently expanding across the application)*
 
 ---
 
@@ -107,21 +109,21 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 - ☀️ Light Theme
 - 🌙 Dark Theme
-- ⚙️ System Theme
+- ⚙️ Follow System Theme
 
 ---
 
 # 📱 Application Screenshots
 
-| Login | Home |
-|-------|------|
+| Login | Dashboard |
+|-------|-----------|
 | ![](screenshots/LogIn.png) | ![](screenshots/HomePage.png) |
 
 | Quick Access | Reports |
-|-------------|---------|
+|-------------|----------|
 | ![](screenshots/QuickAccess.png) | ![](screenshots/Report.png) |
 
-> More screenshots will be added in future releases.
+> Additional screenshots (Search, AI Assistant, Step Tracker, Dark Mode, Arabic UI) will be added in future updates.
 
 ---
 
@@ -129,46 +131,46 @@ The application combines medication reminders, smart alarms, AI-powered assistan
 
 ## Latest Release
 
-### 🚀 Version **v0.9.3**
+### 🚀 Version **v0.9.4**
 
 Download the latest APK from GitHub Releases:
 
-➡️ **https://github.com/MomenOsama123/SmartHealthReminder/releases/tag/v0.9.3**
+➡️ https://github.com/MomenOsama123/SmartHealthReminder/releases/tag/v0.9.4
 
 ---
 
-# 🏗️ Application Architecture
+# 🏗️ Architecture
 
-Trusta follows modern Android development principles to ensure scalability, maintainability, and performance.
+Trusta follows Modern Android Development principles.
 
-## Architecture Pattern
+### Architecture Pattern
 
 - MVVM (Model–View–ViewModel)
 - Repository Pattern
 
-## Local Storage
+### Local Database
 
 - Room Database
 
-## Cloud Services
+### Cloud Services
 
 - Firebase Authentication
 - Firebase Firestore
 
-## Networking
+### Networking
 
 - Retrofit
 
-## Dependency Injection
+### Dependency Injection
 
 - Koin
 
-## Asynchronous Programming
+### Asynchronous Programming
 
 - Kotlin Coroutines
 - Kotlin Flow
 
-## User Interface
+### User Interface
 
 - XML Layouts
 - Material Design 3
@@ -177,7 +179,7 @@ Trusta follows modern Android development principles to ensure scalability, main
 
 ---
 
-# 🛠 Technologies Used
+# 🛠 Tech Stack
 
 - Kotlin
 - Android SDK
@@ -194,28 +196,28 @@ Trusta follows modern Android development principles to ensure scalability, main
 
 ---
 
-# 🚀 Application Highlights
+# 🚀 Highlights
 
 - Modern MVVM Architecture
 - Clean Project Structure
 - Offline & Online Data Management
 - Smart Medication Management
-- AI-powered Health Assistant
+- AI-powered Healthcare Assistant
 - Smart Search Experience
 - Daily Planner
 - Reports & Statistics
 - Step Tracker
-- Light / Dark / System Theme
+- Light & Dark Theme Support
 - Multi-language Ready
-- Material Design 3 UI
+- Material Design 3
 
 ---
 
 # 📌 Project Status
 
-**Current Version:** `v0.9.3`
+**Current Version:** `v0.9.4`
 
-### Completed Features
+### Implemented Features
 
 - ✅ User Authentication
 - ✅ Medication Reminder Management
@@ -231,7 +233,7 @@ Trusta follows modern Android development principles to ensure scalability, main
 - ✅ Light / Dark / System Theme
 - ✅ Arabic Localization *(In Progress)*
 
-The application is currently in its final development stage and continues to receive improvements before the first stable release.
+The project is currently in the final beta stage and continues to receive improvements before the first stable release.
 
 ---
 
@@ -239,19 +241,18 @@ The application is currently in its final development stage and continues to rec
 
 - Complete Arabic Localization
 - Medication Database API Integration
-- Automatic Medication Schedule Generation
+- Automatic Medication Scheduling
 - PDF Report Export
-- Health Progress Analytics
+- Health Analytics Dashboard
 - Personalized AI Recommendations
-- Wearable Device Integration
+- Wearable Device Support
+- Cloud Synchronization
 
 ---
 
 # 🎯 Project Goal
 
-Trusta aims to simplify medication management and encourage healthier daily routines through smart reminders, intelligent assistance, activity tracking, and an intuitive Android experience.
-
-Our goal is to provide users with a trusted healthcare companion that supports medication adherence and promotes healthier lifestyles.
+Trusta aims to simplify medication management and encourage healthier daily routines through intelligent reminders, AI-powered assistance, activity tracking, and a modern Android experience.
 
 ---
 
@@ -263,12 +264,12 @@ The project combines modern Android technologies with healthcare-focused feature
 
 ---
 
-# ⭐ Support the Project
+# ⭐ Support
 
-If you like this project, consider giving it a ⭐ on GitHub.
+If you like this project, don't forget to leave a ⭐ on the repository.
 
 ---
 
 # 📄 License
 
-This project was developed for educational and graduation project purposes.
+Developed for educational and graduation project purposes.
