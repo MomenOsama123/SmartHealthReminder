@@ -11,10 +11,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import com.example.smarthealthreminder.databinding.SignupBinding
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
+import com.example.smarthealthreminder.features.model_dashboard.User
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignupActivity : AppCompatActivity() {
 
@@ -71,12 +75,11 @@ class SignupActivity : AppCompatActivity() {
             when (state) {
                 is SignupState.Loading -> {
                     binding.signupBtn.isEnabled = false
-                    // If you add a progress bar to your layout, show it here
                 }
                 is SignupState.Success -> {
                     binding.signupBtn.isEnabled = true
                     showSnackbar("Sign Up Success")
-                    navigateToCompleteProfile()
+                    checkProfileAndNavigate()
                 }
                 is SignupState.Error -> {
                     binding.signupBtn.isEnabled = true
@@ -93,13 +96,12 @@ class SignupActivity : AppCompatActivity() {
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
             if (isSuccess) {
                 showSnackbar("Google Sign Up Success")
-                navigateToCompleteProfile()
+                checkProfileAndNavigate()
             } else {
                 showSnackbar(error ?: "Google Error")
             }
         }
 
-        // Use findViewWithTag as in original code or add an ID to the button in signup.xml
         binding.root.findViewWithTag<View>("google_btn")?.setOnClickListener {
             googleAuthHelper.startLogin()
         }
@@ -108,13 +110,10 @@ class SignupActivity : AppCompatActivity() {
     private fun validateForm(): Boolean {
         var isValid = true
 
-
         val email = binding.emailInput.text.toString().trim()
         val password = binding.passwordInput.text.toString()
         val confirmPassword = binding.confirmPasswordInput.text.toString()
         val isChecked = binding.checkBox.isChecked
-
-
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.emailInput.error = "Enter a valid email address"
@@ -137,6 +136,70 @@ class SignupActivity : AppCompatActivity() {
         }
 
         return isValid
+    }
+
+    private fun checkProfileAndNavigate() {
+        val uid = auth.currentUser?.uid ?: return
+        val db = FirebaseFirestore.getInstance()
+
+        // Sync with local session
+        getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+            .edit()
+            .putString("FIREBASE_ID", uid)
+            .apply()
+
+        db.collection("users").document(uid).get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    val firestoreUser = document.toObject(User::class.java)
+                    
+                    // Prioritize the Boolean field directly, then the User object
+                    val isCompleted = document.getBoolean("isProfileCompleted") ?: 
+                                     document.getBoolean("profileCompleted") ?: 
+                                     (firestoreUser?.isProfileCompleted ?: false)
+                    
+                    if (isCompleted) {
+                        // Sync SQLite with full profile from Firestore
+                        firestoreUser?.let {
+                            val localDb = DatabaseHelper(this)
+                            if (localDb.getUserByFirebaseId(uid) == null) {
+                                localDb.insertUser(it)
+                            } else {
+                                localDb.updateUser(it)
+                            }
+                        }
+
+                        // Sync local session
+                        getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                            .edit()
+                            .putBoolean("isProfileCompleted", true)
+                            .apply()
+                        
+                        navigateToMain()
+                        return@addOnSuccessListener
+                    }
+                }
+                
+                // If document doesn't exist or isProfileCompleted is false
+                navigateToCompleteProfile()
+            }
+            .addOnFailureListener {
+                // Fallback to local status on failure
+                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .getBoolean("isProfileCompleted", false)
+                if (localCompleted) {
+                    navigateToMain()
+                } else {
+                    navigateToCompleteProfile()
+                }
+            }
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
     }
 
     private fun navigateToCompleteProfile() {

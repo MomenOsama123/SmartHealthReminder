@@ -2,7 +2,16 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.SmartHealthReminder" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorOnPrimary">@color/text_on_primary</item>
+        <item name="colorSurface">@color/surface</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="alertDialogTheme">@style/AppAlertDialogTheme</item>
+        <item name="materialAlertDialogTheme">@style/AppAlertDialogTheme</item>
     </style>
 
     <style name="Theme.SmartHealthReminder" parent="Base.Theme.SmartHealthReminder" />
@@ -35,8 +44,24 @@
     <style name="AppAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorPrimary">@color/primary_green</item>
         <item name="colorOnSurface">@color/text_primary</item>
-        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/text_secondary</item>
+        <item name="android:textColorPrimary">@color/text_primary</item>
+        <item name="android:textColorSecondary">@color/text_secondary</item>
+        <item name="colorSurface">@color/surface</item>
         <item name="shapeAppearanceOverlay">@style/RoundedAlertDialogShape</item>
+        <item name="materialAlertDialogTitleTextStyle">@style/AppAlertDialogTitleText</item>
+        <item name="materialAlertDialogBodyTextStyle">@style/AppAlertDialogBodyText</item>
+    </style>
+
+    <style name="AppAlertDialogTitleText" parent="MaterialAlertDialog.Material3.Title.Text">
+        <item name="android:textColor">@color/primary_green</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="AppAlertDialogBodyText" parent="MaterialAlertDialog.Material3.Body.Text">
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="RoundedAlertDialogShape" parent="">

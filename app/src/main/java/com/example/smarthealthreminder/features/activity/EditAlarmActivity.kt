@@ -20,6 +20,7 @@ import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.model.Alarm
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -294,7 +295,7 @@ class EditAlarmActivity : AppCompatActivity() {
     }
 
     private fun requestExactAlarmPermission() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Exact alarm permission required")
             .setMessage(
                 "Smart Health Reminder needs permission to schedule exact alarms " +
@@ -313,7 +314,7 @@ class EditAlarmActivity : AppCompatActivity() {
     }
 
     private fun confirmDeleteAlarm() {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Delete Alarm")
             .setMessage("Are you sure you want to delete this alarm?")
             .setPositiveButton("Delete") { _, _ -> deleteAlarmWithUndo() }

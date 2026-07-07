@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -238,7 +239,7 @@ class AddReminderActivity : AppCompatActivity() {
 
     private fun showRecurrencePicker() {
         val currentIndex = RecurrenceHelper.OPTIONS.indexOf(selectedRecurrence).coerceAtLeast(0)
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Recurrence")
             .setSingleChoiceItems(RecurrenceHelper.OPTIONS, currentIndex) { dialog, which ->
                 selectedRecurrence = RecurrenceHelper.OPTIONS[which]
@@ -432,7 +433,7 @@ class AddReminderActivity : AppCompatActivity() {
 
     private fun deleteReminder() {
         existingReminderId?.let { id ->
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Delete Reminder")
                 .setMessage("Are you sure you want to delete this reminder?")
                 .setPositiveButton("Delete") { _, _ ->

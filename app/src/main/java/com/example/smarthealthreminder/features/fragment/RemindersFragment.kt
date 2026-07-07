@@ -23,6 +23,7 @@ import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.adapter.TimelineAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.example.smarthealthreminder.features.model.TimelineItem
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
@@ -157,7 +158,7 @@ class RemindersFragment : Fragment() {
 
             override fun onDelete(item: TimelineItem) {
                 item.id?.let { id ->
-                    AlertDialog.Builder(requireContext())
+                    MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
                         .setTitle("Delete Reminder")
                         .setMessage("Are you sure you want to delete this reminder?")
                         .setPositiveButton("Delete") { _, _ ->

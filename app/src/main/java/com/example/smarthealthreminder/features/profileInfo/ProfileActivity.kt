@@ -124,43 +124,66 @@ class ProfileActivity : AppCompatActivity() {
         dobInput.showSoftInputOnFocus = false
         genderInput.showSoftInputOnFocus = false
         bloodTypeInput.showSoftInputOnFocus = false
+
+        findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
     }
 
     private fun loadUserData() {
         val uid = auth.currentUser?.uid ?: return
+
+        // Prefer local data for speed and offline support
+        val localUser = localDb.getUserByFirebaseId(uid)
+        if (localUser != null) {
+            displayUser(localUser)
+        }
+
+        // Still fetch from Firestore to ensure synchronization
         db.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
                 if (document.exists()) {
                     val user = document.toObject(User::class.java)
                     user?.let {
-                        fullNameInput.setText(it.name)
-                        userNameDisplay.text = it.name
-                        dobInput.setText(it.dob)
-                        genderInput.setText(it.gender)
-                        bloodTypeInput.setText(it.bloodType)
-                        weightInput.setText(it.weight)
-                        heightInput.setText(it.height)
-                        diseasesInput.setText(it.chronicDiseases)
-                        allergiesInput.setText(it.allergies)
-                        emergencyContactInput.setText(it.emergencyContact)
-
-                        it.profileImage?.let { base64 ->
-                            val bitmap = ImageUtils.base64ToBitmap(base64)
-                            profileImage.setImageBitmap(bitmap)
+                        displayUser(it)
+                        // Sync local DB
+                        val existingLocalUser = localDb.getUserByFirebaseId(uid)
+                        if (existingLocalUser != null) {
+                            localDb.updateUser(it)
+                        } else {
+                            localDb.insertUser(it)
                         }
                     }
                 }
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to load profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                if (localUser == null) {
+                    Toast.makeText(this, "Failed to load profile: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
             }
     }
 
-    private fun setupListeners() {
-        findViewById<ImageView>(R.id.btn_back).setOnClickListener {
-            finish()
-        }
+    private fun displayUser(user: User) {
+        fullNameInput.setText(user.name)
+        userNameDisplay.text = user.name
+        dobInput.setText(user.dob)
+        genderInput.setText(user.gender)
+        bloodTypeInput.setText(user.bloodType)
+        weightInput.setText(user.weight)
+        heightInput.setText(user.height)
+        diseasesInput.setText(user.chronicDiseases)
+        allergiesInput.setText(user.allergies)
+        emergencyContactInput.setText(user.emergencyContact)
 
+        user.profileImage?.let { base64 ->
+            val bitmap = ImageUtils.base64ToBitmap(base64)
+            if (bitmap != null) {
+                profileImage.setImageBitmap(bitmap)
+            }
+        } ?: run {
+            profileImage.setImageResource(R.drawable.ic_profile_placeholder)
+        }
+    }
+
+    private fun setupListeners() {
         findViewById<MaterialCardView>(R.id.editProfileCard).setOnClickListener {
             showImageSourceDialog()
         }

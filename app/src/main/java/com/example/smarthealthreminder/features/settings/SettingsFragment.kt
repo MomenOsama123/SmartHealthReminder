@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.FragmentSettingsBinding
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import androidx.core.content.edit
 import androidx.core.net.toUri
@@ -269,7 +270,7 @@ class SettingsFragment : Fragment() {
             wrapSelectorWheel = false
         }
 
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
             .setTitle(title)
             .setView(picker)
             .setNegativeButton(R.string.cancel, null)
@@ -287,7 +288,7 @@ class SettingsFragment : Fragment() {
     }
 
     private fun confirmLogout() {
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
             .setTitle("Log out")
             .setMessage("Do you want to log out of Smart Health Reminder?")
             .setNegativeButton("Cancel", null)
