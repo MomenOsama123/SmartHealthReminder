@@ -255,10 +255,11 @@ class CompleteProfileActivity : AppCompatActivity() {
             "isProfileCompleted" to true
         )
 
-        binding.btnContinue.isEnabled = false
+        setLoading(true)
         db.collection("users").document(uid)
             .set(userMap)
             .addOnSuccessListener {
+                setLoading(false)
                 // Sync with Local Database
                 val userProfile = User(
                     firebaseId = uid,
@@ -292,10 +293,15 @@ class CompleteProfileActivity : AppCompatActivity() {
                 navigateToMain()
             }
             .addOnFailureListener { e ->
-                binding.btnContinue.isEnabled = true
+                setLoading(false)
                 Toast.makeText(this, "Failed to save profile: ${e.message}", Toast.LENGTH_SHORT).show()
             println("--------------------------------Failed to save profile: ${e.message}")
             }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
+        binding.btnContinue.isEnabled = !isLoading
     }
 
     private fun showDatePickerDialog(editText: EditText) {

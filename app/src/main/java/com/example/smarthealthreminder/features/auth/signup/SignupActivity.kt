@@ -74,22 +74,27 @@ class SignupActivity : AppCompatActivity() {
         viewModel.signupState.observe(this) { state ->
             when (state) {
                 is SignupState.Loading -> {
-                    binding.signupBtn.isEnabled = false
+                    setLoading(true)
                 }
                 is SignupState.Success -> {
-                    binding.signupBtn.isEnabled = true
+                    setLoading(false)
                     showSnackbar("Sign Up Success")
                     checkProfileAndNavigate()
                 }
                 is SignupState.Error -> {
-                    binding.signupBtn.isEnabled = true
+                    setLoading(false)
                     showSnackbar("Sign Up Failed: ${state.message}")
                 }
                 is SignupState.Idle -> {
-                    binding.signupBtn.isEnabled = true
+                    setLoading(false)
                 }
             }
         }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.signupBtn.isEnabled = !isLoading
     }
 
     private fun setupGoogleAuth() {
