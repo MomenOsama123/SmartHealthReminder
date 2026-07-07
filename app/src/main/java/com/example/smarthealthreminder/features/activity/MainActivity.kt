@@ -21,9 +21,14 @@ import com.example.smarthealthreminder.features.settings.SettingsFragment
 import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
 //  NEW: Imported ReportsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.smarthealthreminder.core.utils.LocaleHelper
 import com.example.smarthealthreminder.features.reports.ReportsFragment
 
 class MainActivity : AppCompatActivity() {
+
+    override fun attachBaseContext(newBase: android.content.Context) {
+        super.attachBaseContext(LocaleHelper.wrapContext(newBase))
+    }
 
     companion object {
         const val EXTRA_START_DESTINATION = "extra_start_destination"

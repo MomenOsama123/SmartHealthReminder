@@ -183,9 +183,9 @@
 
     <string name="vitamins">Vitamins</string>
 
-    <string name="facebook_app_id">924597597084563</string>
-    <string name="fb_login_protocol_scheme">fb924597597084563</string>
-    <string name="facebook_client_token">9738d8624eb804760bbd820158c42810</string>
+    <string name="facebook_app_id" translatable="false">924597597084563</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb924597597084563</string>
+    <string name="facebook_client_token" translatable="false">9738d8624eb804760bbd820158c42810</string>
     <string name="login_text">Login</string>
 
     <string name="create_account_title">Create Account</string>
@@ -635,6 +635,9 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="motivation_desc_achieved">Excellent work %1$s! You\'ve reached your daily step goal. Keep maintaining this healthy habit.</string>
     <string name="select_daily_goal">Select Daily Step Goal</string>
 
+    <string name="physical_activity_permission">Physical activity permission</string>
+    <string name="physical_activity_permission_desc">Required to track your daily steps accurately.</string>
+
     <!-- Format Strings (to avoid setText concatenation warnings) -->
     <string name="percentage_format">%1$d%%</string>
     <string name="med_name_dosage_format">%1$s - %2$s</string>
@@ -696,4 +699,10 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="enabled">Enabled</string>
     <string name="close">Close</string>
     <string name="no_description_provided">No description provided.</string>
+    <string name="language">Language</string>
+    <string name="language_desc">Select your preferred language (English or Arabic).</string>
+    <string name="view_reminder">View Reminder</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_schedule">Schedule</string>
+    <string name="nav_ai">AI Assistant</string>
 </resources>

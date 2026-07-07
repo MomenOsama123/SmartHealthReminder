@@ -79,6 +79,15 @@ class SettingsFragment : Fragment() {
             listOf("Light", "Dark", "Same as device")
         )
         binding.spinnerThemeMode.setSelection(themeModeToPosition(prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT)))
+
+        binding.spinnerLanguage.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf("English", "العربية")
+        )
+        val currentLang = prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN)
+        binding.spinnerLanguage.setSelection(if (currentLang == SettingsPrefs.LANG_AR) 1 else 0)
+
         updateSnoozeValueLabels()
     }
 
@@ -123,8 +132,27 @@ class SettingsFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
 
+        binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLang = if (position == 1) SettingsPrefs.LANG_AR else SettingsPrefs.LANG_EN
+                if (prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN) == selectedLang) return
+
+                prefs.edit { putString(SettingsPrefs.KEY_LANGUAGE, selectedLang) }
+                
+                // Note: Real-time language switching usually requires an activity restart or a Locale helper
+                // For now, we update the preference. To apply immediately, we'd need a restart logic.
+                requireActivity().recreate()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
         binding.rowExactAlarm.setOnClickListener {
             openExactAlarmSettings()
+        }
+
+        binding.rowPhysicalActivity.setOnClickListener {
+            requestPhysicalActivityPermission()
         }
 
         binding.rowAlarmSnooze.setOnClickListener {
@@ -205,6 +233,26 @@ class SettingsFragment : Fragment() {
             }
         } else {
             Toast.makeText(requireContext(), "Exact alarm permission is already available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun requestPhysicalActivityPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    SettingsPrefs.REQUEST_PHYSICAL_ACTIVITY
+                )
+            } else {
+                Toast.makeText(requireContext(), "Physical activity permission is already allowed", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Physical activity permission is already available", Toast.LENGTH_SHORT).show()
         }
     }
 
