@@ -1,51 +1,48 @@
-package com.example.smarthealthreminder.features.activity
+package com.example.smarthealthreminder.features.fragment
 
 import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import android.view.ViewGroup
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
-import com.example.smarthealthreminder.core.base.BaseActivity
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.alarm.ReminderScheduler
-import com.example.smarthealthreminder.features.util.RecurrenceHelper
-import android.widget.LinearLayout
-import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
-import com.example.smarthealthreminder.features.navigation.BottomNavHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.settings.SettingsPrefs
-import com.example.smarthealthreminder.features.activity.MainActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
+import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
+import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import kotlinx.coroutines.launch
 import java.util.*
 
-class AddReminderActivity : BaseActivity() {
+class AddReminderFragment : Fragment() {
 
     companion object {
-        const val EXTRA_REMINDER_RESULT = "reminder_result"
         const val EXTRA_REMINDER_ID = "reminder_id"
-        private const val STATE_REMINDER_ID = "state_reminder_id"
-        private const val STATE_IS_SAVING = "state_is_saving"
         private const val EARLY_NOTIFICATION_MINUTES = 5
-        const val DATE_FORMAT = "yyyy-MM-dd"
+    }
+
+    private val viewModel: HealthViewModel by activityViewModels {
+        val db = AppDatabase.getDatabase(requireContext())
+        val repository = HealthRepository(db)
+        HealthViewModelFactory(repository)
     }
 
     private lateinit var etTitle: EditText
@@ -76,43 +73,30 @@ class AddReminderActivity : BaseActivity() {
     private lateinit var repository: HealthRepository
     private lateinit var dbHelper: DatabaseHelper
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_add_reminder)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_add_reminder, container, false)
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val db = AppDatabase.getDatabase(this)
+        val db = AppDatabase.getDatabase(requireContext())
         repository = HealthRepository(db)
-        dbHelper = DatabaseHelper(this)
+        dbHelper = DatabaseHelper(requireContext())
 
-        existingReminderId = savedInstanceState?.getString(STATE_REMINDER_ID)
-            ?: intent.getStringExtra(EXTRA_REMINDER_ID)
-            ?: intent.getStringExtra("reminder_id")
+        existingReminderId = arguments?.getString(EXTRA_REMINDER_ID)
         isEditMode = existingReminderId != null
-        isSaving = savedInstanceState?.getBoolean(STATE_IS_SAVING, false) ?: false
 
-        initViews()
+        initViews(view)
         checkEditMode()
-        setupListeners()
-        setupBottomNavigation()
+        setupListeners(view)
         updateSaveButtonState()
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(STATE_REMINDER_ID, existingReminderId)
-        outState.putBoolean(STATE_IS_SAVING, isSaving)
-    }
-
-    private fun setupBottomNavigation() {
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        BottomNavHelper.setup(this, bottomNav, R.id.nav_create)
+        
+        // Hide bottom nav if we want a full screen feel or handle in MainActivity
     }
 
     private fun checkEditMode() {
@@ -127,8 +111,8 @@ class AddReminderActivity : BaseActivity() {
         lifecycleScope.launch {
             val entity = repository.getReminderById(reminderId)
             if (entity == null) {
-                Toast.makeText(this@AddReminderActivity, "Reminder not found", Toast.LENGTH_SHORT).show()
-                finish()
+                Toast.makeText(requireContext(), "Reminder not found", Toast.LENGTH_SHORT).show()
+                navigateToDashboard()
                 return@launch
             }
             loadedEntity = entity
@@ -167,22 +151,25 @@ class AddReminderActivity : BaseActivity() {
         switchVibration.isChecked = entity.vibrationEnabled
     }
 
-    private fun initViews() {
-        etTitle = findViewById(R.id.et_title)
-        etDescription = findViewById(R.id.et_description)
-        etDate = findViewById(R.id.et_date)
-        etTime = findViewById(R.id.et_time)
-        chipGroupCategory = findViewById(R.id.chip_group_category)
-        togglePriority = findViewById(R.id.toggle_priority)
-        switchEarlyNotification = findViewById(R.id.switch_early_notification)
-        switchVibration = findViewById(R.id.switch_vibration)
-        btnSave = findViewById(R.id.btn_save_reminder)
-        btnCancel = findViewById(R.id.btn_cancel)
-        btnDelete = findViewById(R.id.btn_delete_reminder)
-        rowRecurrence = findViewById(R.id.row_recurrence)
-        tvRecurrenceValue = findViewById(R.id.tv_recurrence_value)
+    private fun initViews(view: View) {
+        etTitle = view.findViewById(R.id.et_title)
+        etDescription = view.findViewById(R.id.et_description)
+        etDate = view.findViewById(R.id.et_date)
+        etTime = view.findViewById(R.id.et_time)
+        chipGroupCategory = view.findViewById(R.id.chip_group_category)
+        togglePriority = view.findViewById(R.id.toggle_priority)
+        switchEarlyNotification = view.findViewById(R.id.switch_early_notification)
+        switchVibration = view.findViewById(R.id.switch_vibration)
+        btnSave = view.findViewById(R.id.btn_save_reminder)
+        btnCancel = view.findViewById(R.id.btn_cancel)
+        btnDelete = view.findViewById(R.id.btn_delete_reminder)
+        rowRecurrence = view.findViewById(R.id.row_recurrence)
+        tvRecurrenceValue = view.findViewById(R.id.tv_recurrence_value)
 
-        val settings = getSharedPreferences(SettingsPrefs.PREFS_NAME, MODE_PRIVATE)
+        // Hide bottom nav in AddReminderFragment
+        view.findViewById<View>(R.id.bottom_navigation)?.visibility = View.GONE
+
+        val settings = requireContext().getSharedPreferences(SettingsPrefs.PREFS_NAME, Context.MODE_PRIVATE)
         switchEarlyNotification.isChecked = settings.getBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, true)
         switchVibration.isChecked = settings.getBoolean(SettingsPrefs.KEY_VIBRATION, true)
 
@@ -207,7 +194,7 @@ class AddReminderActivity : BaseActivity() {
         etTime.showSoftInputOnFocus = false
     }
 
-    private fun setupListeners() {
+    private fun setupListeners(view: View) {
         etDate.setOnClickListener { showDatePicker() }
         etTime.setOnClickListener { showTimePicker() }
 
@@ -234,13 +221,13 @@ class AddReminderActivity : BaseActivity() {
         btnSave.setOnClickListener { saveReminder() }
         btnCancel.setOnClickListener { navigateToDashboard() }
         btnDelete.setOnClickListener { deleteReminder() }
-        findViewById<ImageButton>(R.id.btn_back)?.setOnClickListener { navigateToDashboard() }
+        view.findViewById<ImageButton>(R.id.btn_back)?.setOnClickListener { navigateToDashboard() }
         rowRecurrence.setOnClickListener { showRecurrencePicker() }
     }
 
     private fun showRecurrencePicker() {
         val currentIndex = RecurrenceHelper.OPTIONS.indexOf(selectedRecurrence).coerceAtLeast(0)
-        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
+        AlertDialog.Builder(requireContext())
             .setTitle("Recurrence")
             .setSingleChoiceItems(RecurrenceHelper.OPTIONS, currentIndex) { dialog, which ->
                 selectedRecurrence = RecurrenceHelper.OPTIONS[which]
@@ -254,7 +241,7 @@ class AddReminderActivity : BaseActivity() {
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
         DatePickerDialog(
-            this,
+            requireContext(),
             { _, year, month, day ->
                 selectedDate = String.format("%04d-%02d-%02d", year, month + 1, day)
                 etDate.setText(selectedDate)
@@ -268,7 +255,7 @@ class AddReminderActivity : BaseActivity() {
     private fun showTimePicker() {
         val calendar = Calendar.getInstance()
         TimePickerDialog(
-            this,
+            requireContext(),
             { _, hour, minute ->
                 selectedTime = String.format("%02d:%02d", hour, minute)
                 etTime.setText(selectedTime)
@@ -297,20 +284,20 @@ class AddReminderActivity : BaseActivity() {
         }
 
         if (reminderTimeMillis == null) {
-            Toast.makeText(this, "Please choose a valid date and time", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please choose a valid date and time", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (!isRecurring && reminderTimeMillis <= System.currentTimeMillis()) {
-            Toast.makeText(this, "Please choose a future time", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Please choose a future time", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+        val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            Toast.makeText(this, "Allow exact alarms so reminders can ring on time", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Allow exact alarms so reminders can ring on time", Toast.LENGTH_LONG).show()
             startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                data = Uri.parse("package:$packageName")
+                data = Uri.parse("package:${requireContext().packageName}")
             })
             return
         }
@@ -346,9 +333,9 @@ class AddReminderActivity : BaseActivity() {
 
                 saveToDatabaseHelper(reminderId, title, description, selectedTime, selectedCategory)
 
-                ReminderScheduler.scheduleReminder(this@AddReminderActivity, reminder, reminderTimeMillis)
+                ReminderScheduler.scheduleReminder(requireContext(), reminder, reminderTimeMillis)
 
-                Toast.makeText(this@AddReminderActivity, "Reminder saved!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Reminder saved!", Toast.LENGTH_SHORT).show()
                 navigateToDashboard()
             } finally {
                 isSaving = false
@@ -362,19 +349,16 @@ class AddReminderActivity : BaseActivity() {
         btnSave.alpha = if (isSaving) 0.6f else 1f
     }
 
-    // ✅✅✅ مصلّح: أضفت id كـ parameter
     private fun saveToDatabaseHelper(reminderId: String, title: String, description: String, time: String, category: String) {
         try {
-            val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+            val sharedPref = requireActivity().getSharedPreferences("HealthSyncPrefs", Context.MODE_PRIVATE)
             val firebaseId = sharedPref.getString("FIREBASE_ID", "") ?: ""
             val user = dbHelper.getUserByFirebaseId(firebaseId)
             val userId = user?.id ?: -1
 
-            Log.d("ADD_REMINDER", "saveToDatabaseHelper: userId=$userId, firebaseId='$firebaseId', reminderId='$reminderId'")
-
             if (userId != -1) {
                 val values = android.content.ContentValues().apply {
-                    put("id", reminderId)  // ✅✅✅ أضف الـ id هنا!
+                    put("id", reminderId)
                     put("user_id", userId)
                     put("title", title)
                     put("description", description)
@@ -391,11 +375,8 @@ class AddReminderActivity : BaseActivity() {
                 }
 
                 val db = dbHelper.writableDatabase
-                val rowId = db.insert("reminders", null, values)
-                Log.d("ADD_REMINDER", "Inserted reminder rowId=$rowId, id=$reminderId")
+                db.insert("reminders", null, values)
                 db.close()
-            } else {
-                Log.e("ADD_REMINDER", "Cannot save: userId=-1")
             }
         } catch (e: Exception) {
             Log.e("ADD_REMINDER", "Failed to save to DatabaseHelper", e)
@@ -403,12 +384,7 @@ class AddReminderActivity : BaseActivity() {
     }
 
     private fun navigateToDashboard() {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_HOME)
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-        }
-        startActivity(intent)
-        finish()
+        (activity as? MainActivity)?.navigateToDestination(MainActivity.DESTINATION_HOME)
     }
 
     private fun getReminderTimeMillis(): Long? {
@@ -434,23 +410,19 @@ class AddReminderActivity : BaseActivity() {
 
     private fun deleteReminder() {
         existingReminderId?.let { id ->
-            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
+            AlertDialog.Builder(requireContext())
                 .setTitle("Delete Reminder")
                 .setMessage("Are you sure you want to delete this reminder?")
                 .setPositiveButton("Delete") { _, _ ->
                     lifecycleScope.launch {
                         repository.deleteReminderById(id)
-                        cancelReminderNotification(id)
-                        Toast.makeText(this@AddReminderActivity, "Reminder deleted", Toast.LENGTH_SHORT).show()
+                        ReminderScheduler.cancelReminderAlarms(requireContext(), id)
+                        Toast.makeText(requireContext(), "Reminder deleted", Toast.LENGTH_SHORT).show()
                         navigateToDashboard()
                     }
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
         }
-    }
-
-    private fun cancelReminderNotification(reminderId: String) {
-        ReminderScheduler.cancelReminderAlarms(this, reminderId)
     }
 }

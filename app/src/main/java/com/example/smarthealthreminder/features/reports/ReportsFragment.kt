@@ -67,7 +67,7 @@ class ReportsFragment : Fragment() {
         val database = AppDatabase.getDatabase(requireContext())
         val repository = ReportRepository(database.reportDao())
         val reminderDao = database.reminderDao()
-        val factory = ReportViewModelFactory(repository, reminderDao)
+        val factory = ReportViewModelFactory(requireActivity().application, repository, reminderDao)
         viewModel = ViewModelProvider(this, factory)[ReportViewModel::class.java]
 
         // Initialize UI components
@@ -89,13 +89,13 @@ class ReportsFragment : Fragment() {
         // Handle Floating Action Button click to generate a new report
         fabCreateReport.setOnClickListener {
             viewModel.generateRealReport()
-            Toast.makeText(requireContext(), "Generating Real Report...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.generating_report), Toast.LENGTH_SHORT).show()
         }
 
         // Handle Download Button click to generate and save PDF
         val downloadBtn = view.findViewById<Button>(R.id.download_btn)
         downloadBtn.setOnClickListener {
-            Toast.makeText(requireContext(), "Preparing your report...", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.preparing_report), Toast.LENGTH_SHORT).show()
             val fileName = "Trusta_Health_Report_${System.currentTimeMillis()}.pdf"
 
             // Run PDF generation in a background thread to prevent UI freezing
@@ -111,24 +111,24 @@ class ReportsFragment : Fragment() {
                     val latestReport = reportsList.first()
 
                     // Update UI with the latest report data
-                    tvPercentage.text = "${latestReport.adherencePercentage}%"
-                    tvAdherenceMessage?.text = "You took ${latestReport.adherencePercentage}% of your medications this week. You missed only ${latestReport.missedDoses} doses."
+                    tvPercentage.text = getString(R.string.percentage_format, latestReport.adherencePercentage)
+                    tvAdherenceMessage?.text = getString(R.string.report_adherence_summary, latestReport.adherencePercentage, latestReport.missedDoses)
                     tvSymptomsOverview?.text = latestReport.symptomsOverview
                     tvInsight1?.text = latestReport.aiInsight1
                     tvInsight2?.text = latestReport.aiInsight2
 
                     // Adjust progress bar color and text based on adherence rate
                     if (latestReport.adherencePercentage >= 80) {
-                        tvStatusTitle?.text = "Your condition is stable"
-                        tvStatusDescription?.text = "Excellent adherence this week. Your health vitals are showing positive trends."
+                        tvStatusTitle?.text = getString(R.string.status_stable_title)
+                        tvStatusDescription?.text = getString(R.string.status_stable_description)
                         progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.primary_green))
                     } else if (latestReport.adherencePercentage >= 50) {
-                        tvStatusTitle?.text = "Your condition is fair"
-                        tvStatusDescription?.text = "Adherence could be improved. Consistency is key to maintaining stable health."
+                        tvStatusTitle?.text = getString(R.string.status_fair_title)
+                        tvStatusDescription?.text = getString(R.string.status_fair_description)
                         progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.pending))
                     } else {
-                        tvStatusTitle?.text = "Action required"
-                        tvStatusDescription?.text = "Low adherence detected. Please try to follow your medication schedule more closely."
+                        tvStatusTitle?.text = getString(R.string.status_action_title)
+                        tvStatusDescription?.text = getString(R.string.status_action_description)
                         progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.error_red))
                     }
 
@@ -136,7 +136,7 @@ class ReportsFragment : Fragment() {
 
                     // Format and display the last updated date
                     val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
-                    val lastUpdatedText = "Last updated: ${sdf.format(Date(latestReport.createdAt))}"
+                    val lastUpdatedText = getString(R.string.last_updated_label, sdf.format(Date(latestReport.createdAt)))
                     tvLastUpdated?.text = lastUpdatedText
                 } else {
                     // Generate an initial report if the list is empty
@@ -201,17 +201,17 @@ class ReportsFragment : Fragment() {
                 val contentWidth = pageWidth - (marginX * 2).toInt()
 
                 // Header section
-                canvas.drawText("Trusta App", pageWidth / 2f, currentY, titlePaint)
+                canvas.drawText(getString(R.string.app_name), pageWidth / 2f, currentY, titlePaint)
                 currentY += 30f
 
                 titlePaint.textSize = 16f
                 titlePaint.color = Color.GRAY
-                canvas.drawText("Official Health & Adherence Report", pageWidth / 2f, currentY, titlePaint)
+                canvas.drawText(getString(R.string.pdf_report_title), pageWidth / 2f, currentY, titlePaint)
                 currentY += 40f
 
                 val sdf = SimpleDateFormat("MMMM dd, yyyy - HH:mm", Locale.getDefault())
                 val currentDate = sdf.format(Date())
-                canvas.drawText("Generated on: $currentDate", marginX, currentY, textPaint)
+                canvas.drawText(getString(R.string.pdf_generated_on, currentDate), marginX, currentY, textPaint)
                 currentY += 20f
 
                 // Divider line
@@ -219,7 +219,7 @@ class ReportsFragment : Fragment() {
                 currentY += 40f
 
                 // Section 1: Current Health Status
-                canvas.drawText("1. Current Health Status", marginX, currentY, sectionPaint)
+                canvas.drawText(getString(R.string.pdf_section_health_status), marginX, currentY, sectionPaint)
                 currentY += 30f
                 canvas.drawText(statusTitle, marginX + 15f, currentY, textPaint)
                 currentY += 40f
@@ -229,11 +229,11 @@ class ReportsFragment : Fragment() {
                 currentY += 40f
 
                 // Section 2: Medication Adherence
-                canvas.drawText("2. Medication Adherence", marginX, currentY, sectionPaint)
+                canvas.drawText(getString(R.string.pdf_section_adherence), marginX, currentY, sectionPaint)
                 currentY += 30f
 
                 textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-                canvas.drawText("Adherence Rate: $percentage", marginX + 15f, currentY, textPaint)
+                canvas.drawText(getString(R.string.pdf_adherence_rate, percentage), marginX + 15f, currentY, textPaint)
                 currentY += 25f
 
                 textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
@@ -253,17 +253,19 @@ class ReportsFragment : Fragment() {
                 currentY += 40f
 
                 // Section 3: AI Insights & Recommendations
-                canvas.drawText("3. AI Insights & Recommendations", marginX, currentY, sectionPaint)
+                canvas.drawText(getString(R.string.pdf_section_insights), marginX, currentY, sectionPaint)
                 currentY += 30f
 
-                val insight1Layout = StaticLayout.Builder.obtain("• $insight1", 0, insight1.length + 2, textPaint, contentWidth - 15).build()
+                val insight1Text = "• $insight1"
+                val insight1Layout = StaticLayout.Builder.obtain(insight1Text, 0, insight1Text.length, textPaint, contentWidth - 15).build()
                 canvas.save()
                 canvas.translate(marginX + 15f, currentY)
                 insight1Layout.draw(canvas)
                 canvas.restore()
                 currentY += insight1Layout.height + 20f
 
-                val insight2Layout = StaticLayout.Builder.obtain("• $insight2", 0, insight2.length + 2, textPaint, contentWidth - 15).build()
+                val insight2Text = "• $insight2"
+                val insight2Layout = StaticLayout.Builder.obtain(insight2Text, 0, insight2Text.length, textPaint, contentWidth - 15).build()
                 canvas.save()
                 canvas.translate(marginX + 15f, currentY)
                 insight2Layout.draw(canvas)
@@ -275,7 +277,7 @@ class ReportsFragment : Fragment() {
                     textSize = 12f
                     textAlign = Paint.Align.CENTER
                 }
-                canvas.drawText("This report was generated automatically by Trusta App.", pageWidth / 2f, pageHeight - 40f, footerPaint)
+                canvas.drawText(getString(R.string.pdf_footer, getString(R.string.app_name)), pageWidth / 2f, pageHeight - 40f, footerPaint)
 
                 // Finish the PDF page
                 document.finishPage(page)
@@ -293,7 +295,7 @@ class ReportsFragment : Fragment() {
                         requireContext().contentResolver.openOutputStream(uri)?.use { outputStream ->
                             document.writeTo(outputStream)
                         }
-                        Toast.makeText(requireContext(), "PDF Saved to Downloads!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), getString(R.string.pdf_saved_success), Toast.LENGTH_LONG).show()
                     }
                 } else {
                     // Fallback for Android 9 (Pie) and below
@@ -302,14 +304,14 @@ class ReportsFragment : Fragment() {
                     FileOutputStream(file).use { outputStream ->
                         document.writeTo(outputStream)
                     }
-                    Toast.makeText(requireContext(), "PDF Saved to Downloads!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), getString(R.string.pdf_saved_success), Toast.LENGTH_LONG).show()
                 }
 
                 document.close()
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(requireContext(), "Failed to save PDF: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.pdf_save_failed, e.message), Toast.LENGTH_SHORT).show()
             }
         }
     }

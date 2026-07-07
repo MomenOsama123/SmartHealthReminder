@@ -12,6 +12,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.alarm.AlarmService
 import com.example.smarthealthreminder.features.data.local.AppDatabase
@@ -23,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AlarmRingingActivity : AppCompatActivity() {
+class AlarmRingingActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_ALARM_ID = "alarm_id"

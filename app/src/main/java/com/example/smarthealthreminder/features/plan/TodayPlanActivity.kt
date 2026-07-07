@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
@@ -14,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TodayPlanActivity : AppCompatActivity() {
+class TodayPlanActivity : BaseActivity() {
 
     private lateinit var viewModel: HealthViewModel
     private lateinit var scheduleAdapter: ScheduleAdapter
@@ -74,7 +74,7 @@ class TodayPlanActivity : AppCompatActivity() {
         emptyMessage = findViewById(R.id.tv_empty_message)
         recyclerView = findViewById(R.id.recycler_today_plan)
 
-        emptyMessage.text = "You don't have any plans scheduled for today."
+        emptyMessage.text = getString(R.string.you_don_t_have_any_plans_scheduled_for_today)
 
         findViewById<MaterialButton>(R.id.btn_add_reminder).setOnClickListener {
             startActivity(Intent(this, AddReminderActivity::class.java))
@@ -219,7 +219,7 @@ class TodayPlanActivity : AppCompatActivity() {
         val allItems = (reminderItems + alarmItems + scheduleEntryItems + reportItems + noteItems).sortedBy { it.time }
         scheduleAdapter.submitList(allItems)
 
-        tvCount.text = "${allItems.size} items"
+        tvCount.text = getString(R.string.items_count_format, allItems.size)
 
         val isEmpty = allItems.isEmpty()
         emptyView.visibility = if (isEmpty) View.VISIBLE else View.GONE

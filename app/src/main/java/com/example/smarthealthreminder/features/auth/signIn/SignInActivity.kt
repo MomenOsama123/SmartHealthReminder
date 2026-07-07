@@ -5,9 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
 import com.example.smarthealthreminder.features.auth.forget_password.ForgetPasswordActivity
 import com.example.smarthealthreminder.features.auth.signup.SignupActivity
@@ -17,7 +17,7 @@ import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.model_dashboard.User
 
-class SignInActivity : AppCompatActivity() {
+class SignInActivity : BaseActivity() {
 
     companion object {
         private const val TAG = "SignInActivity"

@@ -4,6 +4,8 @@ import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.model.ScheduleItem
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -13,6 +15,7 @@ import java.util.*
  *  - Luxury user: extremely long inputs, unicode, emoji, very large datasets
  *  - Malicious user: null injection, empty fields, future/past date logic
  */
+@RunWith(RobolectricTestRunner::class)
 class SecurityAndEdgeCaseTest {
 
     // ─────────────────────────────────────────────
@@ -357,17 +360,19 @@ class SecurityAndEdgeCaseTest {
 
     private fun normalizeDate(dateStr: String?): String {
         if (dateStr.isNullOrBlank()) return ""
-        return try {
-            val sdf1 = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply { isLenient = false }
-            val d1 = sdf1.parse(dateStr)
-            if (d1 != null) return sdf1.format(d1)
-            val sdf2 = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault()).apply { isLenient = false }
-            val d2 = sdf2.parse(dateStr)
-            if (d2 != null) return sdf1.format(d2)
-            dateStr
-        } catch (e: Exception) {
-            dateStr
+        val formats = listOf("yyyy-MM-dd", "MM/dd/yyyy")
+        for (format in formats) {
+            try {
+                val sdf = SimpleDateFormat(format, Locale.getDefault()).apply { isLenient = false }
+                val date = sdf.parse(dateStr)
+                if (date != null) {
+                    return SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(date)
+                }
+            } catch (e: Exception) {
+                // continue
+            }
         }
+        return dateStr
     }
 
     private fun getReminderTimeMillis(date: String, time: String): Long? {

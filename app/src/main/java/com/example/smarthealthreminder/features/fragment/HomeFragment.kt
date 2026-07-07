@@ -222,46 +222,25 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         binding.cvDashboard.setOnClickListener {
-            startActivity(Intent(requireContext(), DashboardActivity::class.java))
+            (activity as? MainActivity)?.navigateToDestination(MainActivity.DESTINATION_DASHBOARD)
         }
 
     }
 
     private fun refreshDailyTip() {
-        val tips = listOf(
-            "Drink at least 8 glasses of water today to stay hydrated.",
-            "A 10-minute walk can significantly boost your mood and energy.",
-            "Try to get 7-9 hours of sleep for optimal brain function.",
-            "Taking deep breaths for 2 minutes can reduce stress levels.",
-            "Include more leafy greens in your meals for essential vitamins.",
-            "Consistency is key—keep up with your health reminders!",
-            "Take a short break every hour to stretch your body.",
-            "Practice mindfulness today: focus on the present moment.",
-            "Replace sugary snacks with fruits for a natural energy boost.",
-            "Regular exercise is a celebration of what your body can do.",
-            "Don't be afraid to ask for help; mental health is just as important as physical health.",
-            "Limit screen time an hour before bed for better sleep quality.",
-            "Your value is not defined by your productivity.",
-            "Small progress is still progress. Keep going!",
-            "Start your day with a positive affirmation.",
-            "Laughter is a great stress-reliever—watch something funny today.",
-            "Social connection is vital; reach out to a friend or loved one.",
-            "Listen to your body; if it needs rest, give it rest.",
-            "Organize your workspace to clear your mind and reduce anxiety.",
-            "Nature has a calming effect; spend some time outdoors if possible.",
-            "Limit caffeine intake in the afternoon to avoid sleep disruption.",
-            "Practice gratitude: name three things you're thankful for today.",
-            "Avoid multi-tasking; focus on one thing at a time to reduce stress.",
-            "Healthy eating isn't about restriction; it's about nourishment.",
-            "Stretch for 5 minutes after waking up to improve circulation."
-        )
+        val tips = resources.getStringArray(R.array.health_tips)
+        if (tips.isEmpty()) return
 
-        val currentTip = binding.tvTipContent.text.toString()
+        // We use the cached tip from preferences to check for duplicates, 
+        // not the current TextView text which might be in a different language or empty.
+        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        val cachedTip = prefs.getString("current_tip", "")
+        
         var newTip = tips.random()
         
-        // BUG FIX: Prevent infinite loop if tips list is small or same
         var attempts = 0
-        while (newTip == currentTip && attempts < 10 && tips.size > 1) {
+        // Try to get a different tip than what was previously shown (if any)
+        while (newTip == cachedTip && attempts < 10 && tips.size > 1) {
             newTip = tips.random()
             attempts++
         }
@@ -269,7 +248,6 @@ class HomeFragment : Fragment() {
         binding.tvTipContent.text = newTip
 
         // Persist the tip and today's date
-        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
         prefs.edit().apply {
             putString("current_tip", newTip)
             putString("last_tip_date", RecurrenceHelper.getTodayString())
@@ -298,7 +276,7 @@ class HomeFragment : Fragment() {
                     if (totalCount > 0) {
                         binding.reminding.text = getString(R.string.dosage_progress_format, completedToday, totalCount)
                     } else {
-                        binding.reminding.text = "No doses today"
+                        binding.reminding.text = getString(R.string.no_doses_today)
                     }
 
                     val todayReminders = totalTodayReminders
@@ -337,6 +315,7 @@ class HomeFragment : Fragment() {
         val percent = prefs.getInt("adherence_percent", 0)
 
         binding.tvHomeAdherencePercent.text = "$percent%"
+        binding.pbHomeAdherence.progress = percent
     }
             }
 

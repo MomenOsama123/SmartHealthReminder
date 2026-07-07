@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.UUID
 
-class CreateScheduleEntryActivity : AppCompatActivity() {
+class CreateScheduleEntryActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_SELECTED_DATE = "extra_selected_date"
@@ -76,7 +77,7 @@ class CreateScheduleEntryActivity : AppCompatActivity() {
             Calendar.getInstance().get(Calendar.MINUTE)
         )
         etTime.setText(selectedTime)
-        etCategory.setText("General")
+        etCategory.setText(getString(R.string.custom))
     }
 
     private fun initViews() {
@@ -133,7 +134,7 @@ class CreateScheduleEntryActivity : AppCompatActivity() {
         }
 
         val description = etDescription.text.toString().trim()
-        val category = etCategory.text.toString().trim().ifEmpty { "General" }
+        val category = etCategory.text.toString().trim().ifEmpty { getString(R.string.custom) }
 
         val entry = ScheduleEntryEntity(
             id = UUID.randomUUID().toString(),

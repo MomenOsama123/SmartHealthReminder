@@ -2,6 +2,8 @@ package com.example.smarthealthreminder.features.viewmodel
 
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
 
 /**
  * Unit tests for authentication input validation logic.
@@ -9,6 +11,7 @@ import org.junit.Test
  *
  * Covers hacker (injection), malicious (empty/null), and luxury (unicode/long) users.
  */
+@RunWith(RobolectricTestRunner::class)
 class AuthValidationTest {
 
     // ─────────────────────────────────────────────

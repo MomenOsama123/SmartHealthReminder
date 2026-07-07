@@ -16,7 +16,6 @@ import android.widget.ArrayAdapter
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -77,7 +76,11 @@ class SettingsFragment : Fragment() {
         binding.spinnerThemeMode.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
-            listOf("Light", "Dark", "Same as device")
+            listOf(
+                getString(R.string.theme_light),
+                getString(R.string.theme_dark),
+                getString(R.string.theme_system)
+            )
         )
         binding.spinnerThemeMode.setSelection(themeModeToPosition(prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT)))
 
@@ -140,8 +143,12 @@ class SettingsFragment : Fragment() {
 
                 prefs.edit { putString(SettingsPrefs.KEY_LANGUAGE, selectedLang) }
                 
-                // Note: Real-time language switching usually requires an activity restart or a Locale helper
-                // For now, we update the preference. To apply immediately, we'd need a restart logic.
+                // Clear the cached daily tip so it shuffles in the new language upon recreate
+                requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE).edit {
+                    remove("current_tip")
+                    remove("last_tip_date")
+                }
+
                 requireActivity().recreate()
             }
 
@@ -289,10 +296,10 @@ class SettingsFragment : Fragment() {
 
     private fun confirmLogout() {
         MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
-            .setTitle("Log out")
-            .setMessage("Do you want to log out of Smart Health Reminder?")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Log out") { _, _ ->
+            .setTitle(R.string.confirm_logout_title)
+            .setMessage(R.string.confirm_logout_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.logout_button) { _, _ ->
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(requireContext(), WelcomeActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

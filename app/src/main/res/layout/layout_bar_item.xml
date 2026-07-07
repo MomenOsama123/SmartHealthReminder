@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="M"
+        android:text="@string/mon_initial"
         android:textColor="@color/text_muted"
         android:textSize="11sp" />
 </LinearLayout>

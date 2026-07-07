@@ -1,6 +1,7 @@
 package com.example.smarthealthreminder.features.schedule.details
 
 import android.os.Bundle
+import com.example.smarthealthreminder.core.base.BaseActivity
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -18,7 +19,7 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFact
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.launch
 
-class AddNoteActivity : AppCompatActivity() {
+class AddNoteActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_DATE = "extra_note_date"

@@ -8,12 +8,11 @@ import android.os.Build
 import android.provider.Settings
 import android.widget.*
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.AlarmEntity
@@ -24,7 +23,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
 import java.util.*
 
-class EditAlarmActivity : AppCompatActivity() {
+class EditAlarmActivity : BaseActivity() {
 
     companion object {
         const val RESULT_ALARM_SAVED = Activity.RESULT_FIRST_USER + 1

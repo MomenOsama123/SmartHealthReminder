@@ -6,29 +6,25 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotFragment
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
+import com.example.smarthealthreminder.features.fragment.AddReminderFragment
 import com.example.smarthealthreminder.features.fragment.AlarmsFragment
+import com.example.smarthealthreminder.features.fragment.DashboardFragment
 import com.example.smarthealthreminder.features.fragment.HomeFragment
 import com.example.smarthealthreminder.features.fragment.RemindersFragment
 import com.example.smarthealthreminder.features.fragment.ScheduleFragment
 import com.example.smarthealthreminder.features.settings.SettingsFragment
 import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
-//  NEW: Imported ReportsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.smarthealthreminder.core.utils.LocaleHelper
 import com.example.smarthealthreminder.features.reports.ReportsFragment
 
-class MainActivity : AppCompatActivity() {
-
-    override fun attachBaseContext(newBase: android.content.Context) {
-        super.attachBaseContext(LocaleHelper.wrapContext(newBase))
-    }
+class MainActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_START_DESTINATION = "extra_start_destination"
@@ -41,6 +37,8 @@ class MainActivity : AppCompatActivity() {
 
         // 🌟 1. NEW: Added a constant for the reports destination
         const val DESTINATION_REPORTS = "reports"
+        const val DESTINATION_DASHBOARD = "dashboard"
+        const val DESTINATION_ADD_REMINDER = "add_reminder"
 
         private const val REQUEST_POST_NOTIFICATIONS = 2001
         private const val TAG_HOME = "home"
@@ -49,9 +47,9 @@ class MainActivity : AppCompatActivity() {
         private const val TAG_REMINDERS = "reminders"
         private const val TAG_SETTINGS = "settings"
         private const val TAG_INSIGHTS = "insights"
-
-        // 2. NEW: Added a tag for the reports fragment
         private const val TAG_REPORTS = "reports"
+        private const val TAG_DASHBOARD = "dashboard"
+        private const val TAG_ADD_REMINDER = "add_reminder"
     }
 
     private lateinit var homeFragment: HomeFragment
@@ -61,9 +59,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var chatBotFragment: ChatBotFragment
     private lateinit var settingsFragment: SettingsFragment
     private lateinit var stepsTrackerFragment: StepsTrackerFragment
-
-    //  3. NEW: Declared the ReportsFragment variable
     private lateinit var reportsFragment: ReportsFragment
+    private lateinit var dashboardFragment: DashboardFragment
+    private lateinit var addReminderFragment: AddReminderFragment
 
     private lateinit var bottomNavigation: BottomNavigationView
     private var activeFragment: Fragment? = null
@@ -85,9 +83,9 @@ class MainActivity : AppCompatActivity() {
             chatBotFragment = ChatBotFragment()
             settingsFragment = SettingsFragment()
             stepsTrackerFragment = StepsTrackerFragment()
-
-            //  4. NEW: Initialized the reports fragment
             reportsFragment = ReportsFragment()
+            dashboardFragment = DashboardFragment()
+            addReminderFragment = AddReminderFragment()
 
             supportFragmentManager.beginTransaction()
                 .add(R.id.fragment_container, scheduleFragment, TAG_SCHEDULE).hide(scheduleFragment)
@@ -96,8 +94,9 @@ class MainActivity : AppCompatActivity() {
                 .add(R.id.fragment_container, chatBotFragment, "chatbot").hide(chatBotFragment)
                 .add(R.id.fragment_container, settingsFragment, TAG_SETTINGS).hide(settingsFragment)
                 .add(R.id.fragment_container, stepsTrackerFragment, TAG_INSIGHTS).hide(stepsTrackerFragment)
-                //  5. NEW: Added it to the container and hid it so it doesn't show on startup
                 .add(R.id.fragment_container, reportsFragment, TAG_REPORTS).hide(reportsFragment)
+                .add(R.id.fragment_container, dashboardFragment, TAG_DASHBOARD).hide(dashboardFragment)
+                .add(R.id.fragment_container, addReminderFragment, TAG_ADD_REMINDER).hide(addReminderFragment)
                 .add(R.id.fragment_container, homeFragment, TAG_HOME)
                 .commit()
 
@@ -110,9 +109,9 @@ class MainActivity : AppCompatActivity() {
             chatBotFragment = supportFragmentManager.findFragmentByTag("chatbot") as? ChatBotFragment ?: ChatBotFragment()
             settingsFragment = supportFragmentManager.findFragmentByTag(TAG_SETTINGS) as? SettingsFragment ?: SettingsFragment()
             stepsTrackerFragment = supportFragmentManager.findFragmentByTag(TAG_INSIGHTS) as? StepsTrackerFragment ?: StepsTrackerFragment()
-
-            // 6. NEW: Restored the fragment on configuration change (e.g., screen rotation)
             reportsFragment = supportFragmentManager.findFragmentByTag(TAG_REPORTS) as? ReportsFragment ?: ReportsFragment()
+            dashboardFragment = supportFragmentManager.findFragmentByTag(TAG_DASHBOARD) as? DashboardFragment ?: DashboardFragment()
+            addReminderFragment = supportFragmentManager.findFragmentByTag(TAG_ADD_REMINDER) as? AddReminderFragment ?: AddReminderFragment()
 
             activeFragment = supportFragmentManager.fragments.find { it.isAdded && !it.isHidden } ?: homeFragment
         }
@@ -198,6 +197,12 @@ class MainActivity : AppCompatActivity() {
             // 🌟 7. NEW: Navigate to the reports fragment when requested by the intent
             DESTINATION_REPORTS -> {
                 showFragment(reportsFragment)
+            }
+            DESTINATION_DASHBOARD -> {
+                showFragment(dashboardFragment)
+            }
+            DESTINATION_ADD_REMINDER -> {
+                showFragment(addReminderFragment)
             }
             "chatbot", "ai" -> {
                 if (bottomNavigation.selectedItemId != R.id.nav_ai) {

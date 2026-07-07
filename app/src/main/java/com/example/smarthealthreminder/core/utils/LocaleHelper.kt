@@ -9,7 +9,9 @@ object LocaleHelper {
 
     fun wrapContext(context: Context): Context {
         val prefs = context.getSharedPreferences(SettingsPrefs.PREFS_NAME, Context.MODE_PRIVATE)
-        val lang = prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN) ?: SettingsPrefs.LANG_EN
+        val systemLang = Locale.getDefault().language
+        val defaultLang = if (systemLang == SettingsPrefs.LANG_AR) SettingsPrefs.LANG_AR else SettingsPrefs.LANG_EN
+        val lang = prefs.getString(SettingsPrefs.KEY_LANGUAGE, defaultLang) ?: defaultLang
         
         val locale = Locale(lang)
         Locale.setDefault(locale)
@@ -23,7 +25,9 @@ object LocaleHelper {
 
     fun applyLocale(context: Context) {
         val prefs = context.getSharedPreferences(SettingsPrefs.PREFS_NAME, Context.MODE_PRIVATE)
-        val lang = prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN) ?: SettingsPrefs.LANG_EN
+        val systemLang = Locale.getDefault().language
+        val defaultLang = if (systemLang == SettingsPrefs.LANG_AR) SettingsPrefs.LANG_AR else SettingsPrefs.LANG_EN
+        val lang = prefs.getString(SettingsPrefs.KEY_LANGUAGE, defaultLang) ?: defaultLang
         
         val locale = Locale(lang)
         Locale.setDefault(locale)
@@ -32,6 +36,7 @@ object LocaleHelper {
         config.setLocale(locale)
         config.setLayoutDirection(locale)
         
+        @Suppress("DEPRECATION")
         context.resources.updateConfiguration(config, context.resources.displayMetrics)
     }
 }

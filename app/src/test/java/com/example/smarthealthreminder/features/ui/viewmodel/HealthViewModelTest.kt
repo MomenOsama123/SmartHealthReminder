@@ -13,8 +13,11 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -85,6 +88,7 @@ class HealthViewModelTest {
 
     @Test
     fun `allAlarms emits list from repository`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.allAlarms.collect() }
         advanceUntilIdle()
         assertEquals(listOf(sampleAlarm), viewModel.allAlarms.value)
     }
@@ -128,30 +132,35 @@ class HealthViewModelTest {
 
     @Test
     fun `allReminders emits list from repository`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.allReminders.collect() }
         advanceUntilIdle()
         assertEquals(listOf(sampleReminder), viewModel.allReminders.value)
     }
 
     @Test
     fun `pendingReminders emits only pending items`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.pendingReminders.collect() }
         advanceUntilIdle()
         assertEquals(listOf(sampleReminder), viewModel.pendingReminders.value)
     }
 
     @Test
     fun `pendingCount emits correct count`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.pendingCount.collect() }
         advanceUntilIdle()
         assertEquals(1, viewModel.pendingCount.value)
     }
 
     @Test
     fun `completedCount emits correct count`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.completedCount.collect() }
         advanceUntilIdle()
         assertEquals(0, viewModel.completedCount.value)
     }
 
     @Test
     fun `missedCount emits correct count`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.missedCount.collect() }
         advanceUntilIdle()
         assertEquals(0, viewModel.missedCount.value)
     }
@@ -202,6 +211,7 @@ class HealthViewModelTest {
 
     @Test
     fun `allScheduleEntries emits list from repository`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.allScheduleEntries.collect() }
         advanceUntilIdle()
         assertEquals(listOf(sampleScheduleEntry), viewModel.allScheduleEntries.value)
     }
@@ -224,6 +234,7 @@ class HealthViewModelTest {
 
     @Test
     fun `allReports emits list from repository`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.allReports.collect() }
         advanceUntilIdle()
         assertEquals(listOf(sampleReport), viewModel.allReports.value)
     }
@@ -246,6 +257,7 @@ class HealthViewModelTest {
 
     @Test
     fun `allNoteDates emits list from repository`() = runTest {
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) { viewModel.allNoteDates.collect() }
         advanceUntilIdle()
         assertEquals(listOf("2025-06-22"), viewModel.allNoteDates.value)
     }

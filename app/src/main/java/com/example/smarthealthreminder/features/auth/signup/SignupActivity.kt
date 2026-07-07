@@ -6,10 +6,10 @@ import android.util.Patterns
 import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.databinding.SignupBinding
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
@@ -20,7 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class SignupActivity : AppCompatActivity() {
+class SignupActivity : BaseActivity() {
 
     private lateinit var binding: SignupBinding
     private val viewModel: SignupViewModel by viewModels()

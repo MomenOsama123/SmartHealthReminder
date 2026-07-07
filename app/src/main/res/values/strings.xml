@@ -61,11 +61,12 @@
     <string name="content_desc_search">Search icon</string>
 
     <string name="noResParagraph">
-        We couldn\'t find any matches for that keyword.
-        Sometimes the best path is a different approach.
+        We couldn\'t find any matches.
+        Try a different keyword or clear your filters to explore all resources.
     </string>
 
     <string name="suggested_topics">SUGGESTED TOPICS</string>
+    <string name="search_try_categories">Try these categories:</string>
     <string name="health_assistant">Health Assistant</string>
 
     <string name="no_results_found">No results found</string>
@@ -402,10 +403,13 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="alarm_bell">Alarm bell</string>
     <string name="category_icon">Category Icon</string>
     <string name="add_note">Add Note</string>
+    <string name="add_note_btn">Add Note</string>
+    <string name="edit_note">Edit Note</string>
     <string name="write_your_note_here">Write your note here...</string>
     <string name="save_note">Save Note</string>
     <string name="no_events">No events</string>
     <string name="add_alarm">Add Alarm</string>
+    <string name="items_count_format">%1$d items</string>
     <string name="today_s_plan">Today\'s Plan</string>
     <string name="_0_items">0 items</string>
     <string name="today_s_schedule">Today\'s Schedule</string>
@@ -491,6 +495,13 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="steps_count_sample">6,432</string>
     <string name="deep_breathe_title">Deep Breathe.</string>
     <string name="cancel">Cancel</string>
+
+    <string name="profile_photo">Profile Photo</string>
+    <string name="choose_photo_method">Choose how you want to update your profile photo</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="content_desc_take_photo">Take Photo</string>
+    <string name="content_desc_choose_gallery">Choose from Gallery</string>
 
     <string name="serenepulse_is_thinking">SerenePulse AI Assistant is thinking...</string>
 
@@ -601,6 +612,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <!-- UI Texts -->
     <string name="no_more_meds">No more medications</string>
     <string name="no_more_meds_today">No more medications for today 🎉</string>
+    <string name="no_doses_today">No doses today</string>
 
     <!-- Dialog Options -->
 
@@ -616,6 +628,19 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="status_action_title">Action required</string>
     <string name="status_action_description">Low adherence detected. Please try to follow your medication schedule more closely.</string>
     <string name="last_updated_label">Last updated: %1$s</string>
+
+    <!-- PDF Report Strings -->
+    <string name="pdf_report_title">Official Health &amp; Adherence Report</string>
+    <string name="pdf_generated_on">Generated on: %1$s</string>
+    <string name="pdf_section_health_status">1. Current Health Status</string>
+    <string name="pdf_section_adherence">2. Medication Adherence</string>
+    <string name="pdf_adherence_rate">Adherence Rate: %1$s</string>
+    <string name="pdf_section_insights">3. AI Insights &amp; Recommendations</string>
+    <string name="pdf_footer">This report was generated automatically by %1$s.</string>
+    <string name="pdf_saved_success">PDF Saved to Downloads!</string>
+    <string name="pdf_save_failed">Failed to save PDF: %1$s</string>
+    <string name="preparing_report">Preparing your report...</string>
+    <string name="generating_report">Generating Real Report...</string>
 
     <!-- Steps Tracker -->
     <string name="stop_activity">STOP ACTIVITY</string>
@@ -704,5 +729,49 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="view_reminder">View Reminder</string>
     <string name="nav_home">Home</string>
     <string name="nav_schedule">Schedule</string>
-    <string name="nav_ai">AI Assistant</string>
+    <string name="nav_create">Add</string>
+    <string name="nav_ai">AI</string>
+    <string name="nav_settings">Settings</string>
+
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_system">Same as device</string>
+    <string name="confirm_logout_title">Log out</string>
+    <string name="confirm_logout_message">Do you want to log out of Smart Health Reminder?</string>
+
+    <string-array name="health_tips">
+        <item>Drink at least 8 glasses of water today to stay hydrated.</item>
+        <item>A 10-minute walk can significantly boost your mood and energy.</item>
+        <item>Try to get 7-9 hours of sleep for optimal brain function.</item>
+        <item>Taking deep breaths for 2 minutes can reduce stress levels.</item>
+        <item>Include more leafy greens in your meals for essential vitamins.</item>
+        <item>Consistency is key—keep up with your health reminders!</item>
+        <item>Take a short break every hour to stretch your body.</item>
+        <item>Practice mindfulness today: focus on the present moment.</item>
+        <item>Replace sugary snacks with fruits for a natural energy boost.</item>
+        <item>Regular exercise is a celebration of what your body can do.</item>
+        <item>Don\'t be afraid to ask for help; mental health is just as important as physical health.</item>
+        <item>Limit screen time an hour before bed for better sleep quality.</item>
+        <item>Your value is not defined by your productivity.</item>
+        <item>Small progress is still progress. Keep going!</item>
+        <item>Start your day with a positive affirmation.</item>
+        <item>Laughter is a great stress-reliever—watch something funny today.</item>
+        <item>Social connection is vital; reach out to a friend or loved one.</item>
+        <item>Listen to your body; if it needs rest, give it rest.</item>
+        <item>Organize your workspace to clear your mind and reduce anxiety.</item>
+        <item>Nature has a calming effect; spend some time outdoors if possible.</item>
+        <item>Limit caffeine intake in the afternoon to avoid sleep disruption.</item>
+        <item>Practice gratitude: name three things you\'re thankful for today.</item>
+        <item>Avoid multi-tasking; focus on one thing at a time to reduce stress.</item>
+        <item>Healthy eating isn\'t about restriction; it\'s about nourishment.</item>
+        <item>Stretch for 5 minutes after waking up to improve circulation.</item>
+    </string-array>
+    <!-- Report Insights -->
+    <string name="report_title_weekly">Weekly Health Summary</string>
+    <string name="report_symptoms_format">Analysis based on %1$d recorded medication events (%2$d taken, %3$d missed).</string>
+    <string name="insight_excellent">Excellent consistency! Keep up the great work.</string>
+    <string name="insight_good">Good job, but try to minimize missing doses.</string>
+    <string name="insight_low_adherence">Your adherence is low. Setting extra reminders might help.</string>
+    <string name="insight_missed_busy">Most missed doses occur when you\'re busy. Try to plan ahead.</string>
+    <string name="insight_perfect_score">You haven\'t missed any doses lately. Perfect score!</string>
 </resources>

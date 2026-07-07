@@ -3,10 +3,10 @@ package com.example.smarthealthreminder.features.welcome
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.databinding.ActivityWelcomeBinding
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity
@@ -14,7 +14,7 @@ import com.example.smarthealthreminder.features.model_dashboard.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : BaseActivity() {
     private lateinit var binding: ActivityWelcomeBinding
     private var isCheckingAuth = true
 

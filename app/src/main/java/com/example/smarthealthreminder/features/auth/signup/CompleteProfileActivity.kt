@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import com.example.smarthealthreminder.core.base.BaseActivity
 import android.provider.MediaStore
 import android.widget.EditText
 import android.widget.Toast
@@ -28,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 
-class CompleteProfileActivity : AppCompatActivity() {
+class CompleteProfileActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCompleteProfileBinding
     private val auth by lazy { FirebaseAuth.getInstance() }
