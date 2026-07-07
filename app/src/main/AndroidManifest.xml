@@ -110,6 +110,9 @@
             android:name=".features.profileInfo.ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".features.profileInfo.EditProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.reports.ReportsActivity"
             android:exported="false" />
         <activity

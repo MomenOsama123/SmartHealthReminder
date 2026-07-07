@@ -43,7 +43,6 @@ class ProfileActivity : AppCompatActivity() {
     private val auth by lazy { FirebaseAuth.getInstance() }
     private val db by lazy { FirebaseFirestore.getInstance() }
     private val localDb by lazy { DatabaseHelper(this) }
-    private var selectedImageUri: Uri? = null
 
     private val viewModel: HealthViewModel by viewModels {
         val db = AppDatabase.getDatabase(this)
@@ -63,33 +62,6 @@ class ProfileActivity : AppCompatActivity() {
     private lateinit var userNameDisplay: TextView
     private lateinit var profileImage: ImageView
 
-    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        uri?.let {
-            selectedImageUri = it
-            profileImage.setImageURI(it)
-        }
-    }
-
-    private val captureImageLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        bitmap?.let {
-            profileImage.setImageBitmap(it)
-        }
-    }
-
-
-
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        val allGranted = permissions.all { it.value }
-        if (allGranted) {
-            showImageSourceDialog()
-        } else {
-            Toast.makeText(this, "Permissions are required to change profile image", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(SettingsPrefs.getSavedNightMode(this))
         enableEdgeToEdge()
@@ -103,8 +75,12 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         initViews()
-        loadUserData()
         setupListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadUserData()
     }
 
     private fun initViews() {
@@ -119,11 +95,6 @@ class ProfileActivity : AppCompatActivity() {
         emergencyContactInput = findViewById(R.id.emergency_contact_input)
         userNameDisplay = findViewById(R.id.tv_user_name)
         profileImage = findViewById(R.id.profile_image)
-
-        // make edit text unwritable
-        dobInput.showSoftInputOnFocus = false
-        genderInput.showSoftInputOnFocus = false
-        bloodTypeInput.showSoftInputOnFocus = false
 
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
     }
@@ -154,11 +125,6 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 }
             }
-            .addOnFailureListener { e ->
-                if (localUser == null) {
-                    Toast.makeText(this, "Failed to load profile: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            }
     }
 
     private fun displayUser(user: User) {
@@ -184,169 +150,9 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
-        findViewById<MaterialCardView>(R.id.editProfileCard).setOnClickListener {
-            showImageSourceDialog()
+        findViewById<View>(R.id.fab_edit_profile).setOnClickListener {
+            val intent = android.content.Intent(this, EditProfileActivity::class.java)
+            startActivity(intent)
         }
-
-        profileImage.setOnClickListener {
-            showImageSourceDialog()
-        }
-
-        dobInput.setOnClickListener {
-            showDatePickerDialog(dobInput)
-        }
-
-        genderInput.setOnClickListener {
-            showGenderDialog(genderInput)
-        }
-
-        bloodTypeInput.setOnClickListener {
-            showBloodTypeDialog(bloodTypeInput)
-        }
-
-        findViewById<Button>(R.id.save_btn).setOnClickListener {
-            saveUserData()
-        }
-    }
-
-    private fun showImageSourceDialog() {
-        val bottomSheetDialog = BottomSheetDialog(this)
-        val view = layoutInflater.inflate(R.layout.dialog_image_source, null)
-
-        view.findViewById<View>(R.id.btn_camera).setOnClickListener {
-            checkCameraPermissionAndLaunch()
-            bottomSheetDialog.dismiss()
-        }
-
-        view.findViewById<View>(R.id.btn_gallery).setOnClickListener {
-            checkGalleryPermissionAndLaunch()
-            bottomSheetDialog.dismiss()
-        }
-
-        bottomSheetDialog.setContentView(view)
-        bottomSheetDialog.show()
-    }
-
-    private fun checkCameraPermissionAndLaunch() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            captureImageLauncher.launch(null)
-        } else {
-            requestPermissionLauncher.launch(arrayOf(Manifest.permission.CAMERA))
-        }
-    }
-
-    private fun checkGalleryPermissionAndLaunch() {
-        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Manifest.permission.READ_MEDIA_IMAGES
-        } else {
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        }
-
-        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
-            pickImageLauncher.launch("image/*")
-        } else {
-            requestPermissionLauncher.launch(arrayOf(permission))
-        }
-    }
-
-    private fun saveUserData() {
-        val uid = auth.currentUser?.uid ?: return
-
-        val weightStr = weightInput.text.toString().trim()
-        val heightStr = heightInput.text.toString().trim()
-
-        if (weightStr.isNotEmpty()) {
-            val weight = weightStr.toDoubleOrNull()
-            if (weight == null || weight !in 10.0..500.0) {
-                weightInput.error = "Please enter a valid weight (10-500 kg)"
-                weightInput.requestFocus()
-                return
-            }
-        }
-
-        if (heightStr.isNotEmpty()) {
-            val height = heightStr.toDoubleOrNull()
-            if (height == null || height !in 50.0..300.0) {
-                heightInput.error = "Please enter a valid height (50-300 cm)"
-                heightInput.requestFocus()
-                return
-            }
-        }
-
-        val profileImageBase64 = try {
-            val bitmap = profileImage.drawable.toBitmap()
-            ImageUtils.bitmapToBase64(bitmap)
-        } catch (e: Exception) {
-            null
-        }
-
-        val updatedUser = User(
-            firebaseId = uid,
-            name = fullNameInput.text.toString().trim(),
-            email = auth.currentUser?.email ?: "",
-            dob = dobInput.text.toString().trim(),
-            gender = genderInput.text.toString().trim(),
-            bloodType = bloodTypeInput.text.toString().trim(),
-            weight = weightStr,
-            height = heightStr,
-            chronicDiseases = diseasesInput.text.toString().trim(),
-            allergies = allergiesInput.text.toString().trim(),
-            emergencyContact = emergencyContactInput.text.toString().trim(),
-            profileImage = profileImageBase64,
-            isProfileCompleted = true
-        )
-
-        db.collection("users").document(uid)
-            .set(updatedUser)
-            .addOnSuccessListener {
-                // Sync with Local Database
-                val existingLocalUser = localDb.getUserByFirebaseId(uid)
-                if (existingLocalUser != null) {
-                    localDb.updateUser(updatedUser)
-                } else {
-                    localDb.insertUser(updatedUser)
-                }
-
-                viewModel.updateCurrentUser(updatedUser)
-
-                Toast.makeText(this, "Profile updated successfully!", Toast.LENGTH_SHORT).show()
-                userNameDisplay.text = updatedUser.name
-                finish()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(this, "Update failed: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun showDatePickerDialog(editText: EditText) {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
-
-        DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            val formattedDate = "${selectedMonth + 1}/$selectedDay/$selectedYear"
-            editText.setText(formattedDate)
-        }, year, month, day).show()
-    }
-
-    private fun showGenderDialog(editText: EditText) {
-        val options = arrayOf("Female", "Male", "Non-Binary", "Other")
-        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
-            .setTitle("Select Gender")
-            .setItems(options) { _, which ->
-                editText.setText(options[which])
-            }
-            .show()
-    }
-
-    private fun showBloodTypeDialog(editText: EditText) {
-        val options = arrayOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
-        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
-            .setTitle("Select Blood Type")
-            .setItems(options) { _, which ->
-                editText.setText(options[which])
-            }
-            .show()
     }
 }
