@@ -320,7 +320,7 @@
                         android:minHeight="48dp"
                         android:spinnerMode="dropdown" />
                 </LinearLayout>
-            </LinearLayout> <LinearLayout style="@style/SettingsCard">
+            </LinearLayout>            <LinearLayout style="@style/SettingsCard">
 
                 <LinearLayout style="@style/SettingsRow">
 
@@ -346,6 +346,41 @@
                         android:layout_height="wrap_content"
                         android:minHeight="48dp"
                         android:spinnerMode="dropdown" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/card_about"
+                style="@style/SettingsCard"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
+
+                <LinearLayout style="@style/SettingsRow">
+
+                    <ImageView
+                        style="@style/SettingsIcon"
+                        android:src="@drawable/ic_priority"
+                        android:contentDescription="@null"
+                        app:tint="@color/primary" />
+
+                    <LinearLayout style="@style/SettingsTextGroup">
+
+                        <TextView
+                            style="@style/SettingsTitle"
+                            android:text="@string/about_trusta" />
+
+                        <TextView
+                            style="@style/SettingsSubtitle"
+                            android:text="@string/about_trusta_desc" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="22dp"
+                        android:layout_height="22dp"
+                        android:src="@drawable/ic_arrow_right"
+                        android:contentDescription="@null"
+                        app:tint="@color/text_secondary" />
                 </LinearLayout>
             </LinearLayout>
 

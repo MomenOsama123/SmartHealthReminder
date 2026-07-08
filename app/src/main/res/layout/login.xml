@@ -171,17 +171,18 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnLogin"
                 android:layout_width="320dp"
-                android:layout_height="52dp"
+                android:layout_height="54dp"
                 android:layout_marginTop="24dp"
-                android:background="@drawable/et_shape"
-                app:backgroundTint="@color/text_muted"
+                app:backgroundTint="@color/primary_green"
                 android:text="@string/log_in"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
+                android:textAllCaps="false"
+                app:cornerRadius="12dp"
                 android:letterSpacing="0.02" />
         </LinearLayout>
         <!-- OR CONTINUE WITH Divider -->
@@ -224,7 +225,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoogle"
                 android:layout_width="320dp"
-                android:layout_height="52dp"
+                android:layout_height="54dp"
                 android:layout_marginTop="16dp"
                 app:icon="@drawable/ic_google"
                 app:iconGravity="textStart"
@@ -234,7 +235,11 @@
                 android:text="@string/google"
                 android:textSize="14sp"
                 android:textColor="@color/black"
+                android:textAllCaps="false"
                 android:backgroundTint="@color/white"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/divider"
+                app:strokeWidth="1dp"
                 style="@style/Widget.MaterialComponents.Button.TextButton" />
         </LinearLayout>
         <!-- Continue with Facebook -->

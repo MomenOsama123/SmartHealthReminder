@@ -174,6 +174,11 @@ class SettingsFragment : Fragment() {
         binding.rowReminderSnooze.isClickable = false
         binding.rowReminderSnooze.isFocusable = false
 
+        binding.cardAbout.setOnClickListener {
+            val intent = Intent(Intent.ACTION_VIEW, getString(R.string.about_trusta_url).toUri())
+            startActivity(intent)
+        }
+
         binding.btnLogout.setOnClickListener {
             confirmLogout()
         }

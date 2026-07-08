@@ -3,10 +3,10 @@ package com.example.smarthealthreminder.features.activity
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +16,6 @@ import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.UUID
@@ -27,11 +26,11 @@ class CreateScheduleEntryActivity : BaseActivity() {
         const val EXTRA_SELECTED_DATE = "extra_selected_date"
     }
 
-    private lateinit var etTitle: TextInputEditText
-    private lateinit var etDescription: TextInputEditText
-    private lateinit var etDate: TextInputEditText
-    private lateinit var etTime: TextInputEditText
-    private lateinit var etCategory: TextInputEditText
+    private lateinit var etTitle: EditText
+    private lateinit var etDescription: EditText
+    private lateinit var etDate: EditText
+    private lateinit var etTime: EditText
+    private lateinit var etCategory: EditText
     private lateinit var btnSave: MaterialButton
 
     private var selectedDate: String = ""

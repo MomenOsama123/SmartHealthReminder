@@ -16,6 +16,7 @@
         android:orientation="vertical"
         android:paddingBottom="88dp">
 
+        <!-- Calendar Card -->
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,14 +29,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="10dp">
+                android:padding="12dp">
 
+                <!-- Mode Toggle -->
                 <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/toggle_calendar_mode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="12dp"
                     app:singleSelection="true"
                     app:checkedButton="@id/btn_mode_month"
                     app:selectionRequired="true">
@@ -46,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:text="@string/month"
-                        android:textColor="@color/schedule_on_primary_text"
+                        android:textColor="@color/white"
                         app:strokeColor="@color/schedule_on_primary_muted" />
 
                     <com.google.android.material.button.MaterialButton
@@ -55,25 +57,26 @@
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:text="@string/week"
-                        android:textColor="@color/schedule_on_primary_text"
+                        android:textColor="@color/white"
                         app:strokeColor="@color/schedule_on_primary_muted" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
+                <!-- Navigation -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="12dp">
 
                     <ImageButton
                         android:id="@+id/btn_prev_month"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:background="@drawable/circle_white"
-                        android:src="@drawable/ic_arrow_back"
-                        android:padding="8dp"
+                        android:src="@drawable/ic_back"
+                        android:padding="10dp"
                         android:contentDescription="@string/previous"
                         app:tint="@color/primary" />
 
@@ -83,110 +86,51 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold"
-                        android:textColor="@color/schedule_on_primary_text"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/serif_font"
                         tools:text="October 2023" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_today"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
+                        android:layout_height="40dp"
                         android:minWidth="0dp"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="12dp"
                         android:text="@string/today"
-                        android:textColor="@color/schedule_on_primary_text"
-                        android:textSize="12sp" />
+                        android:textColor="@color/white"
+                        android:textStyle="bold"
+                        android:textSize="13sp" />
 
                     <ImageButton
                         android:id="@+id/btn_next_month"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:background="@drawable/circle_white"
                         android:src="@drawable/ic_arrow_right"
-                        android:padding="8dp"
+                        android:padding="10dp"
                         android:contentDescription="@string/next"
                         app:tint="@color/primary" />
 
                 </LinearLayout>
 
+                <!-- Day Header -->
                 <LinearLayout
                     android:id="@+id/layout_dow_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
+                    android:layout_marginBottom="8dp">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/s"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/m"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/t"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/w"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/t"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/f"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/s"
-                        android:textColor="@color/schedule_on_primary_muted"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/s" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/m" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/t" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/w" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/t" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/f" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:gravity="center" android:text="@string/s" android:textColor="@color/schedule_on_primary_muted" android:textSize="11sp" android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -196,36 +140,35 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
                     android:overScrollMode="never"
-                    tools:listitem="@layout/item_calendar_day"
-                    tools:itemCount="35"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="7" />
 
+                <!-- Date Info & Quick Add -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/bg_rounded_pill"
                     android:backgroundTint="@color/schedule_overlay_bg"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:paddingHorizontal="16dp"
-                    android:paddingVertical="10dp">
+                    android:paddingVertical="8dp">
 
                     <ImageView
-                        android:layout_width="16dp"
-                        android:layout_height="16dp"
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
                         android:layout_marginEnd="8dp"
                         android:contentDescription="@string/selected_date"
                         android:src="@drawable/ic_calendar"
-                        app:tint="@color/schedule_on_primary_text" />
+                        app:tint="@color/white" />
 
                     <TextView
                         android:id="@+id/tv_selected_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textColor="@color/schedule_on_primary_text"
+                        android:textColor="@color/white"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         tools:text="Oct 24, 2023" />
@@ -234,22 +177,26 @@
                         android:id="@+id/tv_events_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
+                        android:layout_marginEnd="12dp"
                         android:textColor="@color/schedule_on_primary_accent"
                         android:textSize="12sp"
+                        android:textStyle="bold"
                         tools:text="3 events" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn_add"
                         style="@style/Widget.Material3.Button.TextButton"
                         android:layout_width="wrap_content"
-                        android:layout_height="48dp"
+                        android:layout_height="40dp"
                         android:minWidth="0dp"
-                        android:paddingHorizontal="8dp"
+                        android:paddingHorizontal="12dp"
                         android:text="@string/add"
-                        android:textColor="@color/schedule_on_primary_text"
+                        android:textColor="@color/white"
                         android:textSize="12sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:icon="@drawable/ic_add"
+                        app:iconSize="14dp"
+                        app:iconTint="@color/white" />
 
                 </LinearLayout>
 
@@ -257,26 +204,45 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Events List -->
+
+        <!-- Empty State -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_schedule_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="12dp"
+            android:layout_marginHorizontal="4dp"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
             tools:listitem="@layout/item_schedule" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/tv_schedule_empty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:layout_marginTop="8dp"
+            android:orientation="vertical"
             android:gravity="center"
-            android:text="@string/no_events_for_this_day"
-            android:textColor="@color/text_tertiary"
-            android:textSize="13sp"
-            android:visibility="gone" />
+            android:padding="40dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/ic_schedule"
+                android:alpha="0.2"
+                app:tint="@color/text_tertiary"
+                android:contentDescription="@null"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/no_events_for_this_day"
+                android:textAppearance="@style/TextBody1"
+                android:textColor="@color/text_tertiary"
+                android:gravity="center" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
