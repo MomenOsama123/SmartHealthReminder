@@ -110,7 +110,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 | Daily Steps | Quick Access |
 |--------------|-------------|
-| ![](screenshots/DailySteps.jpeg) | ![](screenshots/QuickActionBar.png) |
+| ![](screenshots/DailySteps.jpeg) | ![](screenshots/QueckActionBar.png) |
 
 ---
 
