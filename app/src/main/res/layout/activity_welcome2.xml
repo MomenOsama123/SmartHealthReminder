@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/page"
+    android:background="@color/dynamic_screen_bg"
     tools:context=".features.welcome.WelcomeActivity2">
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuide"
@@ -39,7 +39,7 @@
         android:text="@string/get_started"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@color/text_dark"
+        android:textColor="?attr/colorOnSurface"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/frameLayout" />
@@ -51,7 +51,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:textSize="18sp"
-        android:textColor="@color/text_secondary"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:text="@string/why_joinUs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:backgroundTint="#769382"
+        android:textColor="@color/white"
         android:text="@string/sign_up_with_email"
         android:textSize="16sp"
         app:cornerRadius="12dp"
@@ -87,7 +88,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="#BDBDBD" />
+            android:background="?attr/colorOnSurfaceVariant" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,14 +96,14 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:text="@string/or_continue_with"
-            android:textColor="#8A9A8A"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp" />
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"
-            android:background="#BDBDBD" />
+            android:background="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
 
@@ -110,13 +111,13 @@
         android:id="@+id/signup_google"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:backgroundTint="#ffffff"
+        android:backgroundTint="@color/dynamic_card_bg"
         app:icon="@drawable/google_icon"
         app:iconTint="@null"
         app:iconGravity="textStart"
         android:text="@string/google"
         android:textStyle="bold"
-        android:textColor="@color/text_dark"
+        android:textColor="?attr/colorOnSurface"
         android:textSize="16sp"
         app:cornerRadius="12dp"
         android:layout_marginTop="20dp"
@@ -125,14 +126,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/continue_with" />
 
-
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/already_have_an_account"
-        android:textColor="@color/text_secondary"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -151,6 +151,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView5" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
