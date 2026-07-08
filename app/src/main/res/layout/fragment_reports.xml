@@ -458,6 +458,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="90dp"
         android:src="@drawable/ic_add"
+        android:backgroundTint="@color/primary_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white"
