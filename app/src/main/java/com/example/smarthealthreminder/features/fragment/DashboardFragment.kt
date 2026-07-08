@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -43,10 +44,12 @@ class DashboardFragment : Fragment() {
     }
 
     private var firebaseId: String = ""
-
+    private lateinit var pbHomeAdherence: ProgressBar
+    private lateinit var pbStepsProgress: ProgressBar
     private lateinit var tvGreeting: TextView
     private lateinit var tvAdherencePercent: TextView
     private lateinit var tvTotalMeds: TextView
+
     private lateinit var tvTakenToday: TextView
     private lateinit var tvMissedToday: TextView
     private lateinit var tvUserName: TextView
@@ -61,10 +64,13 @@ class DashboardFragment : Fragment() {
     private lateinit var tvUpcomingTitle: TextView
     private lateinit var tvNoUpcoming: TextView
     private lateinit var fabAddMed: View
+    private lateinit var tvViewDetails: TextView
+    private lateinit var tvCurrentSteps: TextView
+    private lateinit var tvTargetSteps: TextView
 
     private var reminderEntities: List<ReminderEntity> = emptyList()
     private var currentNextItem: ScheduleItem? = null
-    
+
     private val refreshRunnable = object : Runnable {
         override fun run() {
             loadNextDose()
@@ -110,7 +116,7 @@ class DashboardFragment : Fragment() {
         initViews(view)
         setupClickListeners()
         setupProfileObservation()
-
+        observeSteps()
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allReminders.collect { reminders ->
@@ -125,13 +131,46 @@ class DashboardFragment : Fragment() {
                 }
             }
         }
-    }
+    }private fun observeSteps() {
 
+        viewLifecycleOwner.lifecycleScope.launch {
+
+            viewModel.todaySteps.collect { stepData ->
+
+                if (stepData != null) {
+
+                    val steps = stepData.steps
+                    val target = stepData.targetSteps
+
+                    tvCurrentSteps.text = steps.toString()
+                    tvTargetSteps.text = "/$target"
+
+                    val percentage = if (target > 0) {
+                        (steps * 100) / target
+                    } else {
+                        0
+                    }
+
+                    pbStepsProgress.progress = percentage
+
+                } else {
+
+                    tvCurrentSteps.text = "0"
+                    tvTargetSteps.text = "/10000"
+                    pbStepsProgress.progress = 0
+
+                }
+            }
+        }
+    }
     private fun initViews(view: View) {
+        pbHomeAdherence = view.findViewById(R.id.pbHomeAdherence)
+        pbStepsProgress = view.findViewById(R.id.pbStepsProgress)
         tvGreeting = view.findViewById(R.id.tvGreeting)
         tvUserName = view.findViewById(R.id.tvUserName)
         ivProfile = view.findViewById(R.id.ivProfile)
-
+        tvCurrentSteps = view.findViewById(R.id.tvCurrentSteps)
+        tvTargetSteps = view.findViewById(R.id.tvTargetSteps)
         tvAdherencePercent = view.findViewById(R.id.tvAdherencePercent)
         tvTotalMeds = view.findViewById(R.id.tvTotalMeds)
         tvTakenToday = view.findViewById(R.id.tvTakenToday)
@@ -147,6 +186,7 @@ class DashboardFragment : Fragment() {
         tvUpcomingTitle = view.findViewById(R.id.tvUpcomingTitle)
         tvNoUpcoming = view.findViewById(R.id.tvNoUpcoming)
         fabAddMed = view.findViewById(R.id.fabAddMed)
+        tvViewDetails = view.findViewById(R.id.tvViewDetails)
     }
 
     private fun setupProfileObservation() {
@@ -249,7 +289,17 @@ class DashboardFragment : Fragment() {
         fabAddMed.setOnClickListener {
             startActivity(Intent(requireContext(), AddReminderActivity::class.java))
         }
+        tvViewDetails.setOnClickListener {
 
+            parentFragmentManager.beginTransaction()
+                .replace(
+                    R.id.fragment_container,
+                    StepsTrackerFragment()
+                )
+                .addToBackStack(null)
+                .commit()
+
+        }
         btnMarkTaken.setOnClickListener {
             currentNextItem?.let { item ->
                 if (isItemDue(item)) {
@@ -328,6 +378,7 @@ class DashboardFragment : Fragment() {
 
         val percentage = if (total > 0) (done * 100 / total) else 0
         tvAdherencePercent.text = getString(R.string.percentage_format, percentage)
+        pbHomeAdherence.progress = percentage
 
         requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE).edit {
             putInt("adherence_percent", percentage)
