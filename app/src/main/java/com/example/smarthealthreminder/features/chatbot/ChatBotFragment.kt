@@ -89,25 +89,31 @@ class ChatBotFragment : Fragment() {
         updateSendButtonState("")
         
         // Handle window insets for edge-to-edge support and keyboard
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
-            
-            // Padding for the header to stay below the status bar
-            v.setPadding(0, systemBars.top, 0, 0)
-            
-            // Adjust inputLayout bottom margin to account for keyboard OR navigation bar
-            val bottomInset = if (imeInsets.bottom > 0) imeInsets.bottom else systemBars.bottom
-            val params = binding.inputLayout.layoutParams as ViewGroup.MarginLayoutParams
-            params.bottomMargin = bottomInset
-            binding.inputLayout.layoutParams = params
-            
-            // Scroll to bottom if keyboard opened to keep latest message visible
-            if (imeInsets.bottom > 0 && messages.isNotEmpty()) {
-                binding.chatRecyclerView.post {
-                    binding.chatRecyclerView.scrollToPosition(messages.size - 1)
-                }
+            val ime = insets.getInsets(WindowInsetsCompat.Type.ime())
+
+            binding.header.setPadding(
+                binding.header.paddingLeft,
+                systemBars.top,
+                binding.header.paddingRight,
+                binding.header.paddingBottom
+            )
+
+            val bottom = if (insets.isVisible(WindowInsetsCompat.Type.ime())) {
+                ime.bottom
+            } else {
+                systemBars.bottom
             }
+
+            binding.inputLayout.setPadding(
+                binding.inputLayout.paddingLeft,
+                binding.inputLayout.paddingTop,
+                binding.inputLayout.paddingRight,
+                bottom
+            )
+
             insets
         }
 
