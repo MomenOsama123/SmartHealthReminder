@@ -133,33 +133,26 @@ class DashboardFragment : Fragment() {
             }
         }
     }private fun observeSteps() {
-
         viewLifecycleOwner.lifecycleScope.launch {
-
             viewModel.todaySteps.collect { stepData ->
-
                 if (stepData != null) {
-
                     val steps = stepData.steps
                     val target = stepData.targetSteps
 
                     tvCurrentSteps.text = steps.toString()
                     tvTargetSteps.text = "/$target"
 
-                    val percentage = if (target > 0) {
-                        (steps * 100) / target
-                    } else {
-                        0
-                    }
+                    // خلي الـ max بتاع الـ ProgressBar هو الـ target نفسه
+                    // مش نسبة مئوية ثابتة (100)
+                    pbStepsProgress.max = target
+                    pbStepsProgress.progress = steps.coerceAtMost(target)
 
-                    pbStepsProgress.progress = percentage
-
+                    android.util.Log.d("Steps", "steps=$steps target=$target")
                 } else {
-
                     tvCurrentSteps.text = "0"
                     tvTargetSteps.text = "/10000"
+                    pbStepsProgress.max = 10000
                     pbStepsProgress.progress = 0
-
                 }
             }
         }
