@@ -22,6 +22,7 @@
             android:layout_height="40dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/back"
+            app:tint="@color/text_dark"
             android:src="@drawable/ic_arrow_back" />
 
         <LinearLayout
