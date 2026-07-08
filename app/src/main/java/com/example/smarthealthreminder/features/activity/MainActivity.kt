@@ -212,18 +212,19 @@ class MainActivity : BaseActivity() {
                 showFragment(remindersFragment)
             }
             DESTINATION_MEDICATION_PLANS -> {
-                showFragment(medicationPlansFragment)
+                showFragment(medicationPlansFragment)}
             // 🌟 7. NEW: Navigate to the reports fragment when requested by the intent
             DESTINATION_REPORTS -> {
                 showFragment(reportsFragment)
             }
+
             DESTINATION_DASHBOARD -> {
                 showFragment(dashboardFragment)
             }
             DESTINATION_ADD_REMINDER -> {
                 showFragment(addReminderFragment)
             }
-            "chatbot", "ai" -> {
+                "chatbot", "ai" -> {
                 if (bottomNavigation.selectedItemId != R.id.nav_ai) {
                     bottomNavigation.selectedItemId = R.id.nav_ai
                 }

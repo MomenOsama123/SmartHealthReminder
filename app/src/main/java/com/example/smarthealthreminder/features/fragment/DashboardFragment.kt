@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.example.smarthealthreminder.features.stepsTracker.StepsTrackerFragment
@@ -49,7 +50,7 @@ class DashboardFragment : Fragment() {
     private lateinit var tvGreeting: TextView
     private lateinit var tvAdherencePercent: TextView
     private lateinit var tvTotalMeds: TextView
-
+    private lateinit var cardSteps: CardView
     private lateinit var tvTakenToday: TextView
     private lateinit var tvMissedToday: TextView
     private lateinit var tvUserName: TextView
@@ -164,6 +165,7 @@ class DashboardFragment : Fragment() {
         }
     }
     private fun initViews(view: View) {
+        cardSteps = view.findViewById(R.id.cardSteps)
         pbHomeAdherence = view.findViewById(R.id.pbHomeAdherence)
         pbStepsProgress = view.findViewById(R.id.pbStepsProgress)
         tvGreeting = view.findViewById(R.id.tvGreeting)

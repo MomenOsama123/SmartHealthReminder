@@ -438,6 +438,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     scheduledTime = reminder.time ?: "",
                     status = "Missed"
                 )
+            )
             db.reminderDao().updateSnoozeUsed(id, false)
 
             val updated = db.reminderDao().getReminderById(id)
