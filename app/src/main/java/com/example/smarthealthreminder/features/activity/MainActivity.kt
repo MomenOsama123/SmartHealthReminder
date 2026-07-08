@@ -255,10 +255,13 @@ class MainActivity : BaseActivity() {
         if (fragment == activeFragment) return true
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.hide(activeFragment!!)
+        activeFragment?.let {
+            transaction.hide(it)
+        }
         transaction.show(fragment)
         transaction.commit()
         activeFragment = fragment
+
         return true
     }
 

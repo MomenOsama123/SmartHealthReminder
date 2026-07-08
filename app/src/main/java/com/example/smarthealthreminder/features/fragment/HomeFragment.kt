@@ -26,7 +26,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
-import com.example.smarthealthreminder.features.ui_dashboard.DashboardActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.features.profileInfo.ProfileActivity
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
@@ -34,12 +33,10 @@ import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFact
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
-
 import com.example.smarthealthreminder.features.adapter.MedicationPlanAdapter
-import com.example.smarthealthreminder.features.dialog.ReminderDetailDialogHelper
 import com.example.smarthealthreminder.features.dialog.MedicationPlanDetailDialogHelper
 import com.example.smarthealthreminder.features.alarm.ReminderScheduler
-import java.util.*
+import com.example.smarthealthreminder.features.dialog.ReminderDetailDialogHelper
 
 class HomeFragment : Fragment() {
 
@@ -51,7 +48,7 @@ class HomeFragment : Fragment() {
 
     private val viewModel: HealthViewModel by activityViewModels {
         val db = AppDatabase.getDatabase(requireContext())
-        val repository = HealthRepository(db)
+        val repository = HealthRepository(db!!)
         HealthViewModelFactory(repository)
     }
 
@@ -119,7 +116,8 @@ class HomeFragment : Fragment() {
         val uid = FirebaseAuth.getInstance().currentUser?.uid
         if (uid != null) {
             lifecycleScope.launch(kotlinx.coroutines.Dispatchers.IO) {
-                val localUser = DatabaseHelper(requireContext()).getUserByFirebaseId(uid)
+                val context = context ?: return@launch
+                val localUser = DatabaseHelper(context).getUserByFirebaseId(uid)
                 localUser?.let {
                     withContext(kotlinx.coroutines.Dispatchers.Main) {
                         viewModel.updateCurrentUser(it)
@@ -140,12 +138,13 @@ class HomeFragment : Fragment() {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             updateDailyTipIfNeeded()
-
         }
     }
 
     private fun updateDailyTipIfNeeded() {
-        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        val binding = _binding ?: return
+        val context = context ?: return
+        val prefs = context.getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
         val lastDate = prefs.getString("last_tip_date", "")
         val today = RecurrenceHelper.getTodayString()
 
@@ -256,12 +255,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun refreshDailyTip() {
+        val binding = _binding ?: return
+        val context = context ?: return
         val tips = resources.getStringArray(R.array.health_tips)
         if (tips.isEmpty()) return
 
         // We use the cached tip from preferences to check for duplicates, 
         // not the current TextView text which might be in a different language or empty.
-        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        val prefs = context.getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
         val cachedTip = prefs.getString("current_tip", "")
         
         var newTip = tips.random()

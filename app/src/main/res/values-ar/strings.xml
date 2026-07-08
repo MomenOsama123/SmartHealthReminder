@@ -684,6 +684,7 @@
     <string name="dosage_progress_format">%1$d من %2$d</string>
     <string name="dosage_remaining_format">%1$d متبقية</string>
     <string name="daily_steps_tracker">متتبع الخطوات اليومي</string>
+    <string name="track_your_daily_activity">تتبع نشاطك اليومي وخطواتك</string>
     <string name="_0_0">0.0</string>
     <string name="average_0_steps">المتوسط: 0 خطوة</string>
     <string name="adherence">الالتزام</string>
@@ -756,4 +757,32 @@
     <string name="insight_low_adherence">التزامك منخفض. ضبط تذكيرات إضافية قد يساعدك.</string>
     <string name="insight_missed_busy">تحدث معظم الجرعات الفائتة عندما تكون مشغولاً. حاول التخطيط مسبقاً.</string>
     <string name="insight_perfect_score">لم تفوّت أي جرعات مؤخراً. نتيجة مثالية!</string>
+
+    <!--Medication Plan-->
+    <string name="add_medication_plan">إضافة خطة دوائية</string>
+    <string name="medicine_name">اسم الدواء</string>
+    <string name="e_g_paracetamol">مثال: باراسيتامول</string>
+    <string name="dosage">الجرعة</string>
+    <string name="e_g_500mg">مثال: 500 مجم</string>
+    <string name="instructions_optional">التعليمات (اختياري)</string>
+    <string name="e_g_take_after_meals">مثال: يُؤخذ بعد الوجبات</string>
+    <string name="reminder_times">مواعيد التذكير</string>
+    <string name="add_time">+ إضافة وقت</string>
+    <string name="no_times_added_yet">لم تتم إضافة أي مواعيد بعد</string>
+    <string name="start_date">تاريخ البدء</string>
+    <string name="duration">المدة</string>
+    <string name="e_g_3">مثال: 3</string>
+    <string name="days">أيام</string>
+    <string name="weeks">أسابيع</string>
+    <string name="months">أشهر</string>
+    <string name="save_plan">حفظ الخطة</string>
+    <string name="please_add_at_least_one_time">يرجى إضافة موعد تذكير واحد على الأقل</string>
+    <string name="enter_a_valid_duration">يرجى إدخال مدة صحيحة</string>
+    <string name="set_a_recurring_medicine_plan">إعداد خطة دوائية متكررة</string>
+    <string name="medication_plans">الخطط الدوائية</string>
+    <string name="no_active_plans_yet">لا توجد خطط دوائية نشطة حتى الآن</string>
+    <string name="end_date">تاريخ الانتهاء</string>
+    <string name="stop_plan">إيقاف الخطة</string>
+    <string name="view_reminders">عرض التذكيرات</string>
+    <string name="medication_plan">الخطة الدوائية</string>
 </resources>

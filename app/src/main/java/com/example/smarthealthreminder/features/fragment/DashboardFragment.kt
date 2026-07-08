@@ -22,6 +22,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.alarm.ReminderReceiver
 import com.example.smarthealthreminder.features.data.local.AppDatabase
@@ -285,15 +286,7 @@ class DashboardFragment : Fragment() {
             startActivity(Intent(requireContext(), AddReminderActivity::class.java))
         }
         tvViewDetails.setOnClickListener {
-
-            parentFragmentManager.beginTransaction()
-                .replace(
-                    R.id.fragment_container,
-                    StepsTrackerFragment()
-                )
-                .addToBackStack(null)
-                .commit()
-
+            (activity as? MainActivity)?.navigateToDestination(MainActivity.DESTINATION_INSIGHTS)
         }
         btnMarkTaken.setOnClickListener {
             currentNextItem?.let { item ->

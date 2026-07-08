@@ -203,6 +203,7 @@ class ChatBotFragment : Fragment() {
             .orderBy("timestamp", Query.Direction.ASCENDING)
             .get()
             .addOnSuccessListener { documents ->
+                if (_binding == null) return@addOnSuccessListener
                 messages.clear()
                 for (document in documents) {
                     val message = document.toObject(Message::class.java)
@@ -264,6 +265,7 @@ class ChatBotFragment : Fragment() {
             request
         ).enqueue(object : Callback<ChatResponse> {
             override fun onResponse(call: Call<ChatResponse>, response: Response<ChatResponse>) {
+                if (_binding == null) return
                 showTyping(false)
                 if (response.isSuccessful) {
                     val replyText = response.body()?.choices?.firstOrNull()?.message?.content ?: "No response"
@@ -273,6 +275,7 @@ class ChatBotFragment : Fragment() {
                 }
             }
             override fun onFailure(call: Call<ChatResponse>, t: Throwable) {
+                if (_binding == null) return
                 showTyping(false)
             }
         })
