@@ -21,7 +21,7 @@ import com.example.smarthealthreminder.features.activity.EditAlarmActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.adapter.ScheduleAdapter
 import com.example.smarthealthreminder.features.model.ScheduleItem
-import com.example.smarthealthreminder.features.reports.ReportsFragment
+import com.example.smarthealthreminder.features.schedule.details.AddNoteActivity
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.google.android.material.button.MaterialButton
@@ -39,6 +39,7 @@ class TodayPlanActivity : BaseActivity() {
     private lateinit var tvDate: TextView
     private lateinit var tvCount: TextView
 
+    // Date formatters to handle today's date logic and display
     private val todaySdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     private val displaySdf = SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault())
     private val today = todaySdf.format(Date())
@@ -48,24 +49,29 @@ class TodayPlanActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_today_plan)
 
+        // Apply window insets to prevent UI overlap with system bars
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
+        // Initialize Database, Repository, and ViewModel
         val db = AppDatabase.getDatabase(this)
         val repository = HealthRepository(db)
         viewModel = HealthViewModelFactory(repository).create(HealthViewModel::class.java)
 
+        // Setup the UI and observe data changes
         initViews()
         setupRecyclerView()
         observeData()
     }
 
     private fun initViews() {
+        // Handle back button click
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
 
+        // Set the formatted date header
         tvDate = findViewById(R.id.tv_date)
         tvDate.text = displaySdf.format(Date())
 
@@ -76,25 +82,32 @@ class TodayPlanActivity : BaseActivity() {
 
         emptyMessage.text = getString(R.string.you_don_t_have_any_plans_scheduled_for_today)
 
+        // Navigate to Add Reminder screen
         findViewById<MaterialButton>(R.id.btn_add_reminder).setOnClickListener {
             startActivity(Intent(this, AddReminderActivity::class.java))
         }
 
+        // Navigate to Edit Alarm screen
         findViewById<MaterialButton>(R.id.btn_add_alarm).setOnClickListener {
             startActivity(Intent(this, EditAlarmActivity::class.java))
         }
 
+        // Navigate to Note/Schedule screen via MainActivity
+        // 🌟 FIXED: Navigate to the correct Note Activity
         findViewById<MaterialButton>(R.id.btn_add_note).setOnClickListener {
+            // لو عندك Activity مخصصة لإضافة الملاحظات، استخدمها هنا
+            startActivity(Intent(this, AddNoteActivity::class.java))
+        }
+
+        // 🌟 FIXED: Route to ReportsFragment properly via MainActivity instead of crashing
+        findViewById<MaterialButton>(R.id.btn_create_report).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java).apply {
-                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_SCHEDULE)
+                putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REPORTS)
                 flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
             })
         }
 
-        findViewById<MaterialButton>(R.id.btn_create_report).setOnClickListener {
-            startActivity(Intent(this, ReportsFragment::class.java))
-        }
-
+        // Navigate to Full Schedule screen via MainActivity
         findViewById<MaterialButton>(R.id.btn_open_schedule).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java).apply {
                 putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_SCHEDULE)
@@ -110,6 +123,7 @@ class TodayPlanActivity : BaseActivity() {
     }
 
     private fun observeData() {
+        // Observe all data streams and refresh the list whenever data changes
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.allReminders.collect { refreshList() }
@@ -138,6 +152,7 @@ class TodayPlanActivity : BaseActivity() {
     }
 
     private fun refreshList() {
+        // Filter and map Reminders for today
         val reminderItems = viewModel.allReminders.value.filter {
             normalizeDate(it.date) == today
         }.map { reminder ->
@@ -156,6 +171,7 @@ class TodayPlanActivity : BaseActivity() {
             )
         }
 
+        // Filter and map active Alarms
         val alarmItems = viewModel.allAlarms.value.filter { it.isActive }.map { alarm ->
             ScheduleItem(
                 id = alarm.id,
@@ -170,6 +186,7 @@ class TodayPlanActivity : BaseActivity() {
             )
         }
 
+        // Filter and map Schedule Entries for today
         val scheduleEntryItems = viewModel.allScheduleEntries.value.filter {
             it.date == today
         }.map { entry ->
@@ -186,6 +203,7 @@ class TodayPlanActivity : BaseActivity() {
             )
         }
 
+        // Filter and map Reports generated today
         val reportItems = viewModel.allReports.value.filter {
             it.date == today
         }.map { report ->
@@ -202,6 +220,7 @@ class TodayPlanActivity : BaseActivity() {
             )
         }
 
+        // Filter and map Notes written today
         val noteItems = viewModel.allNoteDates.value.filter { it == today }.map { noteDate ->
             ScheduleItem(
                 id = noteDate,
@@ -216,16 +235,18 @@ class TodayPlanActivity : BaseActivity() {
             )
         }
 
+        // Combine all items, sort them by time, and submit to the adapter
         val allItems = (reminderItems + alarmItems + scheduleEntryItems + reportItems + noteItems).sortedBy { it.time }
         scheduleAdapter.submitList(allItems)
 
+        // Update item count and toggle empty state view
         tvCount.text = getString(R.string.items_count_format, allItems.size)
-
         val isEmpty = allItems.isEmpty()
         emptyView.visibility = if (isEmpty) View.VISIBLE else View.GONE
         recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
     }
 
+    // Helper function to standardize date formats
     private fun normalizeDate(dateStr: String?): String {
         if (dateStr.isNullOrBlank()) return ""
         return try {
