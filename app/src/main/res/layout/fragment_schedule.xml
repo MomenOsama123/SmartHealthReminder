@@ -9,7 +9,6 @@
     android:clipToPadding="false"
     android:fillViewport="true"
     tools:context=".features.fragment.ScheduleFragment">
-    <!--test-->
 
     <LinearLayout
         android:layout_width="match_parent"
