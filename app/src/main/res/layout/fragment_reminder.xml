@@ -274,7 +274,6 @@
                 android:textColor="@color/text_on_primary"
                 app:backgroundTint="@color/primary"
                 app:cornerRadius="12dp"/>
-
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>

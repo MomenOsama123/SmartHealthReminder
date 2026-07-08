@@ -16,10 +16,14 @@ import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.local.entity.ReportEntity
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
 import com.example.smarthealthreminder.features.data.local.entity.StepEntity
+import com.example.smarthealthreminder.features.data.local.dao.MedicationPlanDao
+import com.example.smarthealthreminder.features.data.local.dao.DoseLogDao
+import com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity
+import com.example.smarthealthreminder.features.data.local.entity.DoseLogEntity
 
 @Database(
-    entities = [AlarmEntity::class, ReminderEntity::class, CalendarNoteEntity::class, ScheduleEntryEntity::class, ReportEntity::class, StepEntity::class],
-    version = 9,
+    entities = [AlarmEntity::class, ReminderEntity::class, CalendarNoteEntity::class, ScheduleEntryEntity::class, ReportEntity::class, StepEntity::class, MedicationPlanEntity::class, DoseLogEntity::class],
+    version = 10,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -29,6 +33,9 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun scheduleEntryDao(): ScheduleEntryDao
     abstract fun reportDao(): ReportDao
     abstract fun stepDao(): StepDao
+
+    abstract fun medicationPlanDao(): MedicationPlanDao
+    abstract fun doseLogDao(): DoseLogDao
 
     companion object {
         @Volatile

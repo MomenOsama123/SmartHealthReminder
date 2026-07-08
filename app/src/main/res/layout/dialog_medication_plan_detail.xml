@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tv_plan_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextHeading2"
+        android:textColor="@color/text_primary"/>
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/chip_plan_dialog_status"
+        style="@style/Widget.App.Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/dosage"
+        android:textAppearance="@style/TextCaption"
+        android:textColor="@color/text_tertiary"/>
+
+    <TextView
+        android:id="@+id/tv_plan_dialog_dosage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextBody2"
+        android:textColor="@color/text_primary"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/instructions_optional"
+        android:textAppearance="@style/TextCaption"
+        android:textColor="@color/text_tertiary"/>
+
+    <TextView
+        android:id="@+id/tv_plan_dialog_instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextBody2"
+        android:textColor="@color/text_primary"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/divider"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/reminder_times"
+        android:textAppearance="@style/TextCaption"
+        android:textColor="@color/text_tertiary"/>
+
+    <TextView
+        android:id="@+id/tv_plan_dialog_times"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextBody2"
+        android:textColor="@color/text_primary"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"/>
+
+            <TextView
+                android:id="@+id/tv_plan_dialog_start_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextBody2"
+                android:textColor="@color/text_primary"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/end_date"
+                android:textAppearance="@style/TextCaption"
+                android:textColor="@color/text_tertiary"/>
+
+            <TextView
+                android:id="@+id/tv_plan_dialog_end_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextBody2"
+                android:textColor="@color/text_primary"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/divider"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_stop_plan"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/stop_plan"
+        android:textAppearance="@style/TextButton"
+        android:textColor="@color/urgent"
+        android:background="@drawable/bg_rounded_button_secondary"
+        app:backgroundTint="@color/urgent_light"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/ic_close"
+        app:iconTint="@color/urgent"
+        app:iconGravity="textStart"/>
+
+</LinearLayout>

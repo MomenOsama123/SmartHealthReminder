@@ -702,6 +702,36 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="dosage_progress_format">%1$d of %2$d</string>
     <string name="dosage_remaining_format">%1$d remaining</string>
     <string name="daily_steps_tracker">Daily Steps Tracker</string>
+
+
+    <string name="add_medication_plan">Add Medication Plan</string>
+    <string name="medicine_name">Medicine Name</string>
+    <string name="e_g_paracetamol">e.g. Paracetamol</string>
+    <string name="dosage">Dosage</string>
+    <string name="e_g_500mg">e.g. 500mg</string>
+    <string name="instructions_optional">Instructions (optional)</string>
+    <string name="e_g_take_after_meals">e.g. Take after meals</string>
+    <string name="reminder_times">Reminder Times</string>
+    <string name="add_time">+ Add Time</string>
+    <string name="no_times_added_yet">No times added yet</string>
+    <string name="start_date">Start Date</string>
+    <string name="duration">Duration</string>
+    <string name="e_g_3">e.g. 3</string>
+    <string name="days">Days</string>
+    <string name="weeks">Weeks</string>
+    <string name="months">Months</string>
+    <string name="save_plan">Save Plan</string>
+    <string name="please_add_at_least_one_time">Please add at least one reminder time</string>
+    <string name="enter_a_valid_duration">Please enter a valid duration</string>
+    <string name="set_a_recurring_medicine_plan">Set a recurring medicine plan</string>
+
+    <string name="medication_plans">Medication Plans</string>
+    <string name="no_active_plans_yet">No active plans yet</string>
+    <string name="end_date">End Date</string>
+    <string name="stop_plan">Stop Plan</string>
+    <string name="view_reminders">View reminders</string>
+    <string name="medication_plan">Medication plan</string>
+
     <string name="_0_0">0.0</string>
     <string name="average_0_steps">Average: 0 steps</string>
     <string name="adherence">ADHERENCE</string>

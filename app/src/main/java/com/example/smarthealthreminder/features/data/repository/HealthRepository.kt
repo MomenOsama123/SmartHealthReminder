@@ -8,6 +8,8 @@ import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryE
 import com.example.smarthealthreminder.features.data.local.entity.StepEntity
 import kotlinx.coroutines.flow.Flow
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
+import com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity
+import com.example.smarthealthreminder.features.data.local.entity.DoseLogEntity
 
 class HealthRepository(private val database: AppDatabase) {
 
@@ -104,4 +106,27 @@ class HealthRepository(private val database: AppDatabase) {
     suspend fun deleteReportById(id: String) = database.reportDao().deleteReportById(id)
     suspend fun updateReminderStatus(id: String, status: String) =
         database.reminderDao().updateReminderStatus(id, status)
+
+    // Medication Plan Operations
+    suspend fun insertMedicationPlan(plan: MedicationPlanEntity) =
+        database.medicationPlanDao().insertPlan(plan)
+
+    fun getAllMedicationPlans(): Flow<List<MedicationPlanEntity>> =
+        database.medicationPlanDao().getAllPlans()
+
+    // Dose Log Operations
+    fun getDoseLogsForRange(startDate: String, endDate: String): Flow<List<DoseLogEntity>> =
+        database.doseLogDao().getLogsForRange(startDate, endDate)
+
+    suspend fun getTakenCountForRange(startDate: String, endDate: String) =
+        database.doseLogDao().getTakenCountForRange(startDate, endDate)
+
+    suspend fun getMissedCountForRange(startDate: String, endDate: String) =
+        database.doseLogDao().getMissedCountForRange(startDate, endDate)
+
+    suspend fun getRemindersByPlanId(planId: String) =
+        database.reminderDao().getRemindersByPlanId(planId)
+
+    suspend fun deactivateMedicationPlan(planId: String) =
+        database.medicationPlanDao().deactivatePlan(planId)
 }

@@ -43,5 +43,11 @@ data class ReminderEntity(
     val lastCompletedDate: String? = null,
 
     @ColumnInfo(name = "snooze_used")
-    var snoozeUsed: Boolean = false
+    var snoozeUsed: Boolean = false,
+
+    @ColumnInfo(name = "plan_id")
+    val planId: String? = null,
+
+    @ColumnInfo(name = "end_date")
+    val endDate: String? = null
 )

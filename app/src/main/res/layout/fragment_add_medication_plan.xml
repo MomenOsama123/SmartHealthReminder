@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="40dp"
+            android:paddingBottom="16dp">
+
+            <ImageButton
+                android:id="@+id/btn_back"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_back"
+                android:contentDescription="@string/back"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/add_medication_plan"
+                android:textAppearance="@style/TextHeading3"/>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="32dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Medicine Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/medicine_name"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_medicine_name"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="@string/e_g_paracetamol"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Dosage -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dosage"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_dosage"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="@string/e_g_500mg"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:layout_marginBottom="20dp"/>
+
+            <!-- Instructions -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/instructions_optional"
+                android:textAppearance="@style/TextBody2"
+                android:layout_marginBottom="8dp"/>
+
+            <EditText
+                android:id="@+id/et_instructions"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="@string/e_g_take_after_meals"
+                android:padding="16dp"
+                android:gravity="top"
+                android:textAppearance="@style/TextBody1"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Reminder Times -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reminder_times"
+                android:textAppearance="@style/TextCaption"
+                android:textAllCaps="true"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chip_group_times"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"/>
+
+            <TextView
+                android:id="@+id/tv_no_times"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no_times_added_yet"
+                android:textAppearance="@style/TextCaption"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_time"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="@string/add_time"
+                android:textAppearance="@style/TextBody1"
+                app:icon="@drawable/ic_add"
+                app:iconTint="@color/primary"
+                app:strokeColor="@color/border"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Start Date -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/start_date"
+                android:textAppearance="@style/TextCaption"
+                android:textAllCaps="true"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/et_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:drawableEnd="@drawable/ic_calendar"
+                android:drawableTint="@color/text_tertiary"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:cursorVisible="false"
+                android:inputType="none"
+                android:layout_marginBottom="24dp"/>
+
+            <!-- Duration -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/duration"
+                android:textAppearance="@style/TextCaption"
+                android:textAllCaps="true"
+                android:layout_marginBottom="12dp"/>
+
+            <EditText
+                android:id="@+id/et_duration_value"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@drawable/bg_input_field"
+                android:hint="@string/e_g_3"
+                android:paddingHorizontal="16dp"
+                android:textAppearance="@style/TextBody1"
+                android:inputType="number"
+                android:layout_marginBottom="12dp"/>
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_duration_unit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:singleSelection="true"
+                app:checkedButton="@id/btn_unit_days"
+                android:layout_marginBottom="32dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_unit_days"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/days"
+                    android:textAppearance="@style/TextBody1"
+                    app:strokeColor="@color/border"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_unit_weeks"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/weeks"
+                    android:textAppearance="@style/TextBody1"
+                    app:strokeColor="@color/border"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_unit_months"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/months"
+                    android:textAppearance="@style/TextBody1"
+                    app:strokeColor="@color/border"/>
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_save_plan"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:text="@string/save_plan"
+                android:textAppearance="@style/TextButton"
+                android:background="@drawable/bg_rounded_button_primary"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="12dp"/>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,7 +8,6 @@ import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 interface ReminderDao {
 
     ///yehia added this:
-    // دالة بتجيب عدد الـ Completed والـ Missed في وقت واحد عشان الحسبة
     @Query("SELECT COUNT(*) FROM reminders WHERE status = 'Completed'")
     suspend fun getCompletedCountRaw(): Int
 
@@ -67,4 +66,7 @@ WHERE id = :reminderId
     suspend fun updateSnoozeUsed(id: String, value: Boolean)
     @Query("UPDATE reminders SET time = :time WHERE id = :id")
     suspend fun updateReminderTime(id: String, time: String)
+
+    @Query("SELECT * FROM reminders WHERE plan_id = :planId")
+    suspend fun getRemindersByPlanId(planId: String): List<ReminderEntity>
 }
