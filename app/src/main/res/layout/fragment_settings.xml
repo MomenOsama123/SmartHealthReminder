@@ -386,18 +386,19 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_logout"
-                style="@style/Widget.Material3.Button.TonalButton"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:layout_marginTop="28dp"
                 android:layout_marginHorizontal="24dp"
                 android:text="@string/log_out"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/missed"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:backgroundTint="@color/missed"
-                app:cornerRadius="12dp" />
+                app:backgroundTint="?attr/colorSurface"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/missed"
+                app:strokeWidth="2dp" />
 
         </LinearLayout>
 
