@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.Search
+package com.example.smarthealthreminder.features.search
 
 import android.content.Context
 import android.content.Intent
@@ -27,10 +27,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.EditAlarmActivity
-import com.example.smarthealthreminder.features.search.NoResultFragment
-import com.example.smarthealthreminder.features.search.SearchAdapter
-import com.example.smarthealthreminder.features.search.SearchResult
-import com.example.smarthealthreminder.features.search.SearchViewModel
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.google.android.material.progressindicator.LinearProgressIndicator

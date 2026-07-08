@@ -16,9 +16,9 @@ import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
 import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.model_dashboard.User
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.core.content.edit
 
 class SignupActivity : BaseActivity() {
 
@@ -78,12 +78,11 @@ class SignupActivity : BaseActivity() {
                 }
                 is SignupState.Success -> {
                     setLoading(false)
-                    showSnackbar("Sign Up Success")
                     checkProfileAndNavigate()
                 }
                 is SignupState.Error -> {
                     setLoading(false)
-                    showSnackbar("Sign Up Failed: ${state.message}")
+                    showSnakeBar("Sign Up Failed: ${state.message}")
                 }
                 is SignupState.Idle -> {
                     setLoading(false)
@@ -100,10 +99,9 @@ class SignupActivity : BaseActivity() {
     private fun setupGoogleAuth() {
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, error ->
             if (isSuccess) {
-                showSnackbar("Google Sign Up Success")
                 checkProfileAndNavigate()
             } else {
-                showSnackbar(error ?: "Google Error")
+                showSnakeBar(error ?: "Google Error")
             }
         }
 
@@ -136,7 +134,7 @@ class SignupActivity : BaseActivity() {
         }
 
         if (!isChecked) {
-            showSnackbar("You must agree to the terms")
+            showSnakeBar("You must agree to the terms")
             isValid = false
         }
 
@@ -149,9 +147,9 @@ class SignupActivity : BaseActivity() {
 
         // Sync with local session
         getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-            .edit()
-            .putString("FIREBASE_ID", uid)
-            .apply()
+            .edit {
+                putString("FIREBASE_ID", uid)
+            }
 
         db.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
@@ -176,9 +174,9 @@ class SignupActivity : BaseActivity() {
 
                         // Sync local session
                         getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                            .edit()
-                            .putBoolean("isProfileCompleted", true)
-                            .apply()
+                            .edit {
+                                putBoolean("isProfileCompleted", true)
+                            }
                         
                         navigateToMain()
                         return@addOnSuccessListener
@@ -213,10 +211,6 @@ class SignupActivity : BaseActivity() {
         }
         startActivity(intent)
         finish()
-    }
-
-    private fun showSnackbar(message: String) {
-        Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

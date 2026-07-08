@@ -3,7 +3,6 @@ package com.example.smarthealthreminder.features.auth.signIn
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -70,7 +69,7 @@ class SignInActivity : BaseActivity() {
                             Log.d(TAG, "Login success, firebaseId: '$firebaseId'")
 
                             if (firebaseId.isEmpty()) {
-                                Snackbar.make(binding.root, "Error: No user ID", Snackbar.LENGTH_SHORT).show()
+                                showSnakeBar("Error: No user ID")
                                 return@addOnCompleteListener
                             }
 
@@ -94,17 +93,13 @@ class SignInActivity : BaseActivity() {
                                 Log.d(TAG, "User inserted in SQLite: $firebaseId")
                             }
 
-                            Snackbar.make(binding.root, "Welcome Back", Snackbar.LENGTH_SHORT).show()
+                            showSnakeBar("Welcome Back")
 
                             // ✅ روح Dashboard من غير flags
                             checkProfileCompletion(firebaseId)
                         } else {
                             Log.e(TAG, "Login failed: ${task.exception?.message}")
-                            Snackbar.make(
-                                binding.root,
-                                "Login Failed: ${task.exception?.message}",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            showSnakeBar("Login Failed: ${task.exception?.message}")
                         }
                     }
             }
@@ -142,7 +137,7 @@ class SignInActivity : BaseActivity() {
 
                 if (firebaseId.isEmpty()) {
                     setLoading(false)
-                    Toast.makeText(this, "Error: No user ID", Toast.LENGTH_LONG).show()
+                    // Toast removed
                     return@GoogleAuthHelper
                 }
 
@@ -166,18 +161,16 @@ class SignInActivity : BaseActivity() {
                     Log.d(TAG, "Google user inserted in SQLite: $firebaseId")
                 }
 
-                Toast.makeText(this, "Successfully logged in via Google!", Toast.LENGTH_LONG).show()
 
                 // ✅ روح Dashboard من غير flags
                 checkProfileCompletion(firebaseId)
             } else {
                 setLoading(false)
                 Log.e(TAG, "Google login failed: $errorMessage")
-                Toast.makeText(
-                    this,
+                showSnakeBar(
                     errorMessage ?: "An error occurred during Google login",
-                    Toast.LENGTH_LONG
-                ).show()
+                    Snackbar.LENGTH_LONG
+                )
             }
         }
 

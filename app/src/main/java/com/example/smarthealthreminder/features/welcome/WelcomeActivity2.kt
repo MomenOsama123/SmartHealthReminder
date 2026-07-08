@@ -46,7 +46,7 @@ class WelcomeActivity2 : BaseActivity() {
             if (isSuccess) {
                 checkProfileAndNavigate()
             } else {
-                Snackbar.make(binding.root, errorMessage ?: "An error occurred during login", Snackbar.LENGTH_LONG).show()
+                showSnakeBar(errorMessage ?: "An error occurred during login", Snackbar.LENGTH_LONG)
             }
         }
 
