@@ -5,11 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/background_beige">
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="40dp"/>
+    android:background="@color/dynamic_screen_bg"> <!-- Dynamic screen background -->
 
     <!-- HEADER -->
     <androidx.cardview.widget.CardView
@@ -17,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="12dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor="@color/background_beige">
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@color/dynamic_screen_bg"> <!-- Blend header with background -->
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,6 +33,7 @@
                 android:clipToOutline="true">
 
                 <ImageView
+                    android:id="@+id/ivUserProfile"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/content_desc_profile_avatar"
@@ -56,19 +53,20 @@
                     android:id="@+id/tvGreeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="?attr/colorOnSurface"
                     android:textSize="20sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal"/> <!-- Dynamic Text Color -->
 
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="16sp"
-                    android:textStyle="normal"/>
+                    android:textStyle="normal"/> <!-- Dynamic Subtitle Color -->
 
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -95,8 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/background_beige">
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/dynamic_card_bg"> <!-- Dynamic Card Background -->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -118,7 +116,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/adherence_percent"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="18sp"
                             android:textStyle="bold"
                             android:layout_gravity="center_horizontal|center_vertical"
@@ -128,7 +126,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/adherence_label"
-                            android:textColor="@color/hint_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="11sp"
                             android:layout_gravity="center_horizontal|center_vertical"
                             android:translationY="12dp"/>
@@ -147,7 +145,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/on_track_title"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
                             android:textStyle="bold"/>
 
@@ -155,7 +153,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/on_track_desc"
-                            android:textColor="@color/hint_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="13sp"
                             android:layout_marginTop="4dp"/>
 
@@ -184,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/next_medication"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold"/>
 
@@ -192,7 +190,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/today_date"
-                        android:textColor="@color/hint_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="12sp"/>
                 </LinearLayout>
 
@@ -202,8 +200,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:orientation="vertical"
-                    android:background="@drawable/bg_card_beige"
-                    android:padding="16dp">
+                    android:background="@drawable/et_shape"
+                    android:backgroundTint="@color/dynamic_card_bg"
+                    android:padding="16dp"> <!-- Replaced hardcoded beige background with dynamic shape -->
 
                     <!-- Medication Row -->
                     <LinearLayout
@@ -217,8 +216,9 @@
                             android:layout_height="48dp"
                             android:contentDescription="@string/content_desc_medication_icon"
                             android:src="@drawable/capsule"
-                            android:background="@drawable/bg_card_white"
-                            android:padding="10dp"/>
+                            android:background="@drawable/et_shape"
+                            android:backgroundTint="?attr/colorSurface"
+                            android:padding="10dp"/> <!-- Made icon background dynamic -->
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -233,7 +233,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/med_name"
-                                android:textColor="@color/text_dark"
+                                android:textColor="?attr/colorOnSurface"
                                 android:textSize="16sp"
                                 android:textStyle="bold"/>
 
@@ -242,7 +242,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/med_time"
-                                android:textColor="@color/hint_gray"
+                                android:textColor="?attr/colorOnSurfaceVariant"
                                 android:textSize="13sp"
                                 android:layout_marginTop="2dp"/>
                         </LinearLayout>
@@ -261,17 +261,19 @@
                         android:layout_marginTop="16dp"
                         android:background="@drawable/bg_card_primary"/>
 
+                    <!-- Snooze Button -->
                     <TextView
                         android:id="@+id/btnSnooze"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/snooze"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="14sp"
                         android:gravity="center"
                         android:padding="12dp"
                         android:layout_marginTop="8dp"
-                        android:background="@drawable/bg_card_white"/>
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="?attr/colorSurface"/> <!-- Dynamic snooze button -->
 
                 </LinearLayout>
 
@@ -290,7 +292,8 @@
                         android:layout_height="wrap_content"
                         android:minHeight="90dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_card_beige"
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/dynamic_card_bg"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:layout_marginEnd="8dp"
@@ -300,7 +303,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/total_meds"
-                            android:textColor="@color/hint_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp"
                             android:textAllCaps="true"/>
 
@@ -309,7 +312,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/_5"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp"/>
@@ -321,7 +324,8 @@
                         android:layout_height="wrap_content"
                         android:minHeight="90dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_card_beige"
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/dynamic_card_bg"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:layout_marginEnd="8dp"
@@ -331,7 +335,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/taken_today"
-                            android:textColor="@color/hint_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp"
                             android:textAllCaps="true"/>
 
@@ -340,7 +344,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/_3"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold"
                             android:layout_marginTop="4dp"/>
@@ -352,7 +356,8 @@
                         android:layout_height="wrap_content"
                         android:minHeight="90dp"
                         android:layout_weight="1"
-                        android:background="@drawable/bg_card_beige"
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/dynamic_card_bg"
                         android:orientation="vertical"
                         android:gravity="center"
                         android:padding="8dp">
@@ -361,7 +366,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/missed_today"
-                            android:textColor="@color/hint_gray"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:textSize="12sp"
                             android:textAllCaps="true"/>
 
@@ -371,7 +376,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="@string/_2"
-                            android:textColor="@color/text_dark"
+                            android:textColor="?attr/colorOnSurface"
                             android:textSize="20sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -385,8 +390,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="@color/white">
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/dynamic_card_bg"> <!-- Fixed the white background issue here -->
 
                 <LinearLayout
                     android:id="@+id/containerUpcomingItems"
@@ -401,7 +406,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
                         android:text="@string/upcoming_today"
-                        android:textColor="@color/text_dark"
+                        android:textColor="?attr/colorOnSurface"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -411,7 +416,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="@string/no_upcoming_medications"
-                        android:textColor="@color/hint_gray"
+                        android:textColor="?attr/colorOnSurfaceVariant"
                         android:textSize="14sp"
                         android:visibility="gone"
                         android:layout_marginBottom="12dp"/>
@@ -443,7 +448,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/surface"
+        android:background="?attr/colorSurface"
         android:elevation="10dp"
         app:itemActiveIndicatorStyle="@style/App.ActiveIndicator"
         app:itemIconSize="24dp"
@@ -452,7 +457,5 @@
         app:itemTextColor="@color/bottom_nav_color"
         app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_nav_menu" />
-
-
 
 </LinearLayout>

@@ -40,9 +40,11 @@ class SearchViewModel(
         .flatMapLatest { (query, filter, category) ->
             if (query.isBlank() && filter == SearchFilter.ALL && category == null) {
                 _isLoading.value = false
+                // When empty, we could potentially show "Suggested" or "Recent" items here 
+                // but for now we follow the logic of showing empty list which triggers Suggestions UI in fragment
                 flowOf(emptyList())
             } else {
-                val effectiveQuery = if (query.isBlank() && category != null) category else query.trim()
+                val effectiveQuery = query.trim()
                 
                 val reminderFlow = if (filter == SearchFilter.ALL || filter == SearchFilter.REMINDERS) {
                     repository.searchReminders(effectiveQuery)

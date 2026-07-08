@@ -45,7 +45,7 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-        <activity android:name=".ui_dashboard.DashboardActivity"
+        <activity android:name=".features.ui_dashboard.DashboardActivity"
             android:exported="true"
             />
 
@@ -84,6 +84,9 @@
             android:name=".features.activity.AddReminderActivity"
             android:exported="false" />
         <activity
+            android:name=".features.activity.ViewReminderActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.activity.EditAlarmActivity"
             android:exported="false" />
         <activity
@@ -104,10 +107,13 @@
             android:name=".features.search.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".features.Profileinfo.reports.ProfileActivity"
+            android:name=".features.profileInfo.ProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".features.Profileinfo.reports.ReportsActivity"
+            android:name=".features.profileInfo.EditProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.reports.ReportsActivity"
             android:exported="false" />
         <activity
             android:name=".features.plan.TodayPlanActivity"
@@ -121,7 +127,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <receiver
-            android:name=".alarm.AlarmReceiver"
+            android:name=".features.alarm.AlarmReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

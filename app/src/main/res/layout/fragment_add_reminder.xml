@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background">
@@ -21,11 +22,11 @@
 
             <ImageButton
                 android:id="@+id/btn_back"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_back"
-                android:contentDescription="@string/back"/>
+                android:contentDescription="@string/back_for_add_rem"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -35,8 +36,8 @@
                 android:textAppearance="@style/TextHeading3"/>
 
             <ImageButton
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:layout_gravity="end"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/ic_notifications"
@@ -90,7 +91,8 @@
                 android:hint="@string/e_g_morning_vitamins"
                 android:paddingHorizontal="16dp"
                 android:textAppearance="@style/TextBody1"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                tools:ignore="Autofill,TextFields" />
 
             <!-- Description Input -->
             <TextView
@@ -109,7 +111,8 @@
                 android:padding="16dp"
                 android:textAppearance="@style/TextBody1"
                 android:gravity="top"
-                android:layout_marginBottom="20dp"/>
+                android:layout_marginBottom="20dp"
+                tools:ignore="Autofill,TextFields" />
 
             <!-- Category -->
             <TextView
@@ -167,7 +170,8 @@
                 android:text="@string/date_amp_time"
                 android:textAppearance="@style/TextCaption"
                 android:textAllCaps="true"
-                android:layout_marginBottom="12dp"/>
+                android:layout_marginBottom="12dp"
+                tools:ignore="AllCaps" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,10 +191,10 @@
                     android:textAppearance="@style/TextBody1"
                     android:drawableEnd="@drawable/ic_calendar"
                     android:drawableTint="@color/text_tertiary"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:cursorVisible="false"
-                    android:inputType="none"/>
+                    tools:ignore="Autofill,TextFields"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:cursorVisible="false"/>
 
                 <EditText
                     android:id="@+id/et_time"
@@ -204,10 +208,10 @@
                     android:textAppearance="@style/TextBody1"
                     android:drawableEnd="@drawable/ic_clock"
                     android:drawableTint="@color/text_tertiary"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:cursorVisible="false"
-                    android:inputType="none"/>
+                    tools:ignore="Autofill,TextFields"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:cursorVisible="false"/>
 
             </LinearLayout>
 

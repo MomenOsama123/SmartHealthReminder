@@ -6,9 +6,13 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.alarm.AlarmService
 import com.example.smarthealthreminder.features.data.local.AppDatabase
@@ -20,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class AlarmRingingActivity : AppCompatActivity() {
+class AlarmRingingActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_ALARM_ID = "alarm_id"
@@ -41,6 +45,7 @@ class AlarmRingingActivity : AppCompatActivity() {
     private var isStopped = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         window.addFlags(
@@ -51,6 +56,12 @@ class AlarmRingingActivity : AppCompatActivity() {
         )
 
         setContentView(R.layout.activity_alarm_ringing)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         alarmHelper = AlarmHelper(this)
 
@@ -147,11 +158,8 @@ class AlarmRingingActivity : AppCompatActivity() {
 
     private fun getCurrentTime(): String {
         val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-        val amPm = if (hour < 12) "AM" else "PM"
-        val displayHour = if (hour == 0) 12 else if (hour > 12) hour - 12 else hour
-        return String.format("%02d:%02d %s", displayHour, minute, amPm)
+        val sdf = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        return sdf.format(calendar.time)
     }
 
     private fun getCurrentDate(): String {

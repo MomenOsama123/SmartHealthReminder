@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:text="Profile Photo"
+        android:text="@string/profile_photo"
         android:textAppearance="@style/TextHeading3"
         android:textColor="@color/text_primary"/>
 
@@ -32,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="Choose how you want to update your profile photo"
+        android:text="@string/choose_photo_method"
         android:textAppearance="@style/TextCaption"
         android:textColor="@color/text_tertiary"/>
 
@@ -65,12 +65,12 @@
                 android:src="@drawable/ic_camera"
                 android:layout_marginBottom="12dp"
                 app:tint="@color/primary"
-                android:contentDescription="Take Photo"/>
+                android:contentDescription="@string/content_desc_take_photo"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Camera"
+                android:text="@string/camera"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold"
@@ -100,12 +100,12 @@
                 android:src="@drawable/ic_clipboard"
                 android:layout_marginBottom="12dp"
                 app:tint="@color/primary_dark"
-                android:contentDescription="Choose from Gallery"/>
+                android:contentDescription="@string/content_desc_choose_gallery"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Gallery"
+                android:text="@string/gallery"
                 android:textAppearance="@style/TextBody1"
                 android:textColor="@color/text_primary"
                 android:textStyle="bold"

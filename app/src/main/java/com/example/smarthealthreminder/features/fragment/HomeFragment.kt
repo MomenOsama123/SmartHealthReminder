@@ -6,8 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.smarthealthreminder.R
@@ -17,7 +18,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.databinding.FragmentHomeDashboardBinding
-import com.example.smarthealthreminder.features.Profileinfo.reports.ProfileActivity
 import com.example.smarthealthreminder.features.adapter.WelcomeReminderAdapter
 import com.example.smarthealthreminder.features.model.Reminder
 import com.example.smarthealthreminder.features.util.ImageUtils
@@ -26,8 +26,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.search.SearchActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
-import com.example.smarthealthreminder.ui_dashboard.DashboardActivity
+import com.example.smarthealthreminder.features.ui_dashboard.DashboardActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.smarthealthreminder.features.profileInfo.ProfileActivity
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
@@ -38,6 +39,7 @@ import com.example.smarthealthreminder.features.adapter.MedicationPlanAdapter
 import com.example.smarthealthreminder.features.dialog.ReminderDetailDialogHelper
 import com.example.smarthealthreminder.features.dialog.MedicationPlanDetailDialogHelper
 import com.example.smarthealthreminder.features.alarm.ReminderScheduler
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -66,6 +68,13 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupMedicationPlansSection()
+        // Handle window insets for edge-to-edge support
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
+
         setupRecyclerView()
         setupClickListeners()
         observeReminders()
@@ -154,23 +163,26 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
-        binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext()).apply {
+            reverseLayout = true
+            stackFromEnd = true
+        }
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
-            val id = reminder.id ?: return@setOnReminderClickListener
-            ReminderDetailDialogHelper.show(
-                context = requireContext(),
-                title = reminder.title ?: "Reminder",
-                description = reminder.description,
-                date = reminder.date,
-                time = reminder.time,
-                category = reminder.category,
-                status = reminder.status,
-                onMarkDone = { viewModel.markReminderDone(id) },
-                onMarkMissed = { viewModel.markReminderMissed(id) },
-                onDelete = { viewModel.deleteReminderById(id) }
-            )
+            val intent = Intent(requireContext(), com.example.smarthealthreminder.features.activity.ViewReminderActivity::class.java).apply {
+                putExtra(com.example.smarthealthreminder.features.activity.ViewReminderActivity.EXTRA_REMINDER_ID, reminder.id)
+            }
+            startActivity(intent)
+        }
+
+        reminderAdapter.setOnStatusClickListener { reminder ->
+            if (reminder.status != "Completed") {
+                reminder.id?.let {
+                    viewModel.markReminderDone(it)
+                    Toast.makeText(requireContext(), "Reminder marked as done!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -216,45 +228,24 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
         binding.cvDashboard.setOnClickListener {
-            startActivity(Intent(requireContext(), DashboardActivity::class.java))
+            (activity as? MainActivity)?.navigateToDestination(MainActivity.DESTINATION_DASHBOARD)
         }
     }
 
     private fun refreshDailyTip() {
-        val tips = listOf(
-            "Drink at least 8 glasses of water today to stay hydrated.",
-            "A 10-minute walk can significantly boost your mood and energy.",
-            "Try to get 7-9 hours of sleep for optimal brain function.",
-            "Taking deep breaths for 2 minutes can reduce stress levels.",
-            "Include more leafy greens in your meals for essential vitamins.",
-            "Consistency is key—keep up with your health reminders!",
-            "Take a short break every hour to stretch your body.",
-            "Practice mindfulness today: focus on the present moment.",
-            "Replace sugary snacks with fruits for a natural energy boost.",
-            "Regular exercise is a celebration of what your body can do.",
-            "Don't be afraid to ask for help; mental health is just as important as physical health.",
-            "Limit screen time an hour before bed for better sleep quality.",
-            "Your value is not defined by your productivity.",
-            "Small progress is still progress. Keep going!",
-            "Start your day with a positive affirmation.",
-            "Laughter is a great stress-reliever—watch something funny today.",
-            "Social connection is vital; reach out to a friend or loved one.",
-            "Listen to your body; if it needs rest, give it rest.",
-            "Organize your workspace to clear your mind and reduce anxiety.",
-            "Nature has a calming effect; spend some time outdoors if possible.",
-            "Limit caffeine intake in the afternoon to avoid sleep disruption.",
-            "Practice gratitude: name three things you're thankful for today.",
-            "Avoid multi-tasking; focus on one thing at a time to reduce stress.",
-            "Healthy eating isn't about restriction; it's about nourishment.",
-            "Stretch for 5 minutes after waking up to improve circulation."
-        )
+        val tips = resources.getStringArray(R.array.health_tips)
+        if (tips.isEmpty()) return
 
-        val currentTip = binding.tvTipContent.text.toString()
+        // We use the cached tip from preferences to check for duplicates, 
+        // not the current TextView text which might be in a different language or empty.
+        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
+        val cachedTip = prefs.getString("current_tip", "")
+        
         var newTip = tips.random()
 
-        // BUG FIX: Prevent infinite loop if tips list is small or same
         var attempts = 0
-        while (newTip == currentTip && attempts < 10 && tips.size > 1) {
+        // Try to get a different tip than what was previously shown (if any)
+        while (newTip == cachedTip && attempts < 10 && tips.size > 1) {
             newTip = tips.random()
             attempts++
         }
@@ -262,7 +253,6 @@ class HomeFragment : Fragment() {
         binding.tvTipContent.text = newTip
 
         // Persist the tip and today's date
-        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
         prefs.edit().apply {
             putString("current_tip", newTip)
             putString("last_tip_date", RecurrenceHelper.getTodayString())
@@ -291,14 +281,10 @@ class HomeFragment : Fragment() {
                     if (totalCount > 0) {
                         binding.reminding.text = getString(R.string.dosage_progress_format, completedToday, totalCount)
                     } else {
-                        binding.reminding.text = "No doses today"
+                        binding.reminding.text = getString(R.string.no_doses_today)
                     }
 
                     val todayReminders = totalTodayReminders
-                        .filter { entity ->
-                            entity.status.equals("Pending", ignoreCase = true) ||
-                                    entity.status.equals("Snoozed", ignoreCase = true)
-                        }
                         .sortedBy { it.time ?: "99:99" }
 
                     val reminders = todayReminders.map { entity ->
@@ -369,6 +355,7 @@ class HomeFragment : Fragment() {
         val percent = prefs.getInt("adherence_percent", 0)
 
         binding.tvHomeAdherencePercent.text = "$percent%"
+        binding.pbHomeAdherence.progress = percent
     }
 
     private fun stopMedicationPlan(plan: com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity) {

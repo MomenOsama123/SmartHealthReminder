@@ -1,10 +1,15 @@
 package com.example.smarthealthreminder.features.schedule.details
 
 import android.os.Bundle
+import com.example.smarthealthreminder.core.base.BaseActivity
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.data.local.AppDatabase
@@ -12,11 +17,9 @@ import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.launch
-import android.widget.EditText
 
-class AddNoteActivity : AppCompatActivity() {
+class AddNoteActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_DATE = "extra_note_date"
@@ -25,13 +28,20 @@ class AddNoteActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: HealthViewModel
-    private lateinit var etNote: TextInputEditText
+    private lateinit var etNote: EditText
     private lateinit var tvDate: TextView
     private var date: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_note)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         date = intent.getStringExtra(EXTRA_DATE) ?: ""
         val dateDisplay = intent.getStringExtra(EXTRA_DATE_DISPLAY) ?: date

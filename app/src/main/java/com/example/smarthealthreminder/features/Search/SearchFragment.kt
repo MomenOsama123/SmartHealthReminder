@@ -1,4 +1,4 @@
-package com.example.smarthealthreminder.features.search
+package com.example.smarthealthreminder.features.Search
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,8 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -25,7 +27,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.EditAlarmActivity
+import com.example.smarthealthreminder.features.search.NoResultFragment
+import com.example.smarthealthreminder.features.search.SearchAdapter
+import com.example.smarthealthreminder.features.search.SearchResult
+import com.example.smarthealthreminder.features.search.SearchViewModel
 import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
+import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -41,13 +49,13 @@ class SearchFragment : Fragment() {
     private lateinit var ivClearSearch: ImageView
     private lateinit var rvSearchResults: RecyclerView
     private lateinit var containerNoResults: View
-    private lateinit var progressSearch: com.google.android.material.progressindicator.LinearProgressIndicator
+    private lateinit var progressSearch: LinearProgressIndicator
     private lateinit var layoutSuggestions: View
-    private lateinit var cgFilters: com.google.android.material.chip.ChipGroup
-    private lateinit var cgCategories: com.google.android.material.chip.ChipGroup
+    private lateinit var cgFilters: ChipGroup
+    private lateinit var cgCategories: ChipGroup
     private lateinit var containerFilters: View
     private lateinit var layoutRecentSearches: View
-    private lateinit var cgRecentSearches: com.google.android.material.chip.ChipGroup
+    private lateinit var cgRecentSearches: ChipGroup
     private lateinit var btnClearHistory: TextView
 
     override fun onCreateView(
@@ -59,6 +67,13 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Handle keyboard insets
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime())
+            v.setPadding(0, 0, 0, imeInsets.bottom)
+            insets
+        }
 
         initViews(view)
         setupRecyclerView()
@@ -77,7 +92,9 @@ class SearchFragment : Fragment() {
 
         // Autofocus and show keyboard
         etSearch.requestFocus()
-        showKeyboard()
+        etSearch.postDelayed({
+            showKeyboard()
+        }, 100)
     }
 
     private fun initViews(view: View) {
@@ -142,10 +159,10 @@ class SearchFragment : Fragment() {
 
         cgCategories.setOnCheckedStateChangeListener { _, checkedIds ->
             val category = when (checkedIds.firstOrNull()) {
-                R.id.chip_cat_medicine -> "Medicine"
-                R.id.chip_cat_appointment -> "Appointment"
-                R.id.chip_cat_task -> "Task"
-                R.id.chip_cat_custom -> "Custom"
+                R.id.chip_cat_medicine -> getString(R.string.medicine)
+                R.id.chip_cat_appointment -> getString(R.string.appointment)
+                R.id.chip_cat_task -> getString(R.string.task)
+                R.id.chip_cat_custom -> getString(R.string.custom)
                 else -> null
             }
             viewModel.onCategoryChanged(category)
@@ -162,6 +179,7 @@ class SearchFragment : Fragment() {
                     }
                     startActivity(intent)
                 }
+
                 is SearchResult.Reminder -> {
                     val intent = Intent(requireContext(), AddReminderActivity::class.java).apply {
                         putExtra(AddReminderActivity.EXTRA_REMINDER_ID, result.entity.id)

@@ -2,19 +2,22 @@ package com.example.smarthealthreminder.features.alarm
 
 import android.app.AlarmManager
 import android.content.Context
-import android.os.Build
 import com.example.smarthealthreminder.alarm.AlarmHelper
 import com.example.smarthealthreminder.features.model.Alarm
 import io.mockk.every
-import io.mockk.mockk
 import io.mockk.spyk
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import junit.framework.TestCase.assertEquals
 import java.util.Calendar
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [33])
 class AlarmHelperTest {
 
     private lateinit var context: Context
@@ -23,16 +26,16 @@ class AlarmHelperTest {
 
     @Before
     fun setup() {
-        context = mockk(relaxed = true)
-        alarmManager = mockk(relaxed = true)
-        every { context.getSystemService(Context.ALARM_SERVICE) } returns alarmManager
+        context = androidx.test.core.app.ApplicationProvider.getApplicationContext()
+        alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
     }
 
     // ───── canScheduleExactAlarm ─────
 
     @Test
+    @Config(sdk = [30])
     fun `canScheduleExactAlarm returns true when SDK below S`() {
-        // On test JVM, Build.VERSION.SDK_INT is 0, which is < S (31), so should return true
+        // SDK 30 (R) is < 31 (S), so should return true regardless of permission
         alarmHelper = AlarmHelper(context)
         assertTrue(alarmHelper.canScheduleExactAlarm())
     }
@@ -58,10 +61,6 @@ class AlarmHelperTest {
     fun `scheduleAlarm returns true when canScheduleExactAlarm is true`() {
         alarmHelper = spyk(AlarmHelper(context))
         every { alarmHelper.canScheduleExactAlarm() } returns true
-        every { context.packageName } returns "com.example.smarthealthreminder"
-
-        val intent = mockk<android.content.Intent>(relaxed = true)
-        val pendingIntent = mockk<android.app.PendingIntent>(relaxed = true)
 
         val alarm = Alarm(
             id = "a1", label = "Test Alarm", time = "08:00",
@@ -89,7 +88,6 @@ class AlarmHelperTest {
     fun `snoozeAlarm returns true when canScheduleExactAlarm is true`() {
         alarmHelper = spyk(AlarmHelper(context))
         every { alarmHelper.canScheduleExactAlarm() } returns true
-        every { context.packageName } returns "com.example.smarthealthreminder"
 
         val alarm = Alarm(id = "a1", label = "Test", time = "08:00", amPm = "AM", category = "MEDICINE")
         val result = alarmHelper.snoozeAlarm(alarm, 10)

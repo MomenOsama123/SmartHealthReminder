@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dynamic_screen_bg"
+    tools:context=".features.profileInfo.EditProfileActivity">
+
+    <RelativeLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
+        android:layout_alignParentTop="true">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="26dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="@string/content_desc_back"
+            app:tint="?attr/colorOnSurface" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/btn_back"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="14dp"
+            android:text="@string/complete_your_profile"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/top_bar"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="24dp">
+
+            <RelativeLayout
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_profile_placeholder"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="@string/content_desc_profile"
+                    app:strokeColor="@color/primary_green"
+                    app:strokeWidth="2dp"
+                    app:shapeAppearanceOverlay="@style/CircleImageStyle" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/editProfileCard"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    app:cardBackgroundColor="@color/primary_green"
+                    app:cardCornerRadius="18dp"
+                    app:cardElevation="4dp"
+                    app:strokeWidth="2dp"
+                    app:strokeColor="?attr/colorSurface">
+
+                    <ImageView
+                        android:id="@+id/editProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_camera"
+                        android:padding="8dp"
+                        android:contentDescription="@string/content_desc_edit_profile"
+                        app:tint="@color/white" />
+                </com.google.android.material.card.MaterialCardView>
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/tv_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yehia_abdo"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/personal_health_information"
+                android:textSize="14sp"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:layout_gravity="center"
+                android:layout_marginBottom="24dp" />
+
+            <!-- Full Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/full_name"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/full_name_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints="name"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/eleanor_vance"
+                android:inputType="textPersonName"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+            <!-- Date of Birth -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_of_birth"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/dob_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints="birthDate"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/may_14_1968"
+                android:inputType="datetime"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:drawableStart="@drawable/ic_calendar"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                android:focusable="true"
+                android:clickable="true"
+                android:cursorVisible="false" />
+
+            <!-- Gender -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/gender_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints="gender"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/female"
+                android:inputType="text"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:drawableStart="@drawable/ic_person"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+            <!-- Blood Type -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/blood_type"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp"/>
+            <EditText
+                android:id="@+id/blood_type_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:autofillHints=""
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/a"
+                android:inputType="text"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:drawableStart="@drawable/ic_blood_drop"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+            <!-- Weight & Height Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/weight_kg"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="4dp"/>
+                    <EditText
+                        android:id="@+id/weight_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints=""
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/dynamic_card_bg"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:hint="@string/_64"
+                        android:inputType="numberDecimal"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:drawableStart="@drawable/ic_scale"
+                        android:drawablePadding="12dp"
+                        app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/height_cm"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="4dp"/>
+                    <EditText
+                        android:id="@+id/height_input"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:autofillHints=""
+                        android:background="@drawable/et_shape"
+                        android:backgroundTint="@color/dynamic_card_bg"
+                        android:textColor="?attr/colorOnSurface"
+                        android:textColorHint="?attr/colorOnSurfaceVariant"
+                        android:hint="@string/_168"
+                        android:inputType="number"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:drawableStart="@drawable/ic_height"
+                        android:drawablePadding="12dp"
+                        app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Chronic Diseases -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chronic_diseases"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp" />
+            <EditText
+                android:id="@+id/diseases_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints=""
+                android:minHeight="80dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/none_reported"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:padding="16dp"
+                android:drawableStart="@drawable/ic_medical_bag"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+            <!-- Allergies -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/allergies"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp" />
+            <EditText
+                android:id="@+id/allergies_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="none"
+                android:minHeight="80dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/none_reported"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:drawableStart="@drawable/ic_warning"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant" />
+
+            <!-- Emergency Contact Number -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/emergency_contact_number"
+                android:textColor="?attr/colorOnSurface"
+                android:layout_marginStart="4dp" />
+            <EditText
+                android:id="@+id/emergency_contact_input"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/et_shape"
+                android:backgroundTint="@color/dynamic_card_bg"
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?attr/colorOnSurfaceVariant"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:drawableStart="@drawable/ic_phone"
+                android:drawablePadding="12dp"
+                app:drawableTint="?attr/colorOnSurfaceVariant"
+                android:autofillHints="phoneNumber" />
+
+            <!-- Save Button -->
+            <Button
+                android:id="@+id/save_btn"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/primary_green"
+                android:text="@string/save_changes"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="30dp"
+                android:backgroundTintMode="src_in"/>
+
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

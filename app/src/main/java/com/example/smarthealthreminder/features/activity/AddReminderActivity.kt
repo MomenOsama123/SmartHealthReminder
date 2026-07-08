@@ -14,10 +14,15 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.alarm.ReminderScheduler
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import android.widget.LinearLayout
@@ -32,7 +37,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
 import java.util.*
 
-class AddReminderActivity : AppCompatActivity() {
+class AddReminderActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_REMINDER_RESULT = "reminder_result"
@@ -72,8 +77,15 @@ class AddReminderActivity : AppCompatActivity() {
     private lateinit var dbHelper: DatabaseHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_add_reminder)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val db = AppDatabase.getDatabase(this)
         repository = HealthRepository(db)
@@ -191,6 +203,8 @@ class AddReminderActivity : AppCompatActivity() {
             )
             etTime.setText(selectedTime)
         }
+        etDate.showSoftInputOnFocus = false
+        etTime.showSoftInputOnFocus = false
     }
 
     private fun setupListeners() {
@@ -226,7 +240,7 @@ class AddReminderActivity : AppCompatActivity() {
 
     private fun showRecurrencePicker() {
         val currentIndex = RecurrenceHelper.OPTIONS.indexOf(selectedRecurrence).coerceAtLeast(0)
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Recurrence")
             .setSingleChoiceItems(RecurrenceHelper.OPTIONS, currentIndex) { dialog, which ->
                 selectedRecurrence = RecurrenceHelper.OPTIONS[which]
@@ -420,7 +434,7 @@ class AddReminderActivity : AppCompatActivity() {
 
     private fun deleteReminder() {
         existingReminderId?.let { id ->
-            AlertDialog.Builder(this)
+            MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Delete Reminder")
                 .setMessage("Are you sure you want to delete this reminder?")
                 .setPositiveButton("Delete") { _, _ ->

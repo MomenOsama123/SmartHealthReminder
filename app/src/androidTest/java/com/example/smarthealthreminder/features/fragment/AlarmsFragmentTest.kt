@@ -24,7 +24,7 @@ class AlarmsFragmentTest {
     @Test
     fun addButton_isVisible() {
         launchFragmentInContainer<AlarmsFragment>(themeResId = R.style.Theme_SmartHealthReminder)
-        onView(withId(R.id.btn_add)).check(matches(isDisplayed()))
+        onView(withId(R.id.fab_add_alarm)).check(matches(isDisplayed()))
     }
 
     @Test

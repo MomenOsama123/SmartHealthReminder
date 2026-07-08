@@ -1,0 +1,759 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ================= Dashboard ================= -->
+
+    <string name="content_desc_profile_avatar">صورة الملف الشخصي للمستخدم</string>
+    <string name="content_desc_medication_icon">أيقونة الدواء</string>
+    <string name="content_desc_add_medication">إضافة دواء</string>
+
+    <string name="app_rname" translatable="false">صباح الخير، إلينا</string>
+
+    <string name="adherence_percent" translatable="false">72%</string>
+    <string name="adherence_label">الالتزام</string>
+    <string name="welcome_back">مرحباً بعودتك</string>
+    <string name="on_track_title">على المسار الصحيح</string>
+    <string name="on_track_desc">أداء رائع. تبقى لك جرعتان فقط للوصول إلى هدفك اليومي.</string>
+
+    <string name="next_medication">الدواء التالي</string>
+    <string name="today_date">اليوم</string>
+
+    <string name="med_name">ليسينوبريل 10 ملغ</string>
+    <string name="med_time">09:00 صباحاً</string>
+
+    <string name="mark_taken">تم تناوله</string>
+    <string name="snooze">تأجيل 10 دقائق</string>
+
+    <string name="total_meds">إجمالي الأدوية</string>
+    <string name="taken_today">تم تناولها اليوم</string>
+    <string name="missed_today">فائتة اليوم</string>
+    <string name="upcoming_today">القادم اليوم</string>
+
+    <string name="your_condition_is_nstable">حالتك\nمستقرة</string>
+
+    <string name="metformin">ميتفورمين 500 ملغ</string>
+    <string name="after_lunch">بعد الغداء</string>
+    <string name="time_1pm">01:00 ظهراً</string>
+
+    <string name="atorvastatin">أتورفاستاتين 20 ملغ</string>
+    <string name="before_bed">قبل النوم</string>
+    <string name="time_9pm">09:00 مساءً</string>
+    <string name="time_1">01:00 ظهراً</string>
+
+    <!-- ================= Features / Master ================= -->
+
+    <string name="search_resources">بحث في الموارد</string>
+    <string name="search_hint">ابحث عن دواء...</string>
+
+    <string name="medical_encyclopedia">الموسوعة الطبية</string>
+    <string name="encyclopedia_desc">الأعراض، الحالات، ومكتبة الأبحاث السريرية.</string>
+
+    <string name="alarms">المنبهات</string>
+    <string name="alarms_desc">الأدوية والتذكيرات</string>
+
+    <string name="tips">نصائح</string>
+    <string name="tips_desc">نصائح صحية يومية</string>
+
+    <string name="app_features">ميزات التطبيق</string>
+    <string name="app_features_desc">أتقن رحلتك الصحية</string>
+
+    <string name="content_desc_back">رجوع</string>
+    <string name="content_desc_search">أيقونة البحث</string>
+
+    <string name="noResParagraph">
+        لم نجد أي نتائج مطابقة.
+        جرّب كلمة مختلفة أو امسح الفلاتر لاستكشاف كل الموارد.
+    </string>
+    <string name="search_try_categories">جرب هذه الفئات:</string>
+
+
+    <string name="suggested_topics">مواضيع مقترحة</string>
+    <string name="health_assistant">المساعد الصحي</string>
+
+    <string name="no_results_found">لا توجد نتائج</string>
+    <string name="try_a_different_keyword">جرّب كلمة مختلفة ↵</string>
+    <string name="clear_all_filters">مسح كل الفلاتر</string>
+    <string name="gluten_free_remedies">علاجات خالية من الغلوتين</string>
+
+    <string name="none_reported_mild_hypertension_managed_by_diet">لا يوجد. ضغط دم بسيط تتم السيطرة عليه بالنظام الغذائي.</string>
+    <string name="none_reported">لا يوجد</string>
+    <string name="chronic_diseases">الأمراض المزمنة</string>
+
+    <string name="weight_kg">الوزن (كجم)</string>
+    <string name="_64">64</string>
+
+    <string name="height_cm">الطول (سم)</string>
+    <string name="_168">168</string>
+
+    <string name="blood_type">فصيلة الدم</string>
+    <string name="a_positive_a">A موجب (A+)</string>
+    <string name="a">A+</string>
+
+    <string name="full_name">الاسم الكامل</string>
+    <string name="eleanor_vance">إليانور فانس</string>
+
+    <string name="date_of_birth">تاريخ الميلاد</string>
+
+    <string name="healthsync">هيلث سينك</string>
+    <string name="personal_health_information">المعلومات الصحية الشخصية</string>
+
+    <string name="save_changes">حفظ التغييرات</string>
+    <string name="darkmode">الوضع الليلي</string>
+
+    <string name="yehia_abdo">يحيى عبده</string>
+    <string name="may_14_1968">14 مايو 1968</string>
+
+    <string name="female">أنثى</string>
+    <string name="gender">الجنس</string>
+
+    <string name="health_reports">التقارير الصحية</string>
+
+    <string name="current_status">الحالة الحالية</string>
+    <string name="your_condition_is_stable">حالتك\nمستقرة</string>
+
+    <string name="daily_vitals_show_consistent_patterns_over_the_last_7_days">
+        تُظهر المؤشرات الحيوية اليومية أنماطاً ثابتة خلال الأيام السبعة الماضية.
+    </string>
+
+    <string name="medication_adherence">الالتزام\nبالأدوية</string>
+
+    <string name="_85">85%</string>
+    <string name="goal_100">الهدف: 100%</string>
+
+    <string name="you_took_85_of_your_medications_this_week_you_missed_only_2_evening_doses">
+        لقد تناولت 85% من أدويتك هذا الأسبوع. فاتتك جرعتان مسائيتان فقط.
+    </string>
+
+    <string name="symptoms_overview">نظرة عامة\nعلى الأعراض</string>
+
+    <string name="mild_fatigue_reported_more_frequently_on_wednesday_and_saturday">
+        تم الإبلاغ عن تعب بسيط بشكل متكرر أكثر يومي الأربعاء والسبت.
+    </string>
+
+    <string name="insights">تحليلات</string>
+
+    <string name="try_not_to_miss_evening_doses_to_maintain_consistent_levels">
+        حاول ألا تفوّت الجرعات المسائية للحفاظ على مستويات ثابتة.
+    </string>
+
+    <string name="symptoms_increased_this_week_monitor_fatigue_levels_closely_tomorrow">
+        زادت الأعراض هذا الأسبوع؛ راقب مستويات التعب عن قرب غداً.
+    </string>
+
+    <string name="download_report">تحميل التقرير</string>
+
+    <string name="pdf_format_last_updated_today_at_08_45_am">
+        صيغة PDF • آخر تحديث اليوم الساعة 08:45 صباحاً
+    </string>
+
+    <!-- Week Days -->
+
+    <string name="mon">الإثنين</string>
+    <string name="tue">الثلاثاء</string>
+    <string name="wed">الأربعاء</string>
+    <string name="thu">الخميس</string>
+    <string name="fri">الجمعة</string>
+    <string name="sat">السبت</string>
+    <string name="sun">الأحد</string>
+
+    <string name="allergies">الحساسية</string>
+    <string name="emergency_contact_number">رقم الطوارئ</string>
+
+    <string name="date">يوم/شهر/سنة</string>
+
+    <string name="skip_for_now">تخطِّي الآن</string>
+
+    <string name="clinical_care_active">الرعاية السريرية نشطة</string>
+
+    <string name="report_session_today">جلسة التقرير: اليوم</string>
+
+    <string name="rk_your_health_sanctuary">✦ ابدأ ملاذك الصحي</string>
+
+    <string name="take_a_breath_your_wellness_journey_continues_today_with_personalized_reminders_and_gentle_insights_designed_for_your_tranquility">
+        خذ نفساً عميقاً. رحلتك الصحية تستمر اليوم مع تذكيرات مخصصة وتحليلات لطيفة صُممت من أجل هدوئك.
+    </string>
+
+    <string name="today_s_reminders">تذكيرات اليوم</string>
+
+    <string name="sleep_quality">جودة النوم</string>
+    <string name="optimal">مثالية</string>
+
+    <string name="daily_steps">الخطوات اليومية</string>
+    <string name="fatigue">التعب</string>
+
+    <string name="essential_tools">الأدوات الأساسية</string>
+
+    <string name="vitamins">الفيتامينات</string>
+
+    <string name="facebook_app_id" translatable="false">924597597084563</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb924597597084563</string>
+    <string name="facebook_client_token" translatable="false">9738d8624eb804760bbd820158c42810</string>
+    <string name="login_text">تسجيل الدخول</string>
+
+    <string name="create_account_title">إنشاء حساب</string>
+    <string name="create_account_subtitle">انضم إلى مجتمعنا الصحي</string>
+
+    <string name="full_name_label">الاسم الكامل</string>
+    <string name="full_name_hint">أحمد محمد</string>
+
+    <string name="email_label">البريد الإلكتروني</string>
+    <string name="email_hint">name@example.com</string>
+
+    <string name="password_label">كلمة المرور</string>
+    <string name="password_hint">********</string>
+
+    <string name="confirm_password_label">تأكيد كلمة المرور</string>
+    <string name="confirm_password_hint">********</string>
+
+    <string name="terms_text">بالتسجيل، أوافق على شروط الخدمة وسياسة الخصوصية</string>
+    <string name="signup_button">إنشاء حساب</string>
+    <string name="app_name">تطبيق تراستا</string>
+    <string name="Trusta">تراستا</string>
+    <string name="welcome_message">مرحباً بك في تطبيق تراستا</string>
+    <string name="subtitle_welcome">رفيقك الصحي الذكي</string>
+    <string name="forgot_password">نسيت كلمة المرور؟</string>
+    <string name="log_in">تسجيل الدخول</string>
+    <string name="or_continue_with">أو تابع باستخدام</string>
+    <string name="c">Welcome Back</string>
+    <string name="secure_access_to_your_health_records">وصول آمن إلى سجلاتك الصحية.</string>
+    <string name="email_address">اسم المستخدم أو البريد الإلكتروني</string>
+    <string name="sampleEmail">name@example.com</string>
+    <string name="password">كلمة المرور</string>
+    <string name="hiddenPassword">••••••••</string>
+    <string name="google">جوجل</string>
+    <string name="don_t_have_an_account">ليس لديك حساب؟</string>
+    <string name="create_an_account">إنشاء حساب</string>
+    <string name="facebook">فيسبوك</string>
+    <string name="password_changed_successfully">تم تغيير كلمة المرور بنجاح</string>
+    <string name="password_reset_successfully">تم إعادة تعيين كلمة المرور بنجاح. \n يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.</string>
+    <string name="back_to_login">العودة لتسجيل الدخول</string>
+    <string name="verification_successful">تم التحقق بنجاح!</string>
+    <string name="your_email_verified">تم التحقق من بريدك الإلكتروني. \n يمكنك الآن تسجيل الدخول إلى حسابك.</string>
+    <string name="check_your_email">تحقق من بريدك الإلكتروني</string>
+    <string name="password_recovery_link">لقد أرسلنا رابط استعادة كلمة المرور إلى بريدك الإلكتروني المسجل.</string>
+    <string name="verify_email_title">تحقق من بريدك الإلكتروني</string>
+
+    <string name="verify_email_subtitle">
+        لقد أرسلنا رمز تحقق إلى بريدك الإلكتروني.\n
+        الرجاء إدخاله أدناه للمتابعة.
+    </string>
+
+    <string name="verify_button">تحقق</string>
+
+    <string name="did_not_receive_code">لم تستلم الرمز؟</string>
+
+    <string name="resend_code">إعادة إرسال الرمز</string>
+    <string name="forgot_password_title">نسيت كلمة المرور</string>
+
+    <string name="forgot_password_subtitle">
+أدخل بريدك الإلكتروني لتلقي \n رابط إعادة تعيين كلمة المرور.
+</string>
+
+    <string name="send_link">إرسال الرابط</string>
+
+    <string name="healthcare_technical">الرعاية الصحية التقنية</string>
+    <string name="create_new_password_title">إنشاء كلمة مرور جديدة</string>
+    <string name="create_new_password_desc">
+الرجاء إدخال كلمة مرور جديدة لاستعادة الوصول إلى حسابك. اختر كلمة مرور قوية وفريدة.
+</string>
+
+    <string name="new_password_label">كلمة المرور الجديدة</string>
+    <string name="new_password_hint">أدخل كلمة المرور الجديدة</string>
+
+    <string name="confirm_new_password_label">تأكيد كلمة المرور الجديدة</string>
+    <string name="confirm_new_password_hint">أكّد كلمة المرور الجديدة</string>
+
+    <string name="password_rule">
+يجب أن تكون كلمة المرور 8 أحرف على الأقل، وتحدوي على مزيج من الحروف والأرقام والرموز.
+</string>
+
+    <string name="update_password_btn">تحديث كلمة المرور</string>
+    <string name="username">اسم المستخدم</string>
+    <string name="fb924597597084563" />
+    <string name="fb9738d8624eb804760bbd820158c42810" />
+    <string name="default_web_client_id">436777065371-4c3o1n4k43r3oadfipjfo9dgr8vvqme8.apps.googleusercontent.com</string>
+    <string name="sign_up">إنشاء حساب</string>
+
+
+    <!--sdvvdsvvdsvdsvsdv-->
+
+
+    <string name="app_ename">هيلث سينك</string>
+
+
+    <string name="performance">الأداء</string>
+    <string name="your_week">أسبوعك</string>
+    <string name="on_track">على المسار الصحيح</string>
+    <string name="today">اليوم</string>
+    <string name="date_oct_24_2023">24 أكتوبر 2023</string>
+
+
+    <string name="steps">الخطوات</string>
+    <string name="steps_value">8,432</string>
+    <string name="steps_percent">+12% عن الأمس</string>
+
+    <string name="sleep">النوم</string>
+    <string name="sleep_time">7س 20د</string>
+
+    <string name="heart_rate">معدل ضربات القلب</string>
+    <string name="heart_rate_value">72 نبضة/د</string>
+
+
+    <string name="medication_tracking">تتبع الأدوية</string>
+    <string name="take_now">تناول الآن</string>
+
+    <string name="multivitamin">فيتامينات متعددة</string>
+    <string name="multi_time">8:00 صباحاً - كبسولة واحدة</string>
+
+    <string name="omega">أوميغا-3</string>
+    <string name="omega_time">1:00 ظهراً - كبسولتان</string>
+    <string name="join_healthsync">انضم إلى هيلث سينك</string>
+    <string name="start_your_jorney_towards_a_healthier_nmore_balanced_life_today">ابدأ رحلتك نحو حياة أكثر صحة\nوتوازناً اليوم.</string>
+    <string name="sign_up_with_email">إنشاء حساب بالبريد الإلكتروني</string>
+    <string name="view_today_s_plan_u2192">عرض خطة اليوم ←</string>
+    <string name="chatbot">روبوت الدردشة</string>
+    <string name="back_arrow_into_the_main_page">سهم الرجوع إلى الصفحة الرئيسية</string>
+    <string name="describe_your_symptoms">صف أعراضك...</string>
+    <string name="Trusta_is_thinking">مساعد تراستا الذكي يفكر...</string>
+    <string name="send">إرسال</string>
+
+
+    <string name="complete_profile_label">إكمال الملف الشخصي</string>
+    <string name="low">منخفضة</string>
+    <string name="medications">الأدوية</string>
+    <string name="sleep_track">تتبع النوم</string>
+    <string name="forgot_password_icon_desc">أيقونة نسيت كلمة المرور</string>
+    <string name="save_alarm_protocol">حفظ المنبه </string>
+    <string name="back_for_add_rem">رجوع</string>
+    <string name="set_alarm">ضبط منبه</string>
+    <string name="category_for_rem_detail">الفئة</string>
+    <string name="alarm_name">اسم المنبه</string>
+    <string name="alarm_hint">مثال: دواء الصباح</string>
+    <string name="time">الوقت</string>
+    <string name="repeat_days">أيام التكرار</string>
+    <string name="save_alarm">حفظ المنبه</string>
+    <string name="delete_alarm">حذف المنبه</string>
+    <string name="back">رجوع</string>
+    <string name="sun_initial">ح</string>
+    <string name="mon_initial">ن</string>
+    <string name="tue_initial">ث</string>
+    <string name="wed_initial">ر</string>
+    <string name="thu_initial">خ</string>
+    <string name="fri_initial">ج</string>
+    <string name="sat_initial">س</string>
+    <string name="search">بحث</string>
+    <string name="more_options">مزيد من الخيارات</string>
+    <string name="urgent">عاجل</string>
+    <string name="pending">قيد الانتظار</string>
+    <string name="no_reminders">لا توجد تذكيرات</string>
+    <string name="no_reminders_yet">لا توجد تذكيرات بعد</string>
+    <string name="add_first_reminder">أضف أول تذكير صحي لك</string>
+    <string name="add_reminder">إضافة تذكير</string>
+    <string name="due_at">مستحق في %s</string>
+    <string name="medicine_icon">أيقونة الدواء</string>
+    <string name="full_description">الوصف الكامل</string>
+    <string name="reminder_history">سجل التذكيرات</string>
+    <string name="completed">مكتمل</string>
+    <string name="view_details">عرض التفاصيل</string>
+    <string name="missed">فائت</string>
+    <string name="modified">معدّل</string>
+    <string name="mark_as_done">وضع علامة كمنجز</string>
+    <string name="edit">تعديل</string>
+    <string name="delete">حذف</string>
+    <string name="today_s_air_is_clean_and_restorative">هواء اليوم نظيف ومنعش.</string>
+    <string name="settings">الإعدادات</string>
+    <string name="settings_alarm_snooze_title">مدة تأجيل المنبه</string>
+    <string name="settings_alarm_snooze_subtitle">المدة التي ينتظرها المنبه قبل أن يرن مجدداً.</string>
+    <string name="settings_reminder_snooze_title">مدة تأجيل التذكير</string>
+    <string name="settings_reminder_snooze_subtitle">المدة التي ينتظرها التذكير قبل التنبيه مجدداً.</string>
+    <string name="settings_snooze_minutes_value">%1$d دقيقة</string>
+    <string name="settings_snooze_saved">تم ضبط مدة التأجيل على %1$d دقيقة</string>
+    <string name="snoozed_for_minutes">تم التأجيل لمدة %1$d دقيقة</string>
+    <string name="snooze_button_label">تأجيل</string>
+    <string name="save">حفظ</string>
+    <string name="why_joinUs">رفيقك الموثوق لإدارة الأدوية والتذكيرات والعادات الصحية.</string>
+    <string name="already_have_an_account">لديك حساب بالفعل؟</string>
+    <string name="already_account">لديك حساب بالفعل؟</string>
+    <string name="app_related_icon">أيقونة متعلقة بالتطبيق</string>
+    <string name="get_started">ابدأ الآن!</string>
+
+    <!-- ChatBot Disclaimer -->
+    <string name="medical_disclaimer_title">إخلاء المسؤولية الطبية</string>
+    <string name="medical_disclaimer_message">يرجى استشارة طبيبك بخصوص أي مخاوف طبية. هذا المساعد الذكي لأغراض إعلامية فقط ولا ينبغي الاعتماد عليه للتشخيص أو العلاج.</string>
+    <string name="i_understand">أوافق</string>
+    <string name="Your_Trusted_HA">مساعدك الصحي الموثوق</string>
+    <string name="ai_disclaimer_info">معلومات إخلاء مسؤولية الذكاء الاصطناعي</string>
+    <string name="create_schedule_entry">إنشاء إدخال في الجدول</string>
+    <string name="title">العنوان</string>
+    <string name="date_yyyy_mm_dd">التاريخ (سنة-شهر-يوم)</string>
+    <string name="description">الوصف</string>
+    <string name="time_hh_mm">الوقت (ساعة:دقيقة)</string>
+    <string name="category">الفئة</string>
+    <string name="save_entry">حفظ الإدخال</string>
+    <string name="report_title">عنوان التقرير</string>
+    <string name="e_g_weekly_health_summary">مثال: ملخص صحي أسبوعي</string>
+    <string name="enter_report_details">أدخل تفاصيل التقرير...</string>
+    <string name="fetching_your_daily_wellness_tip">جاري جلب نصيحتك الصحية اليومية...</string>
+    <string name="refresh">تحديث</string>
+    <string name="todays_health_tip">نصيحة اليوم الصحية</string>
+    <string name="stop_alarm">إيقاف المنبه</string>
+    <string name="alarm_bell">جرس المنبه</string>
+    <string name="category_icon">أيقونة الفئة</string>
+    <string name="add_note">إضافة ملاحظة</string>
+    <string name="add_note_btn">إضافة ملاحظة</string>
+    <string name="edit_note">تعديل ملاحظة</string>
+    <string name="write_your_note_here">اكتب ملاحظتك هنا...</string>
+    <string name="save_note">حفظ الملاحظة</string>
+    <string name="no_events">لا توجد أحداث</string>
+    <string name="add_alarm">إضافة منبه</string>
+    <string name="items_count_format">%1$d مهام</string>
+    <string name="today_s_plan">خطة اليوم</string>
+    <string name="_0_items">0 عناصر</string>
+    <string name="today_s_schedule">جدول اليوم</string>
+    <string name="you_don_t_have_any_plans_scheduled_for_today">ليس لديك أي خطط مجدولة لليوم.</string>
+    <string name="quick_actions">إجراءات سريعة</string>
+    <string name="reminder">تذكير</string>
+    <string name="alarm">منبه</string>
+    <string name="note">ملاحظة</string>
+    <string name="report">تقرير</string>
+    <string name="open_full_schedule">فتح الجدول الكامل</string>
+    <string name="quick_access">وصول سريع</string>
+    <string name="go_to_a_section_to_manage_your_health_data">انتقل إلى قسم لإدارة بياناتك الصحية</string>
+    <string name="reminders">التذكيرات</string>
+    <string name="set_a_new_reminder">ضبط تذكير جديد</string>
+    <string name="set_a_new_alarm">ضبط منبه جديد</string>
+    <string name="reports">التقارير</string>
+    <string name="add_report">إضافة تقرير</string>
+    <string name="upload_health_report">رفع تقرير صحي</string>
+    <string name="dashboard">لوحة التحكم</string>
+    <string name="view_dashboard">عرض لوحة التحكم</string>
+    <string name="your_health_overview">نظرة عامة على صحتك</string>
+    <string name="notifications">الإشعارات</string>
+    <string name="action_required">إجراء مطلوب</string>
+    <string name="set_a_new_health_goal">حدد هدفاً صحياً جديداً.</string>
+    <string name="title1">العنوان *</string>
+    <string name="e_g_morning_vitamins">مثال: فيتامينات الصباح</string>
+    <string name="add_specific_instructions_or_notes">أضف تعليمات أو ملاحظات محددة...</string>
+    <string name="medicine">دواء</string>
+    <string name="appointment">موعد</string>
+    <string name="task">مهمة</string>
+    <string name="custom">مخصص</string>
+    <string name="date_amp_time">التاريخ والوقت</string>
+    <string name="mm_dd_yyyy">يوم/شهر/سنة</string>
+    <string name="for_time">--:--</string>
+    <string name="recurrence">التكرار</string>
+    <string name="none">بدون</string>
+    <string name="select_recurrence">اختر التكرار</string>
+    <string name="priority_level">مستوى الأولوية</string>
+    <string name="medium">متوسطة</string>
+    <string name="high">عالية</string>
+    <string name="notification">إشعار</string>
+    <string name="early_notification">إشعار مبكر</string>
+    <string name="remind_me_before_the_event">ذكّرني قبل الحدث</string>
+    <string name="_5_min">5 دقائق</string>
+    <string name="vibration">الاهتزاز</string>
+    <string name="haptic_feedback_on_alert">اهتزاز عند التنبيه</string>
+    <string name="save_reminder">حفظ التذكير</string>
+    <string name="delete_reminder">حذف التذكير</string>
+    <string name="profile">الملف الشخصي</string>
+    <string name="clinical_alarms">المنبهات السريرية</string>
+    <string name="no_alarms_set_yet_ntap_to_add_your_first_alarm">لا توجد منبهات بعد\nاضغط + لإضافة أول منبه</string>
+    <string name="edit_alarm">تعديل المنبه</string>
+    <string name="for_time1">:</string>
+    <string name="sunday">الأحد</string>
+    <string name="monday">الإثنين</string>
+    <string name="tuesday">الثلاثاء</string>
+    <string name="wednesday">الأربعاء</string>
+    <string name="thursday">الخميس</string>
+    <string name="friday">الجمعة</string>
+    <string name="saturday">السبت</string>
+    <string name="alarm_label">تسمية المنبه</string>
+    <string name="enter_alarm_label">أدخل تسمية المنبه</string>
+    <string name="sound">الصوت</string>
+    <string name="select_sound">اختر الصوت</string>
+    <string name="gradual_volume_increase">زيادة الصوت تدريجياً</string>
+    <string name="starts_softly_and_increases_over_2_minutes">يبدأ بهدوء ويزداد خلال دقيقتين</string>
+    <string name="advanced_protocol">بروتوكول متقدم</string>
+    <string name="auto_snooze">التأجيل التلقائي</string>
+    <string name="_0">0</string>
+    <string name="tasks">مهام</string>
+    <string name="_00">00</string>
+    <string name="alerts">تنبيهات</string>
+    <string name="needs_attention">! يحتاج إلى انتباه</string>
+    <string name="great_progress">تقدم ممتاز</string>
+    <string name="timeline">الجدول الزمني</string>
+    <string name="view_calendar">عرض التقويم ←</string>
+    <string name="month">الشهر</string>
+    <string name="welcome_back_name">مرحباً بعودتك، %1$s</string>
+    <string name="mark_done">وضع علامة كمنجز</string>
+    <string name="content_desc_logo">شعار التطبيق</string>
+    <string name="content_desc_profile">صورة الملف الشخصي</string>
+    <string name="sleep_percentage_88">88%</string>
+    <string name="steps_count_sample">6,432</string>
+    <string name="deep_breathe_title">تنفس بعمق.</string>
+    <string name="cancel">إلغاء</string>
+
+    <string name="profile_photo">صورة الملف الشخصي</string>
+    <string name="choose_photo_method">اختر الطريقة التي تريد بها تحديث صورة ملفك الشخصي</string>
+    <string name="camera">الكاميرا</string>
+    <string name="gallery">المعرض</string>
+    <string name="content_desc_take_photo">التقاط صورة</string>
+    <string name="content_desc_choose_gallery">اختر من المعرض</string>
+
+    <string name="serenepulse_is_thinking">مساعد سيرين بلس الذكي يفكر...</string>
+
+    <string name="step_2_of_2">الخطوة 2 من 2</string>
+
+    <string name="_50">50%</string>
+    <string name="complete_your_profile">أكمل ملفك الشخصي</string>
+    <string name="help_us_personalize_your_health_experience">ساعدنا في تخصيص تجربتك الصحية</string>
+    <string name="chronic_diseases_if_any">الأمراض المزمنة (إن وجدت)</string>
+    <string name="complete_profile">إكمال المِلَفّ الشخصي</string>
+    <string name="_5">5</string>
+    <string name="_3">3</string>
+    <string name="_2">2</string>
+    <string name="no_upcoming_medications">لا توجد أدوية قادمة</string>
+    <string name="phone_number">رقم الهاتف</string>
+    <string name="content_desc_edit_profile">تعديل صورة الملف الشخصي</string>
+    <string name="saved_reports">التقارير المحفوظة</string>
+    <string name="control_reminders">تحكم في التذكيرات والمنبهات والمظهر واختصارات الحساب.</string>
+    <string name="remainders_and_alarms">التذكيرات والمنبهات</string>
+    <string name="alarm_vibration">اهتزاز المنبه</string>
+    <string name="vibration_desc">اهتزاز عند تنبيه المنبهات والتذكيرات.</string>
+    <string name="early_reminders_title">التذكيرات المبكرة</string>
+    <string name="early_reminders_subtitle">تذكير افتراضي قبل 5 دقائق من الحدث.</string>
+    <string name="exact_alarm_title">إذن المنبه الدقيق</string>
+    <string name="exact_alarm_subtitle">مطلوب لضبط رنين المنبهات في الوقت المحدد تماماً.</string>
+    <string name="app_header">التطبيق</string>
+    <string name="appearance_title">المظهر</string>
+    <string name="appearance_subtitle">اختر الوضع الفاتح أو الداكن أو مطابقة جهازك.</string>
+    <string name="profile_info_title">معلومات الملف الشخصي</string>
+    <string name="profile_info_subtitle">تحديث التفاصيل الصحية الشخصية.</string>
+    <string name="health_reports_subtitle">مراجعة التقدم والتحليلات الأسبوعية.</string>
+    <string name="logout_button">تسجيل الخروج</string>
+    <!-- ================= Dashboard ================= -->
+
+    <string name="week">الأسبوع</string>
+    <string name="previous">السابق</string>
+    <string name="next">التالي</string>
+    <string name="recent_searches">عمليات البحث الأخيرة</string>
+    <string name="clear_all">مسح الكل</string>
+    <string name="clear_search">مسح البحث</string>
+    <string name="i_am_looking_for">أبحث عن</string>
+    <string name="all">الكل</string>
+    <string name="select_category">اختر الفئة</string>
+
+    <!-- Settings -->
+    <string name="settings_description">تحكم في التذكيرات والمنبهات والمظهر واختصارات الحساب.</string>
+    <string name="reminders_and_alarms">التذكيرات والمنبهات</string>
+    <string name="notifications_desc">السماح بظهور تنبيهات التذكيرات والمنبهات.</string>
+    <string name="alarm_vibration_desc">اهتزاز عند تنبيه المنبهات والتذكيرات.</string>
+    <string name="early_reminders">التذكيرات المبكرة</string>
+    <string name="early_reminders_desc">تذكير افتراضي قبل 5 دقائق من الحدث.</string>
+    <string name="exact_alarm_permission">إذن المنبه الدقيق</string>
+    <string name="exact_alarm_permission_desc">مطلوب لضبط رنين المنبهات في الوقت المحدد تماماً.</string>
+    <string name="app_settings_label">التطبيق</string>
+    <string name="appearance">المظهر</string>
+    <string name="appearance_desc">اختر الوضع الفاتح أو الداكن أو مطابقة جهازك.</string>
+    <string name="profile_info">معلومات الملف الشخصي</string>
+    <string name="profile_info_desc">تحديث التفاصيل الصحية الشخصية.</string>
+    <string name="health_reports_desc">مراجعة التقدم والتحليلات الأسبوعية.</string>
+    <string name="logout">تسجيل الخروج</string>
+    <string name="log_out">تسجيل الخروج</string>
+    <string name="add">+ إضافة</string>
+    <string name="selected_date">التاريخ المحدد</string>
+    <string name="no_events_for_this_day">لا توجد أحداث لهذا اليوم</string>
+    <string name="control_reminders_alarms_appearance_and_account_shortcuts">تحكم في التذكيرات والمنبهات والمظهر واختصارات الحساب.</string>
+    <string name="s">أ</string>
+    <string name="m">ن</string>
+    <string name="t">ث</string>
+    <string name="w">ر</string>
+    <string name="f">ج</string>
+    <string name="offline_message">لا يوجد اتصال بالإنترنت. يرجى التحقق من شبكتك لإرسال الرسائل.</string>
+
+    <string name="bot_message">رسالة الروبوت</string>
+    <string name="user_message">رسالة المستخدم</string>
+    <string name="dot_separator"> • </string>
+    <string name="content_desc_notifications">الإشعارات</string>
+    <string name="notifications_subtitle">السماح بظهور تنبيهات التذكيرات والمنبهات.</string>
+    <string name="content_desc_actions">إجراءات</string>
+    <string name="due_at_time">مستحق في 9:00 صباحاً</string>
+    <string name="show_password">إظهار كلمة المرور</string>
+    <string name="marked_done">تم التنفيذ</string>
+    <string name="no_medication">لا يوجد دواء لتمييزه</string>
+    <string name="no_medication_to_snooze">لا يوجد دواء للتأجيل</string>
+    <string name="snoozed">تم التأجيل لمدة 10 دقائق</string>
+    <string name="not_yet_time">لم يحن الوقت بعد! انتظر حتى %1$s</string>
+    <string name="not_yet_time_short">لم يحن الوقت بعد!</string>
+
+    <!-- Greetings -->
+    <string name="greeting_morning">صباح الخير ☀️</string>
+    <string name="greeting_afternoon">مساء الخير 🌤️</string>
+    <string name="greeting_evening">مساء الخير 🌅</string>
+    <string name="greeting_night">تصبح على خير 🌙</string>
+
+    <!-- UI Texts -->
+    <string name="no_more_meds">لا مزيد من الأدوية</string>
+    <string name="no_more_meds_today">لا مزيد من الأدوية لليوم 🎉</string>
+    <string name="no_doses_today">لا توجد جرعات اليوم</string>
+
+    <!-- Dialog Options -->
+
+    <string name="snooze_10_min">تأجيل 10 دقائق</string>
+
+    <!-- Reports Activity -->
+    <string name="report_adherence_summary">لقد تناولت %1$d%% من أدويتك هذا الأسبوع. فاتتك %2$d جرعات فقط.</string>
+    <string name="status_stable_title">حالتك مستقرة</string>
+    <string name="status_stable_description">التزام ممتاز هذا الأسبوع. مؤشراتك الحيوية تُظهر اتجاهات إيجابية.</string>
+    <string name="status_fair_title">حالتك متوسطة</string>
+    <string name="status_fair_description">يمكن تحسين الالتزام. الانتظام هو المفتاح للحفاظ على صحة مستقرة.</string>
+    <string name="status_action_title">إجراء مطلوب</string>
+    <string name="status_action_description">تم رصد التزام منخفض. يرجى محاولة اتباع جدول أدويتك بشكل أدق.</string>
+    <string name="last_updated_label">آخر تحديث: %1$s</string>
+
+    <!-- PDF Report Strings -->
+    <string name="pdf_report_title">تقرير الصحة والالتزام الرسمي</string>
+    <string name="pdf_generated_on">تم الإنشاء في: %1$s</string>
+    <string name="pdf_section_health_status">1. الحالة الصحية الحالية</string>
+    <string name="pdf_section_adherence">2. الالتزام بالأدوية</string>
+    <string name="pdf_adherence_rate">معدل الالتزام: %1$s</string>
+    <string name="pdf_section_insights">3. تحليلات وتوصيات الذكاء الاصطناعي</string>
+    <string name="pdf_footer">تم إنشاء هذا التقرير تلقائياً بواسطة %1$s.</string>
+    <string name="pdf_saved_success">تم حفظ ملف PDF في التنزيلات!</string>
+    <string name="pdf_save_failed">فشل حفظ ملف PDF: %1$s</string>
+    <string name="preparing_report">جاري تحضير تقريرك...</string>
+    <string name="generating_report">جاري إنشاء تقرير حقيقي...</string>
+
+    <!-- Steps Tracker -->
+    <string name="stop_activity">إيقاف النشاط</string>
+    <string name="start_activity_btn">بدء النشاط</string>
+    <string name="live_tracking_active">التتبع المباشر نشط! امشِ لرؤية الخطوات.</string>
+    <string name="activity_tracking_stopped">تم إيقاف تتبع النشاط</string>
+    <string name="sensor_not_found">لم يتم العثور على المستشعر</string>
+    <string name="no_sensor_found">لا يوجد مستشعر خطوات على هذا الجهاز</string>
+    <string name="permission_denied_steps">تم رفض الإذن. عد الخطوات لن يعمل.</string>
+    <string name="goal_updated">تم تحديث الهدف إلى %1$s خطوة</string>
+    <string name="weekly_average_format">المتوسط: %1$s خطوة</string>
+    <string name="no_weekly_data">لا توجد بيانات أسبوعية بعد</string>
+    <string name="goal_achieved">تم تحقيق الهدف!</string>
+    <string name="get_started_title">ابدأ الآن!</string>
+    <string name="target_steps_format">/ %1$s خطوة</string>
+    <string name="motivation_desc_get_started">ابدأ يومك بالمشي. صل إلى 10,000 خطوة للحفاظ على هدفك الصحي.</string>
+    <string name="motivation_desc_achieved">عمل رائع %1$s! لقد وصلت إلى هدفك اليومي من الخطوات. استمر في الحفاظ على هذه العادة الصحية.</string>
+    <string name="select_daily_goal">اختر هدف الخطوات اليومي</string>
+
+    <string name="physical_activity_permission">إذن النشاط البدني</string>
+    <string name="physical_activity_permission_desc">مطلوب لتتبع خطواتك اليومية بدقة.</string>
+
+    <!-- Format Strings (to avoid setText concatenation warnings) -->
+    <string name="percentage_format">%1$d%%</string>
+    <string name="med_name_dosage_format">%1$s - %2$s</string>
+
+    <!-- Status Prefixes for Upcoming List -->
+    <string name="taken_prefix">✅ %1$s</string>
+    <string name="snoozed_prefix">⏰ %1$s</string>
+    <string name="missed_prefix">❌ %1$s</string>
+
+    <!-- Dosage Suffixes -->
+    <string name="taken_dosage_suffix">%1$s • تم التناول</string>
+    <string name="snoozed_dosage_suffix">%1$s • مؤجل</string>
+    <string name="missed_dosage_suffix">%1$s • فائت</string>
+    <string name="hello_blank_fragment">مرحباً، جزء فارغ</string>
+    <string name="today_s_progress">تقدم اليوم</string>
+    <string name="zerosSample">0000</string>
+    <string name="_10_000_steps">/ 10,000 خطوة</string>
+    <string name="calories_related_icon">أيقونة السعرات الحرارية</string>
+    <string name="_6_2">6.2</string>
+    <string name="kilometers">كيلومتر</string>
+    <string name="distance_related_icon">أيقونة المسافة</string>
+    <string name="_412">412</string>
+    <string name="kcal_burned">سعرة حرارية محروقة</string>
+    <string name="time_related_icon">أيقونة الوقت</string>
+    <string name="_48">48</string>
+    <string name="active_min">دقيقة نشطة</string>
+    <string name="start_activity">بدء النشاط</string>
+    <string name="reset_progress">إعادة ضبط التقدم</string>
+    <string name="weekly_pulse">النبض الأسبوعي</string>
+    <string name="average_7_850_steps">المتوسط: 7,850 خطوة</string>
+    <string name="last_7_days">آخر 7 أيام</string>
+    <string name="quot_keep_it_up_quot">\"استمر!\"</string>
+    <string name="start_evening">ابدأ المساء</string>
+    <string name="you_re_only_1_568_steps_away_from_your_daily_goal_a_short_15_minute_walk_this_evening_will_close_the_ring">أنت على بعد 1,568 خطوة فقط من هدفك اليومي. مشي قصير لمدة 15 دقيقة هذا المساء سيغلق الحلقة.</string>
+    <string name="steps_tracker">متتبع الخطوات</string>
+    <string name="motivation_desc_format">أنت على بعد %1$s خطوة من هدفك اليومي. مشي قصير لمدة %2$d دقيقة هذا المساء سيغلق الحلقة.</string>
+    <string name="dosage_progress_format">%1$d من %2$d</string>
+    <string name="dosage_remaining_format">%1$d متبقية</string>
+    <string name="daily_steps_tracker">متتبع الخطوات اليومي</string>
+    <string name="_0_0">0.0</string>
+    <string name="average_0_steps">المتوسط: 0 خطوة</string>
+    <string name="adherence">الالتزام</string>
+    <string name="_72">72%</string>
+    <string name="reminding_doses">جرعات التذكير</string>
+    <string name="reminder_related_icon">أيقونة التذكير</string>
+    <string name="morning_medication">دواء الصباح</string>
+    <string name="schedule">الجدول</string>
+    <string name="active_reminder">تذكير نشط</string>
+    <string name="_8_00_am">8:00 صباحاً</string>
+    <string name="daily_routine">الروتين اليومي</string>
+    <string name="frequency">التكرار</string>
+    <string name="every_day">كل يوم</string>
+    <string name="details">التفاصيل</string>
+    <string name="SampleDescription">تناول قرصاً واحداً من فيتامين د مع الإفطار. حافظ على ترطيب جسمك طوال الصباح لدعم الامتصاص الأمثل وطاقة الخلايا.</string>
+    <string name="preferences">التفضيلات</string>
+    <string name="priority">الأولوية</string>
+    <string name="_5_minutes_before">قبل 5 دقائق</string>
+    <string name="edit_reminder">تعديل التذكير</string>
+    <string name="enabled">مفعّل</string>
+    <string name="close">إغلاق</string>
+    <string name="no_description_provided">لا يوجد وصف متاح.</string>
+    <string name="language">اللغة</string>
+    <string name="language_desc">اختر لغتك المفضلة (الإنجليزية أو العربية).</string>
+    <string name="view_reminder">عرض التذكير</string>
+    <string name="nav_home">الرئيسية</string>
+    <string name="nav_schedule">الجدول</string>
+    <string name="nav_create">إضافة</string>
+    <string name="nav_ai">الذكاء الاصطناعي</string>
+    <string name="nav_settings">الإعدادات</string>
+
+    <string name="theme_light">فاتح</string>
+    <string name="theme_dark">داكن</string>
+    <string name="theme_system">تلقائي حسب الجهاز</string>
+    <string name="confirm_logout_title">تسجيل الخروج</string>
+    <string name="confirm_logout_message">هل تريد تسجيل الخروج من تطبيق تراستا؟</string>
+
+    <string-array name="health_tips">
+        <item>اشرب ما لا يقل عن 8 أكواب من الماء اليوم للبقاء رطباً.</item>
+        <item>المشي لمدة 10 دقائق يمكن أن يحسن مزاجك وطاقتك بشكل كبير.</item>
+        <item>حاول الحصول على 7-9 ساعات من النوم لوظيفة الدماغ المثلى.</item>
+        <item>أخذ أنفاس عميقة لمدة دقيقتين يمكن أن يقلل من مستويات التوتر.</item>
+        <item>قم بتضمين المزيد من الخضروات الورقية في وجباتك للحصول على الفيتامينات الأساسية.</item>
+        <item>الاستمرارية هي المفتاح — استمر في تذكيراتك الصحية!</item>
+        <item>خذ استراحة قصيرة كل ساعة لتمديد جسمك.</item>
+        <item>مارس اليقظة اليوم: ركز على اللحظة الحالية.</item>
+        <item>استبدل الوجبات الخفيفة السكرية بالفواكه لزيادة الطاقة الطبيعية.</item>
+        <item>ممارسة الرياضة بانتظام هي احتفال بما يمكن لجسمك القيام به.</item>
+        <item>لا تخف من طلب المساعدة؛ الصحة النفسية لا تقل أهمية عن الصحة الجسدية.</item>
+        <item>قلل من وقت الشاشة قبل ساعة من النوم لتحسين جودة النوم.</item>
+        <item>قيمتك لا تحددها إنتاجيتك.</item>
+        <item>التقدم الصغير لا يزال تقدماً. استمر في المضي قدماً!</item>
+        <item>ابدأ يومك بتوكيد إيجابي.</item>
+        <item>الضحك هو وسيلة رائعة لتخفيف التوتر — شاهد شيئاً مضحكاً اليوم.</item>
+        <item>التواصل الاجتماعي أمر حيوي؛ تواصل مع صديق أو أحد أفراد أسرتك.</item>
+        <item>استمع إلى جسدك؛ إذا كان يحتاج إلى راحة، فامنحه الراحة.</item>
+        <item>نظم مساحة عملك لتصفية ذهنك وتقليل القلق.</item>
+        <item>الطبيعة لها تأثير مهدئ؛ اقضِ بعض الوقت في الهواء الطلق إن أمكن.</item>
+        <item>قلل من تناول الكافيين في فترة ما بعد الظهر لتجنب اضطراب النوم.</item>
+        <item>مارس الامتنان: اذكر ثلاثة أشياء تشعر بالامتنان لها اليوم.</item>
+        <item>تجنب تعدد المهام؛ ركز على شيء واحد في كل مرة لتقليل التوتر.</item>
+        <item>الأكل الصحي لا يتعلق بالتقييد؛ بل يتعلق بالتغذية.</item>
+        <item>قم بالتمدد لمدة 5 دقائق بعد الاستيقاظ لتحسين الدورة الدموية.</item>
+    </string-array>
+    <!-- Report Insights -->
+    <string name="report_title_weekly">ملخص الصحة الأسبوعي</string>
+    <string name="report_symptoms_format">التحليل بناءً على %1$d من أحداث الأدوية المسجلة (%2$d تم تناولها، %3$d فائتة).</string>
+    <string name="insight_excellent">تناسق ممتاز! استمر في هذا الأداء الرائع.</string>
+    <string name="insight_good">عمل جيد، ولكن حاول تقليل الجرعات الفائتة.</string>
+    <string name="insight_low_adherence">التزامك منخفض. ضبط تذكيرات إضافية قد يساعدك.</string>
+    <string name="insight_missed_busy">تحدث معظم الجرعات الفائتة عندما تكون مشغولاً. حاول التخطيط مسبقاً.</string>
+    <string name="insight_perfect_score">لم تفوّت أي جرعات مؤخراً. نتيجة مثالية!</string>
+</resources>

@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -21,6 +23,7 @@ import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.adapter.TimelineAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.example.smarthealthreminder.features.model.TimelineItem
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
@@ -63,6 +66,13 @@ class RemindersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Handle window insets for edge-to-edge support
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
 
         recyclerTimeline = view.findViewById(R.id.recycler_timeline)
         recyclerTimeline?.layoutManager = LinearLayoutManager(context)
@@ -151,7 +161,7 @@ class RemindersFragment : Fragment() {
 
             override fun onDelete(item: TimelineItem) {
                 item.id?.let { id ->
-                    AlertDialog.Builder(requireContext())
+                    MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
                         .setTitle("Delete Reminder")
                         .setMessage("Are you sure you want to delete this reminder?")
                         .setPositiveButton("Delete") { _, _ ->

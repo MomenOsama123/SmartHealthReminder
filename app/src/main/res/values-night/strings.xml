@@ -2,4 +2,5 @@
 <resources>
     <string name="today_s_air_is_clean_and_restorative">Today\'s air is clean and restorative.</string>
     <string name="refresh">Refresh</string>
+    <string name="language">Language</string>
 </resources>

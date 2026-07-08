@@ -113,7 +113,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="serif"
-                                android:text="0"
+                                android:text="@string/_0"
                                 tools:text="8,432"
                                 android:textColor="@color/text_dark"
                                 android:textSize="48sp"
@@ -163,7 +163,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/dynamic_card_bg"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="2dp">
 
@@ -186,7 +186,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="0.0"
+                            android:text="@string/_0_0"
                             tools:text="6.2"
                             android:textColor="@color/text_dark"
                             android:textSize="18sp"
@@ -207,7 +207,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="4dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/dynamic_card_bg"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="2dp">
 
@@ -231,7 +231,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="0"
+                            android:text="@string/_0"
                             tools:text="412"
                             android:textColor="@color/text_dark"
                             android:textSize="18sp"
@@ -252,7 +252,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    app:cardBackgroundColor="@color/white"
+                    app:cardBackgroundColor="@color/dynamic_card_bg"
                     app:cardCornerRadius="24dp"
                     app:cardElevation="2dp">
 
@@ -276,7 +276,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="0"
+                            android:text="@string/_0"
                             tools:text="48"
                             android:textColor="@color/text_dark"
                             android:textSize="18sp"
@@ -323,7 +323,7 @@
                     android:textAllCaps="true"
                     android:textColor="@color/text_muted"
                     android:textStyle="bold"
-                    app:backgroundTint="#EBEBE4"
+                    app:backgroundTint="@color/surface_variant"
                     app:cornerRadius="28dp" />
             </LinearLayout>
 
@@ -333,7 +333,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                app:cardBackgroundColor="#F1F3EE"
+                app:cardBackgroundColor="@color/card_soft_sage"
                 app:cardCornerRadius="28dp"
                 app:cardElevation="0dp">
 
@@ -358,7 +358,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="Average: 0 steps"
+                        android:text="@string/average_0_steps"
                         tools:text="Average: 7,850 steps"
                         android:textColor="@color/text_muted"
                         android:textSize="13sp"
@@ -478,7 +478,7 @@
                         android:lineSpacingExtra="4dp"
                         android:text=""
                         tools:text="You're only 1,568 steps away from your daily goal. A short 15-minute walk this evening will close the ring."
-                        android:textColor="#D0DDD5"
+                        android:textColor="@color/card_stat_accent_label"
                         android:textSize="14sp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"

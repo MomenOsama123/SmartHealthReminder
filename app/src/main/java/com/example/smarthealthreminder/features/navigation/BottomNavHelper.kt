@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
-import com.example.smarthealthreminder.features.settings.SettingsPrefs
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 object BottomNavHelper {
@@ -52,9 +51,7 @@ object BottomNavHelper {
                 }
 
                 R.id.action_settings -> {
-                    if (activity !is SettingsPrefs) {
-                        activity.startActivity(Intent(activity, SettingsPrefs::class.java))
-                    }
+                    openMainDestination(activity, MainActivity.DESTINATION_SETTINGS)
                     true
                 }
 

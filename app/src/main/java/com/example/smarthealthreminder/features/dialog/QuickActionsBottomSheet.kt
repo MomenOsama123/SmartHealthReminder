@@ -6,9 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.smarthealthreminder.databinding.BottomSheetQuickActionsBinding
-import com.example.smarthealthreminder.features.Profileinfo.reports.ReportsActivity
 import com.example.smarthealthreminder.features.activity.MainActivity
-import com.example.smarthealthreminder.ui_dashboard.DashboardActivity
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
@@ -16,7 +14,6 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
 
     private var _binding: BottomSheetQuickActionsBinding? = null
     private val binding get() = _binding!!
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +30,7 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
         binding.actionAddReminder.setOnClickListener {
             startActivity(
                 Intent(requireContext(), MainActivity::class.java).apply {
-                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REMINDERS)
+                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_ADD_REMINDER)
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 }
             )
@@ -50,13 +47,24 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
 
+        // 🌟 التعديل هنا: خليناه يكلم MainActivity عشان يفتح الـ ReportsFragment
         binding.actionAddReport.setOnClickListener {
-            startActivity(Intent(requireContext(), ReportsActivity::class.java))
+            startActivity(
+                Intent(requireContext(), MainActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REPORTS)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+            )
             dismiss()
         }
 
         binding.actionViewDashboard.setOnClickListener {
-            startActivity(Intent(requireContext(), DashboardActivity::class.java))
+            startActivity(
+                Intent(requireContext(), MainActivity::class.java).apply {
+                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_DASHBOARD)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                }
+            )
             dismiss()
         }
 

@@ -1,18 +1,22 @@
-package com.example.smarthealthreminder.ui_dashboard
+package com.example.smarthealthreminder.features.ui_dashboard
 
-import android.app.AlertDialog
 import android.content.Intent
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.activity.AddReminderActivity
 import com.example.smarthealthreminder.features.alarm.ReminderReceiver
 import com.example.smarthealthreminder.features.auth.signIn.SignInActivity
@@ -23,12 +27,15 @@ import com.example.smarthealthreminder.features.navigation.BottomNavHelper
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
+import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
+import com.example.smarthealthreminder.features.util.ImageUtils
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DashboardActivity : AppCompatActivity() {
+class DashboardActivity : BaseActivity() {
 
     private lateinit var viewModel: HealthViewModel
     private var firebaseId: String = ""
@@ -38,7 +45,8 @@ class DashboardActivity : AppCompatActivity() {
     private lateinit var tvTotalMeds: TextView
     private lateinit var tvTakenToday: TextView
     private lateinit var tvMissedToday: TextView
-
+    private lateinit var tvUserName: TextView
+    private lateinit var ivUserProfile: ImageView
     private lateinit var tvNextMedName: TextView
     private lateinit var tvNextMedTime: TextView
     private lateinit var btnMarkTaken: TextView
@@ -52,6 +60,13 @@ class DashboardActivity : AppCompatActivity() {
 
     private var reminderEntities: List<ReminderEntity> = emptyList()
     private var currentNextItem: ScheduleItem? = null
+    private val refreshRunnable = object : Runnable {
+        override fun run() {
+            loadNextDose()
+            loadUpcomingList()
+            window.decorView.postDelayed(this, 30000)
+        }
+    }
 
     private companion object {
         private const val PREFS_NAME = "DashboardPrefs"
@@ -61,11 +76,18 @@ class DashboardActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_dashboard)
 
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        val auth = FirebaseAuth.getInstance()
 
         firebaseId = auth.currentUser?.uid ?: sharedPref.getString("FIREBASE_ID", "") ?: ""
 
@@ -103,6 +125,9 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun initViews() {
         tvGreeting = findViewById(R.id.tvGreeting)
+        tvUserName = findViewById(R.id.tvUserName)
+        ivUserProfile = findViewById(R.id.ivUserProfile)
+
         tvAdherencePercent = findViewById(R.id.tvAdherencePercent)
         tvTotalMeds = findViewById(R.id.tvTotalMeds)
         tvTakenToday = findViewById(R.id.tvTakenToday)
@@ -265,19 +290,37 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun loadUserGreeting() {
         val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        val auth = com.google.firebase.auth.FirebaseAuth.getInstance()
+        val auth = FirebaseAuth.getInstance()
 
         if (sharedPref.getString("USER_NAME", null) == null) {
             val userName = auth.currentUser?.displayName
                 ?: auth.currentUser?.email?.substringBefore("@")?.replaceFirstChar {
                     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
                 }
-                ?: "User"
+                ?: getString(R.string.none)
             sharedPref.edit { putString("USER_NAME", userName) }
         }
 
         // FIX: getString(key, "User") already can't return null here, the trailing "?: "User"" was redundant
-        val userName = sharedPref.getString("USER_NAME", "User")
+        val userName = sharedPref.getString("USER_NAME", getString(R.string.none))
+        val uid = auth.currentUser?.uid ?: return
+
+        val localDb = DatabaseHelper(this)
+        val user = localDb.getUserByFirebaseId(uid)
+
+        if (user != null) {
+            tvUserName.text = user.name
+            user.profileImage?.let { base64 ->
+                val bitmap = ImageUtils.base64ToBitmap(base64)
+                if (bitmap != null) {
+                    ivUserProfile.setImageBitmap(bitmap)
+                }
+            }
+        } else {
+            val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+            val userName = sharedPref.getString("USER_NAME", "User")
+            tvUserName.text = userName
+        }
 
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         val greetingRes = when (hour) {
@@ -287,7 +330,7 @@ class DashboardActivity : AppCompatActivity() {
             else -> R.string.greeting_night
         }
 
-        tvGreeting.text = getString(greetingRes, userName)
+        tvGreeting.text = getString(greetingRes)
     }
 
     private fun shouldShowToday(reminder: ReminderEntity): Boolean {
@@ -369,28 +412,40 @@ class DashboardActivity : AppCompatActivity() {
                     minutes = reminderMinutes,
                     type = "reminder",
                     category = reminder.category,
-                    status = reminder.status
-                ))
+                    status = reminder.status))
             }
 
         val nextItem = when {
-            allItems.isEmpty() -> null
-            else -> {
-                val validSnoozed = allItems.filter {
-                    it.status.equals("Snoozed", true) && currentMinutes >= it.minutes
-                }
-                val pendingItems = allItems.filter {
-                    it.status.equals("Pending", true) && currentMinutes < it.minutes
-                }
 
-                when {
-                    validSnoozed.isNotEmpty() -> validSnoozed.minByOrNull { it.minutes }
-                    pendingItems.isNotEmpty() -> pendingItems.minByOrNull { it.minutes }
-                    else -> null
-                }
+            allItems.any {
+                it.status == "Snoozed" && currentMinutes >= it.minutes
+            } -> {
+                allItems
+                    .filter {
+                        it.status == "Snoozed" && currentMinutes >= it.minutes
+                    }
+                    .minByOrNull { it.minutes }
+            }
+
+            allItems.any {
+                it.status == "Pending" && currentMinutes >= it.minutes
+            } -> {
+                allItems
+                    .filter {
+                        it.status == "Pending" && currentMinutes >= it.minutes
+                    }
+                    .minByOrNull { it.minutes }
+            }
+
+            else -> {
+                allItems
+                    .filter {
+                        it.status == "Pending" &&
+                                it.minutes > currentMinutes
+                    }
+                    .minByOrNull { it.minutes }
             }
         }
-
         currentNextItem = nextItem
 
         if (nextItem != null) {
@@ -408,22 +463,21 @@ class DashboardActivity : AppCompatActivity() {
             tvNextMedName.text = getString(R.string.med_name_dosage_format, displayName, displayDosage)
             tvNextMedTime.text = nextItem.time
 
-            when {
-                nextItem.status.equals("Snoozed", true) -> {
-                    btnMarkTaken.visibility = View.VISIBLE
-                    btnMarkTaken.isEnabled = true
-                    btnMarkTaken.alpha = 1f
-                    btnSnooze.visibility = View.GONE
-                }
-                else -> {
-                    val isDue = isItemDue(nextItem)
-                    btnMarkTaken.isEnabled = isDue
-                    btnMarkTaken.alpha = if (isDue) 1.0f else 0.5f
-                    btnSnooze.visibility = View.VISIBLE
-                    btnSnooze.isEnabled = isDue
-                    btnSnooze.alpha = if (isDue) 1.0f else 0.5f
-                }
-            }
+            val reminder = reminderEntities.find { it.id == nextItem.id }
+            val snoozeUsed = reminder?.snoozeUsed == true
+
+            val isDue = isItemDue(nextItem)
+
+            btnMarkTaken.visibility = View.VISIBLE
+            btnMarkTaken.isEnabled = isDue
+            btnMarkTaken.alpha = if (isDue) 1f else 0.5f
+
+            btnSnooze.visibility =
+                if (snoozeUsed) View.GONE else View.VISIBLE
+
+            btnSnooze.isEnabled = isDue && !snoozeUsed
+            btnSnooze.alpha =
+                if (isDue && !snoozeUsed) 1f else 0.5f
         } else {
             tvNextMedName.setText(R.string.no_more_meds)
             tvNextMedTime.text = ""
@@ -452,10 +506,14 @@ class DashboardActivity : AppCompatActivity() {
 
             val status = when (reminder.status) {
                 "Completed" -> "Taken"
-                "Snoozed" -> "Snoozed"
                 "Missed" -> "Missed"
+                "Snoozed" -> "Snoozed"
                 else -> "Pending"
             }
+            Log.d(
+                "SNOOZE_TEST",
+                "id=${reminder.id}, status=${reminder.status}, snoozeUsed=${reminder.snoozeUsed}"
+            )
 
             allItems.add(ScheduleItem(
                 id = reminder.id,
@@ -517,60 +575,106 @@ class DashboardActivity : AppCompatActivity() {
      * Snoozed: Mark as Done + Cancel
      */
     private fun showReminderActions(reminder: ReminderEntity, item: ScheduleItem) {
-        val options = when {
-            item.status.equals("Snoozed", true) ->
-                arrayOf(getString(R.string.mark_as_done), getString(R.string.cancel))
 
-            isWarningStage(item) ->
-                arrayOf(getString(R.string.mark_as_done), getString(R.string.cancel))
-
-            else ->
-                arrayOf(getString(R.string.mark_as_done), getString(R.string.snooze_10_min), getString(R.string.cancel))
+        val snoozeDisabled =
+            item.status.equals("Snoozed", true) || reminder.snoozeUsed
+        val options = if (snoozeDisabled) {
+            arrayOf(
+                getString(R.string.mark_as_done),
+                getString(R.string.cancel)
+            )
+        } else {
+            arrayOf(
+                getString(R.string.mark_as_done),
+                getString(R.string.snooze_10_min),
+                getString(R.string.cancel)
+            )
         }
 
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle(reminder.title)
             .setItems(options) { _, which ->
-                if (item.status.equals("Snoozed", true) || isWarningStage(item)) {
+
+                if (snoozeDisabled){
                     when (which) {
                         0 -> {
                             if (!isItemDue(item)) {
-                                Toast.makeText(this, getString(R.string.not_yet_time_short), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.not_yet_time_short),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@setItems
                             }
+
                             viewModel.markReminderDone(reminder.id)
-                            Toast.makeText(this, getString(R.string.marked_done), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.marked_done),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        1 -> { /* Cancel */ }
+
+                        1 -> {
+                            // Cancel
+                        }
                     }
+
                 } else {
+
                     when (which) {
+
                         0 -> {
                             if (!isItemDue(item)) {
-                                Toast.makeText(this, getString(R.string.not_yet_time_short), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.not_yet_time_short),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@setItems
                             }
+
                             viewModel.markReminderDone(reminder.id)
-                            Toast.makeText(this, getString(R.string.marked_done), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.marked_done),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
+
                         1 -> {
                             if (!isItemDue(item)) {
-                                Toast.makeText(this, getString(R.string.not_yet_time_short), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    this,
+                                    getString(R.string.not_yet_time_short),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 return@setItems
                             }
+
                             val intent = Intent(this, ReminderReceiver::class.java).apply {
                                 action = ReminderReceiver.ACTION_SNOOZE
                                 putExtra(ReminderReceiver.EXTRA_REMINDER_ID, reminder.id)
                                 putExtra(ReminderReceiver.EXTRA_TYPE, "reminder")
-                                // FIX: reminder.title is a non-null String, .orEmpty() was redundant
                                 putExtra(ReminderReceiver.EXTRA_TITLE, reminder.title)
-                                putExtra(ReminderReceiver.EXTRA_DESCRIPTION, reminder.description.orEmpty())
+                                putExtra(
+                                    ReminderReceiver.EXTRA_DESCRIPTION,
+                                    reminder.description.orEmpty()
+                                )
                             }
+
                             sendBroadcast(intent)
 
-                            Toast.makeText(this, getString(R.string.snoozed), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                getString(R.string.snoozed),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                        2 -> { /* Cancel */ }
+
+                        2 -> {
+                            // Cancel
+                        }
                     }
                 }
             }
@@ -591,7 +695,7 @@ class DashboardActivity : AppCompatActivity() {
     private fun buildUpcomingItemView(item: ScheduleItem): LinearLayout {
         val rowLayout = LinearLayout(this).apply {
             orientation = LinearLayout.HORIZONTAL
-            gravity = android.view.Gravity.CENTER_VERTICAL
+            gravity = Gravity.CENTER_VERTICAL
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -670,6 +774,16 @@ class DashboardActivity : AppCompatActivity() {
 
     private fun Int.dpToPx(): Int {
         return (this * resources.displayMetrics.density).toInt()
+    }
+    override fun onResume() {
+        super.onResume()
+        loadUserGreeting()
+        window.decorView.post(refreshRunnable)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        window.decorView.removeCallbacks(refreshRunnable)
     }
 
     data class ScheduleItem(

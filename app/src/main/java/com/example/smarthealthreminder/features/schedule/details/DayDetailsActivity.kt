@@ -4,14 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.CalendarNoteEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
@@ -26,7 +30,7 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DayDetailsActivity : AppCompatActivity() {
+class DayDetailsActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_DATE = "extra_date"
@@ -59,8 +63,15 @@ class DayDetailsActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_day_details)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         date = intent.getStringExtra(EXTRA_DATE) ?: run {
             SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
@@ -236,7 +247,7 @@ class DayDetailsActivity : AppCompatActivity() {
             // Empty state — show Add Note prompt
             layoutEmpty.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
-            tvEmptyMessage.text = "No events for this day.\nYou can add a note to remember something."
+            tvEmptyMessage.text = getString(R.string.no_events_for_this_day)
             btnAddNote.visibility = View.VISIBLE
         } else {
             // Has content — show list; note button still accessible via edit icon if note exists
@@ -244,7 +255,7 @@ class DayDetailsActivity : AppCompatActivity() {
             recyclerView.visibility = View.VISIBLE
             // Show "Edit / Add Note" button below the list always
             btnAddNote.visibility = View.VISIBLE
-            btnAddNote.text = if (currentNoteText.isNotBlank()) "Edit Note" else "Add Note"
+            btnAddNote.text = if (currentNoteText.isNotBlank()) getString(R.string.edit_note) else getString(R.string.add_note_btn)
         }
     }
 

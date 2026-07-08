@@ -2,6 +2,7 @@ package com.example.smarthealthreminder
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
+import com.example.smarthealthreminder.core.utils.LocaleHelper
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.search.SearchHistoryManager
@@ -17,8 +18,9 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Apply saved theme before any activity is created.
-        // Defaults to light mode if the user has never changed it.
+        // Apply saved locale and theme before any activity is created.
+        LocaleHelper.applyLocale(this)
+
         AppCompatDelegate.setDefaultNightMode(
             SettingsPrefs.getSavedNightMode(this)
         )

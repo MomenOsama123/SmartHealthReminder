@@ -5,7 +5,6 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -17,15 +16,19 @@ import android.widget.ArrayAdapter
 import android.widget.NumberPicker
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.databinding.FragmentSettingsBinding
 import com.example.smarthealthreminder.features.welcome.WelcomeActivity
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
+import androidx.core.content.edit
+import androidx.core.net.toUri
 
 class SettingsFragment : Fragment() {
 
@@ -47,6 +50,14 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Handle window insets for edge-to-edge support
+        ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(0, systemBars.top, 0, 0)
+            insets
+        }
+
         loadValues()
         setupListeners()
     }
@@ -65,9 +76,22 @@ class SettingsFragment : Fragment() {
         binding.spinnerThemeMode.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_spinner_dropdown_item,
-            listOf("Light", "Dark", "Same as device")
+            listOf(
+                getString(R.string.theme_light),
+                getString(R.string.theme_dark),
+                getString(R.string.theme_system)
+            )
         )
         binding.spinnerThemeMode.setSelection(themeModeToPosition(prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT)))
+
+        binding.spinnerLanguage.adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            listOf("English", "العربية")
+        )
+        val currentLang = prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN)
+        binding.spinnerLanguage.setSelection(if (currentLang == SettingsPrefs.LANG_AR) 1 else 0)
+
         updateSnoozeValueLabels()
     }
 
@@ -86,11 +110,11 @@ class SettingsFragment : Fragment() {
         setupNotificationSwitchListener()
 
         binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsPrefs.KEY_VIBRATION, isChecked).apply()
+            prefs.edit { putBoolean(SettingsPrefs.KEY_VIBRATION, isChecked) }
         }
 
         binding.switchEarlyReminders.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, isChecked).apply()
+            prefs.edit { putBoolean(SettingsPrefs.KEY_EARLY_REMINDERS, isChecked) }
         }
 
         binding.spinnerThemeMode.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -98,11 +122,33 @@ class SettingsFragment : Fragment() {
                 val themeMode = positionToThemeMode(position)
                 if (prefs.getString(SettingsPrefs.KEY_THEME_MODE, SettingsPrefs.THEME_LIGHT) == themeMode) return
 
-                prefs.edit()
-                    .putString(SettingsPrefs.KEY_THEME_MODE, themeMode)
-                    .putBoolean(SettingsPrefs.KEY_DARK_MODE, themeMode == SettingsPrefs.THEME_DARK)
-                    .apply()
+                prefs.edit {
+                    putString(SettingsPrefs.KEY_THEME_MODE, themeMode)
+                        .putBoolean(
+                            SettingsPrefs.KEY_DARK_MODE,
+                            themeMode == SettingsPrefs.THEME_DARK
+                        )
+                }
                 AppCompatDelegate.setDefaultNightMode(SettingsPrefs.getSavedNightMode(requireContext()))
+                requireActivity().recreate()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        }
+
+        binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedLang = if (position == 1) SettingsPrefs.LANG_AR else SettingsPrefs.LANG_EN
+                if (prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN) == selectedLang) return
+
+                prefs.edit { putString(SettingsPrefs.KEY_LANGUAGE, selectedLang) }
+                
+                // Clear the cached daily tip so it shuffles in the new language upon recreate
+                requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE).edit {
+                    remove("current_tip")
+                    remove("last_tip_date")
+                }
+
                 requireActivity().recreate()
             }
 
@@ -111,6 +157,10 @@ class SettingsFragment : Fragment() {
 
         binding.rowExactAlarm.setOnClickListener {
             openExactAlarmSettings()
+        }
+
+        binding.rowPhysicalActivity.setOnClickListener {
+            requestPhysicalActivityPermission()
         }
 
         binding.rowAlarmSnooze.setOnClickListener {
@@ -138,7 +188,7 @@ class SettingsFragment : Fragment() {
 
     private fun setupNotificationSwitchListener() {
         binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
-            prefs.edit().putBoolean(SettingsPrefs.KEY_NOTIFICATIONS, isChecked).apply()
+            prefs.edit { putBoolean(SettingsPrefs.KEY_NOTIFICATIONS, isChecked) }
             if (isChecked) {
                 requestNotificationPermissionIfNeeded()
             } else {
@@ -174,7 +224,7 @@ class SettingsFragment : Fragment() {
             })
         } else {
             startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                data = Uri.parse("package:${requireContext().packageName}")
+                data = "package:${requireContext().packageName}".toUri()
             })
         }
     }
@@ -184,13 +234,33 @@ class SettingsFragment : Fragment() {
             val alarmManager = requireContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {
                 startActivity(Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).apply {
-                    data = Uri.parse("package:${requireContext().packageName}")
+                    data = "package:${requireContext().packageName}".toUri()
                 })
             } else {
                 Toast.makeText(requireContext(), "Exact alarm permission is already allowed", Toast.LENGTH_SHORT).show()
             }
         } else {
             Toast.makeText(requireContext(), "Exact alarm permission is already available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun requestPhysicalActivityPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.ACTIVITY_RECOGNITION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    SettingsPrefs.REQUEST_PHYSICAL_ACTIVITY
+                )
+            } else {
+                Toast.makeText(requireContext(), "Physical activity permission is already allowed", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(requireContext(), "Physical activity permission is already available", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -207,13 +277,13 @@ class SettingsFragment : Fragment() {
             wrapSelectorWheel = false
         }
 
-        AlertDialog.Builder(requireContext())
+        MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
             .setTitle(title)
             .setView(picker)
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.save) { _, _ ->
                 val minutes = picker.value.coerceIn(SettingsPrefs.MIN_SNOOZE_MINUTES, SettingsPrefs.MAX_SNOOZE_MINUTES)
-                prefs.edit().putInt(prefKey, minutes).apply()
+                prefs.edit { putInt(prefKey, minutes) }
                 valueView.text = formatSnoozeMinutes(minutes)
                 Toast.makeText(
                     requireContext(),
@@ -225,11 +295,11 @@ class SettingsFragment : Fragment() {
     }
 
     private fun confirmLogout() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Log out")
-            .setMessage("Do you want to log out of Smart Health Reminder?")
-            .setNegativeButton("Cancel", null)
-            .setPositiveButton("Log out") { _, _ ->
+        MaterialAlertDialogBuilder(requireContext(), R.style.AppAlertDialogTheme)
+            .setTitle(R.string.confirm_logout_title)
+            .setMessage(R.string.confirm_logout_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.logout_button) { _, _ ->
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(requireContext(), WelcomeActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

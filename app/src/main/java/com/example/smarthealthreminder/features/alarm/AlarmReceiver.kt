@@ -1,17 +1,21 @@
-package com.example.smarthealthreminder.alarm
+package com.example.smarthealthreminder.features.alarm
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.util.Log
-import com.example.smarthealthreminder.features.alarm.ReminderReceiver
+import com.example.smarthealthreminder.alarm.AlarmHelper
+import com.example.smarthealthreminder.alarm.AlarmService
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.model.Alarm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -139,7 +143,7 @@ class AlarmReceiver : BroadcastReceiver() {
         try {
             val db = AppDatabase.getDatabase(context)
             val reminders = db.reminderDao().getAllReminders().first()
-            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as android.app.AlarmManager
+            val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
             val now = System.currentTimeMillis()
 
@@ -149,14 +153,14 @@ class AlarmReceiver : BroadcastReceiver() {
                     val timeParts = reminder.time?.split(":") ?: return@forEach
                     if (dateParts.size < 3 || timeParts.size < 2) return@forEach
 
-                    val calendar = java.util.Calendar.getInstance().apply {
-                        set(java.util.Calendar.YEAR, dateParts[0].toInt())
-                        set(java.util.Calendar.MONTH, dateParts[1].toInt() - 1)
-                        set(java.util.Calendar.DAY_OF_MONTH, dateParts[2].toInt())
-                        set(java.util.Calendar.HOUR_OF_DAY, timeParts[0].toInt())
-                        set(java.util.Calendar.MINUTE, timeParts[1].toInt())
-                        set(java.util.Calendar.SECOND, 0)
-                        set(java.util.Calendar.MILLISECOND, 0)
+                    val calendar = Calendar.getInstance().apply {
+                        set(Calendar.YEAR, dateParts[0].toInt())
+                        set(Calendar.MONTH, dateParts[1].toInt() - 1)
+                        set(Calendar.DAY_OF_MONTH, dateParts[2].toInt())
+                        set(Calendar.HOUR_OF_DAY, timeParts[0].toInt())
+                        set(Calendar.MINUTE, timeParts[1].toInt())
+                        set(Calendar.SECOND, 0)
+                        set(Calendar.MILLISECOND, 0)
                     }
 
                     if (calendar.timeInMillis < now) {
@@ -173,11 +177,11 @@ class AlarmReceiver : BroadcastReceiver() {
                         putExtra(ReminderReceiver.EXTRA_VIBRATION, reminder.vibrationEnabled)
                     }
 
-                    val pendingIntent = android.app.PendingIntent.getBroadcast(
+                    val pendingIntent = PendingIntent.getBroadcast(
                         context,
                         reminder.id.hashCode(),
                         intent,
-                        android.app.PendingIntent.FLAG_UPDATE_CURRENT or android.app.PendingIntent.FLAG_IMMUTABLE
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                     )
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
@@ -186,7 +190,7 @@ class AlarmReceiver : BroadcastReceiver() {
                     }
 
                     alarmManager.setExactAndAllowWhileIdle(
-                        android.app.AlarmManager.RTC_WAKEUP,
+                        AlarmManager.RTC_WAKEUP,
                         calendar.timeInMillis,
                         pendingIntent
                     )

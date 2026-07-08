@@ -19,6 +19,10 @@ object SettingsPrefs {
     const val THEME_DARK = "dark"
     const val THEME_SYSTEM = "system"
     const val REQUEST_NOTIFICATIONS = 3001
+    const val REQUEST_PHYSICAL_ACTIVITY = 3002
+    const val KEY_LANGUAGE = "app_language"
+    const val LANG_EN = "en"
+    const val LANG_AR = "ar"
 
     fun getSavedNightMode(context: Context): Int {
         val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

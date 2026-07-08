@@ -5,9 +5,13 @@ import android.app.TimePickerDialog
 import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ScheduleEntryEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
@@ -17,7 +21,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.UUID
 
-class CreateScheduleEntryActivity : AppCompatActivity() {
+class CreateScheduleEntryActivity : BaseActivity() {
 
     companion object {
         const val EXTRA_SELECTED_DATE = "extra_selected_date"
@@ -36,8 +40,15 @@ class CreateScheduleEntryActivity : AppCompatActivity() {
     private lateinit var repository: HealthRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_schedule_entry)
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         val db = AppDatabase.getDatabase(this)
         repository = HealthRepository(db)
@@ -66,7 +77,7 @@ class CreateScheduleEntryActivity : AppCompatActivity() {
             Calendar.getInstance().get(Calendar.MINUTE)
         )
         etTime.setText(selectedTime)
-        etCategory.setText("General")
+        etCategory.setText(getString(R.string.custom))
     }
 
     private fun initViews() {
@@ -123,7 +134,7 @@ class CreateScheduleEntryActivity : AppCompatActivity() {
         }
 
         val description = etDescription.text.toString().trim()
-        val category = etCategory.text.toString().trim().ifEmpty { "General" }
+        val category = etCategory.text.toString().trim().ifEmpty { getString(R.string.custom) }
 
         val entry = ScheduleEntryEntity(
             id = UUID.randomUUID().toString(),

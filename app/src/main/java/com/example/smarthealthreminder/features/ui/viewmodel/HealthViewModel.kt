@@ -17,7 +17,7 @@ import java.util.Locale
 
 import com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity
 
-class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
+class HealthViewModel(val repository: HealthRepository) : ViewModel() {
 
 
     // Medication Plans
@@ -107,7 +107,7 @@ class HealthViewModel(private val repository: HealthRepository) : ViewModel() {
             val updatedUser = user.copy(dailyStepGoal = target)
             updateCurrentUser(updatedUser)
             // Note: Ideally this should also be saved to Firestore/Local database here
-            // but we'll stick to the current VM state for now as per project pattern.
+            // ,but we'll stick to the current VM state for now as per project pattern.
         }
     }
 
