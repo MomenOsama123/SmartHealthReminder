@@ -106,7 +106,6 @@ class SettingsFragment : Fragment() {
 
     private fun setupListeners() {
 
-
         setupNotificationSwitchListener()
 
         binding.switchVibration.setOnCheckedChangeListener { _, isChecked ->
@@ -142,8 +141,7 @@ class SettingsFragment : Fragment() {
                 if (prefs.getString(SettingsPrefs.KEY_LANGUAGE, SettingsPrefs.LANG_EN) == selectedLang) return
 
                 prefs.edit { putString(SettingsPrefs.KEY_LANGUAGE, selectedLang) }
-                
-                // Clear the cached daily tip so it shuffles in the new language upon recreate
+
                 requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE).edit {
                     remove("current_tip")
                     remove("last_tip_date")
@@ -172,14 +170,9 @@ class SettingsFragment : Fragment() {
             )
         }
 
-        binding.rowReminderSnooze.setOnClickListener {
-            showSnoozeDurationDialog(
-                title = getString(R.string.settings_reminder_snooze_title),
-                currentMinutes = SettingsPrefs.getReminderSnoozeMinutes(requireContext()),
-                prefKey = SettingsPrefs.KEY_REMINDER_SNOOZE_MINUTES,
-                valueView = binding.tvReminderSnoozeValue
-            )
-        }
+        // Reminder snooze: ثابت على 10 دقايق، مش قابل للتعديل
+        binding.rowReminderSnooze.isClickable = false
+        binding.rowReminderSnooze.isFocusable = false
 
         binding.btnLogout.setOnClickListener {
             confirmLogout()
@@ -211,10 +204,10 @@ class SettingsFragment : Fragment() {
 
     private fun areNotificationsAllowed(): Boolean {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
+                ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun openAppNotificationSettings() {

@@ -43,8 +43,6 @@ object SettingsPrefs {
     }
 
     fun getReminderSnoozeMinutes(context: Context): Int {
-        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-            .getInt(KEY_REMINDER_SNOOZE_MINUTES, DEFAULT_SNOOZE_MINUTES)
-            .coerceIn(MIN_SNOOZE_MINUTES, MAX_SNOOZE_MINUTES)
+        return DEFAULT_SNOOZE_MINUTES
     }
 }
