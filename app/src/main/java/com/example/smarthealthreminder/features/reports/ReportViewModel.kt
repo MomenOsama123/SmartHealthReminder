@@ -13,16 +13,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-// عدل الـ Constructor عشان يستقبل الـ reminderDao والـ application
 class ReportViewModel(
     application: Application,
     private val repository: ReportRepository,
     private val reminderDao: ReminderDao
 ) : AndroidViewModel(application) {
 
-    // ضيف السطر ده عشان الشاشة تقدر تلاقي البيانات وتراقبها
+    // Expose all reports from database as a Flow to observe updates
     val allReports: Flow<List<ReportEntity>> = repository.allReports
 
+    // Core function to generate a new report using the generator utility
     fun generateRealReport() {
         viewModelScope.launch(Dispatchers.IO) {
             val generator = ReportGenerator(getApplication(), reminderDao)
@@ -32,13 +32,13 @@ class ReportViewModel(
     }
 }
 
-// الكلاس ده ضروري عشان نعرف ننشئ الـ ViewModel واحنا بنباصيله الـ Repository
+// Factory class required to pass custom dependencies into the ViewModel
 class ReportViewModelFactory(
     private val application: Application,
     private val repository: ReportRepository,
-    private val reminderDao: ReminderDao // ضفنا ده هنا كمان
+    private val reminderDao: ReminderDao
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ReportViewModel(application, repository, reminderDao) as T // مررناه هنا
+        return ReportViewModel(application, repository, reminderDao) as T
     }
 }
