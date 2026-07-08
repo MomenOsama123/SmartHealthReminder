@@ -391,8 +391,8 @@ class AddReminderActivity : BaseActivity() {
                 }
 
                 val db = dbHelper.writableDatabase
-                val rowId = db.insert("reminders", null, values)
-                Log.d("ADD_REMINDER", "Inserted reminder rowId=$rowId, id=$reminderId")
+                val rowId = db.replace("reminders", null, values)
+                Log.d("ADD_REMINDER", "Replaced/Inserted reminder rowId=$rowId, id=$reminderId")
                 db.close()
             } else {
                 Log.e("ADD_REMINDER", "Cannot save: userId=-1")

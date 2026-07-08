@@ -29,21 +29,17 @@ import com.example.smarthealthreminder.features.data.local.AppDatabase
 import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import com.example.smarthealthreminder.features.util.ImageUtils
 import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
 class DashboardFragment : Fragment() {
 
-    private val viewModel: HealthViewModel by activityViewModels {
-        val db = AppDatabase.getDatabase(requireContext())
-        val repository = HealthRepository(db)
-        HealthViewModelFactory(repository)
-    }
+    private val viewModel: HealthViewModel by activityViewModel()
 
     private var firebaseId: String = ""
     private lateinit var pbHomeAdherence: ProgressBar

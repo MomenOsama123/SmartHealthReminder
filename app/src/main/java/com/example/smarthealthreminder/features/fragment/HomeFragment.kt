@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import com.example.smarthealthreminder.R
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,9 +28,9 @@ import com.example.smarthealthreminder.features.util.RecurrenceHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.smarthealthreminder.features.profileInfo.ProfileActivity
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 import java.util.Locale
 import com.example.smarthealthreminder.features.adapter.MedicationPlanAdapter
 import com.example.smarthealthreminder.features.dialog.MedicationPlanDetailDialogHelper
@@ -46,11 +45,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var reminderAdapter: WelcomeReminderAdapter
 
-    private val viewModel: HealthViewModel by activityViewModels {
-        val db = AppDatabase.getDatabase(requireContext())
-        val repository = HealthRepository(db!!)
-        HealthViewModelFactory(repository)
-    }
+    private val viewModel: HealthViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

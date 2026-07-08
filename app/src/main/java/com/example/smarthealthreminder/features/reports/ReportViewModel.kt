@@ -19,15 +19,23 @@ class ReportViewModel(
     private val reminderDao: ReminderDao
 ) : AndroidViewModel(application) {
 
+    private var isGenerating = false
+
     // Expose all reports from database as a Flow to observe updates
     val allReports: Flow<List<ReportEntity>> = repository.allReports
 
     // Core function to generate a new report using the generator utility
     fun generateRealReport() {
+        if (isGenerating) return
+        isGenerating = true
         viewModelScope.launch(Dispatchers.IO) {
-            val generator = ReportGenerator(getApplication(), reminderDao)
-            val realReport = generator.generateWeeklyReport()
-            repository.insertReport(realReport)
+            try {
+                val generator = ReportGenerator(getApplication(), reminderDao)
+                val realReport = generator.generateWeeklyReport()
+                repository.insertReport(realReport)
+            } finally {
+                isGenerating = false
+            }
         }
     }
 }

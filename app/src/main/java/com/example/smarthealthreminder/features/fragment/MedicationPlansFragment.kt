@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -21,8 +20,8 @@ import com.example.smarthealthreminder.features.data.local.entity.MedicationPlan
 import com.example.smarthealthreminder.features.data.repository.HealthRepository
 import com.example.smarthealthreminder.features.dialog.MedicationPlanDetailDialogHelper
 import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModel
-import com.example.smarthealthreminder.features.ui.viewmodel.HealthViewModelFactory
 import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.activityViewModel
 
 class MedicationPlansFragment : Fragment() {
 
@@ -30,11 +29,7 @@ class MedicationPlansFragment : Fragment() {
     private var plansAdapter: MedicationPlansListAdapter? = null
     private var emptyView: View? = null
 
-    private val viewModel: HealthViewModel by activityViewModels {
-        val db = AppDatabase.getDatabase(requireContext())
-        val repository = HealthRepository(db)
-        HealthViewModelFactory(repository)
-    }
+    private val viewModel: HealthViewModel by activityViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

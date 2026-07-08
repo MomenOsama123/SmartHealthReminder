@@ -441,6 +441,23 @@ class ReminderReceiver : BroadcastReceiver() {
             )
             db.reminderDao().updateSnoozeUsed(id, false)
 
+            // ✅ Schedule next occurrence if it's a recurring reminder
+            if (reminder.isRecurring && RecurrenceHelper.isRecurring(reminder.recurrenceType)) {
+                val nextMillis = RecurrenceHelper.computeNextTriggerMillis(
+                    date = reminder.date,
+                    time = reminder.time,
+                    recurrenceType = reminder.recurrenceType
+                )
+
+                val reachedEnd = reminder.endDate != null && nextMillis != null &&
+                        RecurrenceHelper.formatDate(nextMillis) > reminder.endDate!!
+
+                if (nextMillis != null && !reachedEnd) {
+                    ReminderScheduler.scheduleReminder(context, reminder, nextMillis)
+                    Log.d("REMINDER_RECEIVER", "Missed recurring reminder, scheduled next alarm")
+                }
+            }
+
             val updated = db.reminderDao().getReminderById(id)
             Log.d(
                 "MISSED_TEST",
