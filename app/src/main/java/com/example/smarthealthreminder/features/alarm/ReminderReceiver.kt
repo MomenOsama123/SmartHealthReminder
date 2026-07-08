@@ -438,6 +438,7 @@ class ReminderReceiver : BroadcastReceiver() {
                     scheduledTime = reminder.time ?: "",
                     status = "Missed"
                 )
+            )
             db.reminderDao().updateSnoozeUsed(id, false)
 
             val updated = db.reminderDao().getReminderById(id)
@@ -732,7 +733,6 @@ class ReminderReceiver : BroadcastReceiver() {
 
     private fun vibrate(context: Context) {
         val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            context.getSystemService(VibratorManager::class.java)?.defaultVibrator
             context.getSystemService(VibratorManager::class.java)?.defaultVibrator
         } else {
             @Suppress("DEPRECATION")
