@@ -94,7 +94,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 | Medication Plan | Today's Schedule |
 |-----------------|------------------|
-| ![](screenshots/Medication%20Plan.png) | ![](screenshots/TodaySchedule.png) |
+| ![](screenshots/MedicationPlan.png) | ![](screenshots/TodaySchedule.png) |
 
 | Set Alarm | Alarm List |
 |------------|------------|
@@ -118,7 +118,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 | Complete Profile | Settings |
 |------------------|----------|
-| ![](screenshots/Complete%20Info.png) | ![](screenshots/Settings.png) |
+| ![](screenshots/CompleteInfo.png) | ![](screenshots/Settings.png) |
 
 | Light Theme | Dark Theme |
 |-------------|------------|
