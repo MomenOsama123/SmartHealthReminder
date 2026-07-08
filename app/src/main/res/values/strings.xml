@@ -807,6 +807,6 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="insight_perfect_score">You haven\'t missed any doses lately. Perfect score!</string>
     <string name="about_trusta">About TRUSTA</string>
     <string name="about_trusta_desc">Learn more about your health companion</string>
-    <string name="about_trusta_url">https://trusta-care-companion.lovable.app</string>
+    <string name="about_trusta_url" translatable="false">https://trusta-health-story.lovable.app</string>
     <string name="add_schedule">Add Schedule</string>
 </resources>
