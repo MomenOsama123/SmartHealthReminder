@@ -112,8 +112,12 @@ class SignInActivity : BaseActivity() {
 
             if (isPasswordVisible) {
                 binding.etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.icTogglePassword.setImageResource(com.example.smarthealthreminder.R.drawable.ic_visibility_off)
+                binding.icTogglePassword.contentDescription = getString(com.example.smarthealthreminder.R.string.show_password)
             } else {
                 binding.etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.icTogglePassword.setImageResource(com.example.smarthealthreminder.R.drawable.ic_visibility)
+                binding.icTogglePassword.contentDescription = getString(com.example.smarthealthreminder.R.string.hide_password)
             }
 
             binding.etPassword.setSelection(selection)

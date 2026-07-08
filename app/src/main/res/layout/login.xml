@@ -117,8 +117,8 @@
                 android:backgroundTint="@color/dynamic_card_bg"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingStart="14dp"
-                android:paddingEnd="14dp">
+                android:paddingStart="16dp"
+                android:paddingEnd="8dp">
 
                 <EditText
                     android:id="@+id/etPassword"
@@ -138,11 +138,11 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:padding="14dp"
-                    android:src="@drawable/ic_visibility"
+                    android:src="@drawable/ic_visibility_off"
                     android:clickable="true"
                     android:focusable="true"
                     android:contentDescription="@string/show_password"
-                    app:tint="?attr/colorOnSurfaceVariant"/>
+                    app:tint="@color/primary_green"/>
             </LinearLayout>
 
             <TextView

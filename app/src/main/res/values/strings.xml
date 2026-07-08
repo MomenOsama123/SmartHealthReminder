@@ -592,6 +592,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="content_desc_actions">Actions</string>
     <string name="due_at_time">Due at 9:00 AM</string>
     <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
     <string name="marked_done">Marked as done</string>
     <string name="no_medication">No medication to mark</string>
     <string name="no_medication_to_snooze">No medication to snooze</string>

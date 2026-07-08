@@ -68,6 +68,30 @@ class SignupActivity : BaseActivity() {
         binding.passwordInput.addTextChangedListener { binding.passwordInput.error = null }
         binding.confirmPasswordInput.addTextChangedListener { binding.confirmPasswordInput.error = null }
 
+        // Password visibility toggle
+        binding.icTogglePassword.setOnClickListener {
+            togglePasswordVisibility(binding.passwordInput, binding.icTogglePassword)
+        }
+
+        binding.icToggleConfirmPassword.setOnClickListener {
+            togglePasswordVisibility(binding.confirmPasswordInput, binding.icToggleConfirmPassword)
+        }
+    }
+
+    private fun togglePasswordVisibility(editText: android.widget.EditText, imageView: android.widget.ImageView) {
+        val selection = editText.selectionEnd
+        val isPasswordVisible = editText.inputType == (android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+
+        if (isPasswordVisible) {
+            editText.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
+            imageView.setImageResource(com.example.smarthealthreminder.R.drawable.ic_visibility_off)
+            imageView.contentDescription = getString(com.example.smarthealthreminder.R.string.show_password)
+        } else {
+            editText.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            imageView.setImageResource(com.example.smarthealthreminder.R.drawable.ic_visibility)
+            imageView.contentDescription = getString(com.example.smarthealthreminder.R.string.hide_password)
+        }
+        editText.setSelection(selection)
     }
 
     private fun setupObservers() {

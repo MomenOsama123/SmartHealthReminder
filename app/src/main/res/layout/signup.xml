@@ -85,54 +85,87 @@
             android:layout_marginTop="12dp"
             android:labelFor="@id/password_input" />
 
-        <EditText
-            android:id="@+id/password_input"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="12dp"
             android:background="@drawable/et_shape"
             android:backgroundTint="@color/white"
-            android:hint="@string/password_hint"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/hint_gray"
-            android:textSize="16sp"
-            android:inputType="textPassword"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:drawableEnd="@drawable/ic_visibility"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/primary_green"
-            android:gravity="start|center_vertical"
-            android:autofillHints="password" />
+            android:paddingEnd="8dp">
+
+            <EditText
+                android:id="@+id/password_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autofillHints="password"
+                android:background="@null"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:textColor="@color/hint_gray"
+                android:textColorHint="@color/hint_gray"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/icTogglePassword"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="@string/show_password"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_off"
+                app:tint="@color/primary_green" />
+        </LinearLayout>
 
         <!-- Confirm Password -->
         <TextView
             android:id="@+id/tvConfirmPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/confirm_password_label"
-            android:textColor="@color/text_dark"
             android:layout_marginTop="12dp"
-            android:labelFor="@id/confirm_password_input" />
+            android:labelFor="@id/confirm_password_input"
+            android:text="@string/confirm_password_label"
+            android:textColor="@color/text_dark" />
 
-        <EditText
-            android:id="@+id/confirm_password_input"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginBottom="16dp"
-            android:autofillHints="password"
             android:background="@drawable/et_shape"
             android:backgroundTint="@color/white"
-            android:hint="@string/confirm_password_hint"
-            android:textColorHint="@color/hint_gray"
-            android:textColor="@color/hint_gray"
-            android:textSize="16sp"
-            android:inputType="textPassword"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:drawableStart="@drawable/outline_check_circle"
-            android:drawablePadding="10dp"
-            android:drawableTint="@color/primary_green" />
+            android:paddingEnd="8dp">
+
+            <EditText
+                android:id="@+id/confirm_password_input"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:autofillHints="password"
+                android:background="@null"
+                android:hint="@string/confirm_password_hint"
+                android:inputType="textPassword"
+                android:textColor="@color/hint_gray"
+                android:textColorHint="@color/hint_gray"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/icToggleConfirmPassword"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:contentDescription="@string/show_password"
+                android:focusable="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_visibility_off"
+                app:tint="@color/primary_green" />
+        </LinearLayout>
 
         <!-- Terms -->
         <CheckBox

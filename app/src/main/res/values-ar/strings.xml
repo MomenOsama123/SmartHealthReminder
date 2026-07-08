@@ -579,6 +579,7 @@
     <string name="content_desc_actions">إجراءات</string>
     <string name="due_at_time">مستحق في 9:00 صباحاً</string>
     <string name="show_password">إظهار كلمة المرور</string>
+    <string name="hide_password">إخفاء كلمة المرور</string>
     <string name="marked_done">تم التنفيذ</string>
     <string name="no_medication">لا يوجد دواء لتمييزه</string>
     <string name="no_medication_to_snooze">لا يوجد دواء للتأجيل</string>
