@@ -2,19 +2,27 @@ package com.example.smarthealthreminder.features.auth.signIn
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
+import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.databinding.LoginBinding
+import com.example.smarthealthreminder.features.activity.MainActivity
 import com.example.smarthealthreminder.features.auth.forget_password.ForgetPasswordActivity
-import com.example.smarthealthreminder.features.auth.signup.SignupActivity
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.example.smarthealthreminder.features.auth.providers.GoogleAuthHelper
+import com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity
+import com.example.smarthealthreminder.features.auth.signup.SignupActivity
 import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.model_dashboard.User
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class SignInActivity : BaseActivity() {
 
@@ -23,37 +31,35 @@ class SignInActivity : BaseActivity() {
     }
 
     private lateinit var binding: LoginBinding
-    private lateinit var auth: FirebaseAuth
+    private val auth by lazy { FirebaseAuth.getInstance() }
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // ❌ شيل الـ auto-redirect - Splash هو اللي يقرر
-        // val sharedPref = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-        // val existingId = sharedPref.getString("FIREBASE_ID", "") ?: ""
-        // if (existingId.isNotEmpty()) { ... }
-
         enableEdgeToEdge()
         binding = LoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+        setupWindowInsets()
+        setupListeners()
+        setupGoogleAuth()
+    }
+
+    private fun setupWindowInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+    }
 
-        auth = FirebaseAuth.getInstance()
-
-        // ================= SIGN UP =================
-        binding.tvCreateAccount.setOnClickListener {
+    private fun setupListeners() {
+        binding.tvSwitchAuth.setOnClickListener {
             startActivity(Intent(this, SignupActivity::class.java))
             finish()
         }
 
-        // ================= LOGIN =================
-        binding.btnLogin.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             if (validateForm()) {
                 val email = binding.etEmail.text.toString().trim()
                 val password = binding.etPassword.text.toString().trim()
@@ -61,133 +67,127 @@ class SignInActivity : BaseActivity() {
                 setLoading(true)
                 auth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
-                        setLoading(false)
                         if (task.isSuccessful) {
-                            val firebaseUser = auth.currentUser
-                            val firebaseId = firebaseUser?.uid ?: ""
-
-                            Log.d(TAG, "Login success, firebaseId: '$firebaseId'")
-
-                            if (firebaseId.isEmpty()) {
-                                showSnakeBar("Error: No user ID")
-                                return@addOnCompleteListener
-                            }
-
-                            // ✅ SAVE SESSION
-                            getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                                .edit()
-                                .putString("FIREBASE_ID", firebaseId)
-                                .apply()
-
-                            // ✅ INSERT USER IN SQLITE
-                            val db = DatabaseHelper(this)
-                            val existingUser = db.getUserByFirebaseId(firebaseId)
-
-                            if (existingUser == null) {
-                                val user = User(
-                                    firebaseId = firebaseId,
-                                    name = firebaseUser?.displayName ?: "User",
-                                    email = firebaseUser?.email ?: email
-                                )
-                                db.insertUser(user)
-                                Log.d(TAG, "User inserted in SQLite: $firebaseId")
-                            }
-
-                            showSnakeBar("Welcome Back")
-
-                            // ✅ روح Dashboard من غير flags
-                            checkProfileCompletion(firebaseId)
+                            val firebaseId = auth.currentUser?.uid ?: ""
+                            saveSessionAndSync(firebaseId, email)
                         } else {
-                            Log.e(TAG, "Login failed: ${task.exception?.message}")
+                            setLoading(false)
                             showSnakeBar("Login Failed: ${task.exception?.message}")
                         }
                     }
             }
         }
 
-        // Toggle password visibility
         binding.icTogglePassword.setOnClickListener {
-            val selection = binding.etPassword.selectionEnd
-            val isPasswordVisible = binding.etPassword.inputType == (android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
-
-            if (isPasswordVisible) {
-                binding.etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD
-                binding.icTogglePassword.setImageResource(com.example.smarthealthreminder.R.drawable.ic_visibility_off)
-                binding.icTogglePassword.contentDescription = getString(com.example.smarthealthreminder.R.string.show_password)
-            } else {
-                binding.etPassword.inputType = android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                binding.icTogglePassword.setImageResource(com.example.smarthealthreminder.R.drawable.ic_visibility)
-                binding.icTogglePassword.contentDescription = getString(com.example.smarthealthreminder.R.string.hide_password)
-            }
-
-            binding.etPassword.setSelection(selection)
+            togglePasswordVisibility(binding.etPassword, binding.icTogglePassword)
         }
 
-        // Forgot Password
         binding.tvForgotPassword.setOnClickListener {
-            val intent = Intent(this, ForgetPasswordActivity::class.java)
-            startActivity(intent)
-            binding.etEmail.text.clear()
-            binding.etPassword.text.clear()
+            startActivity(Intent(this, ForgetPasswordActivity::class.java))
         }
+    }
 
-        // Google Authentication
+    private fun togglePasswordVisibility(editText: EditText, imageView: ImageView) {
+        val selection = editText.selectionEnd
+        val isPasswordVisible = editText.inputType == (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+
+        if (isPasswordVisible) {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            imageView.setImageResource(R.drawable.ic_visibility_off)
+            imageView.contentDescription = getString(R.string.show_password)
+        } else {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            imageView.setImageResource(R.drawable.ic_visibility)
+            imageView.contentDescription = getString(R.string.hide_password)
+        }
+        editText.setSelection(selection)
+    }
+
+    private fun setupGoogleAuth() {
         googleAuthHelper = GoogleAuthHelper(this, auth) { isSuccess, errorMessage ->
             if (isSuccess) {
-                val firebaseUser = auth.currentUser
-                val firebaseId = firebaseUser?.uid ?: ""
-
-                Log.d(TAG, "Google login success, firebaseId: '$firebaseId'")
-
-                if (firebaseId.isEmpty()) {
-                    setLoading(false)
-                    // Toast removed
-                    return@GoogleAuthHelper
-                }
-
-                // ✅ SAVE SESSION
-                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .edit()
-                    .putString("FIREBASE_ID", firebaseId)
-                    .apply()
-
-                // ✅ INSERT USER IN SQLITE
-                val db = DatabaseHelper(this)
-                val existingUser = db.getUserByFirebaseId(firebaseId)
-
-                if (existingUser == null) {
-                    val user = User(
-                        firebaseId = firebaseId,
-                        name = firebaseUser?.displayName ?: "User",
-                        email = firebaseUser?.email ?: ""
-                    )
-                    db.insertUser(user)
-                    Log.d(TAG, "Google user inserted in SQLite: $firebaseId")
-                }
-
-
-                // ✅ روح Dashboard من غير flags
-                checkProfileCompletion(firebaseId)
+                val firebaseId = auth.currentUser?.uid ?: ""
+                saveSessionAndSync(firebaseId, auth.currentUser?.email ?: "")
             } else {
                 setLoading(false)
-                Log.e(TAG, "Google login failed: $errorMessage")
-                showSnakeBar(
-                    errorMessage ?: "An error occurred during Google login",
-                    Snackbar.LENGTH_LONG
-                )
+                showSnakeBar(errorMessage ?: "Google Login Failed")
             }
         }
 
-        // Google button
         binding.btnGoogle.setOnClickListener {
             setLoading(true)
             googleAuthHelper.startLogin()
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
+    private fun saveSessionAndSync(firebaseId: String, email: String) {
+        if (firebaseId.isEmpty()) {
+            setLoading(false)
+            showSnakeBar("Error: No user ID")
+            return
+        }
+
+        getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+            .edit()
+            .putString("FIREBASE_ID", firebaseId)
+            .apply()
+
+        val db = DatabaseHelper(this)
+        if (db.getUserByFirebaseId(firebaseId) == null) {
+            val user = User(
+                firebaseId = firebaseId,
+                name = auth.currentUser?.displayName ?: "User",
+                email = email
+            )
+            db.insertUser(user)
+        }
+        
+        checkProfileCompletion(firebaseId)
+    }
+
+    private fun checkProfileCompletion(uid: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("users").document(uid).get()
+            .addOnSuccessListener { document ->
+                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?: 
+                                       document.getBoolean("profileCompleted") ?: 
+                                       (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                
+                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .getBoolean("isProfileCompleted", false)
+                
+                val isCompleted = firestoreCompleted || localCompleted
+                
+                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isProfileCompleted", isCompleted)
+                    .apply()
+
+                setLoading(false)
+                if (isCompleted) navigateToMain() else navigateToCompleteProfile()
+            }
+            .addOnFailureListener {
+                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .getBoolean("isProfileCompleted", false)
+                setLoading(false)
+                if (localCompleted) navigateToMain() else navigateToCompleteProfile()
+            }
+    }
+
+    private fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
+    }
+
+    private fun navigateToCompleteProfile() {
+        val intent = Intent(this, CompleteProfileActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        startActivity(intent)
+        finish()
     }
 
     private fun validateForm(): Boolean {
@@ -195,84 +195,27 @@ class SignInActivity : BaseActivity() {
         val password = binding.etPassword.text.toString().trim()
         var isValid = true
 
-        if (email.isEmpty()) {
-            binding.etEmail.error = "Required"
-            isValid = false
-        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.etEmail.error = "Enter a valid email address"
             isValid = false
-        } else {
-            binding.etEmail.error = null
         }
 
         if (password.isEmpty()) {
             binding.etPassword.error = "Required"
             isValid = false
-        } else {
-            binding.etPassword.error = null
         }
 
         return isValid
     }
 
-    private fun checkProfileCompletion(uid: String) {
-        setLoading(true)
-        val db = com.google.firebase.firestore.FirebaseFirestore.getInstance()
-        db.collection("users").document(uid).get()
-            .addOnSuccessListener { document ->
-                setLoading(false)
-                // Robust check: try multiple field names and object mapping
-                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?: 
-                                       document.getBoolean("profileCompleted") ?: 
-                                       (document.toObject(User::class.java)?.isProfileCompleted ?: false)
-                
-                // Fallback to local storage if Firestore is uncertain
-                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .getBoolean("isProfileCompleted", false)
-                
-                val isCompleted = firestoreCompleted || localCompleted
-                
-                // Sync local storage if Firestore confirms completion
-                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .edit()
-                    .putBoolean("isProfileCompleted", isCompleted)
-                    .apply()
-
-                val intent = if (isCompleted) {
-                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                } else {
-                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                }
-                startActivity(intent)
-                finish()
-            }
-            .addOnFailureListener {
-                setLoading(false)
-                // Fallback to local on network error
-                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .getBoolean("isProfileCompleted", false)
-                
-                val intent = if (localCompleted) {
-                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                } else {
-                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                }
-                startActivity(intent)
-                finish()
-            }
+    private fun setLoading(isLoading: Boolean) {
+        binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        binding.btnSubmit.isEnabled = !isLoading
+        binding.btnGoogle.isEnabled = !isLoading
     }
 
-    private fun setLoading(isLoading: Boolean) {
-        binding.progressBar.visibility = if (isLoading) android.view.View.VISIBLE else android.view.View.GONE
-        binding.btnLogin.isEnabled = !isLoading
-        binding.btnGoogle.isEnabled = !isLoading
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        googleAuthHelper.handleActivityResult(requestCode, resultCode, data)
     }
 }
