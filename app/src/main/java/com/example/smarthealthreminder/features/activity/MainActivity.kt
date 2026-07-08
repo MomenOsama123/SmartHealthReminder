@@ -255,23 +255,27 @@ class MainActivity : BaseActivity() {
         if (fragment == activeFragment) return true
 
         val transaction = supportFragmentManager.beginTransaction()
-        activeFragment?.let {
-            transaction.hide(it)
+
+        supportFragmentManager.fragments.forEach {
+            if (it.isAdded && !it.isHidden) {
+                transaction.hide(it)
+            }
         }
+
         transaction.show(fragment)
         transaction.commit()
-        activeFragment = fragment
 
+        activeFragment = fragment
         return true
     }
 
     fun openAddMedicationPlanFragment() {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, AddMedicationPlanFragment())
+            .hide(activeFragment!!)
+            .add(R.id.fragment_container, AddMedicationPlanFragment(), "add_medication_plan")
             .addToBackStack(null)
             .commit()
     }
-
     private fun requestNotificationPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
