@@ -44,7 +44,7 @@ class ScheduleFragment : Fragment() {
     private var scheduleAdapter: ScheduleAdapter? = null
 
     private var layoutDowHeader: View? = null
-    private var tvScheduleEmpty: TextView? = null
+    private var tvScheduleEmpty: View? = null
     private var toggleCalendarMode: MaterialButtonToggleGroup? = null
 
     private var selectedDate = ""

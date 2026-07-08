@@ -116,6 +116,9 @@ class DayDetailsActivity : BaseActivity() {
         findViewById<MaterialButton>(R.id.btn_add_alarm).setOnClickListener {
             startActivity(Intent(this, EditAlarmActivity::class.java))
         }
+        findViewById<MaterialButton>(R.id.btn_add_schedule).setOnClickListener {
+            startActivity(Intent(this, com.example.smarthealthreminder.features.activity.CreateScheduleEntryActivity::class.java))
+        }
     }
 
     private fun setupRecyclerView() {
@@ -248,15 +251,13 @@ class DayDetailsActivity : BaseActivity() {
             layoutEmpty.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
             tvEmptyMessage.text = getString(R.string.no_events_for_this_day)
-            btnAddNote.visibility = View.VISIBLE
         } else {
-            // Has content — show list; note button still accessible via edit icon if note exists
+            // Has content — show list
             layoutEmpty.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
-            // Show "Edit / Add Note" button below the list always
-            btnAddNote.visibility = View.VISIBLE
-            btnAddNote.text = if (currentNoteText.isNotBlank()) getString(R.string.edit_note) else getString(R.string.add_note_btn)
         }
+        // Always show all four action buttons in the bottom grid
+        btnAddNote.text = if (currentNoteText.isNotBlank()) getString(R.string.edit_note) else getString(R.string.add_note_btn)
     }
 
     private fun normalizeDate(dateStr: String?): String {

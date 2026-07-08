@@ -788,4 +788,5 @@
     <string name="about_trusta">حول تراستا</string>
     <string name="about_trusta_desc">تعرف على المزيد حول رفيقك الصحي</string>
     <string name="about_trusta_url">https://trusta-care-companion.lovable.app</string>
+    <string name="add_schedule">إضافة جدول</string>
 </resources>

@@ -67,12 +67,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signup_btn"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="64dp"
+        android:layout_marginHorizontal="16dp"
         app:backgroundTint="@color/primary_green"
         android:text="@string/signup_button"
-        android:textColor="@color/background_beige"
+        android:textColor="@color/white"
         android:textAllCaps="false"
         android:textStyle="bold"
         app:cornerRadius="12dp"
@@ -82,9 +83,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/signIn_btn"
-        android:layout_width="320dp"
+        android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
         android:text="@string/log_in"
         android:textColor="@color/primary_green"
         android:textSize="16sp"

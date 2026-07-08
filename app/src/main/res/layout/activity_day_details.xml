@@ -93,69 +93,104 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Bottom action bar — always visible -->
+    <!-- Bottom action bar — 2x2 Grid for Better UX -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
-        android:paddingBottom="20dp"
+        android:paddingBottom="24dp"
         android:paddingTop="8dp"
         android:background="@color/background">
 
-        <!-- Add / Edit Note button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_note"
+        <!-- First Row: Reminder & Alarm -->
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:layout_marginBottom="10dp"
-            android:text="@string/add_note"
-            android:textSize="14sp"
-            android:textColor="@color/primary"
-            android:backgroundTint="@color/surface"
-            app:cornerRadius="14dp"
-            app:icon="@drawable/ic_edit"
-            app:iconTint="@color/primary"
-            app:iconGravity="textStart"
-            app:strokeColor="@color/primary"
-            app:strokeWidth="1dp"
-            android:visibility="gone"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
 
-        <!-- Quick action row -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_reminder"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="@string/add_reminder"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:backgroundTint="@color/primary"
+                android:textColor="@color/white"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_pill"
+                app:iconTint="@color/white"
+                app:iconSize="20dp"
+                app:iconGravity="textStart"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_alarm"
+                android:layout_width="0dp"
+                android:layout_height="54dp"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="@string/add_alarm"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:backgroundTint="@color/urgent"
+                android:textColor="@color/white"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_bell"
+                app:iconTint="@color/white"
+                app:iconSize="20dp"
+                app:iconGravity="textStart"/>
+
+        </LinearLayout>
+
+        <!-- Second Row: Schedule & Note -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_reminder"
+                android:id="@+id/btn_add_schedule"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="54dp"
                 android:layout_weight="1"
-                android:layout_marginEnd="8dp"
-                android:text="@string/add_reminder"
+                android:layout_marginEnd="4dp"
+                android:text="@string/add_schedule"
                 android:textSize="13sp"
-                android:backgroundTint="@color/primary"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:backgroundTint="@color/appointment"
                 android:textColor="@color/white"
-                app:cornerRadius="14dp"
-                app:icon="@drawable/ic_pill"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_calendar"
                 app:iconTint="@color/white"
+                app:iconSize="20dp"
                 app:iconGravity="textStart"/>
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_add_alarm"
+                android:id="@+id/btn_add_note"
                 android:layout_width="0dp"
-                android:layout_height="52dp"
+                android:layout_height="54dp"
                 android:layout_weight="1"
-                android:layout_marginStart="8dp"
-                android:text="@string/add_alarm"
+                android:layout_marginStart="4dp"
+                android:text="@string/add_note"
                 android:textSize="13sp"
-                android:backgroundTint="@color/urgent"
-                android:textColor="@color/white"
-                app:cornerRadius="14dp"
-                app:icon="@drawable/ic_bell"
-                app:iconTint="@color/white"
-                app:iconGravity="textStart"/>
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                app:backgroundTint="@color/surface_variant"
+                android:textColor="@color/text_dark"
+                app:cornerRadius="12dp"
+                app:icon="@drawable/ic_edit"
+                app:iconTint="@color/text_dark"
+                app:iconSize="20dp"
+                app:iconGravity="textStart"
+                app:strokeColor="@color/border_gray"
+                app:strokeWidth="1dp"/>
 
         </LinearLayout>
 
