@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -30,7 +28,7 @@ class MedicationPlansFragment : Fragment() {
 
     private var recyclerPlans: RecyclerView? = null
     private var plansAdapter: MedicationPlansListAdapter? = null
-    private var emptyView: TextView? = null
+    private var emptyView: View? = null
 
     private val viewModel: HealthViewModel by activityViewModels {
         val db = AppDatabase.getDatabase(requireContext())
@@ -64,7 +62,7 @@ class MedicationPlansFragment : Fragment() {
             )
         }
 
-        view.findViewById<ImageButton>(R.id.btn_add)?.setOnClickListener {
+        view.findViewById<View>(R.id.btn_add)?.setOnClickListener {
             (requireActivity() as MainActivity).openAddMedicationPlanFragment()
         }
 

@@ -805,4 +805,7 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="insight_low_adherence">Your adherence is low. Setting extra reminders might help.</string>
     <string name="insight_missed_busy">Most missed doses occur when you\'re busy. Try to plan ahead.</string>
     <string name="insight_perfect_score">You haven\'t missed any doses lately. Perfect score!</string>
+    <string name="about_trusta">About TRUSTA</string>
+    <string name="about_trusta_desc">Learn more about your health companion</string>
+    <string name="about_trusta_url">https://trusta-care-companion.lovable.app</string>
 </resources>

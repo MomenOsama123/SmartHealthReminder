@@ -785,4 +785,7 @@
     <string name="stop_plan">إيقاف الخطة</string>
     <string name="view_reminders">عرض التذكيرات</string>
     <string name="medication_plan">الخطة الدوائية</string>
+    <string name="about_trusta">حول تراستا</string>
+    <string name="about_trusta_desc">تعرف على المزيد حول رفيقك الصحي</string>
+    <string name="about_trusta_url">https://trusta-care-companion.lovable.app</string>
 </resources>
