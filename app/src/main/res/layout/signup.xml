@@ -150,11 +150,13 @@
             android:layout_height="54dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            app:backgroundTint="@color/primary_green"
             android:text="@string/signup_button"
-            android:textColor="@color/white"
+            android:textColor="@color/primary_green"
             android:textAllCaps="false"
             android:textStyle="bold"
+            app:strokeColor="@color/primary_green"
+            app:strokeWidth="2dp"
+            app:backgroundTint="?attr/colorSurface"
             app:cornerRadius="12dp"/>
 
         <!-- Already Account -->

@@ -157,14 +157,15 @@
                     android:layout_width="320dp"
                     android:layout_height="54dp"
                     android:layout_marginTop="24dp"
-                    app:backgroundTint="@color/primary_green"
+                    android:letterSpacing="0.02"
                     android:text="@string/log_in"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:textAllCaps="false"
+                    android:textColor="@color/primary_green"
+                    android:textStyle="bold"
+                    app:backgroundTint="?attr/colorSurface"
                     app:cornerRadius="12dp"
-                    android:letterSpacing="0.02" />
+                    app:strokeColor="@color/primary_green"
+                    app:strokeWidth="2dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -199,33 +200,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal">
-
                 <LinearLayout
-                    android:id="@+id/btnGoogle"
-                    android:layout_width="320dp"
-                    android:layout_height="54dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/et_shape"
-                    android:backgroundTint="@color/dynamic_card_bg"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    android:clickable="true"
-                    android:focusable="true">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_google"
-                        android:layout_marginEnd="12dp"
-                        android:contentDescription="@string/google" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnGoogle"
+                        android:layout_width="320dp"
+                        android:layout_height="54dp"
+                        android:layout_marginTop="16dp"
                         android:text="@string/google"
-                        android:textSize="14sp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textStyle="bold"/>
+                        android:textAllCaps="false"
+                        android:textColor="@color/primary_green"
+                        android:textStyle="bold"
+                        app:backgroundTint="?attr/colorSurface"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/primary_green"
+                        app:strokeWidth="2dp"
+                        app:icon="@drawable/ic_google"
+                        app:iconTint="@null"
+                        app:iconGravity="textStart"
+                        app:iconPadding="12dp"
+                        app:iconSize="24dp" />
                 </LinearLayout>
             </LinearLayout>
 
