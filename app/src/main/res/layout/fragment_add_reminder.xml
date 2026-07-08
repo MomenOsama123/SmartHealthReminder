@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/background"
+        app:liftOnScroll="false"
         app:elevation="0dp">
 
         <androidx.appcompat.widget.Toolbar
@@ -35,13 +36,7 @@
                 android:text="@string/reminders"
                 android:textAppearance="@style/TextHeading3"/>
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="end"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_notifications"
-                android:contentDescription="@string/notifications"/>
+
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -277,6 +272,8 @@
                     android:layout_weight="1"
                     android:text="@string/low"
                     android:textAppearance="@style/TextBody1"
+                    android:textColor="@color/priority_text_selector"
+                    app:backgroundTint="@color/priority_bg_selector"
                     app:strokeColor="@color/border"/>
 
                 <com.google.android.material.button.MaterialButton
@@ -287,6 +284,8 @@
                     android:layout_weight="1"
                     android:text="@string/medium"
                     android:textAppearance="@style/TextBody1"
+                    android:textColor="@color/priority_text_selector"
+                    app:backgroundTint="@color/priority_bg_selector"
                     app:strokeColor="@color/border"/>
 
                 <com.google.android.material.button.MaterialButton
@@ -297,6 +296,8 @@
                     android:layout_weight="1"
                     android:text="@string/high"
                     android:textAppearance="@style/TextBody1"
+                    android:textColor="@color/priority_text_selector"
+                    app:backgroundTint="@color/priority_bg_selector"
                     app:strokeColor="@color/border"/>
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
