@@ -242,9 +242,13 @@ class SignInActivity : BaseActivity() {
                     .apply()
 
                 val intent = if (isCompleted) {
-                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 } else {
-                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 }
                 startActivity(intent)
                 finish()
@@ -256,9 +260,13 @@ class SignInActivity : BaseActivity() {
                     .getBoolean("isProfileCompleted", false)
                 
                 val intent = if (localCompleted) {
-                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 } else {
-                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.auth.signup.CompleteProfileActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 }
                 startActivity(intent)
                 finish()

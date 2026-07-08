@@ -82,9 +82,13 @@ class WelcomeActivity : BaseActivity() {
                 }
 
                 val intent = if (isCompleted) {
-                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 } else {
-                    Intent(this, CompleteProfileActivity::class.java)
+                    Intent(this, CompleteProfileActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 }
                 startActivity(intent)
                 finish()
@@ -96,9 +100,13 @@ class WelcomeActivity : BaseActivity() {
                     .getBoolean("isProfileCompleted", false)
                 
                 val intent = if (isCompleted) {
-                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java)
+                    Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 } else {
-                    Intent(this, CompleteProfileActivity::class.java)
+                    Intent(this, CompleteProfileActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
                 }
                 startActivity(intent)
                 finish()
