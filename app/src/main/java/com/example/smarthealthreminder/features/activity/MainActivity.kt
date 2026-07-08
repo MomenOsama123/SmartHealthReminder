@@ -13,6 +13,7 @@ import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.features.chatbot.ChatBotFragment
 import com.example.smarthealthreminder.features.dialog.QuickActionsBottomSheet
+import com.example.smarthealthreminder.features.fragment.AddMedicationPlanFragment
 import com.example.smarthealthreminder.features.fragment.AddReminderFragment
 import com.example.smarthealthreminder.features.fragment.AlarmsFragment
 import com.example.smarthealthreminder.features.fragment.DashboardFragment
@@ -212,7 +213,8 @@ class MainActivity : BaseActivity() {
                 showFragment(remindersFragment)
             }
             DESTINATION_MEDICATION_PLANS -> {
-                showFragment(medicationPlansFragment)}
+                showFragment(medicationPlansFragment)
+            }
             // 🌟 7. NEW: Navigate to the reports fragment when requested by the intent
             DESTINATION_REPORTS -> {
                 showFragment(reportsFragment)
@@ -249,38 +251,28 @@ class MainActivity : BaseActivity() {
         isProgrammaticSelection = false
     }
 
-    fun openAddMedicationPlanFragment() {
-        supportFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, com.example.smarthealthreminder.features.fragment.AddMedicationPlanFragment(), "add_medication_plan")
-            .addToBackStack("add_medication_plan")
-            .commit()
-    }
-
     private fun showFragment(fragment: Fragment): Boolean {
-        if (activeFragment == fragment) return true
+        if (fragment == activeFragment) return true
 
         val transaction = supportFragmentManager.beginTransaction()
-
-        // Safety check for activeFragment being null
-        activeFragment?.let {
-            transaction.hide(it)
-        }
-
-        transaction.show(fragment).commit()
+        transaction.hide(activeFragment!!)
+        transaction.show(fragment)
+        transaction.commit()
         activeFragment = fragment
         return true
     }
 
+    fun openAddMedicationPlanFragment() {
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fragment_container, AddMedicationPlanFragment())
+            .addToBackStack(null)
+            .commit()
+    }
+
     private fun requestNotificationPermissionIfNeeded() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
-                != PackageManager.PERMISSION_GRANTED
-            ) {
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    REQUEST_POST_NOTIFICATIONS
-                )
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_POST_NOTIFICATIONS)
             }
         }
     }

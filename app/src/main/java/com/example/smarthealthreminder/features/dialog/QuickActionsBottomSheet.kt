@@ -30,7 +30,7 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
         binding.actionAddReminder.setOnClickListener {
             startActivity(
                 Intent(requireContext(), MainActivity::class.java).apply {
-                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_ADD_REMINDER)
+                    putExtra(MainActivity.EXTRA_START_DESTINATION, MainActivity.DESTINATION_REMINDERS)
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 }
             )
@@ -47,7 +47,6 @@ class QuickActionsBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        // 🌟 التعديل هنا: خليناه يكلم MainActivity عشان يفتح الـ ReportsFragment
         binding.actionAddReport.setOnClickListener {
             startActivity(
                 Intent(requireContext(), MainActivity::class.java).apply {
