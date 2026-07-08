@@ -1,0 +1,9 @@
+Index: .idea/.name
+===================================================================
+diff --git a/.idea/.name b/.idea/.name
+deleted file mode 100644
+--- a/.idea/.name	(revision b70d344822c983e7282c376a56544a81f49ae0b9)
++++ /dev/null	(revision b70d344822c983e7282c376a56544a81f49ae0b9)
+@@ -1,1 +0,0 @@
+-SmartHealthReminder
+\ No newline at end of file

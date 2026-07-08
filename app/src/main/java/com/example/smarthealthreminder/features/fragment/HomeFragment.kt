@@ -80,7 +80,7 @@ class HomeFragment : Fragment() {
         observeReminders()
         setupProfileObservation()
         observeHealthStats()
-        observeAdherenceFromPrefs()
+        observeAdherence()
     }
 
     private fun observeHealthStats() {
@@ -133,14 +133,14 @@ class HomeFragment : Fragment() {
         super.onResume()
         refreshUserProfile()
         updateDailyTipIfNeeded()
-        observeAdherenceFromPrefs()
+
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
         if (!hidden) {
             updateDailyTipIfNeeded()
-            observeAdherenceFromPrefs()
+
         }
     }
 
@@ -350,12 +350,35 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun observeAdherenceFromPrefs() {
-        val prefs = requireContext().getSharedPreferences("health_prefs", Context.MODE_PRIVATE)
-        val percent = prefs.getInt("adherence_percent", 0)
+    private fun observeAdherence() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.allReminders.collect { reminders ->
 
-        binding.tvHomeAdherencePercent.text = "$percent%"
-        binding.pbHomeAdherence.progress = percent
+                    val today = RecurrenceHelper.getTodayString()
+
+                    val todayReminders = reminders.filter {
+                        RecurrenceHelper.isDueOnDate(
+                            reminderDate = it.date,
+                            recurrenceType = it.recurrenceType,
+                            isRecurring = it.isRecurring,
+                            targetDate = today
+                        )
+                    }
+
+                    val total = todayReminders.size
+                    val completed = todayReminders.count {
+                        it.status.equals("Completed", true)
+                    }
+
+                    val percent =
+                        if (total > 0) (completed * 100) / total else 0
+
+                    binding.tvHomeAdherencePercent.text = "$percent%"
+                    binding.pbHomeAdherence.progress = percent
+                }
+            }
+        }
     }
 
     private fun stopMedicationPlan(plan: com.example.smarthealthreminder.features.data.local.entity.MedicationPlanEntity) {

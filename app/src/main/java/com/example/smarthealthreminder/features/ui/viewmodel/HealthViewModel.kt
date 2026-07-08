@@ -120,10 +120,13 @@ class HealthViewModel(val repository: HealthRepository) : ViewModel() {
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
     val pendingReminders: StateFlow<List<ReminderEntity>> = repository.getRemindersByStatus("Pending")
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
-
     val todayReminders: StateFlow<List<ReminderEntity>> = repository.getAllReminders()
         .map { reminders ->
-            val today = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date())
+            val today = SimpleDateFormat(
+                "yyyy-MM-dd",
+                Locale.getDefault()
+            ).format(Date())
+
             reminders.filter { it.date == today }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())

@@ -219,13 +219,14 @@ class MainActivity : BaseActivity() {
             DESTINATION_REPORTS -> {
                 showFragment(reportsFragment)
             }
+
             DESTINATION_DASHBOARD -> {
                 showFragment(dashboardFragment)
             }
             DESTINATION_ADD_REMINDER -> {
                 showFragment(addReminderFragment)
             }
-            "chatbot", "ai" -> {
+                "chatbot", "ai" -> {
                 if (bottomNavigation.selectedItemId != R.id.nav_ai) {
                     bottomNavigation.selectedItemId = R.id.nav_ai
                 }

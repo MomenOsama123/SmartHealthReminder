@@ -1,0 +1,13 @@
+Index: app/src/main/res/drawable/bg_card_primary.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><shape xmlns:android=\"http://schemas.android.com/apk/res/android\">\r\n    <solid android:color=\"@color/primary\"/>\r\n    <corners android:radius=\"16dp\"/>\r\n</shape>
+===================================================================
+diff --git a/app/src/main/res/drawable/bg_card_primary.xml b/app/src/main/res/drawable/bg_card_primary.xml
+--- a/app/src/main/res/drawable/bg_card_primary.xml	(revision c98228a27c5f6e27aa46cb45bed6fe5a1437378b)
++++ b/app/src/main/res/drawable/bg_card_primary.xml	(date 1781715638613)
+@@ -1,3 +1,4 @@
++<?xml version="1.0" encoding="utf-8"?>
+ <shape xmlns:android="http://schemas.android.com/apk/res/android">
+     <solid android:color="@color/primary"/>
+     <corners android:radius="16dp"/>

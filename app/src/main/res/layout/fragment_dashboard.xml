@@ -98,38 +98,49 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120dp"
                     android:baselineAligned="false"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
+                    android:padding="16dp">
 
                     <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="90dp"
-                        android:minHeight="90dp"
-                        android:background="@drawable/circle_bg">
+                        android:layout_width="80dp"
+                        android:layout_height="80dp">
 
-                        <TextView
-                            android:id="@+id/tvAdherencePercent"
+                        <ProgressBar
+                            android:id="@+id/pbHomeAdherence"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="72"
+                            android:progressDrawable="@drawable/circular_progress_bar" />
+
+                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/adherence_percent"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_gravity="center_horizontal|center_vertical"
-                            android:translationY="-6dp"/>
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/adherence_label"
-                            android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="11sp"
-                            android:layout_gravity="center_horizontal|center_vertical"
-                            android:translationY="12dp"/>
+                            <TextView
+                                android:id="@+id/tvAdherencePercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/_72"
+                                android:textColor="@color/text_dark"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/adherence"
+                                android:textColor="@color/hint_gray"
+                                android:textSize="8sp" />
+                        </LinearLayout>
 
                     </FrameLayout>
 
@@ -147,21 +158,125 @@
                             android:text="@string/on_track_title"
                             android:textColor="?attr/colorOnSurface"
                             android:textSize="16sp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="@string/on_track_desc"
                             android:textColor="?attr/colorOnSurfaceVariant"
-                            android:textSize="13sp"
-                            android:layout_marginTop="4dp"/>
+                            android:textSize="13sp" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
+            <!-- STEPS CARD -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardSteps"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                app:cardBackgroundColor="@color/dynamic_card_bg"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <!-- دائرة الخطوات -->
+                    <FrameLayout
+                        android:layout_width="80dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="11dp">
+
+                        <ProgressBar
+                            android:id="@+id/pbStepsProgress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="80dp"
+                            android:layout_height="91dp"
+                            android:indeterminate="false"
+                            android:max="100"
+                            android:progress="75"
+                            android:progressDrawable="@drawable/circular_progress_bar" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Today's"
+                                android:textColor="@color/text_muted"
+                                android:textSize="8sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvCurrentSteps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:fontFamily="serif"
+                                android:text="0"
+                                android:textColor="@color/text_dark"
+                                android:textSize="15sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/tvTargetSteps"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="/10000"
+                                android:textColor="@color/text_muted"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                    </FrameLayout>
+
+                    <!-- بيانات الخطوات -->
+                    <LinearLayout
+                        android:layout_width="205dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="17dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daily Steps Tracker"
+                            android:textColor="@color/text_dark"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvViewDetails"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:text="View Details"
+                            android:textColor="@color/card_stat_accent"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
 
             <!-- NEXT MEDICATION SECTION -->
             <LinearLayout
