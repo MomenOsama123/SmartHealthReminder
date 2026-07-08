@@ -163,24 +163,47 @@ class HomeFragment : Fragment() {
 
     private fun setupRecyclerView() {
         reminderAdapter = WelcomeReminderAdapter()
-        binding.rvTodayReminders.layoutManager = LinearLayoutManager(requireContext()).apply {
-            reverseLayout = true
-            stackFromEnd = true
-        }
+
+        binding.rvTodayReminders.layoutManager =
+            LinearLayoutManager(requireContext()).apply {
+                reverseLayout = true
+                stackFromEnd = true
+            }
+
         binding.rvTodayReminders.adapter = reminderAdapter
 
         reminderAdapter.setOnReminderClickListener { reminder ->
-            val intent = Intent(requireContext(), com.example.smarthealthreminder.features.activity.ViewReminderActivity::class.java).apply {
-                putExtra(com.example.smarthealthreminder.features.activity.ViewReminderActivity.EXTRA_REMINDER_ID, reminder.id)
-            }
-            startActivity(intent)
+            val id = reminder.id ?: return@setOnReminderClickListener
+
+            ReminderDetailDialogHelper.show(
+                context = requireContext(),
+                title = reminder.title ?: "Reminder",
+                description = reminder.description,
+                date = reminder.date,
+                time = reminder.time,
+                category = reminder.category,
+                status = reminder.status,
+                onMarkDone = {
+                    viewModel.markReminderDone(id)
+                },
+                onMarkMissed = {
+                    viewModel.markReminderMissed(id)
+                },
+                onDelete = {
+                    viewModel.deleteReminderById(id)
+                }
+            )
         }
 
         reminderAdapter.setOnStatusClickListener { reminder ->
-            if (reminder.status != "Completed") {
+            if (!reminder.status.equals("Completed", true)) {
                 reminder.id?.let {
                     viewModel.markReminderDone(it)
-                    Toast.makeText(requireContext(), "Reminder marked as done!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Reminder marked as done!",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
