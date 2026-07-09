@@ -12,6 +12,7 @@ import android.provider.MediaStore
 import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.smarthealthreminder.R
+import com.example.smarthealthreminder.features.data.local.entity.ReminderEntity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.LinearProgressIndicator
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +37,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -42,7 +45,9 @@ class ReportsFragment : Fragment() {
 
     private val viewModel: ReportViewModel by viewModel()
 
-    // 1. Inflate the fragment layout
+    // Helper data structure to hold daily metrics for the UI calculation
+    data class DayMedicationSummary(val total: Int, val taken: Int, val missed: Int)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -50,18 +55,17 @@ class ReportsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_reports, container, false)
     }
 
-    // 2. Setup UI handling and business logic
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Apply dynamic WindowInsets safely to avoid toolbar overlapping
+        // Apply dynamic WindowInsets safely to avoid toolbar overlapping issues
         ViewCompat.setOnApplyWindowInsetsListener(view) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        // Find views by their respective XML IDs
+        // Initialize UI component reference mappings from compiled layouts
         val fabCreateReport = view.findViewById<FloatingActionButton>(R.id.fab_create_report)
         val recyclerReports = view.findViewById<RecyclerView>(R.id.recycler_reports)
         val tvPercentage = view.findViewById<TextView>(R.id.tv_percentage)
@@ -74,76 +78,208 @@ class ReportsFragment : Fragment() {
         val tvStatusTitle = view.findViewById<TextView>(R.id.tv_status_title)
         val tvStatusDescription = view.findViewById<TextView>(R.id.tv_status_description)
 
-        // Set up the list layout manager
+        // Map Weekday view IDs inside a sequential list array structure
+        val dayViews = listOf(
+            view.findViewById<TextView>(R.id.day_mon),
+            view.findViewById<TextView>(R.id.day_tue),
+            view.findViewById<TextView>(R.id.day_wed),
+            view.findViewById<TextView>(R.id.day_thu),
+            view.findViewById<TextView>(R.id.day_fri),
+            view.findViewById<TextView>(R.id.day_sat),
+            view.findViewById<TextView>(R.id.day_sun)
+        )
+
+        // Updates the day selection styles and text metrics inside the card block dynamically
+        fun updateDaysUI(selectedDayIndex: Int, remindersMap: Map<Int, DayMedicationSummary>) {
+            dayViews.forEachIndexed { index, textView ->
+                val summary = remindersMap[index]
+
+                when {
+                    // Current Active Selection State
+                    index == selectedDayIndex -> {
+                        textView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+                        textView?.background = ContextCompat.getDrawable(requireContext(), R.drawable.bg_rounded_pill)
+                        textView?.backgroundTintList = ContextCompat.getColorStateList(requireContext(), R.color.primary_green)
+
+                        tvSymptomsOverview?.text = if (summary != null) {
+                            "Total: ${summary.total} | ✅ Taken: ${summary.taken} | ❌ Missed: ${summary.missed}"
+                        } else {
+                            "No medications scheduled for this day."
+                        }
+                    }
+                    // Day contains database information and missed doses are zero (Stable Green)
+                    summary != null && summary.missed == 0 -> {
+                        textView?.background = null
+                        textView?.backgroundTintList = null
+                        textView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.primary_green))
+                    }
+                    // Day contains database information and missed doses exist (Warning Red)
+                    summary != null && summary.missed > 0 -> {
+                        textView?.background = null
+                        textView?.backgroundTintList = null
+                        textView?.setTextColor(ContextCompat.getColor(requireContext(), R.color.error_red))
+                    }
+                    // Default fallback state mapping dynamic theme color resources
+                    else -> {
+                        val typedValue = TypedValue()
+                        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceVariant, typedValue, true)
+                        textView?.setTextColor(typedValue.data)
+                        textView?.background = null
+                        textView?.backgroundTintList = null
+                    }
+                }
+            }
+
+            // Revert summary space text back to fallback label if layout initialization index is passed
+            if (selectedDayIndex == -1) {
+                tvSymptomsOverview?.text = "Select a day to view your medication history."
+            }
+        }
+
         recyclerReports.layoutManager = LinearLayoutManager(requireContext())
 
-        // Set explicit click listener for manually generating a report
+        // Trigger manual analytics calculations on back-end IO thread pools
         fabCreateReport.setOnClickListener {
             viewModel.generateRealReport()
             Toast.makeText(requireContext(), getString(R.string.generating_report), Toast.LENGTH_SHORT).show()
         }
 
-        // Setup download button listener to convert statistics to an official PDF
+        // Setup PDF download print engine routine
         val downloadBtn = view.findViewById<Button>(R.id.download_btn)
         downloadBtn.setOnClickListener {
             Toast.makeText(requireContext(), getString(R.string.preparing_report), Toast.LENGTH_SHORT).show()
             val fileName = "Trusta_Health_Report_${System.currentTimeMillis()}.pdf"
-
-            // Process PDF rendering in IO thread to keep UI completely responsive
             lifecycleScope.launch(Dispatchers.IO) {
                 generateAndSavePdfDirectly(fileName)
             }
         }
 
-        // Collect and observe database records continuously via Kotlin Flow
+        // Live observation pipeline gathering historical system reports and dynamic compliance indexes
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.allReports.collect { reportsList ->
                 if (reportsList.isNotEmpty()) {
                     val latestReport = reportsList.first()
 
-                    // Populate layout components with database text values
-                    tvPercentage.text = getString(R.string.percentage_format, latestReport.adherencePercentage)
-                    tvAdherenceMessage?.text = getString(R.string.report_adherence_summary, latestReport.adherencePercentage, latestReport.missedDoses)
-                    tvSymptomsOverview?.text = latestReport.symptomsOverview
+                    // Keep AI Insights from the latest generated report
                     tvInsight1?.text = latestReport.aiInsight1
                     tvInsight2?.text = latestReport.aiInsight2
 
-                    // Apply visual indicators based on calculated adherence boundaries
-                    if (latestReport.adherencePercentage >= 80) {
-                        tvStatusTitle?.text = getString(R.string.status_stable_title)
-                        tvStatusDescription?.text = getString(R.string.status_stable_description)
-                        progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.primary_green))
-                    } else if (latestReport.adherencePercentage >= 50) {
-                        tvStatusTitle?.text = getString(R.string.status_fair_title)
-                        tvStatusDescription?.text = getString(R.string.status_fair_description)
-                        progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.pending))
-                    } else {
-                        tvStatusTitle?.text = getString(R.string.status_action_title)
-                        tvStatusDescription?.text = getString(R.string.status_action_description)
-                        progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.error_red))
-                    }
-
-                    progressBar?.setProgress(latestReport.adherencePercentage, true)
-
-                    // Display local timestamp indicating when stats were computed
+                    // Show the timestamp of the last generated report
                     val sdf = SimpleDateFormat("MMM dd, yyyy HH:mm", Locale.getDefault())
                     val lastUpdatedText = getString(R.string.last_updated_label, sdf.format(Date(latestReport.createdAt)))
                     tvLastUpdated?.text = lastUpdatedText
 
-                    // 🌟 SMART LOGIC: Generate a new report ONLY if 7 days have passed since the latest one
+                    // Fetch real database reminder tracking streams for the current trailing week
+                    val sevenDaysAgoTimestamp = System.currentTimeMillis() - (7 * 24 * 60 * 60 * 1000L)
+
+                    viewModel.getRecentReminders(sevenDaysAgoTimestamp).collect { remindersList ->
+
+                        // =======================================================
+                        // 1. Calculate Live Adherence Percentage
+                        // =======================================================
+                        val totalDosesThisWeek = remindersList.size
+                        val takenDosesThisWeek = remindersList.count { it.status.equals("Completed", ignoreCase = true) }
+                        val missedDosesThisWeek = totalDosesThisWeek - takenDosesThisWeek
+
+                        // Calculate percentage, preventing division by zero
+                        val calculatedPercentage = if (totalDosesThisWeek > 0) {
+                            (takenDosesThisWeek * 100) / totalDosesThisWeek
+                        } else {
+                            0
+                        }
+
+                        // Update Adherence Progress UI (Card 2)
+                        tvPercentage.text = getString(R.string.percentage_format, calculatedPercentage)
+                        tvAdherenceMessage?.text = getString(R.string.report_adherence_summary, calculatedPercentage, missedDosesThisWeek)
+                        progressBar?.setProgress(calculatedPercentage, true)
+
+                        // Update Health Status UI (Card 1) based on the newly calculated percentage
+                        if (calculatedPercentage >= 80) {
+                            tvStatusTitle?.text = getString(R.string.status_stable_title)
+                            tvStatusDescription?.text = getString(R.string.status_stable_description)
+                            progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.primary_green))
+                        } else if (calculatedPercentage >= 50) {
+                            tvStatusTitle?.text = getString(R.string.status_fair_title)
+                            tvStatusDescription?.text = getString(R.string.status_fair_description)
+                            progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.pending))
+                        } else {
+                            tvStatusTitle?.text = getString(R.string.status_action_title)
+                            tvStatusDescription?.text = getString(R.string.status_action_description)
+                            progressBar?.setIndicatorColor(ContextCompat.getColor(requireContext(), R.color.error_red))
+                        }
+
+                        // =======================================================
+                        // 2. Group Reminders for Daily Breakdown (Card 3)
+                        // =======================================================
+                        val realRemindersMap = mutableMapOf<Int, DayMedicationSummary>()
+
+                        // Group reminders matching day index arrays using the date String
+                        val groupedReminders = remindersList.groupBy { reminder ->
+                            getDayIndexFromDateString(reminder.date)
+                        }
+
+                        // Process nested arrays to compute adherence metrics dynamically
+                        groupedReminders.forEach { (dayIndex, dayReminders) ->
+                            val total = dayReminders.size
+                            val taken = dayReminders.count { it.status.equals("Completed", ignoreCase = true) }
+                            val missed = total - taken
+
+                            realRemindersMap[dayIndex] = DayMedicationSummary(total, taken, missed)
+                        }
+
+                        // Attach listeners and setup starting view configurations
+                        updateDaysUI(-1, realRemindersMap)
+                        dayViews.forEachIndexed { index, textView ->
+                            textView?.setOnClickListener {
+                                updateDaysUI(index, realRemindersMap)
+                            }
+                        }
+                    }
+
+                    // Auto-generate a new report if 7 days have passed since the last one
                     val sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000L
                     if (System.currentTimeMillis() - latestReport.createdAt > sevenDaysInMillis) {
                         viewModel.generateRealReport()
                     }
                 } else {
-                    // Safety block preserved: Generate first report if database is entirely empty
+                    // Generate initial report if the database is empty
                     viewModel.generateRealReport()
                 }
             }
         }
     }
 
-    // Comprehensive function to generate a well-formatted professional A4 PDF document
+    // Helper function to convert String date (e.g., "dd/MM/yyyy" or "yyyy-MM-dd") into weekday index (0-6)
+    private fun getDayIndexFromDateString(dateString: String?): Int {
+        if (dateString.isNullOrEmpty()) return 0
+
+        val formats = arrayOf("dd/MM/yyyy", "yyyy-MM-dd", "MM/dd/yyyy", "yyyy/MM/dd")
+        for (format in formats) {
+            try {
+                val sdf = SimpleDateFormat(format, Locale.getDefault())
+                val date = sdf.parse(dateString)
+                if (date != null) {
+                    val calendar = Calendar.getInstance()
+                    calendar.time = date
+                    val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
+                    return when (dayOfWeek) {
+                        Calendar.MONDAY -> 0
+                        Calendar.TUESDAY -> 1
+                        Calendar.WEDNESDAY -> 2
+                        Calendar.THURSDAY -> 3
+                        Calendar.FRIDAY -> 4
+                        Calendar.SATURDAY -> 5
+                        else -> 6 // Calendar.SUNDAY
+                    }
+                }
+            } catch (e: Exception) {
+                // Ignore format mismatch and try the next one
+            }
+        }
+        return 0 // Fallback if parsing fails
+    }
+
+    // PDF Canvas generator processing routine
     private suspend fun generateAndSavePdfDirectly(fileName: String) {
         try {
             val statusTitle: String
@@ -154,7 +290,6 @@ class ReportsFragment : Fragment() {
 
             withContext(Dispatchers.Main) {
                 val view = requireView()
-                // Extract current text content from the active layout views
                 statusTitle = view.findViewById<TextView>(R.id.tv_status_title)?.text.toString()
                 percentage = view.findViewById<TextView>(R.id.tv_percentage)?.text.toString()
                 adherenceMsg = view.findViewById<TextView>(R.id.tv_adherence_message)?.text.toString()
@@ -162,7 +297,6 @@ class ReportsFragment : Fragment() {
                 insight2 = view.findViewById<TextView>(R.id.tv_insight2)?.text.toString()
             }
 
-            // Construct a standardized A4 document dimensions schema (595 x 842 points)
             val document = PdfDocument()
             val pageWidth = 595
             val pageHeight = 842
@@ -170,10 +304,8 @@ class ReportsFragment : Fragment() {
             val page = document.startPage(pageInfo)
             val canvas = page.canvas
 
-            // Fill background layer with plain white color
             canvas.drawColor(Color.WHITE)
 
-            // Initialize distinct drawing brushes with configured typography weights
             val titlePaint = Paint().apply {
                 color = Color.BLACK
                 textSize = 26f
@@ -182,7 +314,7 @@ class ReportsFragment : Fragment() {
             }
 
             val sectionPaint = Paint().apply {
-                color = Color.rgb(46, 125, 50) // Medical theme green tone
+                color = Color.rgb(46, 125, 50)
                 textSize = 18f
                 typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
             }
@@ -198,12 +330,10 @@ class ReportsFragment : Fragment() {
                 strokeWidth = 2f
             }
 
-            // Sequential canvas drawing tracking variables
             var currentY = 60f
             val marginX = 50f
             val contentWidth = pageWidth - (marginX * 2).toInt()
 
-            // Draw formal document header titles
             canvas.drawText(getString(R.string.app_name), pageWidth / 2f, currentY, titlePaint)
             currentY += 30f
 
@@ -217,11 +347,9 @@ class ReportsFragment : Fragment() {
             canvas.drawText(getString(R.string.pdf_generated_on, currentDate), marginX, currentY, textPaint)
             currentY += 20f
 
-            // Draw structural separating line
             canvas.drawLine(marginX, currentY, pageWidth - marginX, currentY, linePaint)
             currentY += 40f
 
-            // Render Section 1: Current Health Condition Status
             canvas.drawText(getString(R.string.pdf_section_health_status), marginX, currentY, sectionPaint)
             currentY += 30f
             canvas.drawText(statusTitle, marginX + 15f, currentY, textPaint)
@@ -230,7 +358,6 @@ class ReportsFragment : Fragment() {
             canvas.drawLine(marginX, currentY, pageWidth - marginX, currentY, linePaint)
             currentY += 40f
 
-            // Render Section 2: Medication Adherence rate block
             canvas.drawText(getString(R.string.pdf_section_adherence), marginX, currentY, sectionPaint)
             currentY += 30f
 
@@ -240,7 +367,6 @@ class ReportsFragment : Fragment() {
 
             textPaint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
 
-            // Instantiate multiline text layout block to safely wrap long adherence strings
             val adherenceLayout = StaticLayout.Builder.obtain(adherenceMsg, 0, adherenceMsg.length, textPaint, contentWidth - 15)
                 .setAlignment(Layout.Alignment.ALIGN_NORMAL)
                 .build()
@@ -253,7 +379,6 @@ class ReportsFragment : Fragment() {
             canvas.drawLine(marginX, currentY, pageWidth - marginX, currentY, linePaint)
             currentY += 40f
 
-            // Render Section 3: AI Engine Diagnostics & Insights
             canvas.drawText(getString(R.string.pdf_section_insights), marginX, currentY, sectionPaint)
             currentY += 30f
 
@@ -272,7 +397,6 @@ class ReportsFragment : Fragment() {
             insight2Layout.draw(canvas)
             canvas.restore()
 
-            // Print formal document footer line at the page bottom boundary
             val footerPaint = Paint().apply {
                 color = Color.LTGRAY
                 textSize = 12f
@@ -280,10 +404,9 @@ class ReportsFragment : Fragment() {
             }
             canvas.drawText(getString(R.string.pdf_footer, getString(R.string.app_name)), pageWidth / 2f, pageHeight - 40f, footerPaint)
 
-            // Commit and close active document drawing canvas page
             document.finishPage(page)
 
-            // Write document data out directly to user storage directory
+            // Scans and saves Document bytes based on active SDK versions safely
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val contentValues = ContentValues().apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
