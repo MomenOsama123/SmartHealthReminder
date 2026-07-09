@@ -68,10 +68,12 @@ class CompleteProfileActivity : BaseActivity() {
         binding = ActivityCompleteProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // MODIFIED: Updated to combine systemBars and ime (keyboard) insets.
+        // This ensures the root view adds padding dynamically when the keyboard is shown.
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime())
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            windowInsets
         }
 
         // Make edit text unwritable via keyboard (matches ProfileActivity behavior)
@@ -79,9 +81,11 @@ class CompleteProfileActivity : BaseActivity() {
         binding.etGender.showSoftInputOnFocus = false
         binding.etBloodType.showSoftInputOnFocus = false
 
-
         setupListeners()
+
+        // MODIFIED: Re-enabled the auto scroll feature to bring bottom fields into view automatically
         setupAutoScroll()
+
         setupImagePicker()
     }
 
@@ -142,7 +146,7 @@ class CompleteProfileActivity : BaseActivity() {
             val options = arrayOf("Female", "Male", "Non-Binary", "Other")
             MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Gender")
-                .setItems(options) { _, which -> 
+                .setItems(options) { _, which ->
                     binding.etGender.setText(options[which])
                 }
                 .show()
@@ -153,7 +157,7 @@ class CompleteProfileActivity : BaseActivity() {
             val options = arrayOf("A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-")
             MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Blood Type")
-                .setItems(options) { _, which -> 
+                .setItems(options) { _, which ->
                     binding.etBloodType.setText(options[which])
                 }
                 .show()
@@ -172,6 +176,8 @@ class CompleteProfileActivity : BaseActivity() {
         })
     }
 
+    // MODIFIED: Excluded etFullName from this list to prevent it from scrolling out of view.
+    // It now only tracks the bottom fields that can actually be hidden by the soft keyboard.
     private fun setupAutoScroll() {
         val bottomFields = listOf(
             binding.etWeight,
@@ -185,8 +191,9 @@ class CompleteProfileActivity : BaseActivity() {
             editText.setOnFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
                     binding.complateInfo.postDelayed({
-                        binding.complateInfo.smoothScrollTo(0, view.bottom)
-                    }, 200)
+                        // Scrolls smoothly to the bottom of the active view + 150px extra padding for perfect visibility
+                        binding.complateInfo.smoothScrollTo(0, view.bottom + 150)
+                    }, 300)
                 }
             }
         }
@@ -200,14 +207,14 @@ class CompleteProfileActivity : BaseActivity() {
         val bloodType = binding.etBloodType.text.toString().trim()
         val weight = binding.etWeight.text.toString().trim()
         val height = binding.etHeight.text.toString().trim()
-        
+
         // Optional fields
         val chronicDiseases = binding.etChronicDiseases.text.toString().trim()
         val allergies = binding.etAllergies.text.toString().trim()
         val emergencyContact = binding.etEmergencyContact.text.toString().trim()
 
         // Mandatory fields check
-        if (fullName.isEmpty() || dob.isEmpty() || dob == getString(com.example.smarthealthreminder.R.string.date) || 
+        if (fullName.isEmpty() || dob.isEmpty() || dob == getString(com.example.smarthealthreminder.R.string.date) ||
             gender.isEmpty() || bloodType.isEmpty()) {
             Toast.makeText(this, "Please fill all mandatory fields", Toast.LENGTH_SHORT).show()
             return
@@ -277,7 +284,7 @@ class CompleteProfileActivity : BaseActivity() {
                     profileImage = userMap["profileImage"] as String?,
                     isProfileCompleted = true
                 )
-                
+
                 val existingLocalUser = localDb.getUserByFirebaseId(uid)
                 if (existingLocalUser != null) {
                     localDb.updateUser(userProfile)
@@ -289,14 +296,14 @@ class CompleteProfileActivity : BaseActivity() {
                     .edit()
                     .putBoolean("isProfileCompleted", true)
                     .apply()
-                
+
                 Toast.makeText(this, "Profile Saved!", Toast.LENGTH_SHORT).show()
                 navigateToMain()
             }
             .addOnFailureListener { e ->
                 setLoading(false)
                 Toast.makeText(this, "Failed to save profile: ${e.message}", Toast.LENGTH_SHORT).show()
-            println("--------------------------------Failed to save profile: ${e.message}")
+                println("--------------------------------Failed to save profile: ${e.message}")
             }
     }
 

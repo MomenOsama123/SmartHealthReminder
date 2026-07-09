@@ -72,6 +72,7 @@
             android:exported="false" />
         <activity
             android:name=".features.auth.signup.CompleteProfileActivity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".features.welcome.WelcomeActivity2"
@@ -102,7 +103,6 @@
             android:turnScreenOn="true" />
 
 
-
         <activity
             android:name=".features.search.SearchActivity"
             android:exported="false" />
@@ -111,10 +111,9 @@
             android:exported="false" />
         <activity
             android:name=".features.profileInfo.EditProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.reports.ReportsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".features.plan.TodayPlanActivity"
             android:exported="false" />

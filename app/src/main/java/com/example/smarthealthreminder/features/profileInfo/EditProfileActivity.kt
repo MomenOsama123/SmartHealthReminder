@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -96,15 +97,19 @@ class EditProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // MODIFIED: Combined systemBars and ime (keyboard) insets to adjust padding dynamically
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime())
+            v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            windowInsets
         }
 
         initViews()
         loadUserData()
         setupListeners()
+
+        // MODIFIED: Added setupAutoScroll to trigger automatic scrolling when input fields are focused
+        setupAutoScroll()
     }
 
     private fun initViews() {
@@ -125,6 +130,44 @@ class EditProfileActivity : AppCompatActivity() {
         bloodTypeInput.showSoftInputOnFocus = false
 
         findViewById<View>(R.id.btn_back).setOnClickListener { finish() }
+    }
+
+    // MODIFIED: Fixed the scroll math. Now it accurately places the view at the bottom of the visible screen
+    // instead of pushing it off the top edge.
+    private fun setupAutoScroll() {
+        val bottomFields = listOf(
+            weightInput,
+            heightInput,
+            diseasesInput,
+            allergiesInput,
+            emergencyContactInput
+        )
+
+        val scrollView = findViewById<ScrollView>(R.id.editProfileScrollView)
+
+        bottomFields.forEach { editText ->
+            editText.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    scrollView?.postDelayed({
+                        val rect = android.graphics.Rect()
+                        view.getDrawingRect(rect)
+
+                        // Map coordinates relative to the ScrollView container
+                        scrollView.offsetDescendantRectToMyCoords(view, rect)
+
+                        // The padding space we want below the input field
+                        val padding = 150
+
+                        // CORRECT MATH: (Bottom of view + padding) - (Visible height of ScrollView)
+                        // This ensures the view is aligned nicely above the keyboard, not pushed off the top.
+                        val targetScrollY = rect.bottom + padding - scrollView.height
+
+                        // Scroll to the target position, ensuring it doesn't scroll into negative values
+                        scrollView.smoothScrollTo(0, targetScrollY.coerceAtLeast(0))
+                    }, 300)
+                }
+            }
+        }
     }
 
     private fun loadUserData() {
