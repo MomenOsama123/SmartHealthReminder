@@ -304,7 +304,9 @@ class HomeFragment : Fragment() {
                     }
 
                     val todayReminders = totalTodayReminders
-                        .sortedBy { it.time ?: "99:99" }
+                        .sortedByDescending { it.id } // Sort by ID to get the last added ones first
+                        .take(3) // Limit to at most three
+                        .sortedBy { it.time ?: "99:99" } // Re-sort by time for display if preferred
 
                     val reminders = todayReminders.map { entity ->
                         Reminder(
