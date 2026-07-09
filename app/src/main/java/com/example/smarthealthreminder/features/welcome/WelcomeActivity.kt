@@ -62,24 +62,20 @@ class WelcomeActivity : BaseActivity() {
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
-                // Robust check: try direct boolean read first, then object mapping
-                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?: 
-                                       document.getBoolean("profileCompleted") ?: 
-                                       (document.toObject(User::class.java)?.isProfileCompleted ?: false)
-                
-                // Fallback to local storage if Firestore is uncertain
-                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .getBoolean("isProfileCompleted", false)
-                
-                val isCompleted = firestoreCompleted || localCompleted
-                
-                // Sync local storage if Firestore confirms completion
-                if (firestoreCompleted && !localCompleted) {
-                    getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                        .edit()
-                        .putBoolean("isProfileCompleted", true)
-                        .apply()
+                // Truth from Firestore for this specific account
+                val isCompleted = if (document.exists()) {
+                    document.getBoolean("isProfileCompleted") ?: 
+                    document.getBoolean("profileCompleted") ?: 
+                    (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                } else {
+                    false
                 }
+                
+                // Update local storage to match this user's state
+                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isProfileCompleted", isCompleted)
+                    .apply()
 
                 val intent = if (isCompleted) {
                     Intent(this, com.example.smarthealthreminder.features.activity.MainActivity::class.java).apply {
@@ -95,7 +91,7 @@ class WelcomeActivity : BaseActivity() {
                 isCheckingAuth = false
             }
             .addOnFailureListener {
-                // Network failure fallback: check local storage
+                // Network failure fallback: check local storage for this session
                 val isCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .getBoolean("isProfileCompleted", false)
                 

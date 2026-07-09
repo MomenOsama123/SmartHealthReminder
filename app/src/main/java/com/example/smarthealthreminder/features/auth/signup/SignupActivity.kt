@@ -195,15 +195,16 @@ class SignupActivity : BaseActivity() {
         val firestore = FirebaseFirestore.getInstance()
         firestore.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
-                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?:
-                document.getBoolean("profileCompleted") ?:
-                (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                // Determine completion state based ONLY on Firestore for this account
+                val isCompleted = if (document.exists()) {
+                    document.getBoolean("isProfileCompleted") ?: 
+                    document.getBoolean("profileCompleted") ?: 
+                    (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                } else {
+                    false
+                }
 
-                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .getBoolean("isProfileCompleted", false)
-
-                val isCompleted = firestoreCompleted || localCompleted
-
+                // Update local storage to match this user's state
                 getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .edit()
                     .putBoolean("isProfileCompleted", isCompleted)
@@ -213,6 +214,7 @@ class SignupActivity : BaseActivity() {
                 if (isCompleted) navigateToMain() else navigateToCompleteProfile()
             }
             .addOnFailureListener {
+                // On failure, fallback to local state for this session
                 val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .getBoolean("isProfileCompleted", false)
                 setLoading(false)

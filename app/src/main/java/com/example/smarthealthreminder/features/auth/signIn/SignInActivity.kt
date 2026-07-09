@@ -149,24 +149,26 @@ class SignInActivity : BaseActivity() {
         val firestore = FirebaseFirestore.getInstance()
         firestore.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
-                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?: 
-                                       document.getBoolean("profileCompleted") ?: 
-                                       (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                // Truth from Firestore for this specific account
+                val firestoreCompleted = if (document.exists()) {
+                    document.getBoolean("isProfileCompleted") ?: 
+                    document.getBoolean("profileCompleted") ?: 
+                    (document.toObject(User::class.java)?.isProfileCompleted ?: false)
+                } else {
+                    false
+                }
                 
-                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                    .getBoolean("isProfileCompleted", false)
-                
-                val isCompleted = firestoreCompleted || localCompleted
-                
+                // Update local storage with the state of the current user
                 getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .edit()
-                    .putBoolean("isProfileCompleted", isCompleted)
+                    .putBoolean("isProfileCompleted", firestoreCompleted)
                     .apply()
 
                 setLoading(false)
-                if (isCompleted) navigateToMain() else navigateToCompleteProfile()
+                if (firestoreCompleted) navigateToMain() else navigateToCompleteProfile()
             }
             .addOnFailureListener {
+                // Fallback to local storage only if Firestore is unreachable
                 val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .getBoolean("isProfileCompleted", false)
                 setLoading(false)
