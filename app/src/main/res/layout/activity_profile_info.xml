@@ -33,7 +33,7 @@
             android:layout_toEndOf="@id/btn_back"
             android:layout_centerVertical="true"
             android:layout_marginStart="14dp"
-            android:text="@string/app_name"
+            android:text="@string/profile_info"
             android:textColor="?attr/colorOnSurface"
             android:textSize="20sp"
             android:textStyle="bold" />
