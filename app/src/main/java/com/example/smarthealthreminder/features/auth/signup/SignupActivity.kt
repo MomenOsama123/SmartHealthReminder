@@ -2,13 +2,18 @@ package com.example.smarthealthreminder.features.auth.signup
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.util.Patterns
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
+import com.example.smarthealthreminder.R
 import com.example.smarthealthreminder.core.base.BaseActivity
 import com.example.smarthealthreminder.databinding.SignupBinding
 import com.example.smarthealthreminder.features.activity.MainActivity
@@ -18,7 +23,6 @@ import com.example.smarthealthreminder.features.data_dashboard.DatabaseHelper
 import com.example.smarthealthreminder.features.model_dashboard.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import androidx.core.content.edit
 
 class SignupActivity : BaseActivity() {
 
@@ -26,7 +30,6 @@ class SignupActivity : BaseActivity() {
     private val viewModel: SignupViewModel by viewModels()
     private val auth by lazy { FirebaseAuth.getInstance() }
     
-    // Google Authentication
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,32 +53,54 @@ class SignupActivity : BaseActivity() {
     }
 
     private fun setupListeners() {
-        binding.loginText.setOnClickListener {
+        binding.tvSwitchAuth.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
             finish()
         }
 
-        binding.signupBtn.setOnClickListener {
+        binding.btnSubmit.setOnClickListener {
             if (validateForm()) {
-                val email = binding.emailInput.text.toString().trim()
-                val password = binding.passwordInput.text.toString()
+                val email = binding.etEmail.text.toString().trim()
+                val password = binding.etPassword.text.toString()
                 viewModel.signUp(email, password)
             }
         }
 
         // Clear error indicators when user starts typing
-        binding.emailInput.addTextChangedListener { binding.emailInput.error = null }
-        binding.passwordInput.addTextChangedListener { binding.passwordInput.error = null }
-        binding.confirmPasswordInput.addTextChangedListener { binding.confirmPasswordInput.error = null }
+        binding.etEmail.addTextChangedListener { binding.etEmail.error = null }
+        binding.etPassword.addTextChangedListener { binding.etPassword.error = null }
+        binding.etConfirmPassword.addTextChangedListener { binding.etConfirmPassword.error = null }
 
+        // Password visibility toggle
+        binding.icTogglePassword.setOnClickListener {
+            togglePasswordVisibility(binding.etPassword, binding.icTogglePassword)
+        }
+
+        binding.icToggleConfirmPassword.setOnClickListener {
+            togglePasswordVisibility(binding.etConfirmPassword, binding.icToggleConfirmPassword)
+        }
+    }
+
+    private fun togglePasswordVisibility(editText: EditText, imageView: ImageView) {
+        val selection = editText.selectionEnd
+        val isPasswordVisible = editText.inputType == (InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD)
+
+        if (isPasswordVisible) {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            imageView.setImageResource(R.drawable.ic_visibility_off)
+            imageView.contentDescription = getString(R.string.show_password)
+        } else {
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+            imageView.setImageResource(R.drawable.ic_visibility)
+            imageView.contentDescription = getString(R.string.hide_password)
+        }
+        editText.setSelection(selection)
     }
 
     private fun setupObservers() {
         viewModel.signupState.observe(this) { state ->
             when (state) {
-                is SignupState.Loading -> {
-                    setLoading(true)
-                }
+                is SignupState.Loading -> setLoading(true)
                 is SignupState.Success -> {
                     setLoading(false)
                     checkProfileAndNavigate()
@@ -84,16 +109,15 @@ class SignupActivity : BaseActivity() {
                     setLoading(false)
                     showSnakeBar("Sign Up Failed: ${state.message}")
                 }
-                is SignupState.Idle -> {
-                    setLoading(false)
-                }
+                is SignupState.Idle -> setLoading(false)
             }
         }
     }
 
     private fun setLoading(isLoading: Boolean) {
         binding.progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
-        binding.signupBtn.isEnabled = !isLoading
+        binding.btnSubmit.isEnabled = !isLoading
+        binding.btnGoogle.isEnabled = !isLoading
     }
 
     private fun setupGoogleAuth() {
@@ -101,11 +125,13 @@ class SignupActivity : BaseActivity() {
             if (isSuccess) {
                 checkProfileAndNavigate()
             } else {
+                setLoading(false)
                 showSnakeBar(error ?: "Google Error")
             }
         }
 
-        binding.root.findViewWithTag<View>("google_btn")?.setOnClickListener {
+        binding.btnGoogle.setOnClickListener {
+            setLoading(true)
             googleAuthHelper.startLogin()
         }
     }
@@ -113,23 +139,23 @@ class SignupActivity : BaseActivity() {
     private fun validateForm(): Boolean {
         var isValid = true
 
-        val email = binding.emailInput.text.toString().trim()
-        val password = binding.passwordInput.text.toString()
-        val confirmPassword = binding.confirmPasswordInput.text.toString()
+        val email = binding.etEmail.text.toString().trim()
+        val password = binding.etPassword.text.toString()
+        val confirmPassword = binding.etConfirmPassword.text.toString()
         val isChecked = binding.checkBox.isChecked
 
         if (email.isEmpty() || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.emailInput.error = "Enter a valid email address"
+            binding.etEmail.error = "Enter a valid email address"
             isValid = false
         }
 
         if (password.length < 6) {
-            binding.passwordInput.error = "Password must be at least 6 characters"
+            binding.etPassword.error = "Password must be at least 6 characters"
             isValid = false
         }
 
         if (password != confirmPassword) {
-            binding.confirmPasswordInput.error = "Passwords do not match"
+            binding.etConfirmPassword.error = "Passwords do not match"
             isValid = false
         }
 
@@ -143,58 +169,54 @@ class SignupActivity : BaseActivity() {
 
     private fun checkProfileAndNavigate() {
         val uid = auth.currentUser?.uid ?: return
-        val db = FirebaseFirestore.getInstance()
+        val email = auth.currentUser?.email ?: ""
+        saveSessionAndSync(uid, email)
+    }
 
-        // Sync with local session
-        getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-            .edit {
-                putString("FIREBASE_ID", uid)
-            }
+    private fun saveSessionAndSync(firebaseId: String, email: String) {
+        getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE).edit {
+            putString("FIREBASE_ID", firebaseId)
+        }
 
-        db.collection("users").document(uid).get()
+        val db = DatabaseHelper(this)
+        if (db.getUserByFirebaseId(firebaseId) == null) {
+            val user = User(
+                firebaseId = firebaseId,
+                name = auth.currentUser?.displayName ?: "User",
+                email = email
+            )
+            db.insertUser(user)
+        }
+
+        checkProfileCompletion(firebaseId)
+    }
+
+    private fun checkProfileCompletion(uid: String) {
+        val firestore = FirebaseFirestore.getInstance()
+        firestore.collection("users").document(uid).get()
             .addOnSuccessListener { document ->
-                if (document.exists()) {
-                    val firestoreUser = document.toObject(User::class.java)
-                    
-                    // Prioritize the Boolean field directly, then the User object
-                    val isCompleted = document.getBoolean("isProfileCompleted") ?: 
-                                     document.getBoolean("profileCompleted") ?: 
-                                     (firestoreUser?.isProfileCompleted ?: false)
-                    
-                    if (isCompleted) {
-                        // Sync SQLite with full profile from Firestore
-                        firestoreUser?.let {
-                            val localDb = DatabaseHelper(this)
-                            if (localDb.getUserByFirebaseId(uid) == null) {
-                                localDb.insertUser(it)
-                            } else {
-                                localDb.updateUser(it)
-                            }
-                        }
+                val firestoreCompleted = document.getBoolean("isProfileCompleted") ?:
+                document.getBoolean("profileCompleted") ?:
+                (document.toObject(User::class.java)?.isProfileCompleted ?: false)
 
-                        // Sync local session
-                        getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
-                            .edit {
-                                putBoolean("isProfileCompleted", true)
-                            }
-                        
-                        navigateToMain()
-                        return@addOnSuccessListener
-                    }
-                }
-                
-                // If document doesn't exist or isProfileCompleted is false
-                navigateToCompleteProfile()
-            }
-            .addOnFailureListener {
-                // Fallback to local status on failure
                 val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
                     .getBoolean("isProfileCompleted", false)
-                if (localCompleted) {
-                    navigateToMain()
-                } else {
-                    navigateToCompleteProfile()
-                }
+
+                val isCompleted = firestoreCompleted || localCompleted
+
+                getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .edit()
+                    .putBoolean("isProfileCompleted", isCompleted)
+                    .apply()
+
+                setLoading(false)
+                if (isCompleted) navigateToMain() else navigateToCompleteProfile()
+            }
+            .addOnFailureListener {
+                val localCompleted = getSharedPreferences("HealthSyncPrefs", MODE_PRIVATE)
+                    .getBoolean("isProfileCompleted", false)
+                setLoading(false)
+                if (localCompleted) navigateToMain() else navigateToCompleteProfile()
             }
     }
 
