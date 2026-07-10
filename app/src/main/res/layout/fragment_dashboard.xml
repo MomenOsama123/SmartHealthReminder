@@ -361,30 +361,31 @@
 
                     </LinearLayout>
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnMarkTaken"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/mark_taken"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:gravity="center"
-                        android:padding="12dp"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/bg_card_primary"/>
+                        android:textAllCaps="false"
+                        android:textColor="@color/primary_green"
+                        android:textStyle="bold"
+                        app:backgroundTint="?attr/colorSurface"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/primary_green"
+                        app:strokeWidth="2dp"/>
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnSnooze"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/snooze"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="14sp"
-                        android:gravity="center"
-                        android:padding="12dp"
-                        android:layout_marginTop="8dp"
-                        android:background="@drawable/et_shape"
-                        android:backgroundTint="?attr/colorSurface"/>
+                        android:textAllCaps="false"
+                        android:textColor="@color/primary_green"
+                        android:textStyle="bold"
+                        app:backgroundTint="?attr/colorSurface"
+                        app:cornerRadius="12dp"
+                        app:strokeColor="@color/primary_green"
+                        app:strokeWidth="2dp"/>
 
                 </LinearLayout>
 
