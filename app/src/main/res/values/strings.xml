@@ -812,4 +812,5 @@ Password must be at least 8 characters long and \n include  a mix of letters, nu
     <string name="add_schedule">Add Schedule</string>
     <string name="daily_breakdown">Daily Breakdown</string>
     <string name="edit_your_profile">Edit Your Profile</string>
+    <string name="select_a_day_to_view_your_medication_history">Select a day to view your medication history.</string>
 </resources>

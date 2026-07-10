@@ -242,7 +242,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Select a day to view your medication history."
+                    android:text="@string/select_a_day_to_view_your_medication_history"
                     android:textColor="?attr/colorOnSurface"
                     android:textSize="14sp" />
             </LinearLayout>
