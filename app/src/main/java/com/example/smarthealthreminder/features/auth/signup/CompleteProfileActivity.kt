@@ -143,7 +143,7 @@ class CompleteProfileActivity : BaseActivity() {
 
         // 2. Setup Gender selection dialog
         binding.etGender.setOnClickListener {
-            val options = arrayOf("Female", "Male", "Non-Binary", "Other")
+            val options = arrayOf("Female", "Male",)
             MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
                 .setTitle("Select Gender")
                 .setItems(options) { _, which ->
