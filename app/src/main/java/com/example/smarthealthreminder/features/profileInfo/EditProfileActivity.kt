@@ -327,7 +327,7 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     private fun showGenderDialog(editText: EditText) {
-        val options = arrayOf("Female", "Male", "Non-Binary", "Other")
+        val options = arrayOf("Female", "Male")
         MaterialAlertDialogBuilder(this, R.style.AppAlertDialogTheme)
             .setTitle("Select Gender")
             .setItems(options) { _, which ->
