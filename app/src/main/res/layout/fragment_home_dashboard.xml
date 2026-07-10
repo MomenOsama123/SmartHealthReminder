@@ -435,13 +435,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="24dp"
-                android:backgroundTint="@color/primary"
                 android:text="@string/view_today_s_plan_u2192"
                 android:textAllCaps="false"
-                android:textColor="@color/text_on_primary"
-                android:textSize="16sp"
+                android:textColor="@color/primary_green"
                 android:textStyle="bold"
-                app:cornerRadius="18dp" />
+                app:backgroundTint="?attr/colorSurface"
+                app:cornerRadius="12dp"
+                app:strokeColor="@color/primary_green"
+                app:strokeWidth="2dp" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
