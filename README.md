@@ -109,7 +109,7 @@ Built using **Kotlin**, **MVVM Architecture**, **Material Design 3**, **Firebase
 
 | Set Alarm | Alarm List |
 |-----------|------------|
-| ![](screenshots/SetAlarm.png) | ![](screenshots/Alarms.png) |
+| ![](screenshots/setAlarm.png) | ![](screenshots/Alarms.png) |
 
 ---
 
@@ -117,11 +117,11 @@ Built using **Kotlin**, **MVVM Architecture**, **Material Design 3**, **Firebase
 
 | AI Assistant | Smart Search |
 |--------------|--------------|
-| ![](screenshots/AIChat.png) | ![](screenshots/Searching.png) |
+| ![](screenshots/AiChat.png) | ![](screenshots/Searching.png) |
 
 | Daily Steps | Quick Action Bar |
 |-------------|------------------|
-| ![](screenshots/DailySteps.jpeg) | ![](screenshots/QuickActionBar.png) |
+| ![](screenshots/DailySteps.jpeg) | ![](screenshots/QueckActionBar.png) |
 
 ---
 
