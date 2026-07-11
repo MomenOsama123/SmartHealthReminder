@@ -2,19 +2,22 @@
 
 <div align="center">
 
-<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="120"/>
+<img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="140"/>
 
 # Trusta
 
 ### Your Trusted Smart Health Assistant
 
-A modern Android healthcare application that helps users manage medications, organize daily health routines, track physical activity, and receive AI-powered healthcare assistance.
+*A modern Android healthcare application that simplifies medication management, promotes healthy habits, and provides an intelligent healthcare experience.*
 
+![Version](https://img.shields.io/badge/Version-v1.0.0-success)
 ![Platform](https://img.shields.io/badge/Platform-Android-green)
 ![Language](https://img.shields.io/badge/Kotlin-100%25-purple)
 ![Architecture](https://img.shields.io/badge/Architecture-MVVM-blue)
-![Database](https://img.shields.io/badge/Room-Firebase-orange)
-![Material3](https://img.shields.io/badge/UI-Material%203-success)
+![Database](https://img.shields.io/badge/Database-Room%20%7C%20Firebase-orange)
+![UI](https://img.shields.io/badge/UI-Material%203-success)
+
+[![Download APK](https://img.shields.io/badge/Download-Latest_APK-success?style=for-the-badge)](https://github.com/MomenOsama123/SmartHealthReminder/releases/latest)
 
 </div>
 
@@ -22,11 +25,11 @@ A modern Android healthcare application that helps users manage medications, org
 
 # 📖 About Trusta
 
-Trusta is a smart healthcare companion developed to simplify medication management and promote healthier daily habits.
+**Trusta** is a modern Android healthcare application developed as a graduation project to help users organize their daily healthcare routines through one unified platform.
 
-The application combines medication reminders, daily planning, AI-powered health assistance, step tracking, reports, multilingual support, and customizable themes into one modern Android application.
+The application combines medication planning, smart reminders, AI-powered healthcare assistance, daily scheduling, physical activity tracking, multilingual support, and customizable themes to deliver a complete healthcare companion.
 
-Designed with **MVVM Architecture**, **Material Design 3**, and modern Android development practices, Trusta provides a responsive, scalable, and user-friendly healthcare experience.
+Built using **Kotlin**, **MVVM Architecture**, **Material Design 3**, **Firebase**, and **Room Database**, Trusta provides a modern, scalable, and user-friendly Android experience.
 
 ---
 
@@ -42,7 +45,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 ## 💊 Medication Management
 
-- Add Medications
+- Add & Manage Medications
 - Medication Planner
 - Daily Medication Schedule
 - Smart Medication Reminders
@@ -55,7 +58,15 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 - AI Health Assistant
 - Smart Medication Search
 - Daily Step Tracker
-- Quick Access Actions
+- Quick Action Bar
+
+---
+
+## 📅 Daily Planner
+
+- Daily Schedule
+- Medication Timeline
+- Organized Daily Routine
 
 ---
 
@@ -72,7 +83,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 ---
 
-## ☁️ Cloud Features
+## ☁️ Cloud Services
 
 - Firebase Authentication
 - Cloud Firestore
@@ -82,7 +93,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 # 📱 Application Screenshots
 
-## Welcome & Home
+## 🚀 Welcome & Home
 
 | Welcome | Home |
 |---------|------|
@@ -90,31 +101,31 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 ---
 
-## Medication Management
+## 💊 Medication Management
 
 | Medication Plan | Today's Schedule |
 |-----------------|------------------|
 | ![](screenshots/MedicationPlan.png) | ![](screenshots/TodaySchedule.png) |
 
 | Set Alarm | Alarm List |
-|------------|------------|
-| ![](screenshots/setAlarm.png) | ![](screenshots/Alarms.png) |
+|-----------|------------|
+| ![](screenshots/SetAlarm.png) | ![](screenshots/Alarms.png) |
 
 ---
 
-## Smart Features
+## 🤖 Smart Features
 
 | AI Assistant | Smart Search |
 |--------------|--------------|
-| ![](screenshots/AiChat.png) | ![](screenshots/Searching.png) |
+| ![](screenshots/AIChat.png) | ![](screenshots/Searching.png) |
 
-| Daily Steps | Quick Access |
-|--------------|-------------|
-| ![](screenshots/DailySteps.jpeg) | ![](screenshots/QueckActionBar.png) |
+| Daily Steps | Quick Action Bar |
+|-------------|------------------|
+| ![](screenshots/DailySteps.jpeg) | ![](screenshots/QuickActionBar.png) |
 
 ---
 
-## User Experience
+## 👤 User Experience
 
 | Complete Profile | Settings |
 |------------------|----------|
@@ -126,7 +137,7 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 ---
 
-## Daily Planner
+## 📅 Planner
 
 | Schedule |
 |----------|
@@ -136,120 +147,66 @@ Designed with **MVVM Architecture**, **Material Design 3**, and modern Android d
 
 # 🏗 Architecture
 
-The project follows the **MVVM (Model-View-ViewModel)** architecture.
+Trusta follows the **MVVM (Model–View–ViewModel)** architecture to ensure scalability, maintainability, and clean separation of concerns.
 
 ```
-                UI
-                │
-                ▼
-          ViewModel
-                │
-                ▼
-          Repository
-       ┌────────┼────────┐
-       ▼        ▼        ▼
-    Room DB Firebase Retrofit
+          UI
+          │
+          ▼
+      ViewModel
+          │
+          ▼
+      Repository
+    ┌─────┼─────┐
+    ▼     ▼     ▼
+ Room  Firebase Retrofit
 ```
 
 ### Architecture Components
 
-- View (Activities & Fragments)
-- ViewModel
+- MVVM Architecture
 - Repository Pattern
+- Dependency Injection (Koin)
 - Room Database
 - Firebase Authentication
 - Cloud Firestore
 - Retrofit
-- Dependency Injection (Koin)
+- Kotlin Coroutines
+- Kotlin Flow
 
 ---
 
 # 🛠 Tech Stack
 
-### Language
-
-- Kotlin
-
-### UI
-
-- XML
-- Material Design 3
-
-### Architecture
-
-- MVVM
-- Repository Pattern
-
-### Dependency Injection
-
-- Koin
-
-### Local Database
-
-- Room
-
-### Cloud
-
-- Firebase Authentication
-- Cloud Firestore
-
-### Networking
-
-- Retrofit
-
-### Asynchronous Programming
-
-- Kotlin Coroutines
-- Kotlin Flow
-
-### Navigation
-
-- Navigation Component
+| Category | Technologies |
+|----------|--------------|
+| Language | Kotlin |
+| UI | XML, Material Design 3 |
+| Architecture | MVVM, Repository Pattern |
+| Dependency Injection | Koin |
+| Local Database | Room |
+| Cloud | Firebase Authentication, Cloud Firestore |
+| Networking | Retrofit |
+| Async | Kotlin Coroutines, Kotlin Flow |
+| Navigation | Navigation Component |
 
 ---
 
-# 📂 Project Structure
+# 📦 Download
 
-```
-app
-│
-├── core
-├── data
-│   ├── local
-│   ├── remote
-│   └── repository
-│
-├── features
-│   ├── authentication
-│   ├── home
-│   ├── medication
-│   ├── planner
-│   ├── reminders
-│   ├── reports
-│   ├── ai
-│   ├── profile
-│   └── settings
-│
-├── di
-├── utils
-└── ui
-```
+Download the latest stable version of **Trusta** directly from GitHub Releases.
 
----
+## 🚀 Latest Version
 
-# 🚀 Getting Started
+**Version:** **v1.0.0**
 
-Clone the repository
+👉 **https://github.com/MomenOsama123/SmartHealthReminder/releases/latest**
 
-```bash
-git clone https://github.com/MomenOsama123/SmartHealthReminder.git
-```
+APK:
 
-Open the project using Android Studio.
+**Trusta-v1.0.0.apk**
 
-Sync Gradle.
-
-Run the application.
+> Enable **Install from Unknown Sources** before installing the APK.
 
 ---
 
@@ -260,8 +217,7 @@ Run the application.
 - Wear OS Support
 - Cloud Backup & Restore
 - Advanced Health Analytics
-- AI Medication Recommendation
-- Health Charts & Statistics
+- AI Medication Recommendations
 
 ---
 
@@ -277,7 +233,7 @@ Run the application.
 
 # ⭐ Support
 
-If you like this project, don't forget to give it a ⭐ on GitHub.
+If you found this project useful, consider giving it a ⭐ on GitHub.
 
 ---
 
@@ -285,8 +241,11 @@ If you like this project, don't forget to give it a ⭐ on GitHub.
 
 ## Trusta
 
-**Your Trusted Smart Health Assistant**
+### Your Trusted Smart Health Assistant
 
-Made with ❤️ using Kotlin & Material Design 3
+**Built with ❤️ using Kotlin, Firebase, Room & Material Design 3**
+
+
+© 2026 Trusta Team
 
 </div>
