@@ -1,5 +1,10 @@
 # 🩺 Trusta
 
+Digital Egypt Pioneers Initiative
+
+# Round 4
+
+
 <div align="center">
 
 <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" width="140"/>
