@@ -205,7 +205,7 @@ Download the latest stable version of **Trusta** directly from GitHub Releases.
 
 **Version:** **v1.0.0**
 
-👉 **https://github.com/MomenOsama123/SmartHealthReminder/releases/latest**
+👉 **https://github.com/MomenOsama123/TrustaApp/releases/latest**
 
 APK:
 
